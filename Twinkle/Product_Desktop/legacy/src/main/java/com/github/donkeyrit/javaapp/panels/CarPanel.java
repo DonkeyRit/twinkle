@@ -1,7 +1,7 @@
 package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
-import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.panels.aboutcar.AboutCarPanel;
 
@@ -19,7 +19,7 @@ public class CarPanel extends JPanel {
 
     public CarPanel(EntryPoint point, int num){
 
-        Database database = point.database;
+        DatabaseProvider database = point.database;
         panel = point.panel;
 
         Car.CarBuilder carBuilder = new Car.CarBuilder();

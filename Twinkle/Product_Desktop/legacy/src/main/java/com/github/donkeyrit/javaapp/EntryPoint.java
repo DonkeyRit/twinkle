@@ -1,6 +1,7 @@
 package com.github.donkeyrit.javaapp;
 
-import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.database.DatabaseProvider;
+import com.github.donkeyrit.javaapp.database.MySqlProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.EnterPanel;
@@ -18,7 +19,7 @@ public class EntryPoint {
     
     public JFrame frame;
     public JPanel panel;
-    public Database database;
+    public DatabaseProvider database;
     public int avatarNumber = 0;
     public User user;
     
@@ -34,7 +35,7 @@ public class EntryPoint {
          * Method configure initial state of panel
          */ 
         frame = new JFrame("Rent car");
-        database = new Database();
+        database = new MySqlProvider();
         
         panel = new JPanel(); 
         panel.setBackground(new Color(255,255,255)); 

@@ -1,6 +1,6 @@
 package com.github.donkeyrit.javaapp.components;
 
-import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 
 import javax.swing.table.AbstractTableModel;
 import java.sql.ResultSet;
@@ -12,9 +12,9 @@ public class MyTableModel extends AbstractTableModel {
     private String tableName;
     private String query;
     private ResultSet rs;
-    private Database database;
+    private DatabaseProvider database;
 
-    public MyTableModel(Database database, String name) {
+    public MyTableModel(DatabaseProvider database, String name) {
         this.database = database;
         tableName = name;
         query = "SELECT * FROM " + tableName;

@@ -1,7 +1,8 @@
 package com.github.donkeyrit.javaapp.panels.aboutcar;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
-import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.database.DatabaseProvider;
+import com.github.donkeyrit.javaapp.database.MySqlProvider;
 import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.ContentPanel;
@@ -27,7 +28,7 @@ public class AboutCarPanel extends JPanel {
     }
 
     // TODO Remove this variables
-    private Database database;
+    private DatabaseProvider database;
     private JPanel panel;
     private User user;
 

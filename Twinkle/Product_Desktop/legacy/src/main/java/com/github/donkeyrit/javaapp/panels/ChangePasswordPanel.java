@@ -2,7 +2,7 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.JPaswordField;
-import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ChangePasswordPanel extends JPanel {
 
-    private Database database;
+    private DatabaseProvider database;
     private User user;
 
     public ChangePasswordPanel(EntryPoint point) {

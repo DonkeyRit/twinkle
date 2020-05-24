@@ -2,7 +2,7 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.JCTextField;
-import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -16,7 +16,7 @@ public class PrivateDataPanel extends JPanel {
     public PrivateDataPanel(EntryPoint point) {
         setLayout(null);
 
-        Database database = point.database;
+        DatabaseProvider database = point.database;
 
         String queryUser = "SELECT firstName,secondName,Patronimic,address,phoneNumber FROM client where idUser = (SELECT idUser FROM user WHERE login = '" + point.user.getLogin() + "')";
         ResultSet userSet = database.select(queryUser);

@@ -2,7 +2,7 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.MyTableModel;
-import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -14,7 +14,7 @@ public class ChangeDataDatabasePanel extends JPanel {
     public ChangeDataDatabasePanel(EntryPoint point) {
         setLayout(null);
 
-        Database database = point.database;
+        DatabaseProvider database = point.database;
 
         ArrayList<String> tableName = database.getTableNames();
         ArrayList<JToggleButton> listTogBut = new ArrayList<>();

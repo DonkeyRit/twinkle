@@ -1,7 +1,7 @@
 package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
-import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class FilterPanel extends JPanel {
 
-    private final Database database;
+    private final DatabaseProvider database;
     private final JPanel panel;
 
     public FilterPanel(EntryPoint point){

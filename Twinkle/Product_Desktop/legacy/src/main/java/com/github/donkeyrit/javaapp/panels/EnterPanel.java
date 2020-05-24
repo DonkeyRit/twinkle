@@ -3,7 +3,7 @@ package com.github.donkeyrit.javaapp.panels;
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.JCTextField;
 import com.github.donkeyrit.javaapp.components.JPaswordField;
-import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class EnterPanel extends JPanel {
 
     private final JPanel panel;
-    private final Database database;
+    private final DatabaseProvider database;
     private final EntryPoint point;
 
     public EnterPanel(EntryPoint point) {
