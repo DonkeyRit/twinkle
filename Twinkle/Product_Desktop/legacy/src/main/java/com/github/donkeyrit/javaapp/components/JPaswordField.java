@@ -1,25 +1,26 @@
-package com.github.donkeyrit.javaapp;
+package com.github.donkeyrit.javaapp.components;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-public class JCTextField extends JTextField{ 
-
-    private Dimension d = new Dimension(200,32); 
+public class JPaswordField extends JPasswordField{
+    private Dimension d = new Dimension(200,32);
     private String placeholder = "";
     private Color phColor= new Color(0,0,0);
     private boolean band = true;
 
     /** Constructor de clase */
-    public JCTextField()
+    public JPaswordField()
     {
-        super(); 
-        setSize(d); 
-        setPreferredSize(d); 
-        setVisible(true); 
-        setMargin( new Insets(3,6,3,6)); 
-        getDocument().addDocumentListener(new DocumentListener() {  
+        super();
+        setSize(d);
+        setPreferredSize(d);
+        setVisible(true);
+        setMargin( new Insets(3,6,3,6));
+        
+        getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
@@ -58,10 +59,11 @@ public class JCTextField extends JTextField{
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
         g.setColor( new Color(phColor.getRed(),phColor.getGreen(),phColor.getBlue(),90));
+        
         g.drawString((band)?placeholder:"",
                      getMargin().left,
                      (getSize().height)/2 + getFont().getSize()/2 );
       }
-
 }

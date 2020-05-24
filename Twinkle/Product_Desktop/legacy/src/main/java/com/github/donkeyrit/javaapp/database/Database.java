@@ -1,4 +1,4 @@
-package com.github.donkeyrit.javaapp;
+package com.github.donkeyrit.javaapp.database;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,7 +13,7 @@ package com.github.donkeyrit.javaapp;
 import java.sql.*;
 import java.util.*;
 
-public class DataBase{
+public class Database {
 	private Connection connect;
 	
 	
@@ -23,7 +23,7 @@ public class DataBase{
 	private String DB_PASSWORD = "root";
 	
 	
-	public DataBase(){
+	public Database(){
 		try {
 			Class.forName(DB_DRIVER);
 		} catch (ClassNotFoundException e) {
