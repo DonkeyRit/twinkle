@@ -2,6 +2,8 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.model.Car;
+import com.github.donkeyrit.javaapp.panels.aboutcar.AboutCarPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,39 +13,31 @@ import java.util.Date;
 
 public class CarPanel extends JPanel {
 
-    private final int imagesNum;
-    private Date modelYear;
-    private Double cost;
-    private String modelName;
-    private String markName;
-    private String nameCountry;
-    private String info;
-    private String bodyTypeName;
-    private String status;
+    private Car car;
 
     private final JPanel panel;
-
 
     public CarPanel(EntryPoint point, int num){
 
         Database database = point.database;
         panel = point.panel;
 
+        Car.CarBuilder carBuilder = new Car.CarBuilder();
 
         ResultSet statusSet = database.select("SELECT * FROM renta WHERE idCar = " + num + " ORDER BY dataEnd, dataPlan DESC LIMIT 1");
-        status = "open";
+        carBuilder.setStatus("open");
         try{
             while(statusSet.next()){
                 Date rentDate = statusSet.getDate("dataEnd");
                 if(rentDate == null){
-                    status = "lock";
+                    carBuilder.setStatus("lock");
                 }
             }
-        }catch(SQLException ex){
+        } catch(SQLException ex){
             ex.printStackTrace();
         }
 
-        imagesNum = num;
+        carBuilder.setImagesNum(num);
         setLayout(null);
         String query = "SELECT idCar,modelYear,info,cost,modelName,markName,nameCountry,bodyTypeName FROM\n" +
                 "(SELECT idCar,modelYear,info,cost,modelName,idBodyType,markName,nameCountry FROM\n" +
@@ -52,18 +46,19 @@ public class CarPanel extends JPanel {
                 "INNER JOIN model ON car.idModel = model.idModel) as join1\n" +
                 "INNER JOIN mark ON join1.idMark = mark.idMark) as join2\n" +
                 "INNER JOIN country ON join2.idCountry = country.idCountry) as join3\n" +
-                "INNER JOIN bodytype ON join3.idBodyType = bodytype.idBodyType WHERE idCar = " + imagesNum;
+                "INNER JOIN bodytype ON join3.idBodyType = bodytype.idBodyType WHERE idCar = " + num;
 
         ResultSet carSet = database.select(query);
         try{
             while(carSet.next()){
-                modelYear = carSet.getDate("modelYear");
-                cost = carSet.getDouble("cost");
-                modelName = carSet.getString("modelName");
-                markName = carSet.getString("markName");
-                nameCountry = carSet.getString("nameCountry");
-                info = carSet.getString("info");
-                bodyTypeName = carSet.getString("bodyTypeName");
+                carBuilder.setModelYear(carSet.getDate("modelYear"))
+                        .setCost(carSet.getDouble("cost"))
+                        .setModelName(carSet.getString("modelName"))
+                        .setMarkName(carSet.getString("markName"))
+                        .setNameCountry(carSet.getString("nameCountry"))
+                        .setInfo(carSet.getString("info"))
+                        .setBodyTypeName(carSet.getString("bodyTypeName"));
+                this.car = carBuilder.create();
             }
         }catch(SQLException ex){
             ex.printStackTrace();
@@ -77,7 +72,7 @@ public class CarPanel extends JPanel {
         modelLab.setFont(alterfont);
         add(modelLab);
 
-        JLabel modelLabel = new JLabel(modelName);
+        JLabel modelLabel = new JLabel(this.car.getModelName());
         modelLabel.setBounds(290, 10, 150, 15);
         modelLabel.setFont(font);
         add(modelLabel);
@@ -88,7 +83,7 @@ public class CarPanel extends JPanel {
         markLab.setFont(alterfont);
         add(markLab);
 
-        JLabel markLabel = new JLabel(markName);
+        JLabel markLabel = new JLabel(this.car.getMarkName());
         markLabel.setBounds(290, 30, 150, 15);
         markLabel.setFont(font);
         add(markLabel);
@@ -98,7 +93,7 @@ public class CarPanel extends JPanel {
         bodyTypeLab.setFont(alterfont);
         add(bodyTypeLab);
 
-        JLabel bodyTypeLabel = new JLabel(bodyTypeName);
+        JLabel bodyTypeLabel = new JLabel(this.car.getBodyTypeName());
         bodyTypeLabel.setBounds(290, 50, 150, 15);
         bodyTypeLabel.setFont(font);
         add(bodyTypeLabel);
@@ -113,7 +108,7 @@ public class CarPanel extends JPanel {
                     temp = (ContentPanel) ma;
                 }
             }
-            AboutCarPanel newPanel = new AboutCarPanel(point, imagesNum,modelYear,cost,modelName,markName,nameCountry,info,bodyTypeName);
+            AboutCarPanel newPanel = new AboutCarPanel(point, this.car);
             newPanel.setFilter(temp.conditionPanel);
             newPanel.setNumPage(temp.numOfPage);
             newPanel.setStartBut(temp.startBut);
@@ -130,13 +125,13 @@ public class CarPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g){
-        Image image = new ImageIcon("assets/cars/min/" + imagesNum + ".png").getImage();
+        Image image = new ImageIcon("assets/cars/min/" + this.car.getImagesNum() + ".png").getImage();
         g.drawImage(image,10,10,this);
 
-        Image country = new ImageIcon("assets/flags/" + nameCountry + ".png").getImage();
+        Image country = new ImageIcon("assets/flags/" + this.car.getNameCountry() + ".png").getImage();
         g.drawImage(country,425,0,this);
 
-        Image statusImage = new ImageIcon("assets/status/" + status + ".png").getImage();
+        Image statusImage = new ImageIcon("assets/status/" + this.car.getStatus() + ".png").getImage();
         g.drawImage(statusImage, 10, 10, this);
     }
 }

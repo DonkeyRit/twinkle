@@ -1,8 +1,11 @@
-package com.github.donkeyrit.javaapp.panels;
+package com.github.donkeyrit.javaapp.panels.aboutcar;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.database.Database;
+import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.panels.ContentPanel;
+import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReloadButtonListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -17,14 +20,11 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class AboutCarPanel extends JPanel {
-    private int imagesNum;
-    private Date modelYear;
-    private Double cost;
-    private String modelName;
-    private String markName;
-    private String nameCountry;
-    private String info;
-    private String bodyTypeName;
+
+    private final Car car;
+    public Car getCar() {
+        return car;
+    }
 
     // TODO Remove this variables
     private Database database;
@@ -59,24 +59,16 @@ public class AboutCarPanel extends JPanel {
         return startBut;
     }
 
-    public AboutCarPanel(EntryPoint point, int imagesNum, Date modelYear, Double cost, String modelName, String markName, String nameCountry, String info, String bodyTypeName) {
+    public AboutCarPanel(EntryPoint point, Car car) {
+        setLayout(null);
+
+        this.car = car;
 
         database = point.database;
         panel = point.panel;
         user = point.user;
 
-        this.imagesNum = imagesNum;
-        this.modelYear = modelYear;
-        this.cost = cost;
-        this.modelName = modelName;
-        this.markName = markName;
-        this.nameCountry = nameCountry;
-        this.info = info;
-        this.bodyTypeName = bodyTypeName;
-
-        setLayout(null);
-
-        JTextArea textArea = new JTextArea(info);
+        JTextArea textArea = new JTextArea(car.getInfo());
         textArea.setLineWrap(true);
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -84,7 +76,7 @@ public class AboutCarPanel extends JPanel {
         scrollPane.setBounds(300, 290, 285, 190);
         add(scrollPane);
 
-        ResultSet statusSet = database.select("SELECT * FROM renta WHERE idCar = " + imagesNum + " ORDER BY dataEnd, dataPlan DESC LIMIT 1");
+        ResultSet statusSet = database.select("SELECT * FROM renta WHERE idCar = " + car.getImagesNum() + " ORDER BY dataEnd, dataPlan DESC LIMIT 1");
         String statusStr = "Свободно";
         try{
             while(statusSet.next()){
@@ -100,8 +92,14 @@ public class AboutCarPanel extends JPanel {
         Font font = new Font("Arial", Font.BOLD, 13);
         Font alterfont = new Font("Arial", Font.ITALIC, 13);
 
-        String[] massArgs = new String[]{"Model:",this.modelName,"Mark:",this.markName,"Year:",this.modelYear.toString(),"Type:",this.bodyTypeName,
-                "Cost per day:", this.cost + "","Status:",statusStr};
+        String[] massArgs = new String[] {
+                "Model:", car.getModelName(),
+                "Mark:",car.getMarkName(),
+                "Year:",car.getModelYear().toString(),
+                "Type:",car.getBodyTypeName(),
+                "Cost per day:", car.getCost() + "",
+                "Status:",statusStr
+        };
         for(int i = 0; i < 12; i++){
             JLabel temp = new JLabel(massArgs[i]);
             if(i % 2 == 0){
@@ -117,24 +115,7 @@ public class AboutCarPanel extends JPanel {
 
         JButton reloadButton = new JButton(new ImageIcon("assets/buttons/reload.png"));
         reloadButton.setBounds(550,0,16,16);
-        reloadButton.addActionListener(e -> {
-            Component[] mas = panel.getComponents();
-            AboutCarPanel temp = null;
-            for(int i = 0; i < mas.length; i++){
-                if(mas[i].getClass().toString().contains("AboutCarPanel")){
-                    temp = (AboutCarPanel) mas[i];
-                }
-            }
-            AboutCarPanel newPanel = new AboutCarPanel(point, imagesNum,modelYear,cost,modelName,markName,nameCountry,info,bodyTypeName);
-            newPanel.setFilter(temp.getFilter());
-            newPanel.setNumPage(temp.getNumPage());
-            newPanel.setStartBut(temp.getStartBut());
-            newPanel.setBounds(250,100,605,550);
-            panel.remove(temp);
-            panel.add(newPanel);
-            panel.revalidate();
-            panel.repaint();
-        });
+        reloadButton.addActionListener(new ReloadButtonListener(point));
         add(reloadButton);
 
         JButton returnButton = new JButton(new ImageIcon("assets/buttons/return.png"));
@@ -143,9 +124,9 @@ public class AboutCarPanel extends JPanel {
 
             Component[] mas = panel.getComponents();
             JPanel temp = null;
-            for(int i = 0; i < mas.length; i++){
-                if(mas[i].getClass().toString().contains("AboutCarPanel")){
-                    temp = (JPanel) mas[i];
+            for (Component ma : mas) {
+                if (ma.getClass().toString().contains("AboutCarPanel")) {
+                    temp = (JPanel) ma;
                 }
             }
 
@@ -169,9 +150,9 @@ public class AboutCarPanel extends JPanel {
 
                 Component[] mas = tempPanel.getComponents();
                 JScrollPane temp = null;
-                for(int i = 0; i < mas.length; i++){
-                    if(mas[i].getClass().toString().contains("JScrollPane")){
-                        temp = (JScrollPane) mas[i];
+                for (Component ma : mas) {
+                    if (ma.getClass().toString().contains("JScrollPane")) {
+                        temp = (JScrollPane) ma;
                     }
                 }
 
@@ -249,16 +230,16 @@ public class AboutCarPanel extends JPanel {
 
                     ArrayList<Integer> yList = new ArrayList<>();
                     int count = 0;
-                    for(int i = 0; i < fields.size(); i++){
-                        if(!fields.get(i).getText().equals("0000")){
-                            if(!fields.get(i).getText().equals("00")){
+                    for (JTextField field : fields) {
+                        if (!field.getText().equals("0000")) {
+                            if (!field.getText().equals("00")) {
                                 count++;
-                                fields.get(i).setBorder(borderButton);
-                            }else{
-                                fields.get(i).setBorder(new LineBorder(Color.RED, 4));
+                                field.setBorder(borderButton);
+                            } else {
+                                field.setBorder(new LineBorder(Color.RED, 4));
                             }
-                        }else{
-                            fields.get(i).setBorder(new LineBorder(Color.RED, 4));
+                        } else {
+                            field.setBorder(new LineBorder(Color.RED, 4));
                         }
                     }
                     if(count == fields.size()){
@@ -364,88 +345,85 @@ public class AboutCarPanel extends JPanel {
 
                         long difference = planDateReturnCar.getTime() - startDateGetCar.getTime();
                         int days = (int) (difference/(24*60*60*1000));
-                        planPriceLabel.setText("Approximately cost: " + (days + 1) * cost + " на " + (days + 1));
+                        planPriceLabel.setText("Approximately cost: " + (days + 1) * car.getCost() + " на " + (days + 1));
 
                         JButton buttonGetCar = new JButton("Get rent.");
-                        buttonGetCar.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e1) {
-                                String checkQuery = "SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = " + "'" + user.getLogin() + "'";
-                                ResultSet checkClientSet = database.select(checkQuery);
-                                int idClient = 0;
+                        buttonGetCar.addActionListener(e11 -> {
+                            String checkQuery = "SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = " + "'" + user.getLogin() + "'";
+                            ResultSet checkClientSet = database.select(checkQuery);
+                            int idClient = 0;
+                            try{
+                                while(checkClientSet.next()){
+                                    idClient = checkClientSet.getInt("idClient");
+                                }
+                            }catch(SQLException ex){
+                                ex.printStackTrace();
+                            }
+
+                            if(idClient == 0){
+                                planPriceLabel.setText("Please, fill data");
+                            }else{
+
+                                String queryToDB = "SELECT * FROM renta where idClient = (SELECT idClient FROM client WHERE idUser = (SELECT idUser FROM user WHERE login = '" + user.getLogin() + "')) ORDER BY dataEnd, dataPlan DESC LIMIT 1";
+                                ResultSet checkRentaSet = database.select(queryToDB);
+                                System.out.println(queryToDB);
+                                boolean isHaveRenta = false;
                                 try{
-                                    while(checkClientSet.next()){
-                                        idClient = checkClientSet.getInt("idClient");
+                                    while(checkRentaSet.next()){
+                                        Date rentDate = checkRentaSet.getDate("dataEnd");
+                                        if(rentDate == null){
+                                            isHaveRenta = true;;
+                                        }
                                     }
                                 }catch(SQLException ex){
                                     ex.printStackTrace();
                                 }
 
-                                if(idClient == 0){
-                                    planPriceLabel.setText("Please, fill data");
+                                if(isHaveRenta){
+                                    planPriceLabel.setText("You cannot take more than one car at a time");
                                 }else{
+                                    String insertRenta = "INSERT INTO renta(idClient,idCar,dataStart,dataPlan) VALUES (" + idClient + "," + car.getImagesNum();
 
-                                    String queryToDB = "SELECT * FROM renta where idClient = (SELECT idClient FROM client WHERE idUser = (SELECT idUser FROM user WHERE login = '" + user.getLogin() + "')) ORDER BY dataEnd, dataPlan DESC LIMIT 1";
-                                    ResultSet checkRentaSet = database.select(queryToDB);
-                                    System.out.println(queryToDB);
-                                    boolean isHaveRenta = false;
-                                    try{
-                                        while(checkRentaSet.next()){
-                                            Date rentDate = checkRentaSet.getDate("dataEnd");
-                                            if(rentDate == null){
-                                                isHaveRenta = true;;
+                                    String startDataIn = "'" + yList.get(0) + "-" + yList.get(1) + "-" + yList.get(2) + "'";
+                                    String planDataIn = "'" + yList.get(3) + "-" + yList.get(4) + "-" + yList.get(5) + "'";
+
+                                    insertRenta += "," + startDataIn + "," + planDataIn +")";
+
+                                    database.insert(insertRenta);
+
+                                    JButton selecBut = (JButton) e11.getSource();
+                                    JPanel selecPane = (JPanel) selecBut.getParent();
+
+                                    Component[] compons = selecPane.getComponents();
+                                    for(int i = 0; i < compons.length; i++){
+                                        if(compons[i].getClass().toString().indexOf("JButton") > -1){
+                                            JButton button = (JButton) compons[i];
+                                            if(button.getText().indexOf("Get rent") > -1 || button.getText().indexOf("Return") > -1 ){
+                                                selecPane.remove(button);
                                             }
                                         }
-                                    }catch(SQLException ex){
-                                        ex.printStackTrace();
                                     }
 
-                                    if(isHaveRenta){
-                                        planPriceLabel.setText("You cannot take more than one car at a time");
-                                    }else{
-                                        String insertRenta = "INSERT INTO renta(idClient,idCar,dataStart,dataPlan) VALUES (" + idClient + "," + imagesNum;
+                                    selecPane.remove(startYearsLabel);
 
-                                        String startDataIn = "'" + yList.get(0) + "-" + yList.get(1) + "-" + yList.get(2) + "'";
-                                        String planDataIn = "'" + yList.get(3) + "-" + yList.get(4) + "-" + yList.get(5) + "'";
-
-                                        insertRenta += "," + startDataIn + "," + planDataIn +")";
-
-                                        database.insert(insertRenta);
-
-                                        JButton selecBut = (JButton) e1.getSource();
-                                        JPanel selecPane = (JPanel) selecBut.getParent();
-
-                                        Component[] compons = selecPane.getComponents();
-                                        for(int i = 0; i < compons.length; i++){
-                                            if(compons[i].getClass().toString().indexOf("JButton") > -1){
-                                                JButton button = (JButton) compons[i];
-                                                if(button.getText().indexOf("Get rent") > -1 || button.getText().indexOf("Return") > -1 ){
-                                                    selecPane.remove(button);
-                                                }
-                                            }
-                                        }
-
-                                        selecPane.remove(startYearsLabel);
-
-                                        selecPane.remove(planPriceLabel);
-                                        selecPane.remove(planYearsLabel);
-                                        selecPane.remove(countPrice);
-                                        selecPane.remove(yearsPlan);
-                                        selecPane.remove(yearsStart);
-                                        selecPane.revalidate();
-                                        selecPane.repaint();
+                                    selecPane.remove(planPriceLabel);
+                                    selecPane.remove(planYearsLabel);
+                                    selecPane.remove(countPrice);
+                                    selecPane.remove(yearsPlan);
+                                    selecPane.remove(yearsStart);
+                                    selecPane.revalidate();
+                                    selecPane.repaint();
 
 
 
-                                        JTextArea textArea1 = new JTextArea(info);
-                                        textArea1.setLineWrap(true);
-                                        JScrollPane scrollPane1 = new JScrollPane(textArea1);
-                                        scrollPane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-                                        scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-                                        scrollPane1.setBounds(300, 290, 285, 190);
-                                        add(scrollPane1);
-                                        System.out.println(insertRenta);
-                                    }
+                                    JTextArea textArea1 = new JTextArea(car.getInfo());
+                                    textArea1.setLineWrap(true);
+                                    JScrollPane scrollPane1 = new JScrollPane(textArea1);
+                                    scrollPane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                                    scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                                    scrollPane1.setBounds(300, 290, 285, 190);
+                                    add(scrollPane1);
+                                    System.out.println(insertRenta);
                                 }
                             }
                         });
@@ -453,10 +431,10 @@ public class AboutCarPanel extends JPanel {
                         add(buttonGetCar);
                     }else{
                         Component[] compons = tempPanel.getComponents();
-                        for(int i = 0; i < compons.length; i++){
-                            if(compons[i].getClass().toString().contains("JButton")){
-                                JButton button = (JButton) compons[i];
-                                if(button.getText().contains("Get rent")){
+                        for (Component compon : compons) {
+                            if (compon.getClass().toString().contains("JButton")) {
+                                JButton button = (JButton) compon;
+                                if (button.getText().contains("Get rent")) {
                                     tempPanel.remove(button);
                                 }
                             }
@@ -475,10 +453,10 @@ public class AboutCarPanel extends JPanel {
                     JPanel selecPane = (JPanel) selecBut.getParent();
 
                     Component[] compons = selecPane.getComponents();
-                    for(int i = 0; i < compons.length; i++){
-                        if(compons[i].getClass().toString().indexOf("JButton") > -1){
-                            JButton button = (JButton) compons[i];
-                            if(button.getText().indexOf("Get rent") > -1){
+                    for (Component compon : compons) {
+                        if (compon.getClass().toString().indexOf("JButton") > -1) {
+                            JButton button = (JButton) compon;
+                            if (button.getText().contains("Get rent")) {
                                 selecPane.remove(button);
                             }
                         }
@@ -496,7 +474,7 @@ public class AboutCarPanel extends JPanel {
 
                     tempBut.setVisible(true);
 
-                    JTextArea textArea1 = new JTextArea(info);
+                    JTextArea textArea1 = new JTextArea(car.getInfo());
                     textArea1.setLineWrap(true);
                     JScrollPane scrollPane1 = new JScrollPane(textArea1);
                     scrollPane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -509,7 +487,7 @@ public class AboutCarPanel extends JPanel {
             add(actionWithCarButton);
         }else{
 
-            String queryToDatabase = "SELECT * FROM user WHERE idUser = (SELECT idUser FROM client WHERE idClient = (SELECT idClient FROm renta WHERE idCar = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))";
+            String queryToDatabase = "SELECT * FROM user WHERE idUser = (SELECT idUser FROM client WHERE idClient = (SELECT idClient FROm renta WHERE idCar = " + car.getImagesNum() + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))";
             ResultSet checkUserSet = database.select(queryToDatabase);
             boolean isTrue = false;
             try{
@@ -542,7 +520,7 @@ public class AboutCarPanel extends JPanel {
                         ex.printStackTrace();
                     }
 
-                    ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
+                    ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
                     for (String injuryName : injuryNames) {
                         JCheckBox temp = new JCheckBox(injuryName);
                         checkBoxes.add(temp);
@@ -553,156 +531,151 @@ public class AboutCarPanel extends JPanel {
                     tempPanel.add(box);
 
                     JButton countButton = new JButton("Count");
-                    countButton.addActionListener(new ActionListener(){
+                    countButton.addActionListener(e13 -> {
+                        JButton selectedButton = (JButton) e13.getSource();
+                        JPanel selecButPanel = (JPanel) selectedButton.getParent();
 
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            JButton selectedButton = (JButton) e.getSource();
-                            JPanel selecButPanel = (JPanel) selectedButton.getParent();
-
-                            Component[] listMas = selecButPanel.getComponents();
-                            for(int i = 0; i< listMas.length; i++){
-                                if(listMas[i].getClass().toString().contains("JLabel")){
-                                    JLabel label = (JLabel) listMas[i];
-                                    if(label.getText().contains("Sum")){
-                                        selecButPanel.remove(label);
-                                    }
+                        Component[] listMas = selecButPanel.getComponents();
+                        for(int i = 0; i< listMas.length; i++){
+                            if(listMas[i].getClass().toString().contains("JLabel")){
+                                JLabel label = (JLabel) listMas[i];
+                                if(label.getText().contains("Sum")){
+                                    selecButPanel.remove(label);
                                 }
                             }
-
-
-
-                            JButton newReturnButton = new JButton("Return");
-                            newReturnButton.setBounds(330, 500, 120, 30);
-                            newReturnButton.addActionListener(new ActionListener() {
-
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    String injuryForCar = "";
-                                    for(int i = 0; i < checkBoxes.size(); i++){
-                                        if(checkBoxes.get(i).isSelected()){
-                                            injuryForCar = checkBoxes.get(i).getText();
-                                        }
-                                    }
-                                    Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-                                    calendar.setTime(new Date());
-                                    int currYear = calendar.get(Calendar.YEAR);
-                                    int currMont = calendar.get(Calendar.MONTH);
-                                    int currDay = calendar.get(Calendar.DATE);
-
-                                    String dataStr = currYear + "-" + currMont + "-" + currDay;
-                                    String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE idCar = " + imagesNum + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');";
-                                    database.update(updateQuery);
-
-                                    String idRentaStr = "SELECT idRenta FROM renta WHERE idCar = " + imagesNum + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
-                                    ResultSet rentaSet = database.select(idRentaStr);
-                                    int idRentaNum = 0;
-                                    try{
-                                        while(rentaSet.next()){
-                                            idRentaNum = rentaSet.getInt("idRenta");
-                                        }
-                                    }catch(SQLException ex){
-                                        ex.printStackTrace();
-                                    }
-
-                                    String idInjuryStr = "SELECT idInjury FROM injury WHERE injuryName = '" + injuryForCar +"'";
-                                    ResultSet injurySet = database.select(idInjuryStr);
-                                    int idInjuryNum = 0;
-                                    try{
-                                        while(injurySet.next()){
-                                            idInjuryNum = injurySet.getInt("idInjury");
-                                        }
-                                    }catch(SQLException ex){
-                                        ex.printStackTrace();
-                                    }
-
-                                    database.insert("INSERT INTO  resultinginjury(idRenta,idInjury) VALUES(" + idRentaNum + "," + idInjuryNum + ")");
-
-                                    remove(box);
-                                    remove(newReturnButton);
-                                    remove(countButton);
-                                    Component[] listMas = selecButPanel.getComponents();
-                                    for(int i = 0; i< listMas.length; i++){
-                                        if(listMas[i].getClass().toString().contains("JLabel")){
-                                            JLabel label = (JLabel) listMas[i];
-                                            if(label.getText().contains("Sum")){
-                                                remove(label);
-                                            }
-                                        }
-                                    }
-                                    JTextArea textArea12 = new JTextArea(info);
-                                    textArea12.setLineWrap(true);
-                                    JScrollPane scrollPane12 = new JScrollPane(textArea12);
-                                    scrollPane12.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-                                    scrollPane12.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-                                    scrollPane12.setBounds(300, 290, 285, 190);
-                                    add(scrollPane12);
-                                    revalidate();
-                                    repaint();
-                                }
-                            });
-                            tempPanel.add(newReturnButton);
-
-
-                            Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-                            calendar.setTime(new Date());
-                            int currYear = calendar.get(Calendar.YEAR);
-                            int currMont = calendar.get(Calendar.MONTH);
-                            int currDay = calendar.get(Calendar.DATE);
-
-                            String queryToDb = "SELECT login,idCar,join1.idUser,dataStart,dataPlan,dataEnd FROM\n" +
-                                    "(SELECT idCar,idUSer,renta.idClient,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.idClient = client.idClient) as join1\n" +
-                                    "INNER JOIN user ON join1.idUser = user.idUser WHERE login = '" + user.getLogin() + "' AND idCar = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;";
-
-                            ResultSet queryToDbSet = database.select(queryToDb);
-                            Date startRentaDate = null;
-                            Date dataRentaPlan = null;
-                            try{
-                                while(queryToDbSet.next()){
-                                    startRentaDate = queryToDbSet.getDate("dataStart");
-                                    dataRentaPlan = queryToDbSet.getDate("dataPlan");
-                                }
-                            }catch(SQLException ex){
-                                ex.printStackTrace();
-                            }
-
-                            Date currentGetData = new Date(currYear,currMont,currDay);
-                            startRentaDate = new Date(currYear,currMont+1,currDay);
-
-                            JLabel labelCostRenta = new JLabel("5000");
-                            labelCostRenta.setBounds(480, 460, 120, 30);
-
-                            if(currentGetData.after(startRentaDate)){
-                                labelCostRenta.setText("Sum = 0");
-                            }else{
-                                double costForTheRent = 0f;
-
-                                long difference = startRentaDate.getTime() - currentGetData.getTime();
-                                int days = (int) (difference/(24*60*60*1000));
-                                costForTheRent = (days + 1f) * cost;
-
-
-                                if(currentGetData.after(dataRentaPlan)){
-                                    long diff = currentGetData.getTime() - dataRentaPlan.getTime();
-                                    int overDay = (int) (difference/(24*60*60*1000));
-                                    costForTheRent += (cost * overDay) * 0.2;
-                                }
-
-                                for(int i = 0; i < checkBoxes.size(); i++){
-                                    if(checkBoxes.get(i).isSelected()){
-                                        costForTheRent += (i+1) * 50000;
-                                    }
-                                }
-
-                                labelCostRenta.setText("Sum " + costForTheRent + "");
-                            }
-
-                            tempPanel.add(labelCostRenta);
-
-                            tempPanel.revalidate();
-                            tempPanel.repaint();
                         }
 
+
+
+                        JButton newReturnButton = new JButton("Return");
+                        newReturnButton.setBounds(330, 500, 120, 30);
+                        newReturnButton.addActionListener(new ActionListener() {
+
+                            @Override
+                            public void actionPerformed(ActionEvent e13) {
+                                String injuryForCar = "";
+                                for (JCheckBox checkBox : checkBoxes) {
+                                    if (checkBox.isSelected()) {
+                                        injuryForCar = checkBox.getText();
+                                    }
+                                }
+                                Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                                calendar.setTime(new Date());
+                                int currYear = calendar.get(Calendar.YEAR);
+                                int currMont = calendar.get(Calendar.MONTH);
+                                int currDay = calendar.get(Calendar.DATE);
+
+                                String dataStr = currYear + "-" + currMont + "-" + currDay;
+                                String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE idCar = " + car.getImagesNum() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');";
+                                database.update(updateQuery);
+
+                                String idRentaStr = "SELECT idRenta FROM renta WHERE idCar = " + car.getImagesNum() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
+                                ResultSet rentaSet = database.select(idRentaStr);
+                                int idRentaNum = 0;
+                                try{
+                                    while(rentaSet.next()){
+                                        idRentaNum = rentaSet.getInt("idRenta");
+                                    }
+                                }catch(SQLException ex){
+                                    ex.printStackTrace();
+                                }
+
+                                String idInjuryStr = "SELECT idInjury FROM injury WHERE injuryName = '" + injuryForCar +"'";
+                                ResultSet injurySet = database.select(idInjuryStr);
+                                int idInjuryNum = 0;
+                                try{
+                                    while(injurySet.next()){
+                                        idInjuryNum = injurySet.getInt("idInjury");
+                                    }
+                                }catch(SQLException ex){
+                                    ex.printStackTrace();
+                                }
+
+                                database.insert("INSERT INTO  resultinginjury(idRenta,idInjury) VALUES(" + idRentaNum + "," + idInjuryNum + ")");
+
+                                remove(box);
+                                remove(newReturnButton);
+                                remove(countButton);
+                                Component[] listMas = selecButPanel.getComponents();
+                                for (Component litmas : listMas) {
+                                    if (litmas.getClass().toString().contains("JLabel")) {
+                                        JLabel label = (JLabel) litmas;
+                                        if (label.getText().contains("Sum")) {
+                                            remove(label);
+                                        }
+                                    }
+                                }
+                                JTextArea textArea12 = new JTextArea(car.getInfo());
+                                textArea12.setLineWrap(true);
+                                JScrollPane scrollPane12 = new JScrollPane(textArea12);
+                                scrollPane12.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                                scrollPane12.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                                scrollPane12.setBounds(300, 290, 285, 190);
+                                add(scrollPane12);
+                                revalidate();
+                                repaint();
+                            }
+                        });
+                        tempPanel.add(newReturnButton);
+
+
+                        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                        calendar.setTime(new Date());
+                        int currYear = calendar.get(Calendar.YEAR);
+                        int currMont = calendar.get(Calendar.MONTH);
+                        int currDay = calendar.get(Calendar.DATE);
+
+                        String queryToDb = "SELECT login,idCar,join1.idUser,dataStart,dataPlan,dataEnd FROM\n" +
+                                "(SELECT idCar,idUSer,renta.idClient,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.idClient = client.idClient) as join1\n" +
+                                "INNER JOIN user ON join1.idUser = user.idUser WHERE login = '" + user.getLogin() + "' AND idCar = " + car.getImagesNum() + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;";
+
+                        ResultSet queryToDbSet = database.select(queryToDb);
+                        Date startRentaDate;
+                        Date dataRentaPlan = null;
+                        try{
+                            while(queryToDbSet.next()){
+                                startRentaDate = queryToDbSet.getDate("dataStart");
+                                dataRentaPlan = queryToDbSet.getDate("dataPlan");
+                            }
+                        }catch(SQLException ex){
+                            ex.printStackTrace();
+                        }
+
+                        Date currentGetData = new Date(currYear,currMont,currDay);
+                        startRentaDate = new Date(currYear,currMont+1,currDay);
+
+                        JLabel labelCostRenta = new JLabel("5000");
+                        labelCostRenta.setBounds(480, 460, 120, 30);
+
+                        if(currentGetData.after(startRentaDate)){
+                            labelCostRenta.setText("Sum = 0");
+                        }else{
+                            double costForTheRent = 0f;
+
+                            long difference = startRentaDate.getTime() - currentGetData.getTime();
+                            int days = (int) (difference/(24*60*60*1000));
+                            costForTheRent = (days + 1f) * car.getCost();
+
+
+                            if(currentGetData.after(dataRentaPlan)){
+                                long diff = currentGetData.getTime() - dataRentaPlan.getTime();
+                                int overDay = (int) (difference/(24*60*60*1000));
+                                costForTheRent += (car.getCost() * overDay) * 0.2;
+                            }
+
+                            for(int i = 0; i < checkBoxes.size(); i++){
+                                if(checkBoxes.get(i).isSelected()){
+                                    costForTheRent += (i+1) * 50000;
+                                }
+                            }
+
+                            labelCostRenta.setText("Sum " + costForTheRent + "");
+                        }
+
+                        tempPanel.add(labelCostRenta);
+
+                        tempPanel.revalidate();
+                        tempPanel.repaint();
                     });
                     countButton.setBounds(330, 460, 120, 30);
                     tempPanel.add(countButton);
@@ -719,7 +692,7 @@ public class AboutCarPanel extends JPanel {
     public void paintComponent(Graphics g){
         g.setColor(new Color(237,237,237));
         g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(),30,25);
-        Image image = new ImageIcon("assets/cars/" + imagesNum + ".png").getImage();
+        Image image = new ImageIcon("assets/cars/" + car.getImagesNum() + ".png").getImage();
         g.drawImage(image,30,10,this);
         g.setColor(new Color(255,255,255));
         g.fillRect(20, 290, 260, 190);
