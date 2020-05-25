@@ -4,6 +4,8 @@ import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.listeners.NextBackListener;
 import com.github.donkeyrit.javaapp.listeners.ScrollPageListener;
+import com.github.donkeyrit.javaapp.resources.Assets;
+import com.github.donkeyrit.javaapp.resources.ResourceManager;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -34,7 +36,7 @@ public class ContentPanel extends JPanel {
 
         JButton reload = new JButton();
         reload.setBounds(568, 10,16,16);
-        ImageIcon iconExit = new ImageIcon("assets/buttons/reload.png");
+        ImageIcon iconExit = ResourceManager.getImageIconFromResources(Assets.BUTTONS, "reload.png");
         reload.setIcon(iconExit);
         reload.setHorizontalTextPosition(SwingConstants.LEFT);
         reload.addActionListener(e -> {
@@ -115,7 +117,7 @@ public class ContentPanel extends JPanel {
         buttonBox.setBounds(205, 520, 400, 30);
 
         if(startBut > 5){
-            JButton backBut = new JButton(new ImageIcon("assets/buttons/back.png"));
+            JButton backBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS,"back.png"));
             backBut.addActionListener(new NextBackListener(point));
 
 
@@ -135,7 +137,7 @@ public class ContentPanel extends JPanel {
         }
 
         if(m != (num + 1)){
-            JButton nextBut = new JButton(new ImageIcon("assets/buttons/next.png"));
+            JButton nextBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS,"next.png"));
             nextBut.addActionListener(new NextBackListener(point));
 
 

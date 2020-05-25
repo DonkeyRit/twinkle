@@ -7,6 +7,8 @@ import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReloadButtonListener;
+import com.github.donkeyrit.javaapp.resources.Assets;
+import com.github.donkeyrit.javaapp.resources.ResourceManager;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -114,12 +116,12 @@ public class AboutCarPanel extends JPanel {
             add(temp);
         }
 
-        JButton reloadButton = new JButton(new ImageIcon("assets/buttons/reload.png"));
+        JButton reloadButton = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS,"reload.png"));
         reloadButton.setBounds(550,0,16,16);
         reloadButton.addActionListener(new ReloadButtonListener(point));
         add(reloadButton);
 
-        JButton returnButton = new JButton(new ImageIcon("assets/buttons/return.png"));
+        JButton returnButton = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS,"return.png"));
         returnButton.setBounds(570,0,16,16);
         returnButton.addActionListener(e -> {
 
@@ -693,7 +695,7 @@ public class AboutCarPanel extends JPanel {
     public void paintComponent(Graphics g){
         g.setColor(new Color(237,237,237));
         g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(),30,25);
-        Image image = new ImageIcon("assets/cars/" + car.getImagesNum() + ".png").getImage();
+        Image image = ResourceManager.getImageFromResources(Assets.CARS, String.format("%d.png", car.getImagesNum()));
         g.drawImage(image,30,10,this);
         g.setColor(new Color(255,255,255));
         g.fillRect(20, 290, 260, 190);

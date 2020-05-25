@@ -1,6 +1,8 @@
 package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
+import com.github.donkeyrit.javaapp.resources.Assets;
+import com.github.donkeyrit.javaapp.resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +25,7 @@ public class HeaderPanel extends JPanel {
         });
 
         logo.setBounds(30, 10, 60, 60);
-        ImageIcon icon = new ImageIcon("assets/logo/logo.png");
+        ImageIcon icon = ResourceManager.getImageIconFromResources(Assets.LOGO,"logo.png");
         logo.setIcon(icon);
         logo.setHorizontalTextPosition(SwingConstants.LEFT);
         logo.setBorderPainted(false);
@@ -46,7 +48,7 @@ public class HeaderPanel extends JPanel {
             panel.add(chooseActionPanel);
         });
         avatar.setBounds(725, 10, 60, 60);
-        ImageIcon iconAvatar = new ImageIcon("assets/avatar/mini_avatar/" + point.avatarNumber + ".png");
+        ImageIcon iconAvatar = ResourceManager.getImageIconFromResources(Assets.MINI_AVATAR, String.format("%d.png", point.avatarNumber));
         avatar.setIcon(iconAvatar);
         avatar.setHorizontalTextPosition(SwingConstants.LEFT);
         avatar.setBorderPainted(false);
@@ -57,7 +59,7 @@ public class HeaderPanel extends JPanel {
 
         JButton exit = new JButton();
         exit.setBounds(795,10,60,60);
-        ImageIcon iconExit = new ImageIcon("assets/buttons/exit.png");
+        ImageIcon iconExit = ResourceManager.getImageIconFromResources(Assets.BUTTONS, "exit.png");
         exit.setIcon(iconExit);
         exit.setHorizontalTextPosition(SwingConstants.LEFT);
         exit.setBorderPainted(false);

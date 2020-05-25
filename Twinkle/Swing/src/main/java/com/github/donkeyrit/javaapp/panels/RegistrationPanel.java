@@ -115,7 +115,7 @@ public class RegistrationPanel extends JPanel {
 
         JButton backButton = new JButton();
         backButton.setBounds(500, 360, 28, 30);
-        ImageIcon icon = new ImageIcon("assets/buttons/return.png");
+        ImageIcon icon = ResourceManager.getImageIconFromResources(Assets.BUTTONS, "return.png");
         backButton.setIcon(icon);
         backButton.setHorizontalTextPosition(SwingConstants.LEFT);
         backButton.addActionListener(e -> {
