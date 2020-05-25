@@ -16,7 +16,7 @@ public abstract class DatabaseProvider {
     public ResultSet select(String query) {
         ResultSet rs = null;
         try {
-            Statement s = connection.createStatement();
+            Statement s = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             rs = s.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
