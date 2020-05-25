@@ -3,6 +3,8 @@ package com.github.donkeyrit.javaapp.panels;
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.JCTextField;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
+import com.github.donkeyrit.javaapp.resources.Assets;
+import com.github.donkeyrit.javaapp.resources.ResourceManager;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -114,7 +116,7 @@ public class PrivateDataPanel extends JPanel {
         g.setColor(new Color(237,237,237));
         g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),30,25);
 
-        Image image = new ImageIcon("assets/background/fill_data.png").getImage();
+        Image image = ResourceManager.getImageFromResources(Assets.BACKGROUND, "fill_data.png");
         g.drawImage(image,50,310,this);
     }
 }

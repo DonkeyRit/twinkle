@@ -4,6 +4,8 @@ import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.panels.aboutcar.AboutCarPanel;
+import com.github.donkeyrit.javaapp.resources.Assets;
+import com.github.donkeyrit.javaapp.resources.ResourceManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +19,7 @@ public class CarPanel extends JPanel {
 
     private final JPanel panel;
 
-    public CarPanel(EntryPoint point, int num){
+    public CarPanel(EntryPoint point, int num) {
 
         DatabaseProvider database = point.database;
         panel = point.panel;
@@ -26,14 +28,14 @@ public class CarPanel extends JPanel {
 
         ResultSet statusSet = database.select("SELECT * FROM renta WHERE idCar = " + num + " ORDER BY dataEnd, dataPlan DESC LIMIT 1");
         carBuilder.setStatus("open");
-        try{
-            while(statusSet.next()){
+        try {
+            while (statusSet.next()) {
                 Date rentDate = statusSet.getDate("dataEnd");
-                if(rentDate == null){
+                if (rentDate == null) {
                     carBuilder.setStatus("lock");
                 }
             }
-        } catch(SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -49,8 +51,8 @@ public class CarPanel extends JPanel {
                 "INNER JOIN bodytype ON join3.idBodyType = bodytype.idBodyType WHERE idCar = " + num;
 
         ResultSet carSet = database.select(query);
-        try{
-            while(carSet.next()){
+        try {
+            while (carSet.next()) {
                 carBuilder.setModelYear(carSet.getDate("modelYear"))
                         .setCost(carSet.getDouble("cost"))
                         .setModelName(carSet.getString("modelName"))
@@ -60,7 +62,7 @@ public class CarPanel extends JPanel {
                         .setBodyTypeName(carSet.getString("bodyTypeName"));
                 this.car = carBuilder.create();
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -112,7 +114,7 @@ public class CarPanel extends JPanel {
             newPanel.setFilter(temp.conditionPanel);
             newPanel.setNumPage(temp.numOfPage);
             newPanel.setStartBut(temp.startBut);
-            newPanel.setBounds(250,100,605,550);
+            newPanel.setBounds(250, 100, 605, 550);
             panel.remove(temp);
             panel.add(newPanel);
             panel.revalidate();
@@ -124,14 +126,13 @@ public class CarPanel extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g){
-        Image image = new ImageIcon("assets/cars/min/" + this.car.getImagesNum() + ".png").getImage();
-        g.drawImage(image,10,10,this);
+    public void paintComponent(Graphics g) {
+        Image image = ResourceManager.getImageFromResources(Assets.MINI_CARS, String.format("%s.png", this.car.getImagesNum())),
+                country = ResourceManager.getImageFromResources(Assets.FLAGS, String.format("%s.png", this.car.getNameCountry())),
+                statusImage = ResourceManager.getImageFromResources(Assets.STATUS, String.format("%s.png", this.car.getStatus()));
 
-        Image country = new ImageIcon("assets/flags/" + this.car.getNameCountry() + ".png").getImage();
-        g.drawImage(country,425,0,this);
-
-        Image statusImage = new ImageIcon("assets/status/" + this.car.getStatus() + ".png").getImage();
+        g.drawImage(image, 10, 10, this);
+        g.drawImage(country, 425, 0, this);
         g.drawImage(statusImage, 10, 10, this);
     }
 }

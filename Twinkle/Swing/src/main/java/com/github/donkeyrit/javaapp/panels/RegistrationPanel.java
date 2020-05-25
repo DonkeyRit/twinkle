@@ -5,6 +5,8 @@ import com.github.donkeyrit.javaapp.components.JCTextField;
 import com.github.donkeyrit.javaapp.components.JPaswordField;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.resources.Assets;
+import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
 
@@ -48,23 +50,23 @@ public class RegistrationPanel extends JPanel {
             boolean isTwo = password.getText().isEmpty();
             boolean isThree = rePassword.getText().isEmpty();
 
-            if(isOne){
+            if (isOne) {
                 login.setPlaceholder("Please, enter login");
                 login.setPhColor(Color.RED);
             }
 
-            if(isTwo){
+            if (isTwo) {
                 password.setPlaceholder("Please, enter password");
                 password.setPhColor(Color.RED);
             }
 
-            if(isThree){
+            if (isThree) {
                 rePassword.setPlaceholder("Please, repeat password");
                 rePassword.setPhColor(Color.RED);
             }
 
-            if(!isOne && !isTwo && !isThree){
-                if(!password.getText().equals(rePassword.getText())){
+            if (!isOne && !isTwo && !isThree) {
+                if (!password.getText().equals(rePassword.getText())) {
 
                     password.setPlaceholder("Password do not match");
                     password.setPhColor(Color.RED);
@@ -73,30 +75,30 @@ public class RegistrationPanel extends JPanel {
                     rePassword.setPlaceholder("Password do not match");
                     rePassword.setPhColor(Color.RED);
                     rePassword.setText("");
-                }else{
+                } else {
                     data.add(ShieldingProvider.shielding(login.getText()));
                     String query = String.format("SELECT count(idUser) as count FROM user WHERE login = '%s'", ShieldingProvider.shielding(login.getText()));
 
                     ResultSet userSet = database.select(query);
                     boolean isCheckUser = false;
-                    try{
+                    try {
                         int tempNum = 0;
-                        while(userSet.next()){
+                        while (userSet.next()) {
                             tempNum = userSet.getInt("count");
                         }
                         isCheckUser = tempNum != 0;
 
-                    }catch(SQLException ex){
+                    } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
 
-                    if(isCheckUser){
+                    if (isCheckUser) {
                         login.setPlaceholder("Login already exist");
                         login.setPhColor(Color.RED);
                         login.setText("");
-                    }else{
+                    } else {
                         data.add(SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())));
-                        point.user = new User(login.getText(), SecurityProvider.sha1(password.getText()),false);
+                        point.user = new User(login.getText(), SecurityProvider.sha1(password.getText()), false);
                         database.insert("INSERT INTO user(login,password,role) VALUES ('" + data.get(0) + "','" + data.get(1) + "',0)");
                         panel.removeAll();
                         panel.revalidate();
@@ -126,20 +128,21 @@ public class RegistrationPanel extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g){
-        Image image = new ImageIcon("assets/background/enter.jpg").getImage();
-        g.drawImage(image,0,0,this);
-        GradientPaint gp = new GradientPaint(0, 0, Color.RED,120, 120, Color.BLUE, true);
-        Graphics2D g2 = (Graphics2D)g;
+    public void paintComponent(Graphics g) {
+
+        Image image = ResourceManager.getImageFromResources(Assets.BACKGROUND, "enter.jpg");
+        g.drawImage(image, 0, 0, this);
+        GradientPaint gp = new GradientPaint(0, 0, Color.RED, 120, 120, Color.BLUE, true);
+        Graphics2D g2 = (Graphics2D) g;
         g2.setPaint(gp);
         g2.fillRoundRect(338, 230, 208, 180, 30, 15);
 
         int random = (int) (Math.random() * 6 + 1);
-        if(point.avatarNumber == 0){
+        if (point.avatarNumber == 0) {
             point.avatarNumber = random;
         }
 
-        Image avatar = new ImageIcon("assets/avatar/" + point.avatarNumber + ".png").getImage();
-        g.drawImage(avatar,380,100,this);
+        Image avatar = ResourceManager.getImageFromResources(Assets.AVATAR, String.format("%d.png", point.avatarNumber));
+        g.drawImage(avatar, 380, 100, this);
     }
 }

@@ -5,6 +5,8 @@ import com.github.donkeyrit.javaapp.components.JCTextField;
 import com.github.donkeyrit.javaapp.components.JPaswordField;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.resources.Assets;
+import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
 
@@ -114,7 +116,7 @@ public class EnterPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g){
-        Image image = new ImageIcon("assets/background/enter.jpg").getImage();
+        Image image = ResourceManager.getImageFromResources(Assets.BACKGROUND, "enter.jpg");
         g.drawImage(image,0,0,this);
         GradientPaint gp = new GradientPaint(0, 0, Color.RED,120, 120, Color.BLUE, true);
         Graphics2D g2 = (Graphics2D)g;
@@ -125,7 +127,7 @@ public class EnterPanel extends JPanel {
         if(point.avatarNumber == 0){
             point.avatarNumber = random;
         }
-        Image avatar = new ImageIcon("assets/avatar/" + point.avatarNumber + ".png").getImage();
+        Image avatar = ResourceManager.getImageFromResources(Assets.AVATAR, String.format("%d.png", point.avatarNumber));
         g.drawImage(avatar,380,100,this);
     }
 

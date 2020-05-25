@@ -4,6 +4,8 @@ import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.JPaswordField;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.resources.Assets;
+import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 
 import javax.swing.*;
@@ -109,7 +111,7 @@ public class ChangePasswordPanel extends JPanel {
         g.setColor(new Color(237,237,237));
         g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),30,25);
 
-        Image image = new ImageIcon("assets/background/page.png").getImage();
+        Image image = ResourceManager.getImageFromResources(Assets.BACKGROUND,"page.png");
         g.drawImage(image,50,250,this);
     }
 }
