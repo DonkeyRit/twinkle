@@ -9,8 +9,8 @@ import java.util.*;
 
 public class MySqlProvider extends DatabaseProvider {
 
-    private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/project";
+    private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/carrental?useUnicode=true&serverTimezone=UTC";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "root";
 
