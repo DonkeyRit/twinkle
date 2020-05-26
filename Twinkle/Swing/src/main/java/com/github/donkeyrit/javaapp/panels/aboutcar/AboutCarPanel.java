@@ -2,11 +2,10 @@ package com.github.donkeyrit.javaapp.panels.aboutcar;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
-import com.github.donkeyrit.javaapp.database.MySqlProvider;
 import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.model.User;
-import com.github.donkeyrit.javaapp.panels.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReloadButtonListener;
+import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReturnButtonListener;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 
@@ -16,8 +15,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -123,23 +120,7 @@ public class AboutCarPanel extends JPanel {
 
         JButton returnButton = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS,"return.png"));
         returnButton.setBounds(570,0,16,16);
-        returnButton.addActionListener(e -> {
-
-            Component[] mas = panel.getComponents();
-            JPanel temp = null;
-            for (Component ma : mas) {
-                if (ma.getClass().toString().contains("AboutCarPanel")) {
-                    temp = (JPanel) ma;
-                }
-            }
-
-            panel.remove(temp);
-            JPanel contentPanel = new ContentPanel(point, filter, numPage,startBut);
-            contentPanel.setBounds(250,100,605,550);
-            panel.add(contentPanel);
-            panel.revalidate();
-            panel.repaint();
-        });
+        returnButton.addActionListener(new ReturnButtonListener(point));
         add(returnButton);
 
         JButton actionWithCarButton = new JButton("ACTION");
@@ -375,7 +356,7 @@ public class AboutCarPanel extends JPanel {
                                     while(checkRentaSet.next()){
                                         Date rentDate = checkRentaSet.getDate("dataEnd");
                                         if(rentDate == null){
-                                            isHaveRenta = true;;
+                                            isHaveRenta = true;
                                         }
                                     }
                                 }catch(SQLException ex){
@@ -398,10 +379,10 @@ public class AboutCarPanel extends JPanel {
                                     JPanel selecPane = (JPanel) selecBut.getParent();
 
                                     Component[] compons = selecPane.getComponents();
-                                    for(int i = 0; i < compons.length; i++){
-                                        if(compons[i].getClass().toString().indexOf("JButton") > -1){
-                                            JButton button = (JButton) compons[i];
-                                            if(button.getText().indexOf("Get rent") > -1 || button.getText().indexOf("Return") > -1 ){
+                                    for (Component compon : compons) {
+                                        if (compon.getClass().toString().contains("JButton")) {
+                                            JButton button = (JButton) compon;
+                                            if (button.getText().contains("Get rent") || button.getText().contains("Return")) {
                                                 selecPane.remove(button);
                                             }
                                         }
@@ -457,7 +438,7 @@ public class AboutCarPanel extends JPanel {
 
                     Component[] compons = selecPane.getComponents();
                     for (Component compon : compons) {
-                        if (compon.getClass().toString().indexOf("JButton") > -1) {
+                        if (compon.getClass().toString().contains("JButton")) {
                             JButton button = (JButton) compon;
                             if (button.getText().contains("Get rent")) {
                                 selecPane.remove(button);
@@ -539,10 +520,10 @@ public class AboutCarPanel extends JPanel {
                         JPanel selecButPanel = (JPanel) selectedButton.getParent();
 
                         Component[] listMas = selecButPanel.getComponents();
-                        for(int i = 0; i< listMas.length; i++){
-                            if(listMas[i].getClass().toString().contains("JLabel")){
-                                JLabel label = (JLabel) listMas[i];
-                                if(label.getText().contains("Sum")){
+                        for (Component litmas : listMas) {
+                            if (litmas.getClass().toString().contains("JLabel")) {
+                                JLabel label = (JLabel) litmas;
+                                if (label.getText().contains("Sum")) {
                                     selecButPanel.remove(label);
                                 }
                             }
@@ -552,72 +533,68 @@ public class AboutCarPanel extends JPanel {
 
                         JButton newReturnButton = new JButton("Return");
                         newReturnButton.setBounds(330, 500, 120, 30);
-                        newReturnButton.addActionListener(new ActionListener() {
-
-                            @Override
-                            public void actionPerformed(ActionEvent e13) {
-                                String injuryForCar = "";
-                                for (JCheckBox checkBox : checkBoxes) {
-                                    if (checkBox.isSelected()) {
-                                        injuryForCar = checkBox.getText();
-                                    }
+                        newReturnButton.addActionListener(e131 -> {
+                            String injuryForCar = "";
+                            for (JCheckBox checkBox : checkBoxes) {
+                                if (checkBox.isSelected()) {
+                                    injuryForCar = checkBox.getText();
                                 }
-                                Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-                                calendar.setTime(new Date());
-                                int currYear = calendar.get(Calendar.YEAR);
-                                int currMont = calendar.get(Calendar.MONTH);
-                                int currDay = calendar.get(Calendar.DATE);
-
-                                String dataStr = currYear + "-" + currMont + "-" + currDay;
-                                String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE idCar = " + car.getImagesNum() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');";
-                                database.update(updateQuery);
-
-                                String idRentaStr = "SELECT idRenta FROM renta WHERE idCar = " + car.getImagesNum() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
-                                ResultSet rentaSet = database.select(idRentaStr);
-                                int idRentaNum = 0;
-                                try{
-                                    while(rentaSet.next()){
-                                        idRentaNum = rentaSet.getInt("idRenta");
-                                    }
-                                }catch(SQLException ex){
-                                    ex.printStackTrace();
-                                }
-
-                                String idInjuryStr = "SELECT idInjury FROM injury WHERE injuryName = '" + injuryForCar +"'";
-                                ResultSet injurySet = database.select(idInjuryStr);
-                                int idInjuryNum = 0;
-                                try{
-                                    while(injurySet.next()){
-                                        idInjuryNum = injurySet.getInt("idInjury");
-                                    }
-                                }catch(SQLException ex){
-                                    ex.printStackTrace();
-                                }
-
-                                database.insert("INSERT INTO  resultinginjury(idRenta,idInjury) VALUES(" + idRentaNum + "," + idInjuryNum + ")");
-
-                                remove(box);
-                                remove(newReturnButton);
-                                remove(countButton);
-                                Component[] listMas = selecButPanel.getComponents();
-                                for (Component litmas : listMas) {
-                                    if (litmas.getClass().toString().contains("JLabel")) {
-                                        JLabel label = (JLabel) litmas;
-                                        if (label.getText().contains("Sum")) {
-                                            remove(label);
-                                        }
-                                    }
-                                }
-                                JTextArea textArea12 = new JTextArea(car.getInfo());
-                                textArea12.setLineWrap(true);
-                                JScrollPane scrollPane12 = new JScrollPane(textArea12);
-                                scrollPane12.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-                                scrollPane12.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-                                scrollPane12.setBounds(300, 290, 285, 190);
-                                add(scrollPane12);
-                                revalidate();
-                                repaint();
                             }
+                            Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                            calendar.setTime(new Date());
+                            int currYear = calendar.get(Calendar.YEAR);
+                            int currMont = calendar.get(Calendar.MONTH);
+                            int currDay = calendar.get(Calendar.DATE);
+
+                            String dataStr = currYear + "-" + currMont + "-" + currDay;
+                            String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE idCar = " + car.getImagesNum() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');";
+                            database.update(updateQuery);
+
+                            String idRentaStr = "SELECT idRenta FROM renta WHERE idCar = " + car.getImagesNum() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
+                            ResultSet rentaSet = database.select(idRentaStr);
+                            int idRentaNum = 0;
+                            try{
+                                while(rentaSet.next()){
+                                    idRentaNum = rentaSet.getInt("idRenta");
+                                }
+                            }catch(SQLException ex){
+                                ex.printStackTrace();
+                            }
+
+                            String idInjuryStr = "SELECT idInjury FROM injury WHERE injuryName = '" + injuryForCar +"'";
+                            ResultSet injurySet = database.select(idInjuryStr);
+                            int idInjuryNum = 0;
+                            try{
+                                while(injurySet.next()){
+                                    idInjuryNum = injurySet.getInt("idInjury");
+                                }
+                            }catch(SQLException ex){
+                                ex.printStackTrace();
+                            }
+
+                            database.insert("INSERT INTO  resultinginjury(idRenta,idInjury) VALUES(" + idRentaNum + "," + idInjuryNum + ")");
+
+                            remove(box);
+                            remove(newReturnButton);
+                            remove(countButton);
+                            Component[] listMas1 = selecButPanel.getComponents();
+                            for (Component litmas : listMas1) {
+                                if (litmas.getClass().toString().contains("JLabel")) {
+                                    JLabel label = (JLabel) litmas;
+                                    if (label.getText().contains("Sum")) {
+                                        remove(label);
+                                    }
+                                }
+                            }
+                            JTextArea textArea12 = new JTextArea(car.getInfo());
+                            textArea12.setLineWrap(true);
+                            JScrollPane scrollPane12 = new JScrollPane(textArea12);
+                            scrollPane12.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                            scrollPane12.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                            scrollPane12.setBounds(300, 290, 285, 190);
+                            add(scrollPane12);
+                            revalidate();
+                            repaint();
                         });
                         tempPanel.add(newReturnButton);
 
@@ -637,7 +614,6 @@ public class AboutCarPanel extends JPanel {
                         Date dataRentaPlan = null;
                         try{
                             while(queryToDbSet.next()){
-                                startRentaDate = queryToDbSet.getDate("dataStart");
                                 dataRentaPlan = queryToDbSet.getDate("dataPlan");
                             }
                         }catch(SQLException ex){
@@ -653,7 +629,7 @@ public class AboutCarPanel extends JPanel {
                         if(currentGetData.after(startRentaDate)){
                             labelCostRenta.setText("Sum = 0");
                         }else{
-                            double costForTheRent = 0f;
+                            double costForTheRent;
 
                             long difference = startRentaDate.getTime() - currentGetData.getTime();
                             int days = (int) (difference/(24*60*60*1000));
