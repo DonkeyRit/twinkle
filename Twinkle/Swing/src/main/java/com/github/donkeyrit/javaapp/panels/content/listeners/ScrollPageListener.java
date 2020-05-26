@@ -1,7 +1,7 @@
-package com.github.donkeyrit.javaapp.listeners;
+package com.github.donkeyrit.javaapp.panels.content.listeners;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
-import com.github.donkeyrit.javaapp.panels.ContentPanel;
+import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 
 import javax.swing.*;
 import java.awt.*;

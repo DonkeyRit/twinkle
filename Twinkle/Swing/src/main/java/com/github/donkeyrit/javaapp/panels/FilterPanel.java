@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
+import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

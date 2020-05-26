@@ -36,7 +36,7 @@ public class LoginPanel extends JPanel {
         database = point.database;
 
         initialize();
-        
+
         add(login);
         add(password);
         add(signIn);

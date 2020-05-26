@@ -1,7 +1,7 @@
 package com.github.donkeyrit.javaapp.panels.aboutcar.listeners;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
-import com.github.donkeyrit.javaapp.panels.ContentPanel;
+import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.aboutcar.AboutCarPanel;
 
 import javax.swing.*;
