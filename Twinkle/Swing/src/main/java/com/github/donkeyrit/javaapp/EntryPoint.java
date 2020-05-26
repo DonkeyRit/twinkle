@@ -4,7 +4,7 @@ import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.database.MySqlProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.ContentPanel;
-import com.github.donkeyrit.javaapp.panels.EnterPanel;
+import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.panels.FilterPanel;
 import com.github.donkeyrit.javaapp.panels.HeaderPanel;
 
@@ -51,7 +51,7 @@ public class EntryPoint {
     }
     
     public void showAuthorization(){
-        JPanel enterPanel = new EnterPanel(this);
+        JPanel enterPanel = new LoginPanel(this);
         enterPanel.setBounds(0,0,875,700); 
         panel.add(enterPanel); 
     }
