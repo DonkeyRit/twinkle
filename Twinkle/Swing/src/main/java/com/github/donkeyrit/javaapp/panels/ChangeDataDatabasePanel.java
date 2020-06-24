@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.MyTableModel;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 
 import javax.swing.*;
@@ -11,10 +12,11 @@ import java.util.ArrayList;
 
 public class ChangeDataDatabasePanel extends JPanel {
 
-    public ChangeDataDatabasePanel(EntryPoint point) {
+    public ChangeDataDatabasePanel() {
         setLayout(null);
 
-        DatabaseProvider database = point.database;
+        ServiceContainer serviceContainer = ServiceContainer.getInstance();
+        DatabaseProvider database = serviceContainer.getDatabaseProvider();
 
         ArrayList<String> tableName = database.getTableNames();
         ArrayList<JToggleButton> listTogBut = new ArrayList<>();

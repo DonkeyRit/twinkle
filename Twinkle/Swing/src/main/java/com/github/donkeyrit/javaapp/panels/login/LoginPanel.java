@@ -3,6 +3,7 @@ package com.github.donkeyrit.javaapp.panels.login;
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.JCTextField;
 import com.github.donkeyrit.javaapp.components.JPaswordField;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.RegistrationPanel;
@@ -33,7 +34,8 @@ public class LoginPanel extends JPanel {
 
         this.point = point;
         panel = point.panel;
-        database = point.database;
+        ServiceContainer serviceContainer = ServiceContainer.getInstance();
+        database = serviceContainer.getDatabaseProvider();
 
         initialize();
 

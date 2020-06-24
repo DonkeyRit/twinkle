@@ -1,6 +1,7 @@
 package com.github.donkeyrit.javaapp.panels.aboutcar;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.model.User;
@@ -64,7 +65,8 @@ public class AboutCarPanel extends JPanel {
 
         this.car = car;
 
-        database = point.database;
+        ServiceContainer serviceContainer = ServiceContainer.getInstance();
+        database = serviceContainer.getDatabaseProvider();
         panel = point.panel;
         user = point.user;
 

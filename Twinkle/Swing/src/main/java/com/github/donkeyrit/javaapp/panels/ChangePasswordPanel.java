@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.JPaswordField;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.resources.Assets;
@@ -21,7 +22,8 @@ public class ChangePasswordPanel extends JPanel {
     public ChangePasswordPanel(EntryPoint point) {
         setLayout(null);
 
-        database = point.database;
+        ServiceContainer serviceContainer = ServiceContainer.getInstance();
+        database = serviceContainer.getDatabaseProvider();
         user = point.user;
 
         Box mainBox = Box.createVerticalBox();

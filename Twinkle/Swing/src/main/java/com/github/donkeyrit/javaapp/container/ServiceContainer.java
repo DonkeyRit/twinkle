@@ -13,8 +13,6 @@ public class ServiceContainer {
         return instance;
     }
 
-
-
     private ServiceContainer() { }
 
     private DatabaseProvider databaseProvider;

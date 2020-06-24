@@ -1,6 +1,7 @@
 package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 
@@ -19,7 +20,8 @@ public class FilterPanel extends JPanel {
     public FilterPanel(EntryPoint point){
         setLayout(null);
 
-        database = point.database;
+        ServiceContainer serviceContainer = ServiceContainer.getInstance();
+        database = serviceContainer.getDatabaseProvider();
         panel = point.panel;
 
         JLabel mainLabel = new JLabel("Применить фильтр");

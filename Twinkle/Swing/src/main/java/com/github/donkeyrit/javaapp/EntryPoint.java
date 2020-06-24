@@ -19,7 +19,6 @@ public class EntryPoint {
 
     public JFrame frame;
     public JPanel panel;
-    public DatabaseProvider database;
     public int avatarNumber = 0;
     public User user;
 
@@ -27,7 +26,7 @@ public class EntryPoint {
         /**
          * Application start
          */
-        new EntryPoint().initGui();
+        new EntryPoint().initialize();
     }
 
     private void initialize() {
@@ -35,14 +34,10 @@ public class EntryPoint {
         ServiceContainer container = ServiceContainer.getInstance();
         container.setDatabaseProvider(new MySqlProvider());
 
-    }
-
-    private void initGui() {
         /**
          * Method configure initial state of panel
          */
         frame = new JFrame("Rent car");
-        database = new MySqlProvider();
 
         panel = new JPanel();
         panel.setBackground(new Color(255, 255, 255));

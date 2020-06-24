@@ -1,6 +1,7 @@
 package com.github.donkeyrit.javaapp.panels.content;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.content.listeners.NextBackListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.ScrollPageListener;
@@ -27,7 +28,8 @@ public class ContentPanel extends JPanel {
         conditionPanel = condition;
 
         panel = point.panel;
-        DatabaseProvider database = point.database;
+        ServiceContainer serviceContainer = ServiceContainer.getInstance();
+        DatabaseProvider database = serviceContainer.getDatabaseProvider();
 
         JLabel contentMainLabel = new JLabel("List of cars:");
         Font font = new Font("Arial", Font.BOLD, 13);
