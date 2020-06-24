@@ -1,6 +1,5 @@
 package com.github.donkeyrit.javaapp.panels.login;
 
-import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.JCTextField;
 import com.github.donkeyrit.javaapp.components.JPaswordField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;

@@ -1,11 +1,10 @@
 package com.github.donkeyrit.javaapp.panels.content;
 
-import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
+import com.github.donkeyrit.javaapp.panels.CarPanel;
 import com.github.donkeyrit.javaapp.panels.content.listeners.NextBackListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.ScrollPageListener;
-import com.github.donkeyrit.javaapp.panels.CarPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.ui.MainPanel;

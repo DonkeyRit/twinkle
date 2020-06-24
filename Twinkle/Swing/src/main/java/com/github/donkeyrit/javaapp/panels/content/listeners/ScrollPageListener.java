@@ -1,6 +1,5 @@
 package com.github.donkeyrit.javaapp.panels.content.listeners;
 
-import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.ui.MainPanel;

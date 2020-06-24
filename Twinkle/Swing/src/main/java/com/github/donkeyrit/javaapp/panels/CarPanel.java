@@ -1,6 +1,5 @@
 package com.github.donkeyrit.javaapp.panels;
 
-import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;

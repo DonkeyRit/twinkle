@@ -1,12 +1,10 @@
 package com.github.donkeyrit.javaapp.panels.aboutcar.listeners;
 
-import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.aboutcar.AboutCarPanel;
 import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

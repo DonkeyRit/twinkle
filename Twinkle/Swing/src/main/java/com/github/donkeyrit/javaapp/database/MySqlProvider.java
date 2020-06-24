@@ -4,8 +4,8 @@ package com.github.donkeyrit.javaapp.database;
  * @author Dima
  */
 
-import java.sql.*;
-import java.util.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class MySqlProvider extends DatabaseProvider {
 
