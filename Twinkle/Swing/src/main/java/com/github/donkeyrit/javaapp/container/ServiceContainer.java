@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp.container;
 
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.ui.UiManager;
 
 public class ServiceContainer {
 
@@ -30,5 +31,13 @@ public class ServiceContainer {
     }
     public void setUser(User user) {
         this.user = user;
+    }
+
+    private UiManager uiManager;
+    public UiManager getUiManager() {
+        return uiManager;
+    }
+    public void setUiManager(UiManager uiManager) {
+        this.uiManager = uiManager;
     }
 }

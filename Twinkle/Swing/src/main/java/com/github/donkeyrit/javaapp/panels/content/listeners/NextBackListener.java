@@ -1,7 +1,9 @@
 package com.github.donkeyrit.javaapp.panels.content.listeners;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -9,12 +11,10 @@ import java.awt.event.ActionListener;
 
 public class NextBackListener implements ActionListener {
 
-    private EntryPoint point;
-    private JPanel panel;
+    private MainPanel panel;
 
-    public NextBackListener(EntryPoint point) {
-        this.point = point;
-        panel = point.panel;
+    public NextBackListener() {
+        panel = ServiceContainer.getInstance().getUiManager().getMainPanel();
     }
 
     @Override
@@ -30,10 +30,10 @@ public class NextBackListener implements ActionListener {
 
         JPanel addPanel = null;
         if(nameBut.substring(indexName + 1, indexName + 5).equals("next")){
-            addPanel = new ContentPanel(point, outerPanel.conditionPanel,numNowPage + 5,numNowPage + 5);
+            addPanel = new ContentPanel(outerPanel.conditionPanel,numNowPage + 5,numNowPage + 5);
             panel.add(addPanel);
         }else{
-            addPanel = new ContentPanel(point, outerPanel.conditionPanel,numNowPage - 5,numNowPage - 5);
+            addPanel = new ContentPanel(outerPanel.conditionPanel,numNowPage - 5,numNowPage - 5);
             panel.add(addPanel);
         }
         addPanel.setBounds(250,100,605,550);

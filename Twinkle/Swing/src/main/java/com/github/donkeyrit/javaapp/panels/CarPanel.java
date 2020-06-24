@@ -8,6 +8,7 @@ import com.github.donkeyrit.javaapp.panels.aboutcar.AboutCarPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,13 +20,13 @@ public class CarPanel extends JPanel {
 
     private Car car;
 
-    private final JPanel panel;
+    private final MainPanel panel;
 
-    public CarPanel(EntryPoint point, int num) {
+    public CarPanel(int num) {
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         DatabaseProvider database = serviceContainer.getDatabaseProvider();
-        panel = point.panel;
+        panel = serviceContainer.getUiManager().getMainPanel();
 
         Car.CarBuilder carBuilder = new Car.CarBuilder();
 
@@ -113,7 +114,7 @@ public class CarPanel extends JPanel {
                     temp = (ContentPanel) ma;
                 }
             }
-            AboutCarPanel newPanel = new AboutCarPanel(point, this.car);
+            AboutCarPanel newPanel = new AboutCarPanel(this.car);
             newPanel.setFilter(temp.conditionPanel);
             newPanel.setNumPage(temp.numOfPage);
             newPanel.setStartBut(temp.startBut);

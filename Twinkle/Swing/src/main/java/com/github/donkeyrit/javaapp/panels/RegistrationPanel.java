@@ -10,6 +10,7 @@ import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,16 +20,12 @@ import java.util.ArrayList;
 
 public class RegistrationPanel extends JPanel {
 
-    private final EntryPoint point;
-
-    public RegistrationPanel(EntryPoint point) {
+    public RegistrationPanel() {
         setLayout(null);
-
-        this.point = point;
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         DatabaseProvider database = serviceContainer.getDatabaseProvider();
-        JPanel panel = point.panel;
+        MainPanel panel = serviceContainer.getUiManager().getMainPanel();
 
         JCTextField login = new JCTextField();
         login.setPlaceholder("Enter login");
@@ -106,7 +103,7 @@ public class RegistrationPanel extends JPanel {
                         panel.removeAll();
                         panel.revalidate();
                         panel.repaint();
-                        point.showContent();
+                        panel.showContent();
                     }
                 }
             }
@@ -125,7 +122,7 @@ public class RegistrationPanel extends JPanel {
             panel.removeAll();
             panel.revalidate();
             panel.repaint();
-            point.showAuthorization();
+            panel.showAuthorization();
         });
         add(backButton);
     }

@@ -4,25 +4,26 @@ import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class HeaderPanel extends JPanel {
 
-    private JPanel panel;
+    private MainPanel panel;
 
-    public HeaderPanel(EntryPoint point){
+    public HeaderPanel(){
         this.setLayout(null);
 
-        panel = point.panel;
+        panel = ServiceContainer.getInstance().getUiManager().getMainPanel();
 
         JButton logo = new JButton();
         logo.addActionListener(e -> {
             panel.removeAll();
             panel.revalidate();
             panel.repaint();
-            point.showContent();
+            panel.showContent();
         });
 
         logo.setBounds(30, 10, 60, 60);
@@ -40,11 +41,11 @@ public class HeaderPanel extends JPanel {
             panel.revalidate();
             panel.repaint();
 
-            JPanel headerPanel = new HeaderPanel(point);
+            JPanel headerPanel = new HeaderPanel();
             headerPanel.setBounds(0,0,875,80);
             panel.add(headerPanel);
 
-            JPanel chooseActionPanel = new ChooseActionPanel(point);
+            JPanel chooseActionPanel = new ChooseActionPanel();
             chooseActionPanel.setBounds(30, 100, 200, 550);
             panel.add(chooseActionPanel);
         });
@@ -69,7 +70,7 @@ public class HeaderPanel extends JPanel {
         exit.addActionListener(e -> {
             ServiceContainer.getInstance().setUser(null);
             panel.removeAll();
-            point.showAuthorization();
+            panel.showAuthorization();
             panel.revalidate();
             panel.repaint();
         });

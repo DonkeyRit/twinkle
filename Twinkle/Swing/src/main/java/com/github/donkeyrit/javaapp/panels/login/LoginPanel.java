@@ -11,6 +11,7 @@ import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,22 +22,19 @@ public class LoginPanel extends JPanel {
 
     private final ServiceContainer serviceContainer;
     private final DatabaseProvider database;
-
-    private final JPanel panel;
-    private final EntryPoint point;
+    private final MainPanel panel;
 
     private JCTextField login;
     private JPaswordField password;
     private JButton signIn;
     private JButton register;
 
-    public LoginPanel(EntryPoint point) {
+    public LoginPanel() {
 
         setLayout(null);
 
-        this.point = point;
-        panel = point.panel;
         this.serviceContainer = ServiceContainer.getInstance();
+        this.panel = serviceContainer.getUiManager().getMainPanel();
         this.database = serviceContainer.getDatabaseProvider();
 
         initialize();
@@ -101,7 +99,7 @@ public class LoginPanel extends JPanel {
                             ShieldingProvider.shielding(login.getText()),
                             SecurityProvider.sha1(password.getText()), roleUser)
                     );
-                    point.showContent();
+                    panel.showContent();
 
 
                 } else {
@@ -126,7 +124,7 @@ public class LoginPanel extends JPanel {
             panel.removeAll();
             panel.revalidate();
             panel.repaint();
-            JPanel registrationPanel = new RegistrationPanel(point);
+            JPanel registrationPanel = new RegistrationPanel();
             registrationPanel.setBounds(0, 0, 875, 700);
             panel.add(registrationPanel);
         });

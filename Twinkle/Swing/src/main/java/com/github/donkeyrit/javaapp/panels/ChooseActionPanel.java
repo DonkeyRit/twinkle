@@ -3,6 +3,7 @@ package com.github.donkeyrit.javaapp.panels;
 import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,14 +11,14 @@ import java.util.ArrayList;
 
 public class ChooseActionPanel extends JPanel {
 
-    private final JPanel panel;
+    private final MainPanel panel;
 
-    public ChooseActionPanel(EntryPoint point){
+    public ChooseActionPanel(){
         setLayout(null);
 
         ServiceContainer container = ServiceContainer.getInstance();
         User user = container.getUser();
-        panel = point.panel;
+        panel = container.getUiManager().getMainPanel();
 
         ArrayList<String> actions = new ArrayList<>();
         actions.add("Change password");

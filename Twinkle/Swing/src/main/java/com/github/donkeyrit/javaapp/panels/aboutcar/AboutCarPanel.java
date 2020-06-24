@@ -9,6 +9,7 @@ import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReloadButtonListen
 import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReturnButtonListener;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -27,9 +28,8 @@ public class AboutCarPanel extends JPanel {
         return car;
     }
 
-    // TODO Remove this variables
     private DatabaseProvider database;
-    private JPanel panel;
+    private MainPanel panel;
     private User user;
 
     private String filter;
@@ -60,14 +60,14 @@ public class AboutCarPanel extends JPanel {
         return startBut;
     }
 
-    public AboutCarPanel(EntryPoint point, Car car) {
+    public AboutCarPanel(Car car) {
         setLayout(null);
 
         this.car = car;
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         database = serviceContainer.getDatabaseProvider();
-        panel = point.panel;
+        panel = serviceContainer.getUiManager().getMainPanel();
         user = serviceContainer.getUser();
 
         JTextArea textArea = new JTextArea(car.getInfo());
@@ -117,12 +117,12 @@ public class AboutCarPanel extends JPanel {
 
         JButton reloadButton = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS,"reload.png"));
         reloadButton.setBounds(550,0,16,16);
-        reloadButton.addActionListener(new ReloadButtonListener(point));
+        reloadButton.addActionListener(new ReloadButtonListener());
         add(reloadButton);
 
         JButton returnButton = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS,"return.png"));
         returnButton.setBounds(570,0,16,16);
-        returnButton.addActionListener(new ReturnButtonListener(point));
+        returnButton.addActionListener(new ReturnButtonListener());
         add(returnButton);
 
         JButton actionWithCarButton = new JButton("ACTION");

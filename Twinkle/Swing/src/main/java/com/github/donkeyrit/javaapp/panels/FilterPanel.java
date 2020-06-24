@@ -4,6 +4,7 @@ import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -15,14 +16,14 @@ import java.util.ArrayList;
 public class FilterPanel extends JPanel {
 
     private final DatabaseProvider database;
-    private final JPanel panel;
+    private final MainPanel panel;
 
-    public FilterPanel(EntryPoint point){
+    public FilterPanel(){
         setLayout(null);
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         database = serviceContainer.getDatabaseProvider();
-        panel = point.panel;
+        panel = serviceContainer.getUiManager().getMainPanel();
 
         JLabel mainLabel = new JLabel("Применить фильтр");
         Font font = new Font("Arial", Font.BOLD, 13);
@@ -219,7 +220,7 @@ public class FilterPanel extends JPanel {
             }
 
             panel.remove(temp);
-            JPanel content = new ContentPanel(point, resStr.toString());
+            JPanel content = new ContentPanel(resStr.toString());
             content.setBounds(250,100,605,550);
             panel.add(content);
             panel.revalidate();

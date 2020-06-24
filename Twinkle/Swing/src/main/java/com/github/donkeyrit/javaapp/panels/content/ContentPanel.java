@@ -8,6 +8,7 @@ import com.github.donkeyrit.javaapp.panels.content.listeners.ScrollPageListener;
 import com.github.donkeyrit.javaapp.panels.CarPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -21,13 +22,13 @@ public class ContentPanel extends JPanel {
     public int startBut = 1;
     public String conditionPanel = "";
 
-    private final JPanel panel;
+    private final MainPanel panel;
 
-    public ContentPanel(EntryPoint point, String condition, int ... args){
+    public ContentPanel(String condition, int ... args){
         setLayout(null);
         conditionPanel = condition;
 
-        panel = point.panel;
+        panel = ServiceContainer.getInstance().getUiManager().getMainPanel();
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         DatabaseProvider database = serviceContainer.getDatabaseProvider();
 
@@ -52,7 +53,7 @@ public class ContentPanel extends JPanel {
             }
 
             panel.remove(temp);
-            JPanel content = new ContentPanel(point, "");
+            JPanel content = new ContentPanel("");
             content.setBounds(250,100,605,550);
             panel.add(content);
             panel.revalidate();
@@ -100,7 +101,7 @@ public class ContentPanel extends JPanel {
 
         ArrayList<JPanel> panelList = new ArrayList<>();
         for(int i = start,j = 0; i < end; i++,j++){
-            JPanel temp = new CarPanel(point, carsList.get(i));
+            JPanel temp = new CarPanel(carsList.get(i));
             temp.setBorder(new LineBorder(new Color(0,163,163), 4));
             temp.setBounds(20,40 + j * 120,565,100);
             add(temp);
@@ -121,7 +122,7 @@ public class ContentPanel extends JPanel {
 
         if(startBut > 5){
             JButton backBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS,"back.png"));
-            backBut.addActionListener(new NextBackListener(point));
+            backBut.addActionListener(new NextBackListener());
 
 
             buttonBox.add(backBut);
@@ -133,7 +134,7 @@ public class ContentPanel extends JPanel {
             JButton temp = new JButton(i + "");
 
             temp.setFont(buttonFont);
-            temp.addActionListener(new ScrollPageListener(point));
+            temp.addActionListener(new ScrollPageListener());
 
             buttonBox.add(temp);
             buttonsList.add(temp);
@@ -141,7 +142,7 @@ public class ContentPanel extends JPanel {
 
         if(m != (num + 1)){
             JButton nextBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS,"next.png"));
-            nextBut.addActionListener(new NextBackListener(point));
+            nextBut.addActionListener(new NextBackListener());
 
 
             buttonBox.add(nextBut);

@@ -1,7 +1,9 @@
 package com.github.donkeyrit.javaapp.panels.content.listeners;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
+import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,12 +12,10 @@ import java.awt.event.ActionListener;
 
 public class ScrollPageListener implements ActionListener {
 
-    private EntryPoint point;
-    private JPanel panel;
+    private MainPanel panel;
 
-    public ScrollPageListener(EntryPoint point) {
-        this.point = point;
-        panel = point.panel;
+    public ScrollPageListener() {
+        panel = ServiceContainer.getInstance().getUiManager().getMainPanel();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ScrollPageListener implements ActionListener {
         }
 
         panel.remove(temp);
-        JPanel content = new ContentPanel(point, temp.conditionPanel,numPage,temp.startBut);
+        JPanel content = new ContentPanel(temp.conditionPanel,numPage,temp.startBut);
         content.setBounds(250,100,605,550);
         panel.add(content);
         panel.revalidate();
