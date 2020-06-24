@@ -101,7 +101,7 @@ public class RegistrationPanel extends JPanel {
                         login.setText("");
                     } else {
                         data.add(SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())));
-                        point.user = new User(login.getText(), SecurityProvider.sha1(password.getText()), false);
+                        serviceContainer.setUser(new User(login.getText(), SecurityProvider.sha1(password.getText()), false));
                         database.insert("INSERT INTO user(login,password,role) VALUES ('" + data.get(0) + "','" + data.get(1) + "',0)");
                         panel.removeAll();
                         panel.revalidate();

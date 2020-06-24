@@ -19,8 +19,10 @@ import java.sql.SQLException;
 
 public class LoginPanel extends JPanel {
 
-    private final JPanel panel;
+    private final ServiceContainer serviceContainer;
     private final DatabaseProvider database;
+
+    private final JPanel panel;
     private final EntryPoint point;
 
     private JCTextField login;
@@ -34,8 +36,8 @@ public class LoginPanel extends JPanel {
 
         this.point = point;
         panel = point.panel;
-        ServiceContainer serviceContainer = ServiceContainer.getInstance();
-        database = serviceContainer.getDatabaseProvider();
+        this.serviceContainer = ServiceContainer.getInstance();
+        this.database = serviceContainer.getDatabaseProvider();
 
         initialize();
 
@@ -95,9 +97,12 @@ public class LoginPanel extends JPanel {
                     panel.removeAll();
                     panel.revalidate();
                     panel.repaint();
+                    this.serviceContainer.setUser(new User(
+                            ShieldingProvider.shielding(login.getText()),
+                            SecurityProvider.sha1(password.getText()), roleUser)
+                    );
                     point.showContent();
 
-                    point.user = new User(ShieldingProvider.shielding(login.getText()), SecurityProvider.sha1(password.getText()), roleUser);
 
                 } else {
 

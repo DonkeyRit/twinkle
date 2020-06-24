@@ -1,9 +1,9 @@
 package com.github.donkeyrit.javaapp.panels;
 
-import com.github.donkeyrit.javaapp.EntryPoint;
 import com.github.donkeyrit.javaapp.components.JCTextField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
+import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 
@@ -16,13 +16,14 @@ import java.util.ArrayList;
 
 public class PrivateDataPanel extends JPanel {
 
-    public PrivateDataPanel(EntryPoint point) {
+    public PrivateDataPanel() {
         setLayout(null);
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         DatabaseProvider database = serviceContainer.getDatabaseProvider();
+        User user = serviceContainer.getUser();
 
-        String queryUser = "SELECT firstName,secondName,Patronimic,address,phoneNumber FROM client where idUser = (SELECT idUser FROM user WHERE login = '" + point.user.getLogin() + "')";
+        String queryUser = "SELECT firstName,secondName,Patronimic,address,phoneNumber FROM client where idUser = (SELECT idUser FROM user WHERE login = '" + user.getLogin() + "')";
         ResultSet userSet = database.select(queryUser);
         ArrayList<String> infoUser = new ArrayList<>();
         try{
@@ -72,7 +73,7 @@ public class PrivateDataPanel extends JPanel {
                     for (JCTextField jcTextField : fieldText) {
                         createClient.append("'").append(jcTextField.getText()).append("',");
                     }
-                    createClient.append("(SELECT idUser FROM user WHERE login = '").append(point.user.getLogin()).append("'))");
+                    createClient.append("(SELECT idUser FROM user WHERE login = '").append(user.getLogin()).append("'))");
 
                     database.insert(createClient.toString());
                     for (JCTextField jcTextField : fieldText) {
@@ -89,7 +90,7 @@ public class PrivateDataPanel extends JPanel {
                             updateClient.append(",");
                         }
                     }
-                    updateClient.append(" WHERE idUser = (SELECT idUser FROM user WHERE login = '").append(point.user.getLogin()).append("')");
+                    updateClient.append(" WHERE idUser = (SELECT idUser FROM user WHERE login = '").append(user.getLogin()).append("')");
                     database.update(updateClient.toString());
                 }
             }else{

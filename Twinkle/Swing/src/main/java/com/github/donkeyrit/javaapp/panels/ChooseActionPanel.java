@@ -1,6 +1,7 @@
 package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.User;
 
 import javax.swing.*;
@@ -14,7 +15,8 @@ public class ChooseActionPanel extends JPanel {
     public ChooseActionPanel(EntryPoint point){
         setLayout(null);
 
-        User user = point.user;
+        ServiceContainer container = ServiceContainer.getInstance();
+        User user = container.getUser();
         panel = point.panel;
 
         ArrayList<String> actions = new ArrayList<>();
@@ -54,10 +56,10 @@ public class ChooseActionPanel extends JPanel {
 
                 JPanel rightPanel = null;
                 if(selectedTextButton.equals("Сменить пароль")){
-                    rightPanel = new ChangePasswordPanel(point);
+                    rightPanel = new ChangePasswordPanel();
                 }
                 if(selectedTextButton.equals("Личные данные")){
-                    rightPanel = new PrivateDataPanel(point);
+                    rightPanel = new PrivateDataPanel();
                 }
                 if(selectedTextButton.equals("Изменить данные")){
                     rightPanel = new ChangeDataDatabasePanel();

@@ -1,6 +1,7 @@
 package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.EntryPoint;
+import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 
@@ -48,7 +49,7 @@ public class HeaderPanel extends JPanel {
             panel.add(chooseActionPanel);
         });
         avatar.setBounds(725, 10, 60, 60);
-        ImageIcon iconAvatar = ResourceManager.getImageIconFromResources(Assets.MINI_AVATAR, String.format("%d.png", point.user.getAvatarNumber()));
+        ImageIcon iconAvatar = ResourceManager.getImageIconFromResources(Assets.MINI_AVATAR, String.format("%d.png", ServiceContainer.getInstance().getUser().getAvatarNumber()));
         avatar.setIcon(iconAvatar);
         avatar.setHorizontalTextPosition(SwingConstants.LEFT);
         avatar.setBorderPainted(false);
@@ -66,7 +67,7 @@ public class HeaderPanel extends JPanel {
         exit.setFocusPainted(false);
         exit.setContentAreaFilled(false);
         exit.addActionListener(e -> {
-            point.user = null;
+            ServiceContainer.getInstance().setUser(null);
             panel.removeAll();
             point.showAuthorization();
             panel.revalidate();

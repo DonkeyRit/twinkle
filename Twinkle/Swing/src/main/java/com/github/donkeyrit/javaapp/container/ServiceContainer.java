@@ -1,6 +1,7 @@
 package com.github.donkeyrit.javaapp.container;
 
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
+import com.github.donkeyrit.javaapp.model.User;
 
 public class ServiceContainer {
 
@@ -23,4 +24,11 @@ public class ServiceContainer {
         this.databaseProvider = databaseProvider;
     }
 
+    private User user;
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

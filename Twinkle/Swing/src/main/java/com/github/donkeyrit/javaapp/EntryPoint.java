@@ -1,9 +1,7 @@
 package com.github.donkeyrit.javaapp;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
-import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.database.MySqlProvider;
-import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.panels.FilterPanel;
@@ -19,7 +17,6 @@ public class EntryPoint {
 
     public JFrame frame;
     public JPanel panel;
-    public User user;
 
     public static void main(String[] args) {
         /**

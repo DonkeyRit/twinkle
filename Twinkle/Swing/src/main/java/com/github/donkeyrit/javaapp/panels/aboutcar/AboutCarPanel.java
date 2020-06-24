@@ -68,7 +68,7 @@ public class AboutCarPanel extends JPanel {
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         database = serviceContainer.getDatabaseProvider();
         panel = point.panel;
-        user = point.user;
+        user = serviceContainer.getUser();
 
         JTextArea textArea = new JTextArea(car.getInfo());
         textArea.setLineWrap(true);

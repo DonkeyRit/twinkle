@@ -19,12 +19,12 @@ public class ChangePasswordPanel extends JPanel {
     private DatabaseProvider database;
     private User user;
 
-    public ChangePasswordPanel(EntryPoint point) {
+    public ChangePasswordPanel() {
         setLayout(null);
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         database = serviceContainer.getDatabaseProvider();
-        user = point.user;
+        user = serviceContainer.getUser();
 
         Box mainBox = Box.createVerticalBox();
         mainBox.setBorder(new TitledBorder("Change Password"));
