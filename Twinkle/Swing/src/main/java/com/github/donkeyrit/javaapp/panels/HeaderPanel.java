@@ -48,7 +48,7 @@ public class HeaderPanel extends JPanel {
             panel.add(chooseActionPanel);
         });
         avatar.setBounds(725, 10, 60, 60);
-        ImageIcon iconAvatar = ResourceManager.getImageIconFromResources(Assets.MINI_AVATAR, String.format("%d.png", point.avatarNumber));
+        ImageIcon iconAvatar = ResourceManager.getImageIconFromResources(Assets.MINI_AVATAR, String.format("%d.png", point.user.getAvatarNumber()));
         avatar.setIcon(iconAvatar);
         avatar.setHorizontalTextPosition(SwingConstants.LEFT);
         avatar.setBorderPainted(false);

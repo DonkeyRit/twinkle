@@ -19,7 +19,6 @@ public class EntryPoint {
 
     public JFrame frame;
     public JPanel panel;
-    public int avatarNumber = 0;
     public User user;
 
     public static void main(String[] args) {

@@ -140,12 +140,8 @@ public class RegistrationPanel extends JPanel {
         g2.setPaint(gp);
         g2.fillRoundRect(338, 230, 208, 180, 30, 15);
 
-        int random = (int) (Math.random() * 6 + 1);
-        if (point.avatarNumber == 0) {
-            point.avatarNumber = random;
-        }
-
-        Image avatar = ResourceManager.getImageFromResources(Assets.AVATAR, String.format("%d.png", point.avatarNumber));
+        int avatarNumber = (int) (Math.random() * 6 + 1);
+        Image avatar = ResourceManager.getImageFromResources(Assets.AVATAR, String.format("%d.png", avatarNumber));
         g.drawImage(avatar, 380, 100, this);
     }
 }
