@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
@@ -24,12 +25,7 @@ public class HeaderPanel extends CustomPanel {
         panel = this.uiManager.getMainPanel();
 
         JButton logo = new JButton();
-        logo.addActionListener(e -> {
-            panel.removeAll();
-            panel.revalidate();
-            panel.repaint();
-            panel.showContent();
-        });
+        logo.addActionListener(e -> this.uiManager.replaceWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel("")));
 
         logo.setBounds(30, 10, 60, 60);
         ImageIcon icon = ResourceManager.getImageIconFromResources(Assets.LOGO,"logo.png");

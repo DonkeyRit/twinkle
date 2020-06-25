@@ -6,6 +6,7 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
@@ -103,10 +104,7 @@ public class RegistrationPanel extends CustomPanel {
                         data.add(SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())));
                         serviceContainer.setUser(new User(login.getText(), SecurityProvider.sha1(password.getText()), false));
                         database.insert("INSERT INTO user(login,password,role) VALUES ('" + data.get(0) + "','" + data.get(1) + "',0)");
-                        panel.removeAll();
-                        panel.revalidate();
-                        panel.repaint();
-                        panel.showContent();
+                        uiManager.replaceWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
                     }
                 }
             }

@@ -5,8 +5,11 @@ import com.github.donkeyrit.javaapp.components.JPaswordField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.panels.FilterPanel;
+import com.github.donkeyrit.javaapp.panels.HeaderPanel;
 import com.github.donkeyrit.javaapp.panels.RegistrationPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
@@ -95,15 +98,11 @@ public class LoginPanel extends CustomPanel {
 
                 if (isCheckUser) {
 
-                    panel.removeAll();
-                    panel.revalidate();
-                    panel.repaint();
                     this.serviceContainer.setUser(new User(
                             ShieldingProvider.shielding(login.getText()),
                             SecurityProvider.sha1(password.getText()), roleUser)
                     );
-                    panel.showContent();
-
+                    this.uiManager.replaceWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
 
                 } else {
 
