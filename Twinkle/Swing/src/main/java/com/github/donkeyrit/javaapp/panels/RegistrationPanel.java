@@ -104,7 +104,7 @@ public class RegistrationPanel extends CustomPanel {
                         data.add(SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())));
                         serviceContainer.setUser(new User(login.getText(), SecurityProvider.sha1(password.getText()), false));
                         database.insert("INSERT INTO user(login,password,role) VALUES ('" + data.get(0) + "','" + data.get(1) + "',0)");
-                        uiManager.setWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
+                        uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
                     }
                 }
             }
@@ -119,7 +119,7 @@ public class RegistrationPanel extends CustomPanel {
         ImageIcon icon = ResourceManager.getImageIconFromResources(Assets.BUTTONS, "return.png");
         backButton.setIcon(icon);
         backButton.setHorizontalTextPosition(SwingConstants.LEFT);
-        backButton.addActionListener(e -> uiManager.setWindowPanel(new LoginPanel()));
+        backButton.addActionListener(e -> uiManager.setWindowPanels(new LoginPanel()));
         add(backButton);
     }
 

@@ -22,7 +22,7 @@ public class UiManager {
      * WindowPanel is a type panel on the all window.
      * @param panels
      */
-    public void setWindowPanel(CustomPanel ... panels) {
+    public void setWindowPanels(CustomPanel ... panels) {
         canvas.removeAll();
         canvas.revalidate();
         canvas.repaint();

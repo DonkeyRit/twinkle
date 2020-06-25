@@ -102,7 +102,7 @@ public class LoginPanel extends CustomPanel {
                             ShieldingProvider.shielding(login.getText()),
                             SecurityProvider.sha1(password.getText()), roleUser)
                     );
-                    this.uiManager.setWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
+                    this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
 
                 } else {
 
@@ -122,7 +122,7 @@ public class LoginPanel extends CustomPanel {
 
         register = new JButton("Log in");
         register.setBounds(448, 320, 80, 20);
-        register.addActionListener(e -> this.uiManager.setWindowPanel(new RegistrationPanel()));
+        register.addActionListener(e -> this.uiManager.setWindowPanels(new RegistrationPanel()));
     }
 
     @Override

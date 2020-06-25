@@ -25,7 +25,7 @@ public class HeaderPanel extends CustomPanel {
         panel = this.uiManager.getCanvas();
 
         JButton logo = new JButton();
-        logo.addActionListener(e -> this.uiManager.setWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel("")));
+        logo.addActionListener(e -> this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel("")));
 
         logo.setBounds(30, 10, 60, 60);
         ImageIcon icon = ResourceManager.getImageIconFromResources(Assets.LOGO,"logo.png");
@@ -70,7 +70,7 @@ public class HeaderPanel extends CustomPanel {
         exit.setContentAreaFilled(false);
         exit.addActionListener(e -> {
             ServiceContainer.getInstance().setUser(null);
-            uiManager.setWindowPanel(new LoginPanel());
+            uiManager.setWindowPanels(new LoginPanel());
         });
         add(exit);
     }
