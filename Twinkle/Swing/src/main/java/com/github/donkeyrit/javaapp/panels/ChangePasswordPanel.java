@@ -4,6 +4,7 @@ import com.github.donkeyrit.javaapp.components.JPaswordField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
@@ -13,7 +14,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ChangePasswordPanel extends JPanel {
+public class ChangePasswordPanel extends CustomPanel {
 
     private DatabaseProvider database;
     private User user;
@@ -105,6 +106,11 @@ public class ChangePasswordPanel extends JPanel {
         mainBox.add(confirm);
 
         add(mainBox);
+    }
+
+    @Override
+    public Rectangle getBoundsRectangle() {
+        return new Rectangle(250,100,605,550);
     }
 
     @Override

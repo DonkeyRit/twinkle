@@ -3,13 +3,14 @@ package com.github.donkeyrit.javaapp.panels;
 import com.github.donkeyrit.javaapp.components.MyTableModel;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ChangeDataDatabasePanel extends JPanel {
+public class ChangeDataDatabasePanel extends CustomPanel {
 
     public ChangeDataDatabasePanel() {
         setLayout(null);
@@ -70,6 +71,11 @@ public class ChangeDataDatabasePanel extends JPanel {
             });
         }
         add(scrollPane);
+    }
+
+    @Override
+    public Rectangle getBoundsRectangle() {
+        return new Rectangle(250,100,605,550);
     }
 
     @Override

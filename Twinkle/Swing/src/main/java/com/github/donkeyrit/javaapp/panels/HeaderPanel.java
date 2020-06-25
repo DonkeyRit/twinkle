@@ -1,6 +1,7 @@
 package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.ui.MainPanel;
@@ -8,7 +9,7 @@ import com.github.donkeyrit.javaapp.ui.MainPanel;
 import javax.swing.*;
 import java.awt.*;
 
-public class HeaderPanel extends JPanel {
+public class HeaderPanel extends CustomPanel {
 
     private MainPanel panel;
 
@@ -74,6 +75,11 @@ public class HeaderPanel extends JPanel {
             panel.repaint();
         });
         add(exit);
+    }
+
+    @Override
+    public Rectangle getBoundsRectangle() {
+        return new Rectangle(0, 0, 875, 80);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReloadButtonListener;
 import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReturnButtonListener;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.ui.MainPanel;
@@ -20,7 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class AboutCarPanel extends JPanel {
+public class AboutCarPanel extends CustomPanel {
 
     private final Car car;
     public Car getCar() {
@@ -666,6 +667,11 @@ public class AboutCarPanel extends JPanel {
                 add(actionWithCarButton);
             }
         }
+    }
+
+    @Override
+    public Rectangle getBoundsRectangle() {
+        return new Rectangle(250, 100, 605, 550);
     }
 
     @Override

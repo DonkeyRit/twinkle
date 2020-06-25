@@ -3,6 +3,7 @@ package com.github.donkeyrit.javaapp.panels.content;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.CarPanel;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.listeners.NextBackListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.ScrollPageListener;
 import com.github.donkeyrit.javaapp.resources.Assets;
@@ -16,7 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ContentPanel extends JPanel {
+public class ContentPanel extends CustomPanel {
     public int numOfPage = 1;
     public int startBut = 1;
     public String conditionPanel = "";
@@ -147,6 +148,11 @@ public class ContentPanel extends JPanel {
             buttonBox.add(nextBut);
         }
         add(buttonBox);
+    }
+
+    @Override
+    public Rectangle getBoundsRectangle() {
+        return new Rectangle(250,100,605,550);
     }
 
     @Override

@@ -2,13 +2,14 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.ui.MainPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ChooseActionPanel extends JPanel {
+public class ChooseActionPanel extends CustomPanel {
 
     private final MainPanel panel;
 
@@ -73,6 +74,11 @@ public class ChooseActionPanel extends JPanel {
             buttonActions.add(tmp1);
             add(tmp1);
         }
+    }
+
+    @Override
+    public Rectangle getBoundsRectangle() {
+        return new Rectangle(30, 100, 200, 550);
     }
 
     @Override

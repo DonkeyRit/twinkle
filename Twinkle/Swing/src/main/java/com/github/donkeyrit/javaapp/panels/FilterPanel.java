@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.ui.MainPanel;
 
@@ -12,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class FilterPanel extends JPanel {
+public class FilterPanel extends CustomPanel {
 
     private final DatabaseProvider database;
     private final MainPanel panel;
@@ -226,6 +227,11 @@ public class FilterPanel extends JPanel {
             panel.repaint();
         });
         add(applyFilter);
+    }
+
+    @Override
+    public Rectangle getBoundsRectangle() {
+        return new Rectangle(30, 100, 200, 550);
     }
 
     @Override

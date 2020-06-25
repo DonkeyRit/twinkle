@@ -6,20 +6,23 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.RegistrationPanel;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
 import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class LoginPanel extends JPanel {
+public class LoginPanel extends CustomPanel {
 
     private final ServiceContainer serviceContainer;
+    private final UiManager uiManager;
     private final DatabaseProvider database;
     private final MainPanel panel;
 
@@ -33,7 +36,8 @@ public class LoginPanel extends JPanel {
         setLayout(null);
 
         this.serviceContainer = ServiceContainer.getInstance();
-        this.panel = serviceContainer.getUiManager().getMainPanel();
+        this.uiManager = serviceContainer.getUiManager();
+        this.panel = this.uiManager.getMainPanel();
         this.database = serviceContainer.getDatabaseProvider();
 
         initialize();
@@ -119,14 +123,12 @@ public class LoginPanel extends JPanel {
 
         register = new JButton("Log in");
         register.setBounds(448, 320, 80, 20);
-        register.addActionListener(e -> {
-            panel.removeAll();
-            panel.revalidate();
-            panel.repaint();
-            JPanel registrationPanel = new RegistrationPanel();
-            registrationPanel.setBounds(0, 0, 875, 700);
-            panel.add(registrationPanel);
-        });
+        register.addActionListener(e -> this.uiManager.replaceWindowPanel(new RegistrationPanel()));
+    }
+
+    @Override
+    public Rectangle getBoundsRectangle() {
+        return new Rectangle(0, 0, 875, 700);
     }
 
     @Override

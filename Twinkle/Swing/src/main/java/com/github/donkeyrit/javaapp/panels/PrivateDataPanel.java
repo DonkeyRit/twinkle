@@ -4,6 +4,7 @@ import com.github.donkeyrit.javaapp.components.JCTextField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 
@@ -14,7 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class PrivateDataPanel extends JPanel {
+public class PrivateDataPanel extends CustomPanel {
 
     public PrivateDataPanel() {
         setLayout(null);
@@ -112,6 +113,11 @@ public class PrivateDataPanel extends JPanel {
 
         System.out.println(infoUser);
 
+    }
+
+    @Override
+    public Rectangle getBoundsRectangle() {
+        return new Rectangle(250,100,605,550);
     }
 
     @Override
