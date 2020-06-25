@@ -14,7 +14,7 @@ import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
@@ -27,7 +27,7 @@ public class LoginPanel extends CustomPanel {
     private final ServiceContainer serviceContainer;
     private final UiManager uiManager;
     private final DatabaseProvider database;
-    private final MainPanel panel;
+    private final Canvas panel;
 
     private JCTextField login;
     private JPaswordField password;
@@ -40,7 +40,7 @@ public class LoginPanel extends CustomPanel {
 
         this.serviceContainer = ServiceContainer.getInstance();
         this.uiManager = serviceContainer.getUiManager();
-        this.panel = this.uiManager.getMainPanel();
+        this.panel = this.uiManager.getCanvas();
         this.database = serviceContainer.getDatabaseProvider();
 
         initialize();
@@ -102,7 +102,7 @@ public class LoginPanel extends CustomPanel {
                             ShieldingProvider.shielding(login.getText()),
                             SecurityProvider.sha1(password.getText()), roleUser)
                     );
-                    this.uiManager.replaceWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
+                    this.uiManager.setWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
 
                 } else {
 
@@ -122,7 +122,7 @@ public class LoginPanel extends CustomPanel {
 
         register = new JButton("Log in");
         register.setBounds(448, 320, 80, 20);
-        register.addActionListener(e -> this.uiManager.replaceWindowPanel(new RegistrationPanel()));
+        register.addActionListener(e -> this.uiManager.setWindowPanel(new RegistrationPanel()));
     }
 
     @Override

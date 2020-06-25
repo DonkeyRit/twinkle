@@ -19,6 +19,6 @@ public class EntryPoint {
         ServiceContainer container = ServiceContainer.getInstance();
         container.setDatabaseProvider(new MySqlProvider());
         container.setUiManager(new UiManager());
-        container.getUiManager().replaceWindowPanel(new LoginPanel());
+        container.getUiManager().setWindowPanel(new LoginPanel());
     }
 }

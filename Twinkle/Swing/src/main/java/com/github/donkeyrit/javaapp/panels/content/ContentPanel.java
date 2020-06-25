@@ -8,7 +8,7 @@ import com.github.donkeyrit.javaapp.panels.content.listeners.NextBackListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.ScrollPageListener;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -22,13 +22,13 @@ public class ContentPanel extends CustomPanel {
     public int startBut = 1;
     public String conditionPanel = "";
 
-    private final MainPanel panel;
+    private final Canvas panel;
 
     public ContentPanel(String condition, int ... args){
         setLayout(null);
         conditionPanel = condition;
 
-        panel = ServiceContainer.getInstance().getUiManager().getMainPanel();
+        panel = ServiceContainer.getInstance().getUiManager().getCanvas();
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         DatabaseProvider database = serviceContainer.getDatabaseProvider();
 

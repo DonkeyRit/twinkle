@@ -3,7 +3,7 @@ package com.github.donkeyrit.javaapp.panels;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,14 +11,14 @@ import java.util.ArrayList;
 
 public class ChooseActionPanel extends CustomPanel {
 
-    private final MainPanel panel;
+    private final Canvas panel;
 
     public ChooseActionPanel(){
         setLayout(null);
 
         ServiceContainer container = ServiceContainer.getInstance();
         User user = container.getUser();
-        panel = container.getUiManager().getMainPanel();
+        panel = container.getUiManager().getCanvas();
 
         ArrayList<String> actions = new ArrayList<>();
         actions.add("Change password");

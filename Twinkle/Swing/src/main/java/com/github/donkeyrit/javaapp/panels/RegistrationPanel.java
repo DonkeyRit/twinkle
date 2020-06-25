@@ -12,7 +12,7 @@ import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
@@ -29,7 +29,7 @@ public class RegistrationPanel extends CustomPanel {
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         DatabaseProvider database = serviceContainer.getDatabaseProvider();
         UiManager uiManager = serviceContainer.getUiManager();
-        MainPanel panel = uiManager.getMainPanel();
+        Canvas panel = uiManager.getCanvas();
 
         JCTextField login = new JCTextField();
         login.setPlaceholder("Enter login");
@@ -104,7 +104,7 @@ public class RegistrationPanel extends CustomPanel {
                         data.add(SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())));
                         serviceContainer.setUser(new User(login.getText(), SecurityProvider.sha1(password.getText()), false));
                         database.insert("INSERT INTO user(login,password,role) VALUES ('" + data.get(0) + "','" + data.get(1) + "',0)");
-                        uiManager.replaceWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
+                        uiManager.setWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
                     }
                 }
             }
@@ -119,7 +119,7 @@ public class RegistrationPanel extends CustomPanel {
         ImageIcon icon = ResourceManager.getImageIconFromResources(Assets.BUTTONS, "return.png");
         backButton.setIcon(icon);
         backButton.setHorizontalTextPosition(SwingConstants.LEFT);
-        backButton.addActionListener(e -> uiManager.replaceWindowPanel(new LoginPanel()));
+        backButton.addActionListener(e -> uiManager.setWindowPanel(new LoginPanel()));
         add(backButton);
     }
 

@@ -5,30 +5,30 @@ import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 public class UiManager {
 
     private Frame frame;
-    private MainPanel mainPanel;
+    private Canvas canvas;
 
-    public MainPanel getMainPanel() {
-        return mainPanel;
+    public Canvas getCanvas() {
+        return canvas;
     }
 
     public UiManager() {
         frame = new Frame("Rent car");
-        mainPanel = new MainPanel();
+        canvas = new Canvas();
 
-        frame.initialize(mainPanel);
+        frame.initialize(canvas);
     }
 
     /**
      * WindowPanel is a type panel on the all window.
      * @param panels
      */
-    public void replaceWindowPanel(CustomPanel ... panels) {
-        mainPanel.removeAll();
-        mainPanel.revalidate();
-        mainPanel.repaint();
+    public void setWindowPanel(CustomPanel ... panels) {
+        canvas.removeAll();
+        canvas.revalidate();
+        canvas.repaint();
         for (CustomPanel panel : panels) {
             panel.setBounds(panel.getBoundsRectangle());
-            mainPanel.add(panel);
+            canvas.add(panel);
         }
     }
 }

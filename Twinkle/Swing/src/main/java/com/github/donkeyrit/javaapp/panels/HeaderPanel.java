@@ -6,7 +6,7 @@ import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
@@ -15,17 +15,17 @@ import java.awt.*;
 public class HeaderPanel extends CustomPanel {
 
     private UiManager uiManager;
-    private MainPanel panel;
+    private Canvas panel;
 
     public HeaderPanel(){
         this.setLayout(null);
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         this.uiManager = serviceContainer.getUiManager();
-        panel = this.uiManager.getMainPanel();
+        panel = this.uiManager.getCanvas();
 
         JButton logo = new JButton();
-        logo.addActionListener(e -> this.uiManager.replaceWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel("")));
+        logo.addActionListener(e -> this.uiManager.setWindowPanel(new HeaderPanel(), new FilterPanel(), new ContentPanel("")));
 
         logo.setBounds(30, 10, 60, 60);
         ImageIcon icon = ResourceManager.getImageIconFromResources(Assets.LOGO,"logo.png");
@@ -70,7 +70,7 @@ public class HeaderPanel extends CustomPanel {
         exit.setContentAreaFilled(false);
         exit.addActionListener(e -> {
             ServiceContainer.getInstance().setUser(null);
-            uiManager.replaceWindowPanel(new LoginPanel());
+            uiManager.setWindowPanel(new LoginPanel());
         });
         add(exit);
     }

@@ -8,7 +8,7 @@ import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,13 +20,13 @@ public class CarPanel extends CustomPanel {
 
     private Car car;
 
-    private final MainPanel panel;
+    private final Canvas panel;
 
     public CarPanel(int num) {
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         DatabaseProvider database = serviceContainer.getDatabaseProvider();
-        panel = serviceContainer.getUiManager().getMainPanel();
+        panel = serviceContainer.getUiManager().getCanvas();
 
         Car.CarBuilder carBuilder = new Car.CarBuilder();
 

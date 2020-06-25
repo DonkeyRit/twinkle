@@ -2,7 +2,7 @@ package com.github.donkeyrit.javaapp.panels.content.listeners;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +11,10 @@ import java.awt.event.ActionListener;
 
 public class ScrollPageListener implements ActionListener {
 
-    private MainPanel panel;
+    private Canvas panel;
 
     public ScrollPageListener() {
-        panel = ServiceContainer.getInstance().getUiManager().getMainPanel();
+        panel = ServiceContainer.getInstance().getUiManager().getCanvas();
     }
 
     @Override

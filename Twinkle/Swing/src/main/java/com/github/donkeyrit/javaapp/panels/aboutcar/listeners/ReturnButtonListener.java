@@ -3,7 +3,7 @@ package com.github.donkeyrit.javaapp.panels.aboutcar.listeners;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.aboutcar.AboutCarPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,7 +14,7 @@ public class ReturnButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        MainPanel panel = ServiceContainer.getInstance().getUiManager().getMainPanel();
+        Canvas panel = ServiceContainer.getInstance().getUiManager().getCanvas();
 
         JButton jButton = (JButton) e.getSource();
         AboutCarPanel oldPanel = (AboutCarPanel) jButton.getParent();

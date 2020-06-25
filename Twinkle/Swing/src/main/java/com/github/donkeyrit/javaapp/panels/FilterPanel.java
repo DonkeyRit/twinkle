@@ -4,7 +4,7 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -16,14 +16,14 @@ import java.util.ArrayList;
 public class FilterPanel extends CustomPanel {
 
     private final DatabaseProvider database;
-    private final MainPanel panel;
+    private final Canvas panel;
 
     public FilterPanel(){
         setLayout(null);
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         database = serviceContainer.getDatabaseProvider();
-        panel = serviceContainer.getUiManager().getMainPanel();
+        panel = serviceContainer.getUiManager().getCanvas();
 
         JLabel mainLabel = new JLabel("Применить фильтр");
         Font font = new Font("Arial", Font.BOLD, 13);

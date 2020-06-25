@@ -9,7 +9,7 @@ import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReturnButtonListen
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -29,7 +29,7 @@ public class AboutCarPanel extends CustomPanel {
     }
 
     private DatabaseProvider database;
-    private MainPanel panel;
+    private Canvas panel;
     private User user;
 
     private String filter;
@@ -67,7 +67,7 @@ public class AboutCarPanel extends CustomPanel {
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         database = serviceContainer.getDatabaseProvider();
-        panel = serviceContainer.getUiManager().getMainPanel();
+        panel = serviceContainer.getUiManager().getCanvas();
         user = serviceContainer.getUser();
 
         JTextArea textArea = new JTextArea(car.getInfo());
