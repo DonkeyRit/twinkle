@@ -15,12 +15,6 @@ public class MainPanel extends JPanel {
         setBackground(new Color(255, 255, 255));
     }
 
-    public void showAuthorization() {
-        JPanel enterPanel = new LoginPanel();
-        enterPanel.setBounds(0, 0, 875, 700);
-        this.add(enterPanel);
-    }
-
     public void showContent() {
         JPanel header = new HeaderPanel();
         header.setBounds(0, 0, 875, 80);

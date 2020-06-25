@@ -2,7 +2,7 @@ package com.github.donkeyrit.javaapp;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.MySqlProvider;
-import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
 
@@ -19,8 +19,6 @@ public class EntryPoint {
         ServiceContainer container = ServiceContainer.getInstance();
         container.setDatabaseProvider(new MySqlProvider());
         container.setUiManager(new UiManager());
-
-        MainPanel mainPanel = container.getUiManager().getMainPanel();
-        mainPanel.showAuthorization();
+        container.getUiManager().replaceWindowPanel(new LoginPanel());
     }
 }

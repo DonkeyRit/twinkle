@@ -2,21 +2,26 @@ package com.github.donkeyrit.javaapp.panels;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class HeaderPanel extends CustomPanel {
 
+    private UiManager uiManager;
     private MainPanel panel;
 
     public HeaderPanel(){
         this.setLayout(null);
 
-        panel = ServiceContainer.getInstance().getUiManager().getMainPanel();
+        ServiceContainer serviceContainer = ServiceContainer.getInstance();
+        this.uiManager = serviceContainer.getUiManager();
+        panel = this.uiManager.getMainPanel();
 
         JButton logo = new JButton();
         logo.addActionListener(e -> {
@@ -69,10 +74,7 @@ public class HeaderPanel extends CustomPanel {
         exit.setContentAreaFilled(false);
         exit.addActionListener(e -> {
             ServiceContainer.getInstance().setUser(null);
-            panel.removeAll();
-            panel.showAuthorization();
-            panel.revalidate();
-            panel.repaint();
+            uiManager.replaceWindowPanel(new LoginPanel());
         });
         add(exit);
     }

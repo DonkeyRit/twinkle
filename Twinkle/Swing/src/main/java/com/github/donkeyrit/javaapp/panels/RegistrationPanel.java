@@ -6,11 +6,13 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
 import com.github.donkeyrit.javaapp.ui.MainPanel;
+import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +27,8 @@ public class RegistrationPanel extends CustomPanel {
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         DatabaseProvider database = serviceContainer.getDatabaseProvider();
-        MainPanel panel = serviceContainer.getUiManager().getMainPanel();
+        UiManager uiManager = serviceContainer.getUiManager();
+        MainPanel panel = uiManager.getMainPanel();
 
         JCTextField login = new JCTextField();
         login.setPlaceholder("Enter login");
@@ -118,12 +121,7 @@ public class RegistrationPanel extends CustomPanel {
         ImageIcon icon = ResourceManager.getImageIconFromResources(Assets.BUTTONS, "return.png");
         backButton.setIcon(icon);
         backButton.setHorizontalTextPosition(SwingConstants.LEFT);
-        backButton.addActionListener(e -> {
-            panel.removeAll();
-            panel.revalidate();
-            panel.repaint();
-            panel.showAuthorization();
-        });
+        backButton.addActionListener(e -> uiManager.replaceWindowPanel(new LoginPanel()));
         add(backButton);
     }
 
