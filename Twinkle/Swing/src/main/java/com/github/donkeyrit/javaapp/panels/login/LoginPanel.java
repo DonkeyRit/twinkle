@@ -1,7 +1,7 @@
 package com.github.donkeyrit.javaapp.panels.login;
 
-import com.github.donkeyrit.javaapp.components.JCTextField;
-import com.github.donkeyrit.javaapp.components.JPaswordField;
+import com.github.donkeyrit.javaapp.components.JCustomTextField;
+import com.github.donkeyrit.javaapp.components.JCustomPasswordField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.UserModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
@@ -28,8 +28,8 @@ public class LoginPanel extends CustomPanel {
     private final DatabaseProvider databaseProvider;
     private final Canvas panel;
 
-    private JCTextField login;
-    private JPaswordField password;
+    private JCustomTextField login;
+    private JCustomPasswordField password;
     private JButton signIn;
     private JButton register;
 
@@ -51,12 +51,12 @@ public class LoginPanel extends CustomPanel {
     }
 
     private void initialize() {
-        login = new JCTextField();
-        login.setPlaceholder("Enter login");
+        login = new JCustomTextField();
+        login.setState("Enter login");
         login.setBounds(358, 240, 170, 30);
 
-        password = new JPaswordField();
-        password.setPlaceholder("Enter password");
+        password = new JCustomPasswordField();
+        password.setState("Enter password");
         password.setBounds(358, 280, 170, 30);
 
         signIn = new JButton("Sign in");
@@ -65,12 +65,10 @@ public class LoginPanel extends CustomPanel {
             boolean isTwo = password.getText().isEmpty();
 
             if (isOne) {
-                login.setPlaceholder("Please, enter login");
-                login.setPhColor(Color.RED);
+                login.setState("Please, enter login", Color.RED);
             }
             if (isTwo) {
-                password.setPlaceholder("Please, enter password");
-                password.setPhColor(Color.RED);
+                password.setState("Please, enter password", Color.RED);
             }
 
             panel.revalidate();
@@ -92,13 +90,8 @@ public class LoginPanel extends CustomPanel {
 
                     } else {
 
-                        login.setPlaceholder("Incorrect login");
-                        login.setPhColor(Color.RED);
-                        login.setText("");
-
-                        password.setPlaceholder("Incorrect password");
-                        password.setPhColor(Color.RED);
-                        password.setText("");
+                        login.setState("Incorrect login", Color.RED);
+                        password.setState("Incorrect password", Color.RED);
                     }
 
                 } catch (Exception exception) {

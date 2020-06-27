@@ -1,7 +1,7 @@
 package com.github.donkeyrit.javaapp.panels;
 
-import com.github.donkeyrit.javaapp.components.JCTextField;
-import com.github.donkeyrit.javaapp.components.JPaswordField;
+import com.github.donkeyrit.javaapp.components.JCustomTextField;
+import com.github.donkeyrit.javaapp.components.JCustomPasswordField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
@@ -31,18 +31,18 @@ public class RegistrationPanel extends CustomPanel {
         UiManager uiManager = serviceContainer.getUiManager();
         Canvas panel = uiManager.getCanvas();
 
-        JCTextField login = new JCTextField();
-        login.setPlaceholder("Enter login");
+        JCustomTextField login = new JCustomTextField();
+        login.setState("Enter login");
         login.setBounds(358, 240, 170, 30);
         add(login);
 
-        JPaswordField password = new JPaswordField();
-        password.setPlaceholder("Enter password");
+        JCustomPasswordField password = new JCustomPasswordField();
+        password.setState("Enter password");
         password.setBounds(358, 280, 170, 30);
         add(password);
 
-        JPaswordField rePassword = new JPaswordField();
-        rePassword.setPlaceholder("Repeat password");
+        JCustomPasswordField rePassword = new JCustomPasswordField();
+        rePassword.setState("Repeat password");
         rePassword.setBounds(358, 320, 170, 30);
         add(rePassword);
 
@@ -55,29 +55,24 @@ public class RegistrationPanel extends CustomPanel {
             boolean isThree = rePassword.getText().isEmpty();
 
             if (isOne) {
-                login.setPlaceholder("Please, enter login");
-                login.setPhColor(Color.RED);
+                login.setState("Please, enter login", Color.RED);
             }
 
             if (isTwo) {
-                password.setPlaceholder("Please, enter password");
-                password.setPhColor(Color.RED);
+                password.setState("Please, enter password", Color.RED);
             }
 
             if (isThree) {
-                rePassword.setPlaceholder("Please, repeat password");
-                rePassword.setPhColor(Color.RED);
+                rePassword.setState("Please, repeat password", Color.RED);
             }
 
             if (!isOne && !isTwo && !isThree) {
                 if (!password.getText().equals(rePassword.getText())) {
 
-                    password.setPlaceholder("Password do not match");
-                    password.setPhColor(Color.RED);
+                    password.setState("Password do not match", Color.RED);
                     password.setText("");
 
-                    rePassword.setPlaceholder("Password do not match");
-                    rePassword.setPhColor(Color.RED);
+                    rePassword.setState("Password do not match", Color.RED);
                     rePassword.setText("");
                 } else {
                     data.add(ShieldingProvider.shielding(login.getText()));
@@ -97,8 +92,7 @@ public class RegistrationPanel extends CustomPanel {
                     }
 
                     if (isCheckUser) {
-                        login.setPlaceholder("Login already exist");
-                        login.setPhColor(Color.RED);
+                        login.setState("Login already exist", Color.RED);
                         login.setText("");
                     } else {
                         data.add(SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())));

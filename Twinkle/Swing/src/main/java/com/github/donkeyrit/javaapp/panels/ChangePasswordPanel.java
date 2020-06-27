@@ -1,6 +1,6 @@
 package com.github.donkeyrit.javaapp.panels;
 
-import com.github.donkeyrit.javaapp.components.JPaswordField;
+import com.github.donkeyrit.javaapp.components.JCustomPasswordField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
@@ -31,10 +31,10 @@ public class ChangePasswordPanel extends CustomPanel {
         mainBox.setBounds(202,10, 200, 200);
 
         String[] labels = new String[]{"Enter old pasword","Enter new password","Repeat new password"};
-        ArrayList<JPaswordField> fieldPass = new ArrayList<>();
+        ArrayList<JCustomPasswordField> fieldPass = new ArrayList<>();
         for (String label : labels) {
-            JPaswordField passw = new JPaswordField();
-            passw.setPlaceholder(label);
+            JCustomPasswordField passw = new JCustomPasswordField();
+            passw.setState(label);
             fieldPass.add(passw);
             mainBox.add(passw);
             mainBox.add(Box.createVerticalStrut(10));
@@ -47,55 +47,46 @@ public class ChangePasswordPanel extends CustomPanel {
             boolean isThree = fieldPass.get(2).getText().isEmpty();
 
             if(isOne){
-                fieldPass.get(0).setPlaceholder("Please, enter old password");
-                fieldPass.get(0).setPhColor(Color.RED);
+                fieldPass.get(0).setState("Please, enter old password", Color.RED);
             }
 
             if(isTwo){
-                fieldPass.get(1).setPlaceholder("Please, enter new password");
-                fieldPass.get(1).setPhColor(Color.RED);
+                fieldPass.get(1).setState("Please, enter new password", Color.RED);
             }
 
             if(isThree){
-                fieldPass.get(2).setPlaceholder("Please, repeat new password");
-                fieldPass.get(2).setPhColor(Color.RED);
+                fieldPass.get(2).setState("Please, repeat new password", Color.RED);
             }
 
             if(!isOne && !isTwo && !isThree){
                 if(SecurityProvider.sha1(fieldPass.get(0).getText()).equals(user.getPassword())){
                     if(fieldPass.get(1).getText().equals(fieldPass.get(2).getText())){
                         if(fieldPass.get(0).getText().equals(fieldPass.get(1).getText())){
-                            fieldPass.get(0).setPlaceholder("Old and new match");
-                            fieldPass.get(0).setPhColor(Color.RED);
+                            fieldPass.get(0).setState("Old and new match", Color.RED);
                             fieldPass.get(0).setText("");
 
-                            fieldPass.get(1).setPlaceholder("Old and new match");
-                            fieldPass.get(1).setPhColor(Color.RED);
+                            fieldPass.get(1).setState("Old and new match", Color.RED);
                             fieldPass.get(1).setText("");
                         }else{
                             String updateUserQuery = "UPDATE user SET password = '" + SecurityProvider.sha1(fieldPass.get(1).getText()) + "'" + " WHERE login = '" + user.getLogin() + "'";
                             database.update(updateUserQuery);
                             user.setPassword(SecurityProvider.sha1(fieldPass.get(1).getText()));
 
-                            for (JPaswordField pass : fieldPass) {
+                            for (JCustomPasswordField pass : fieldPass) {
                                 pass.setText("");
-                                pass.setPlaceholder("Success");
-                                pass.setPhColor(Color.green);
+                                pass.setState("Success", Color.green);
                             }
                         }
                     }else{
-                        fieldPass.get(1).setPlaceholder("Password does't match");
-                        fieldPass.get(1).setPhColor(Color.RED);
+                        fieldPass.get(1).setState("Password does't match", Color.RED);
                         fieldPass.get(1).setText("");
 
-                        fieldPass.get(2).setPlaceholder("Password does't match");
-                        fieldPass.get(2).setPhColor(Color.RED);
+                        fieldPass.get(2).setState("Password does't match", Color.RED);
                         fieldPass.get(2).setText("");
                     }
                 }else{
                     fieldPass.get(0).setText("");
-                    fieldPass.get(0).setPlaceholder("Incorrect password");
-                    fieldPass.get(0).setPhColor(Color.RED);
+                    fieldPass.get(0).setState("Incorrect password", Color.RED);
                 }
             }
 

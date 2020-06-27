@@ -1,6 +1,6 @@
 package com.github.donkeyrit.javaapp.panels;
 
-import com.github.donkeyrit.javaapp.components.JCTextField;
+import com.github.donkeyrit.javaapp.components.JCustomTextField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
@@ -43,10 +43,10 @@ public class PrivateDataPanel extends CustomPanel {
         box.setBorder(new TitledBorder("Personal information"));
 
         String[] placeholders = new String[]{"Enter firstName","Enter secondName","Enter patronimic","Enter address","Enter phoneNumber"};
-        ArrayList<JCTextField> fieldText = new ArrayList<>();
+        ArrayList<JCustomTextField> fieldText = new ArrayList<>();
         for (String placeholder : placeholders) {
-            JCTextField tempField = new JCTextField();
-            tempField.setPlaceholder(placeholder);
+            JCustomTextField tempField = new JCustomTextField();
+            tempField.setState(placeholder);
             fieldText.add(tempField);
             box.add(tempField);
             box.add(Box.createVerticalStrut(10));
@@ -61,7 +61,7 @@ public class PrivateDataPanel extends CustomPanel {
         confirm.addActionListener(e -> {
             int counter = 0;
             ArrayList<String> inputData = new ArrayList<>();
-            for (JCTextField textField : fieldText) {
+            for (JCustomTextField textField : fieldText) {
                 if (!textField.getText().isEmpty()) {
                     counter++;
                     inputData.add(textField.getText());
@@ -71,16 +71,15 @@ public class PrivateDataPanel extends CustomPanel {
             if(counter == fieldText.size()){
                 if(infoUser.size() == 0){
                     StringBuilder createClient = new StringBuilder("INSERT INTO client(firstName,secondName,Patronimic,address,phoneNumber,idUser) VALUES (");
-                    for (JCTextField jcTextField : fieldText) {
-                        createClient.append("'").append(jcTextField.getText()).append("',");
+                    for (JCustomTextField JCustomTextField : fieldText) {
+                        createClient.append("'").append(JCustomTextField.getText()).append("',");
                     }
                     createClient.append("(SELECT idUser FROM user WHERE login = '").append(user.getLogin()).append("'))");
 
                     database.insert(createClient.toString());
-                    for (JCTextField jcTextField : fieldText) {
-                        jcTextField.setPlaceholder("Success");
-                        jcTextField.setText("");
-                        jcTextField.setPhColor(Color.green);
+                    for (JCustomTextField JCustomTextField : fieldText) {
+                        JCustomTextField.setState("Success", Color.green);
+                        JCustomTextField.setText("");
                     }
                 }else{
                     String[] columnNames = new String[]{"firstName","secondName","Patronimic","address","phoneNumber"};
@@ -95,10 +94,9 @@ public class PrivateDataPanel extends CustomPanel {
                     database.update(updateClient.toString());
                 }
             }else{
-                for (JCTextField jcTextField : fieldText) {
-                    String previousText = jcTextField.getPlaceholder().substring(jcTextField.getPlaceholder().indexOf("Please") + 7);
-                    jcTextField.setPlaceholder("Please," + previousText);
-                    jcTextField.setPhColor(Color.red);
+                for (JCustomTextField JCustomTextField : fieldText) {
+                    String previousText = JCustomTextField.getPlaceholder().substring(JCustomTextField.getPlaceholder().indexOf("Please") + 7);
+                    JCustomTextField.setState("Please," + previousText, Color.red);
                 }
             }
 
