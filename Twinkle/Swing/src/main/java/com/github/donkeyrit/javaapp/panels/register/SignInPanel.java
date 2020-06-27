@@ -1,8 +1,9 @@
 package com.github.donkeyrit.javaapp.panels.register;
 
-import com.github.donkeyrit.javaapp.components.JCustomTextField;
 import com.github.donkeyrit.javaapp.components.JCustomPasswordField;
+import com.github.donkeyrit.javaapp.components.JCustomTextField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
+import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.UserModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.FilterPanel;
@@ -19,42 +20,59 @@ import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class SignInPanel extends CustomPanel {
+
+    private ServiceContainer serviceContainer;
+    private DatabaseProvider databaseProvider;
+    private UiManager uiManager;
+    private Canvas canvas;
+
+    private JCustomTextField login;
+    private JCustomPasswordField password;
+    private JCustomPasswordField reEnterPassword;
+    private JButton logInButton;
+    private JButton backButton;
+
 
     public SignInPanel() {
         setLayout(null);
 
-        ServiceContainer serviceContainer = ServiceContainer.getInstance();
-        DatabaseProvider database = serviceContainer.getDatabaseProvider();
-        UiManager uiManager = serviceContainer.getUiManager();
-        Canvas panel = uiManager.getCanvas();
+        serviceContainer = ServiceContainer.getInstance();
+        databaseProvider = serviceContainer.getDatabaseProvider();
+        uiManager = serviceContainer.getUiManager();
+        canvas = uiManager.getCanvas();
 
-        JCustomTextField login = new JCustomTextField();
+        initialize();
+
+        add(login);
+        add(password);
+        add(reEnterPassword);
+        add(logInButton);
+        add(backButton);
+    }
+
+    private void initialize() {
+
+        login = new JCustomTextField();
         login.setState("Enter login");
         login.setBounds(358, 240, 170, 30);
-        add(login);
 
-        JCustomPasswordField password = new JCustomPasswordField();
+        password = new JCustomPasswordField();
         password.setState("Enter password");
         password.setBounds(358, 280, 170, 30);
-        add(password);
 
-        JCustomPasswordField rePassword = new JCustomPasswordField();
-        rePassword.setState("Repeat password");
-        rePassword.setBounds(358, 320, 170, 30);
-        add(rePassword);
+        reEnterPassword = new JCustomPasswordField();
+        reEnterPassword.setState("Repeat password");
+        reEnterPassword.setBounds(358, 320, 170, 30);
 
-        JButton regButton = new JButton("Log in");
-        regButton.setBounds(358, 360, 135, 30);
-        regButton.addActionListener(e -> {
-            ArrayList<String> data = new ArrayList<>();
+        logInButton = new JButton("Log in");
+        logInButton.setBounds(358, 360, 135, 30);
+        logInButton.addActionListener(e -> {
+
             boolean isOne = login.getText().isEmpty();
             boolean isTwo = password.getText().isEmpty();
-            boolean isThree = rePassword.getText().isEmpty();
+            boolean isThree = reEnterPassword.getText().isEmpty();
 
             if (isOne) {
                 login.setState("Please, enter login", Color.RED);
@@ -65,58 +83,44 @@ public class SignInPanel extends CustomPanel {
             }
 
             if (isThree) {
-                rePassword.setState("Please, repeat password", Color.RED);
+                reEnterPassword.setState("Please, repeat password", Color.RED);
             }
 
             if (!isOne && !isTwo && !isThree) {
-                if (!password.getText().equals(rePassword.getText())) {
-
+                if (!password.getText().equals(reEnterPassword.getText())) {
                     password.setState("Password do not match", Color.RED);
-                    password.setText("");
-
-                    rePassword.setState("Password do not match", Color.RED);
-                    rePassword.setText("");
+                    reEnterPassword.setState("Password do not match", Color.RED);
                 } else {
-                    data.add(ShieldingProvider.shielding(login.getText()));
-                    String query = String.format("SELECT count(idUser) as count FROM user WHERE login = '%s'", ShieldingProvider.shielding(login.getText()));
 
-                    ResultSet userSet = database.select(query);
-                    boolean isCheckUser = false;
-                    try {
-                        int tempNum = 0;
-                        while (userSet.next()) {
-                            tempNum = userSet.getInt("count");
-                        }
-                        isCheckUser = tempNum != 0;
+                    UserModelProvider userModelProvider = databaseProvider.getUserModelProvider();
+                    User existingUser = userModelProvider.getSpecificUserByLogin(ShieldingProvider.shielding(login.getText()));
 
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    if (isCheckUser) {
+                    if (existingUser != null) {
                         login.setState("Login already exist", Color.RED);
-                        login.setText("");
                     } else {
-                        data.add(SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())));
-                        serviceContainer.setUser(new User(login.getText(), SecurityProvider.sha1(password.getText()), false));
-                        database.insert("INSERT INTO user(login,password,role) VALUES ('" + data.get(0) + "','" + data.get(1) + "',0)");
+
+                        User newUser = new User(
+                                ShieldingProvider.shielding(login.getText()),
+                                SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())),
+                                false
+                        );
+
+                        userModelProvider.addUser(newUser);
+                        serviceContainer.setUser(newUser);
                         uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
                     }
                 }
             }
 
-            panel.revalidate();
-            panel.repaint();
+            canvas.revalidate();
+            canvas.repaint();
         });
-        add(regButton);
 
-        JButton backButton = new JButton();
+        backButton = new JButton();
         backButton.setBounds(500, 360, 28, 30);
-        ImageIcon icon = ResourceManager.getImageIconFromResources(Assets.BUTTONS, "return.png");
-        backButton.setIcon(icon);
         backButton.setHorizontalTextPosition(SwingConstants.LEFT);
+        backButton.setIcon(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "return.png"));
         backButton.addActionListener(e -> uiManager.setWindowPanels(new LoginPanel()));
-        add(backButton);
     }
 
     @Override

@@ -40,6 +40,7 @@ public class JCustomTextField extends JTextField {
     public void setState(String placeholder, Color phColor) {
         this.placeholder = placeholder;
         this.phColor = phColor;
+        this.setText("");
     }
 
     public void setState(String placeholder){

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class UserModelProvider {
@@ -39,10 +40,28 @@ public class UserModelProvider {
         return userList.stream();
     }
 
+    public void addUser(User user) {
+        final String query = String.format(
+                "INSERT INTO user(login,password,role) VALUES ('%s','%s',0)",
+                user.getLogin(),
+                user.getPassword()
+        );
+        provider.insert(query);
+    }
+
     public User getSpecificUserByCredentials(String login, String password) {
-        return getUsers()
+        Optional<User> user = getUsers()
                 .filter(u -> u.getLogin().equals(login) && u.getPassword().equals(password))
-                .findFirst()
-                .get();
+                .findFirst();
+
+        return user.isPresent() ? user.get() : null;
+    }
+
+    public User getSpecificUserByLogin(String login) {
+        Optional<User> user = getUsers()
+                .filter(u -> u.getLogin().equals(login))
+                .findFirst();
+
+        return user.isPresent() ? user.get() : null;
     }
 }
