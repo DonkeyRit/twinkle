@@ -8,7 +8,7 @@ import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.FilterPanel;
 import com.github.donkeyrit.javaapp.panels.HeaderPanel;
-import com.github.donkeyrit.javaapp.panels.RegistrationPanel;
+import com.github.donkeyrit.javaapp.panels.register.SignInPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
@@ -105,7 +105,7 @@ public class LoginPanel extends CustomPanel {
 
         register = new JButton("Log in");
         register.setBounds(448, 320, 80, 20);
-        register.addActionListener(e -> this.uiManager.setWindowPanels(new RegistrationPanel()));
+        register.addActionListener(e -> this.uiManager.setWindowPanels(new SignInPanel()));
     }
 
     @Override

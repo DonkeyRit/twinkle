@@ -1,10 +1,12 @@
-package com.github.donkeyrit.javaapp.panels;
+package com.github.donkeyrit.javaapp.panels.register;
 
 import com.github.donkeyrit.javaapp.components.JCustomTextField;
 import com.github.donkeyrit.javaapp.components.JCustomPasswordField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.panels.FilterPanel;
+import com.github.donkeyrit.javaapp.panels.HeaderPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
@@ -21,9 +23,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class RegistrationPanel extends CustomPanel {
+public class SignInPanel extends CustomPanel {
 
-    public RegistrationPanel() {
+    public SignInPanel() {
         setLayout(null);
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
