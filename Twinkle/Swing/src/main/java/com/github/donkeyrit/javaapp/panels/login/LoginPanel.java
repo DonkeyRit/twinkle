@@ -3,6 +3,7 @@ package com.github.donkeyrit.javaapp.panels.login;
 import com.github.donkeyrit.javaapp.components.JCTextField;
 import com.github.donkeyrit.javaapp.components.JPaswordField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
+import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.UserModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.FilterPanel;
@@ -19,14 +20,12 @@ import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class LoginPanel extends CustomPanel {
 
     private final ServiceContainer serviceContainer;
     private final UiManager uiManager;
-    private final DatabaseProvider database;
+    private final DatabaseProvider databaseProvider;
     private final Canvas panel;
 
     private JCTextField login;
@@ -41,7 +40,7 @@ public class LoginPanel extends CustomPanel {
         this.serviceContainer = ServiceContainer.getInstance();
         this.uiManager = serviceContainer.getUiManager();
         this.panel = this.uiManager.getCanvas();
-        this.database = serviceContainer.getDatabaseProvider();
+        this.databaseProvider = serviceContainer.getDatabaseProvider();
 
         initialize();
 
@@ -79,40 +78,31 @@ public class LoginPanel extends CustomPanel {
 
             if (!isOne && !isTwo) {
 
-
-                String query = String.format("SELECT count(idUser) as count, role FROM user WHERE login = '%s' AND password = '%s'", ShieldingProvider.shielding(login.getText()), SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())));
-                ResultSet userSet = database.select(query);
-                boolean isCheckUser = false;
-                boolean roleUser = false;
+                UserModelProvider provider = databaseProvider.getUserModelProvider();
                 try {
-                    int tempNum = 0;
-                    while (userSet.next()) {
-                        tempNum = userSet.getInt("count");
-                        roleUser = userSet.getBoolean("role");
-                    }
-                    isCheckUser = tempNum != 0;
-
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-
-                if (isCheckUser) {
-
-                    this.serviceContainer.setUser(new User(
+                    User currentUser = provider.getSpecificUserByCredentials(
                             ShieldingProvider.shielding(login.getText()),
-                            SecurityProvider.sha1(password.getText()), roleUser)
+                            SecurityProvider.sha1(ShieldingProvider.shielding(password.getText()))
                     );
-                    this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
 
-                } else {
+                    if (currentUser != null) {
 
-                    login.setPlaceholder("Incorrect login");
-                    login.setPhColor(Color.RED);
-                    login.setText("");
+                        this.serviceContainer.setUser(currentUser);
+                        this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
 
-                    password.setPlaceholder("Incorrect password");
-                    password.setPhColor(Color.RED);
-                    password.setText("");
+                    } else {
+
+                        login.setPlaceholder("Incorrect login");
+                        login.setPhColor(Color.RED);
+                        login.setText("");
+
+                        password.setPlaceholder("Incorrect password");
+                        password.setPhColor(Color.RED);
+                        password.setText("");
+                    }
+
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
             revalidate();

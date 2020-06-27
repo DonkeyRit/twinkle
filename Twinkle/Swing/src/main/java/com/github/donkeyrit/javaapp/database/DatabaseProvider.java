@@ -1,5 +1,7 @@
 package com.github.donkeyrit.javaapp.database;
 
+import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.UserModelProvider;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -7,6 +9,10 @@ public abstract class DatabaseProvider {
 
     protected Connection connection;
 
+    public UserModelProvider getUserModelProvider(){
+        return new UserModelProvider(this);
+    }
+    
     public DatabaseProvider() {
         initialize();
     }
