@@ -7,11 +7,11 @@ import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.panels.CarPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.listeners.BackButtonListener;
-import com.github.donkeyrit.javaapp.panels.content.listeners.NextButtonListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.NavigationButtonListener;
+import com.github.donkeyrit.javaapp.panels.content.listeners.NextButtonListener;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
-import com.github.donkeyrit.javaapp.ui.Canvas;
+import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -30,7 +30,7 @@ public class ContentPanel extends CustomPanel {
     private static final Font navigationButtonFont = new Font("Arial", Font.ITALIC, 10);
 
     private DatabaseProvider databaseProvider;
-    private final Canvas panel;
+    private UiManager uiManager;
 
     private JLabel contentMainLabel;
     private JButton reloadButton;
@@ -48,8 +48,8 @@ public class ContentPanel extends CustomPanel {
         conditionPanel = condition;
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
-        panel = serviceContainer.getUiManager().getCanvas();
         databaseProvider = serviceContainer.getDatabaseProvider();
+        uiManager = serviceContainer.getUiManager();
 
         this.numOfPage = numOfPage;
 
@@ -80,20 +80,9 @@ public class ContentPanel extends CustomPanel {
         reloadButton.setIcon(iconExit);
         reloadButton.setHorizontalTextPosition(SwingConstants.LEFT);
         reloadButton.addActionListener(e -> {
-            Component[] mas = panel.getComponents();
-            JPanel temp = null;
-            for (Component ma : mas) {
-                if (ma.getClass().toString().contains("ContentPanel")) {
-                    temp = (JPanel) ma;
-                }
-            }
-
-            panel.remove(temp);
-            JPanel content = new ContentPanel("");
-            content.setBounds(250, 100, 605, 550);
-            panel.add(content);
-            panel.revalidate();
-            panel.repaint();
+            JButton selectedButton = (JButton) e.getSource();
+            JPanel outerPanel = (JPanel) selectedButton.getParent().getParent();
+            uiManager.redrawSpecificPanel(outerPanel, new ContentPanel(""));
         });
     }
 

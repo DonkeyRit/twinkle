@@ -1,6 +1,9 @@
 package com.github.donkeyrit.javaapp.ui;
 
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
+
+import javax.swing.*;
 
 public class UiManager {
 
@@ -20,9 +23,10 @@ public class UiManager {
 
     /**
      * WindowPanel is a type panel on the all window.
+     *
      * @param panels
      */
-    public void setWindowPanels(CustomPanel ... panels) {
+    public void setWindowPanels(CustomPanel... panels) {
         canvas.removeAll();
         canvas.revalidate();
         canvas.repaint();
@@ -30,5 +34,13 @@ public class UiManager {
             panel.setBounds(panel.getBoundsRectangle());
             canvas.add(panel);
         }
+    }
+
+    public void redrawSpecificPanel(JPanel previousPanel, CustomPanel newPanel) {
+        newPanel.setBounds(newPanel.getBoundsRectangle());
+        canvas.remove(previousPanel);
+        canvas.add(newPanel);
+        canvas.revalidate();
+        canvas.repaint();
     }
 }
