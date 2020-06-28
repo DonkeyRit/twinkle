@@ -7,7 +7,7 @@ import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.UserModelPro
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.FilterPanel;
-import com.github.donkeyrit.javaapp.panels.HeaderPanel;
+import com.github.donkeyrit.javaapp.panels.header.HeaderPanel;
 import com.github.donkeyrit.javaapp.panels.register.SignInPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
