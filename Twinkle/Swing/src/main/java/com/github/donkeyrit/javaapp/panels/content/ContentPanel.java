@@ -6,8 +6,9 @@ import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.panels.CarPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
-import com.github.donkeyrit.javaapp.panels.content.listeners.NextBackListener;
-import com.github.donkeyrit.javaapp.panels.content.listeners.ScrollPageListener;
+import com.github.donkeyrit.javaapp.panels.content.listeners.BackButtonListener;
+import com.github.donkeyrit.javaapp.panels.content.listeners.NextButtonListener;
+import com.github.donkeyrit.javaapp.panels.content.listeners.NavigationButtonListener;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.ui.Canvas;
@@ -17,13 +18,12 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ContentPanel extends CustomPanel {
 
-    public int numOfPage = 1;
+    public int numOfPage = 0;
     public int startBut = 1;
     public String conditionPanel = "";
 
@@ -37,9 +37,13 @@ public class ContentPanel extends CustomPanel {
     private List<CarPanel> carPanels;
     private Box navigationButtonsBox;
 
-    private List<Car> allCar;
+    private int countOfPages;
 
-    public ContentPanel(String condition, int... args) {
+    public ContentPanel(String condition) {
+        this(condition, 0);
+    }
+
+    public ContentPanel(String condition, int numOfPage) {
         setLayout(null);
         conditionPanel = condition;
 
@@ -47,9 +51,7 @@ public class ContentPanel extends CustomPanel {
         panel = serviceContainer.getUiManager().getCanvas();
         databaseProvider = serviceContainer.getDatabaseProvider();
 
-        if (args.length != 0) {
-            numOfPage = args[0];
-        }
+        this.numOfPage = numOfPage;
 
         String conditionQuery = "";
         if (!condition.equals("")) {
@@ -100,23 +102,26 @@ public class ContentPanel extends CustomPanel {
         CarModelProvider carModelProvider = databaseProvider.getCarModelProvider();
         carPanels = new ArrayList<>();
 
-        allCar = carModelProvider.getAllCars().collect(Collectors.toList());
-        List<Car> carsOnThePanel = allCar.stream().skip((numOfPage - 1) * 4).limit(4).collect(Collectors.toList());
+        List<Car> allCar = carModelProvider.getAllCars().collect(Collectors.toList());
+        countOfPages = (int) (Math.ceil(allCar.size() / 4f));
+        List<Car> carsOnThePanel = allCar.stream().skip(numOfPage * 4).limit(4).collect(Collectors.toList());
 
         for (int i = 0; i < carsOnThePanel.size(); i++) {
-            CarPanel temp = new CarPanel(carsOnThePanel.get(i).getId());
-            temp.setBorder(new LineBorder(new Color(0, 163, 163), 4));
-            temp.setBounds(20, 40 + i * 120, 565, 100);
-            carPanels.add(temp);
+            CarPanel currentCar = new CarPanel(carsOnThePanel.get(i).getId());
+            currentCar.setBorder(new LineBorder(new Color(0, 163, 163), 4));
+            currentCar.setBounds(20, 40 + i * 120, 565, 100);
+            carPanels.add(currentCar);
         }
     }
 
     private void initializeNavigationButton() {
 
         List<JButton> navigationButtons = new ArrayList<>();
-        int countOfPages = (int) (Math.ceil(allCar.size() / 4f));
-        int lastNumOfPage = IntStream.range(1, countOfPages)
-                .skip(numOfPage)
+
+        int indexOfRange = numOfPage / 4;
+        int leftBoundary = indexOfRange * 4;
+        int rightBoundary = IntStream.rangeClosed(1, countOfPages)
+                .skip(leftBoundary)
                 .limit(4)
                 .reduce((first, second) -> second)
                 .orElse(numOfPage);
@@ -124,24 +129,24 @@ public class ContentPanel extends CustomPanel {
         navigationButtonsBox = Box.createHorizontalBox();
         navigationButtonsBox.setBounds(205, 520, 400, 30);
 
-        if (numOfPage - 4 > 0) {
-            JButton backBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "back.png"));
-            backBut.addActionListener(new NextBackListener());
-            navigationButtons.add(backBut);
+        if (leftBoundary != 0) {
+            JButton backButton = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "back.png"));
+            backButton.addActionListener(new BackButtonListener(numOfPage));
+            navigationButtons.add(backButton);
         }
 
-        for (int i = numOfPage; i < lastNumOfPage + 1; i++) {
-            JButton navigationButton = new JButton(i + "");
+        for (int i = leftBoundary; i < rightBoundary; i++) {
+            JButton navigationButton = new JButton((i + 1) + "");
             navigationButton.setFont(navigationButtonFont);
-            navigationButton.addActionListener(new ScrollPageListener());
+            navigationButton.addActionListener(new NavigationButtonListener());
 
             navigationButtons.add(navigationButton);
         }
 
-        if (numOfPage + 4 >= countOfPages) {
-            JButton nextBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "next.png"));
-            nextBut.addActionListener(new NextBackListener());
-            navigationButtons.add(nextBut);
+        if (countOfPages > rightBoundary) {
+            JButton nextButton = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "next.png"));
+            nextButton.addActionListener(new NextButtonListener(numOfPage));
+            navigationButtons.add(nextButton);
         }
 
         navigationButtons.forEach(jButton -> navigationButtonsBox.add(jButton));

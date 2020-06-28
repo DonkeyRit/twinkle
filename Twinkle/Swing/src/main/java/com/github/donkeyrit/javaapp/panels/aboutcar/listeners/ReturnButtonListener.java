@@ -19,7 +19,7 @@ public class ReturnButtonListener implements ActionListener {
         JButton jButton = (JButton) e.getSource();
         AboutCarPanel oldPanel = (AboutCarPanel) jButton.getParent();
 
-        JPanel newPanel = new ContentPanel(oldPanel.getFilter(), oldPanel.getNumPage(),oldPanel.getStartBut());
+        JPanel newPanel = new ContentPanel(oldPanel.getFilter(), oldPanel.getNumPage());
         newPanel.setBounds(250,100,605,550);
 
         panel.remove(oldPanel);
