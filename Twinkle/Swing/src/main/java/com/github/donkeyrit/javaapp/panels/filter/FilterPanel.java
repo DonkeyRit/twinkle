@@ -1,4 +1,4 @@
-package com.github.donkeyrit.javaapp.panels;
+package com.github.donkeyrit.javaapp.panels.filter;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;

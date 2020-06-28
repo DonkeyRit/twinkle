@@ -3,13 +3,12 @@ package com.github.donkeyrit.javaapp.panels.header;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.ChooseActionPanel;
-import com.github.donkeyrit.javaapp.panels.FilterPanel;
+import com.github.donkeyrit.javaapp.panels.filter.FilterPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
-import com.github.donkeyrit.javaapp.ui.Canvas;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
