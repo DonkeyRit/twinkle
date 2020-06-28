@@ -14,15 +14,12 @@ import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.Component;
-import java.awt.Graphics;
-
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ContentPanel extends CustomPanel {
 
@@ -30,25 +27,25 @@ public class ContentPanel extends CustomPanel {
     public int startBut = 1;
     public String conditionPanel = "";
 
+    private static final Font navigationButtonFont = new Font("Arial", Font.ITALIC, 10);
+
+    private DatabaseProvider databaseProvider;
     private final Canvas panel;
 
     private JLabel contentMainLabel;
     private JButton reloadButton;
     private List<CarPanel> carPanels;
+    private Box navigationButtonsBox;
 
+    private List<Car> allCar;
 
     public ContentPanel(String condition, int... args) {
         setLayout(null);
         conditionPanel = condition;
 
-        panel = ServiceContainer.getInstance().getUiManager().getCanvas();
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
-        DatabaseProvider databaseProvider = serviceContainer.getDatabaseProvider();
-
-        initialize();
-
-        add(contentMainLabel);
-        add(reloadButton);
+        panel = serviceContainer.getUiManager().getCanvas();
+        databaseProvider = serviceContainer.getDatabaseProvider();
 
         if (args.length != 0) {
             numOfPage = args[0];
@@ -59,85 +56,14 @@ public class ContentPanel extends CustomPanel {
             conditionQuery = "WHERE " + condition;
         }
 
-        CarModelProvider carModelProvider = databaseProvider.getCarModelProvider();
-        List<Car> carList = carModelProvider.getAllCars().collect(Collectors.toList());
+        initialize();
+        initializeCarList();
+        initializeNavigationButton();
 
-       /* String query = "SELECT idCar FROM\n" +
-                "                (SELECT idCar,modelYear,info,cost,modelName,idBodyType,markName,nameCountry FROM\n" +
-                "                (SELECT idCar,modelYear,image,info,cost,modelName,idBodyType,markName,idCountry FROM \n" +
-                "                (SELECT idCar,modelYear,image,info,cost,modelName,idMark,idBodyType FROM car \n" +
-                "                INNER JOIN model ON car.idModel = model.idModel) as join1\n" +
-                "                INNER JOIN mark ON join1.idMark = mark.idMark) as join2\n" +
-                "                INNER JOIN country ON join2.idCountry = country.idCountry) as join3\n" +
-                "                INNER JOIN bodytype ON join3.idBodyType = bodytype.idBodyType " + conditionQuery + " ORDER BY modelYear DESC";
-
-        ResultSet carsSet = databaseProvider.select(query);
-        ArrayList<Integer> carsList = new ArrayList<>();
-        int numString = 0;
-        try {
-            while (carsSet.next()) {
-                carsList.add(carsSet.getInt("idCar"));
-            }
-            carsSet.last();
-            numString = carsSet.getRow();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }*/
-
-        int size = (numOfPage - 1) * 4;
-        List<Car> carsOnThePanel = carList.stream().skip(size).limit(4).collect(Collectors.toList());
-        carPanels = new ArrayList<>();
-        for (int i = 0; i < carsOnThePanel.size(); i++) {
-            CarPanel temp = new CarPanel(carsOnThePanel.get(i).getId());
-            temp.setBorder(new LineBorder(new Color(0, 163, 163), 4));
-            temp.setBounds(20, 40 + i * 120, 565, 100);
-            carPanels.add(temp);
-            add(temp);
-        }
-
-        int numString = carList.size();
-
-        int num = (int) (Math.ceil(numString / 4f));
-        if (args.length > 1) {
-            startBut = args[1];
-        }
-
-        int m = startBut + 5;
-        if (m > num) {
-            m = num + 1;
-        }
-
-        Box buttonBox = Box.createHorizontalBox();
-        buttonBox.setBounds(205, 520, 400, 30);
-
-        if (startBut > 5) {
-            JButton backBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "back.png"));
-            backBut.addActionListener(new NextBackListener());
-
-
-            buttonBox.add(backBut);
-        }
-
-        Font buttonFont = new Font("Arial", Font.ITALIC, 10);
-        ArrayList<JButton> buttonsList = new ArrayList<>();
-        for (int i = startBut; i < m; i++) {
-            JButton temp = new JButton(i + "");
-
-            temp.setFont(buttonFont);
-            temp.addActionListener(new ScrollPageListener());
-
-            buttonBox.add(temp);
-            buttonsList.add(temp);
-        }
-
-        if (m != (num + 1)) {
-            JButton nextBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "next.png"));
-            nextBut.addActionListener(new NextBackListener());
-
-
-            buttonBox.add(nextBut);
-        }
-        add(buttonBox);
+        add(contentMainLabel);
+        add(reloadButton);
+        carPanels.forEach(this::add);
+        add(navigationButtonsBox);
     }
 
     private void initialize() {
@@ -167,6 +93,58 @@ public class ContentPanel extends CustomPanel {
             panel.revalidate();
             panel.repaint();
         });
+    }
+
+    private void initializeCarList() {
+
+        CarModelProvider carModelProvider = databaseProvider.getCarModelProvider();
+        carPanels = new ArrayList<>();
+
+        allCar = carModelProvider.getAllCars().collect(Collectors.toList());
+        List<Car> carsOnThePanel = allCar.stream().skip((numOfPage - 1) * 4).limit(4).collect(Collectors.toList());
+
+        for (int i = 0; i < carsOnThePanel.size(); i++) {
+            CarPanel temp = new CarPanel(carsOnThePanel.get(i).getId());
+            temp.setBorder(new LineBorder(new Color(0, 163, 163), 4));
+            temp.setBounds(20, 40 + i * 120, 565, 100);
+            carPanels.add(temp);
+        }
+    }
+
+    private void initializeNavigationButton() {
+
+        List<JButton> navigationButtons = new ArrayList<>();
+        int countOfPages = (int) (Math.ceil(allCar.size() / 4f));
+        int lastNumOfPage = IntStream.range(1, countOfPages)
+                .skip(numOfPage)
+                .limit(4)
+                .reduce((first, second) -> second)
+                .orElse(numOfPage);
+
+        navigationButtonsBox = Box.createHorizontalBox();
+        navigationButtonsBox.setBounds(205, 520, 400, 30);
+
+        if (numOfPage - 4 > 0) {
+            JButton backBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "back.png"));
+            backBut.addActionListener(new NextBackListener());
+            navigationButtons.add(backBut);
+        }
+
+        for (int i = numOfPage; i < lastNumOfPage + 1; i++) {
+            JButton navigationButton = new JButton(i + "");
+            navigationButton.setFont(navigationButtonFont);
+            navigationButton.addActionListener(new ScrollPageListener());
+
+            navigationButtons.add(navigationButton);
+        }
+
+        if (numOfPage + 4 >= countOfPages) {
+            JButton nextBut = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "next.png"));
+            nextBut.addActionListener(new NextBackListener());
+            navigationButtons.add(nextBut);
+        }
+
+        navigationButtons.forEach(jButton -> navigationButtonsBox.add(jButton));
     }
 
     @Override
