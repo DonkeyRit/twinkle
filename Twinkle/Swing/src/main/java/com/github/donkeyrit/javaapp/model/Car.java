@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Car {
 
-    private int imagesNum;
+    private int id;
     private Date modelYear;
     private Double cost;
     private String modelName;
@@ -14,8 +14,8 @@ public class Car {
     private String bodyTypeName;
     private String status;
 
-    public Car(int imagesNum, Date modelYear, Double cost, String modelName, String markName, String nameCountry, String info, String bodyTypeName, String status) {
-        this.imagesNum = imagesNum;
+    public Car(int id, Date modelYear, Double cost, String modelName, String markName, String nameCountry, String info, String bodyTypeName, String status) {
+        this.id = id;
         this.modelYear = modelYear;
         this.cost = cost;
         this.modelName = modelName;
@@ -28,8 +28,8 @@ public class Car {
 
     private Car(){ }
 
-    public int getImagesNum() {
-        return imagesNum;
+    public int getId() {
+        return id;
     }
     public Date getModelYear() {
         return modelYear;
@@ -65,7 +65,7 @@ public class Car {
         }
 
         public CarBuilder setImagesNum(int imagesNum) {
-            this.car.imagesNum = imagesNum;
+            this.car.id = imagesNum;
             return this;
         }
         public CarBuilder setModelYear(Date modelYear) {
@@ -102,6 +102,10 @@ public class Car {
         }
         public Car create(){
             return this.car;
+        }
+
+        public void flush() {
+            this.car = new Car();
         }
     }
 }

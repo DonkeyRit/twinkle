@@ -78,7 +78,7 @@ public class AboutCarPanel extends CustomPanel {
         scrollPane.setBounds(300, 290, 285, 190);
         add(scrollPane);
 
-        ResultSet statusSet = database.select("SELECT * FROM renta WHERE idCar = " + car.getImagesNum() + " ORDER BY dataEnd, dataPlan DESC LIMIT 1");
+        ResultSet statusSet = database.select("SELECT * FROM renta WHERE idCar = " + car.getId() + " ORDER BY dataEnd, dataPlan DESC LIMIT 1");
         String statusStr = "Свободно";
         try{
             while(statusSet.next()){
@@ -368,7 +368,7 @@ public class AboutCarPanel extends CustomPanel {
                                 if(isHaveRenta){
                                     planPriceLabel.setText("You cannot take more than one car at a time");
                                 }else{
-                                    String insertRenta = "INSERT INTO renta(idClient,idCar,dataStart,dataPlan) VALUES (" + idClient + "," + car.getImagesNum();
+                                    String insertRenta = "INSERT INTO renta(idClient,idCar,dataStart,dataPlan) VALUES (" + idClient + "," + car.getId();
 
                                     String startDataIn = "'" + yList.get(0) + "-" + yList.get(1) + "-" + yList.get(2) + "'";
                                     String planDataIn = "'" + yList.get(3) + "-" + yList.get(4) + "-" + yList.get(5) + "'";
@@ -473,7 +473,7 @@ public class AboutCarPanel extends CustomPanel {
             add(actionWithCarButton);
         }else{
 
-            String queryToDatabase = "SELECT * FROM user WHERE idUser = (SELECT idUser FROM client WHERE idClient = (SELECT idClient FROm renta WHERE idCar = " + car.getImagesNum() + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))";
+            String queryToDatabase = "SELECT * FROM user WHERE idUser = (SELECT idUser FROM client WHERE idClient = (SELECT idClient FROm renta WHERE idCar = " + car.getId() + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))";
             ResultSet checkUserSet = database.select(queryToDatabase);
             boolean isTrue = false;
             try{
@@ -549,10 +549,10 @@ public class AboutCarPanel extends CustomPanel {
                             int currDay = calendar.get(Calendar.DATE);
 
                             String dataStr = currYear + "-" + currMont + "-" + currDay;
-                            String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE idCar = " + car.getImagesNum() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');";
+                            String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE idCar = " + car.getId() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');";
                             database.update(updateQuery);
 
-                            String idRentaStr = "SELECT idRenta FROM renta WHERE idCar = " + car.getImagesNum() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
+                            String idRentaStr = "SELECT idRenta FROM renta WHERE idCar = " + car.getId() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
                             ResultSet rentaSet = database.select(idRentaStr);
                             int idRentaNum = 0;
                             try{
@@ -609,7 +609,7 @@ public class AboutCarPanel extends CustomPanel {
 
                         String queryToDb = "SELECT login,idCar,join1.idUser,dataStart,dataPlan,dataEnd FROM\n" +
                                 "(SELECT idCar,idUSer,renta.idClient,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.idClient = client.idClient) as join1\n" +
-                                "INNER JOIN user ON join1.idUser = user.idUser WHERE login = '" + user.getLogin() + "' AND idCar = " + car.getImagesNum() + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;";
+                                "INNER JOIN user ON join1.idUser = user.idUser WHERE login = '" + user.getLogin() + "' AND idCar = " + car.getId() + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;";
 
                         ResultSet queryToDbSet = database.select(queryToDb);
                         Date startRentaDate;
@@ -678,7 +678,7 @@ public class AboutCarPanel extends CustomPanel {
     public void paintComponent(Graphics g){
         g.setColor(new Color(237,237,237));
         g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(),30,25);
-        Image image = ResourceManager.getImageFromResources(Assets.CARS, String.format("%d.png", car.getImagesNum()));
+        Image image = ResourceManager.getImageFromResources(Assets.CARS, String.format("%d.png", car.getId()));
         g.drawImage(image,30,10,this);
         g.setColor(new Color(255,255,255));
         g.fillRect(20, 290, 260, 190);

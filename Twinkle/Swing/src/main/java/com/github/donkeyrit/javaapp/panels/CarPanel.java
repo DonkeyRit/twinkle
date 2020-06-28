@@ -136,7 +136,7 @@ public class CarPanel extends CustomPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        Image image = ResourceManager.getImageFromResources(Assets.MINI_CARS, String.format("%s.png", this.car.getImagesNum())),
+        Image image = ResourceManager.getImageFromResources(Assets.MINI_CARS, String.format("%s.png", this.car.getId())),
                 country = ResourceManager.getImageFromResources(Assets.FLAGS, String.format("%s.png", this.car.getNameCountry())),
                 statusImage = ResourceManager.getImageFromResources(Assets.STATUS, String.format("%s.png", this.car.getStatus()));
 

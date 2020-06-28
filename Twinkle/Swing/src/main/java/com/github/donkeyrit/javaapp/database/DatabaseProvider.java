@@ -1,5 +1,6 @@
 package com.github.donkeyrit.javaapp.database;
 
+import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.CarModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.UserModelProvider;
 
 import java.sql.*;
@@ -9,10 +10,13 @@ public abstract class DatabaseProvider {
 
     protected Connection connection;
 
-    public UserModelProvider getUserModelProvider(){
+    public UserModelProvider getUserModelProvider() {
         return new UserModelProvider(this);
     }
-    
+    public CarModelProvider getCarModelProvider() {
+        return new CarModelProvider(this);
+    }
+
     public DatabaseProvider() {
         initialize();
     }
