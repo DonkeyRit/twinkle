@@ -4,15 +4,12 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.CarModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
-import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
+import com.github.donkeyrit.javaapp.panels.filter.listeners.ApplyButtonListener;
 import com.github.donkeyrit.javaapp.panels.filter.listeners.ChangeValueMarkComboBoxListener;
-import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +21,6 @@ public class FilterPanel extends CustomPanel {
     private static final Font font = new Font("Arial", Font.BOLD, 13);
 
     private final DatabaseProvider databaseProvider;
-    private final Canvas panel;
 
     private JLabel title;
     private JComboBox<String> markComboBox;
@@ -36,12 +32,27 @@ public class FilterPanel extends CustomPanel {
     private List<JCheckBox> bodyTypesCheckBoxes;
     private JScrollPane bodyTypesScrollPane;
 
+    public JComboBox<String> getMarkComboBox() {
+        return markComboBox;
+    }
+
+    public JComboBox<String> getModelComboBox() {
+        return modelComboBox;
+    }
+
+    public JSlider getPriceSlider() {
+        return priceSlider;
+    }
+
+    public List<JCheckBox> getBodyTypesCheckBoxes() {
+        return bodyTypesCheckBoxes;
+    }
+
     public FilterPanel() {
         setLayout(null);
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         databaseProvider = serviceContainer.getDatabaseProvider();
-        panel = serviceContainer.getUiManager().getCanvas();
 
         initialize();
 
@@ -104,85 +115,7 @@ public class FilterPanel extends CustomPanel {
 
         applyFilterButton = new JButton("Apply");
         applyFilterButton.setBounds(50, 520, 100, 20);
-        applyFilterButton.addActionListener(e -> {
-            String resultCondition = "";
-
-            String selectedMark = markComboBox.getSelectedItem().toString();
-            if (!selectedMark.equals("All marks")) {
-                resultCondition += "markName = " + "'" + selectedMark + "'";
-            } else {
-                resultCondition += "!";
-            }
-
-            resultCondition += ":";
-
-            String selectedModel = modelComboBox.getSelectedItem().toString();
-            if (!selectedModel.equals("All models")) {
-                resultCondition += "modelName = " + "'" + selectedModel + "'";
-            } else {
-                resultCondition += "!";
-            }
-
-            resultCondition += ":";
-
-            int selectedPrice = priceSlider.getValue();
-            if (selectedPrice != 0) {
-                resultCondition += "cost < " + selectedPrice * 1000;
-            } else {
-                resultCondition += "!";
-            }
-            resultCondition += ":";
-
-            StringBuilder selectedCheckBoxes = new StringBuilder();
-            ArrayList<String> selectedCB = new ArrayList<>();
-            for (JCheckBox checkBox : bodyTypesCheckBoxes) {
-                boolean isTrue = checkBox.isSelected();
-                if (isTrue) {
-                    selectedCB.add(checkBox.getText());
-                }
-            }
-
-            if (selectedCB.size() == 0) {
-                resultCondition += "!";
-            } else {
-                selectedCheckBoxes.append("bodyTypeName IN (");
-                for (int i = 0; i < selectedCB.size(); i++) {
-                    selectedCheckBoxes.append("'").append(selectedCB.get(i)).append("'");
-                    if (i != selectedCB.size() - 1) {
-                        selectedCheckBoxes.append(",");
-                    }
-                }
-                selectedCheckBoxes.append(")");
-            }
-            resultCondition += selectedCheckBoxes;
-
-            String res = resultCondition.replaceAll("!", "");
-            String[] masive = res.split(":");
-            StringBuilder resStr = new StringBuilder();
-            for (int i = 0; i < masive.length; i++) {
-                if (!masive[i].equals("")) {
-                    resStr.append(masive[i]);
-                    if (i != masive.length - 1) {
-                        resStr.append(" AND ");
-                    }
-                }
-            }
-
-            Component[] mas = panel.getComponents();
-            JPanel temp = null;
-            for (Component ma : mas) {
-                if (ma.getClass().toString().contains("ContentPanel") || ma.getClass().toString().contains("AboutCarPanel")) {
-                    temp = (JPanel) ma;
-                }
-            }
-
-            panel.remove(temp);
-            JPanel content = new ContentPanel(resStr.toString());
-            content.setBounds(250, 100, 605, 550);
-            panel.add(content);
-            panel.revalidate();
-            panel.repaint();
-        });
+        applyFilterButton.addActionListener(new ApplyButtonListener(this));
     }
 
     @Override
