@@ -32,8 +32,8 @@ public class CarModelProvider {
         List<Car> result = new ArrayList<>();
         Car.CarBuilder carBuilder = new Car.CarBuilder();
 
-        ResultSet carSet = provider.select(query);
-        try {
+
+        try (ResultSet carSet = provider.select(query)) {
             while (carSet.next()) {
                 carBuilder.setModelYear(carSet.getDate("modelYear"))
                         .setImagesNum(carSet.getInt("idCar"))
@@ -51,5 +51,53 @@ public class CarModelProvider {
         }
 
         return result.stream();
+    }
+
+    public Stream<String> getAllCarsMark() {
+
+        final String query = "SELECT DISTINCT(markName) FROM mark";
+        List<String> markList = new ArrayList<>();
+
+        try (ResultSet markSet = provider.select(query);) {
+            while (markSet.next()) {
+                markList.add(markSet.getString("markName"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return markList.stream();
+    }
+
+    public Stream<String> getAllCarsBodyType() {
+
+        final String query = "SELECT DISTINCT(bodyTypeName) FROM bodytype";
+        List<String> bodyTypeList = new ArrayList<>();
+
+        try (ResultSet bodyTypeSet = provider.select(query)) {
+            while (bodyTypeSet.next()) {
+                bodyTypeList.add(bodyTypeSet.getString("bodyTypeName"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return bodyTypeList.stream();
+    }
+
+    public Stream<Double> getAllCarsPrice() {
+
+        final String query = "SELECT MAX(cost) as price FROM car ORDER BY cost";
+        List<Double> carsPrice = new ArrayList<>();
+
+        try (ResultSet priceSet = provider.select(query)) {
+            while (priceSet.next()) {
+                carsPrice.add(priceSet.getDouble("price"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return carsPrice.stream();
     }
 }
