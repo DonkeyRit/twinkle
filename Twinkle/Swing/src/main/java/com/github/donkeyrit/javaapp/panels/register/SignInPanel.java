@@ -107,7 +107,7 @@ public class SignInPanel extends CustomPanel {
 
                         userModelProvider.addUser(newUser);
                         serviceContainer.setUser(newUser);
-                        uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
+                        uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel());
                     }
                 }
             }

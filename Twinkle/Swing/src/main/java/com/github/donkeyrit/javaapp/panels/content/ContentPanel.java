@@ -9,6 +9,8 @@ import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.listeners.BackButtonListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.NavigationButtonListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.NextButtonListener;
+import com.github.donkeyrit.javaapp.panels.filter.model.ContentFilter;
+import com.github.donkeyrit.javaapp.panels.filter.model.NullFilter;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.ui.UiManager;
@@ -25,7 +27,6 @@ public class ContentPanel extends CustomPanel {
 
     public int numOfPage = 0;
     public int startBut = 1;
-    public String conditionPanel = "";
 
     private static final Font navigationButtonFont = new Font("Arial", Font.ITALIC, 10);
 
@@ -38,25 +39,29 @@ public class ContentPanel extends CustomPanel {
     private Box navigationButtonsBox;
 
     private int countOfPages;
+    private ContentFilter<Car> carFilter;
 
-    public ContentPanel(String condition) {
-        this(condition, 0);
+    public ContentFilter<Car> getCarFilter() {
+        return carFilter;
     }
 
-    public ContentPanel(String condition, int numOfPage) {
+    public ContentPanel() {
+        this(new NullFilter(), 0);
+    }
+
+    public ContentPanel(ContentFilter<Car> filter) {
+        this(filter, 0);
+    }
+
+    public ContentPanel(ContentFilter<Car> filter, int numOfPage) {
         setLayout(null);
-        conditionPanel = condition;
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         databaseProvider = serviceContainer.getDatabaseProvider();
         uiManager = serviceContainer.getUiManager();
+        carFilter = filter;
 
         this.numOfPage = numOfPage;
-
-        String conditionQuery = "";
-        if (!condition.equals("")) {
-            conditionQuery = "WHERE " + condition;
-        }
 
         initialize();
         initializeCarList();
@@ -82,7 +87,7 @@ public class ContentPanel extends CustomPanel {
         reloadButton.addActionListener(e -> {
             JButton selectedButton = (JButton) e.getSource();
             JPanel outerPanel = (JPanel) selectedButton.getParent().getParent();
-            uiManager.redrawSpecificPanel(outerPanel, new ContentPanel(""));
+            uiManager.redrawSpecificPanel(outerPanel, new ContentPanel());
         });
     }
 
@@ -91,7 +96,7 @@ public class ContentPanel extends CustomPanel {
         CarModelProvider carModelProvider = databaseProvider.getCarModelProvider();
         carPanels = new ArrayList<>();
 
-        List<Car> allCar = carModelProvider.getAllCars().collect(Collectors.toList());
+        List<Car> allCar = carFilter.filter(carModelProvider.getAllCars()).collect(Collectors.toList());
         countOfPages = (int) (Math.ceil(allCar.size() / 4f));
         List<Car> carsOnThePanel = allCar.stream().skip(numOfPage * 4).limit(4).collect(Collectors.toList());
 

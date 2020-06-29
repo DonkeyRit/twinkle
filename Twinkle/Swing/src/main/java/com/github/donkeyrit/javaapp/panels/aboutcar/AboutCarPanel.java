@@ -7,6 +7,8 @@ import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReloadButtonListener;
 import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReturnButtonListener;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.filter.model.CarFilter;
+import com.github.donkeyrit.javaapp.panels.filter.model.ContentFilter;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.ui.Canvas;
@@ -32,11 +34,11 @@ public class AboutCarPanel extends CustomPanel {
     private Canvas panel;
     private User user;
 
-    private String filter;
+    private ContentFilter<Car> filter;
     private int numPage;
     private int startBut;
 
-    public void setFilter(String filter) {
+    public void setFilter(ContentFilter<Car> filter) {
         this.filter = filter;
     }
 
@@ -48,7 +50,7 @@ public class AboutCarPanel extends CustomPanel {
         this.startBut = startBut;
     }
 
-    public String getFilter() {
+    public ContentFilter<Car> getFilter() {
         return filter;
     }
 

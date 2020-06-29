@@ -3,101 +3,60 @@ package com.github.donkeyrit.javaapp.panels.filter.listeners;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.filter.FilterPanel;
+import com.github.donkeyrit.javaapp.panels.filter.model.CarFilter;
+import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApplyButtonListener implements ActionListener {
 
-    private FilterPanel filterPanel;
-    private JPanel panel;
+    private final FilterPanel filterPanel;
+    private final UiManager uiManager;
 
     public ApplyButtonListener(FilterPanel filterPanel) {
         this.filterPanel = filterPanel;
-        this.panel = ServiceContainer.getInstance().getUiManager().getCanvas();
+        this.uiManager = ServiceContainer.getInstance().getUiManager();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String resultCondition = "";
 
-        String selectedMark = filterPanel.getMarkComboBox().getSelectedItem().toString();
-        if (!selectedMark.equals("All marks")) {
-            resultCondition += "markName = " + "'" + selectedMark + "'";
-        } else {
-            resultCondition += "!";
+        CarFilter carFilter = new CarFilter();
+
+        String selectedCarMark = (String) filterPanel.getMarkComboBox().getSelectedItem();
+        String selectedModelMark = (String) filterPanel.getModelComboBox().getSelectedItem();
+        int priceValue = filterPanel.getPriceSlider().getValue();
+        List<String> selectedBodyTypes = filterPanel.getBodyTypesCheckBoxes().stream()
+                .filter(AbstractButton::isSelected)
+                .map(AbstractButton::getText)
+                .collect(Collectors.toList());
+
+        if (!"All marks".equals(selectedCarMark)) {
+            carFilter.addMarkFilter(selectedCarMark);
+        }
+        if (!"All models".equals(selectedModelMark)) {
+            carFilter.addModelFilter(selectedModelMark);
+        }
+        if (priceValue != 0) {
+            carFilter.addPriceFilter(priceValue);
+        }
+        if (selectedBodyTypes.size() != 0) {
+            carFilter.addBodyTypesFilter(selectedBodyTypes);
         }
 
-        resultCondition += ":";
-
-        String selectedModel = filterPanel.getModelComboBox().getSelectedItem().toString();
-        if (!selectedModel.equals("All models")) {
-            resultCondition += "modelName = " + "'" + selectedModel + "'";
-        } else {
-            resultCondition += "!";
-        }
-
-        resultCondition += ":";
-
-        int selectedPrice = filterPanel.getPriceSlider().getValue();
-        if (selectedPrice != 0) {
-            resultCondition += "cost < " + selectedPrice * 1000;
-        } else {
-            resultCondition += "!";
-        }
-        resultCondition += ":";
-
-        StringBuilder selectedCheckBoxes = new StringBuilder();
-        ArrayList<String> selectedCB = new ArrayList<>();
-        for (JCheckBox checkBox : filterPanel.getBodyTypesCheckBoxes()) {
-            boolean isTrue = checkBox.isSelected();
-            if (isTrue) {
-                selectedCB.add(checkBox.getText());
-            }
-        }
-
-        if (selectedCB.size() == 0) {
-            resultCondition += "!";
-        } else {
-            selectedCheckBoxes.append("bodyTypeName IN (");
-            for (int i = 0; i < selectedCB.size(); i++) {
-                selectedCheckBoxes.append("'").append(selectedCB.get(i)).append("'");
-                if (i != selectedCB.size() - 1) {
-                    selectedCheckBoxes.append(",");
-                }
-            }
-            selectedCheckBoxes.append(")");
-        }
-        resultCondition += selectedCheckBoxes;
-
-        String res = resultCondition.replaceAll("!", "");
-        String[] masive = res.split(":");
-        StringBuilder resStr = new StringBuilder();
-        for (int i = 0; i < masive.length; i++) {
-            if (!masive[i].equals("")) {
-                resStr.append(masive[i]);
-                if (i != masive.length - 1) {
-                    resStr.append(" AND ");
-                }
-            }
-        }
-
-        Component[] mas = panel.getComponents();
-        JPanel temp = null;
+        Component[] mas = this.uiManager.getCanvas().getComponents();
+        JPanel contentPanel = null;
         for (Component ma : mas) {
             if (ma.getClass().toString().contains("ContentPanel") || ma.getClass().toString().contains("AboutCarPanel")) {
-                temp = (JPanel) ma;
+                contentPanel = (JPanel) ma;
             }
         }
 
-        panel.remove(temp);
-        JPanel content = new ContentPanel(resStr.toString());
-        content.setBounds(250, 100, 605, 550);
-        panel.add(content);
-        panel.revalidate();
-        panel.repaint();
+        uiManager.redrawSpecificPanel(contentPanel, new ContentPanel(carFilter));
     }
 }

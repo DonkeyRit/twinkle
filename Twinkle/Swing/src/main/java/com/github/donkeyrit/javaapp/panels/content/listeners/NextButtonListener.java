@@ -22,6 +22,6 @@ public class NextButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton selectedButton = (JButton) e.getSource();
         ContentPanel outerPanel = (ContentPanel) selectedButton.getParent().getParent();
-        uiManager.redrawSpecificPanel(outerPanel, new ContentPanel(outerPanel.conditionPanel, (numOfPage / 4 + 1) * 4));
+        uiManager.redrawSpecificPanel(outerPanel, new ContentPanel(outerPanel.getCarFilter(), (numOfPage / 4 + 1) * 4));
     }
 }

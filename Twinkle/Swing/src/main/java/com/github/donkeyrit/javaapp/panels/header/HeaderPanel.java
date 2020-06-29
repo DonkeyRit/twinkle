@@ -42,7 +42,7 @@ public class HeaderPanel extends CustomPanel {
         logoButton = new JButton();
         logoButton.setBounds(30, 10, 60, 60);
         setIconToButton(logoButton, ResourceManager.getImageIconFromResources(Assets.LOGO, "logo.png"));
-        logoButton.addActionListener(e -> this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel("")));
+        logoButton.addActionListener(e -> this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel()));
 
         userAvatarButton = new JButton();
         userAvatarButton.setBounds(725, 10, 60, 60);

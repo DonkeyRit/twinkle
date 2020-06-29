@@ -35,15 +35,12 @@ public class FilterPanel extends CustomPanel {
     public JComboBox<String> getMarkComboBox() {
         return markComboBox;
     }
-
     public JComboBox<String> getModelComboBox() {
         return modelComboBox;
     }
-
     public JSlider getPriceSlider() {
         return priceSlider;
     }
-
     public List<JCheckBox> getBodyTypesCheckBoxes() {
         return bodyTypesCheckBoxes;
     }

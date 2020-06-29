@@ -86,7 +86,7 @@ public class LoginPanel extends CustomPanel {
                     if (currentUser != null) {
 
                         this.serviceContainer.setUser(currentUser);
-                        this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel(""));
+                        this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel());
 
                     } else {
 

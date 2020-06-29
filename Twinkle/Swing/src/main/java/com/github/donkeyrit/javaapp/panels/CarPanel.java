@@ -115,7 +115,7 @@ public class CarPanel extends CustomPanel {
                 }
             }
             AboutCarPanel newPanel = new AboutCarPanel(this.car);
-            newPanel.setFilter(temp.conditionPanel);
+            newPanel.setFilter(temp.getCarFilter());
             newPanel.setNumPage(temp.numOfPage);
             newPanel.setStartBut(temp.startBut);
             newPanel.setBounds(250, 100, 605, 550);
