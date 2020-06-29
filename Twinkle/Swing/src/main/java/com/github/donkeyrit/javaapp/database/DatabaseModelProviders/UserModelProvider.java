@@ -50,18 +50,16 @@ public class UserModelProvider {
     }
 
     public User getSpecificUserByCredentials(String login, String password) {
-        Optional<User> user = getUsers()
+        return getUsers()
                 .filter(u -> u.getLogin().equals(login) && u.getPassword().equals(password))
-                .findFirst();
-
-        return user.isPresent() ? user.get() : null;
+                .findFirst()
+                .orElse(null);
     }
 
     public User getSpecificUserByLogin(String login) {
-        Optional<User> user = getUsers()
+        return getUsers()
                 .filter(u -> u.getLogin().equals(login))
-                .findFirst();
-
-        return user.isPresent() ? user.get() : null;
+                .findFirst()
+                .orElse(null);
     }
 }
