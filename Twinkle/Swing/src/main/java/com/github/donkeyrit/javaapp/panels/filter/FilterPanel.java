@@ -5,6 +5,7 @@ import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.CarModelProv
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
+import com.github.donkeyrit.javaapp.panels.filter.listeners.ChangeValueMarkComboBoxListener;
 import com.github.donkeyrit.javaapp.ui.Canvas;
 
 import javax.swing.*;
@@ -63,26 +64,12 @@ public class FilterPanel extends CustomPanel {
         List<String> carsMarkList = carModelProvider.getAllCarsMark().collect(Collectors.toList());
         carsMarkList.add(0, "All marks");
 
-        markComboBox = new JComboBox<>(carsMarkList.toArray(new String[0]));
-        markComboBox.setBounds(10, 40, 180, 20);
-        markComboBox.addActionListener(e -> {
-            //noinspection rawtypes
-            JComboBox temp = (JComboBox) e.getSource();
-            String selectedItem = (String) temp.getSelectedItem();
-
-            Stream<String> carsModelStream = Stream.empty();
-
-            if (!"All marks".equals(selectedItem)) {
-                carsModelStream = carModelProvider.getAllModelsForSpecificMark(selectedItem);
-            }
-
-            modelComboBox.removeAllItems();
-            modelComboBox.addItem("All models");
-            carsModelStream.forEachOrdered(model -> modelComboBox.addItem(model));
-        });
-
         modelComboBox = new JComboBox<>(new String[]{"All models"});
         modelComboBox.setBounds(10, 70, 180, 20);
+
+        markComboBox = new JComboBox<>(carsMarkList.toArray(new String[0]));
+        markComboBox.setBounds(10, 40, 180, 20);
+        markComboBox.addActionListener(new ChangeValueMarkComboBoxListener(modelComboBox));
 
         sliderTitle = new JLabel("Choose price:");
         sliderTitle.setBounds(60, 110, 100, 30);
