@@ -100,4 +100,20 @@ public class CarModelProvider {
 
         return carsPrice.stream();
     }
+
+    public Stream<String> getAllModelsForSpecificMark(String mark) {
+
+        final String query = String.format("SELECT modelName FROM mark INNER JOIN model ON mark.idMark = model.idMark WHERE markName='%s';", mark);
+        List<String> carsModelList = new ArrayList<>();
+
+        try (ResultSet bodyTypeSet = provider.select(query)) {
+            while (bodyTypeSet.next()) {
+                carsModelList.add(bodyTypeSet.getString("modelName"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return carsModelList.stream();
+    }
 }

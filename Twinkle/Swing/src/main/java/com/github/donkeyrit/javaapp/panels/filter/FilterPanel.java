@@ -63,50 +63,22 @@ public class FilterPanel extends CustomPanel {
         List<String> carsMarkList = carModelProvider.getAllCarsMark().collect(Collectors.toList());
         carsMarkList.add(0, "All marks");
 
-        markComboBox = new JComboBox<>(carsMarkList.toArray(new String[carsMarkList.size()]));
+        markComboBox = new JComboBox<>(carsMarkList.toArray(new String[0]));
         markComboBox.setBounds(10, 40, 180, 20);
         markComboBox.addActionListener(e -> {
+            //noinspection rawtypes
             JComboBox temp = (JComboBox) e.getSource();
-            String markSelected = (String) temp.getSelectedItem();
-            ArrayList<Integer> idMarkList = new ArrayList<Integer>();
-            ArrayList<String> modelList = new ArrayList<String>();
+            String selectedItem = (String) temp.getSelectedItem();
 
-            if (!markSelected.equals("All marks")) {
-                ResultSet idMarkSet = databaseProvider.select("SELECT idMark FROM mark WHERE markName = '" + markSelected + "'");
+            Stream<String> carsModelStream = Stream.empty();
 
-                try {
-                    while (idMarkSet.next()) {
-                        idMarkList.add(idMarkSet.getInt("idMark"));
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-
-                String queryModel = "SELECT modelName FROM model WHERE idMark in (";
-                for (int i = 0; i < idMarkList.size(); i++) {
-                    queryModel += idMarkList.get(i);
-                    if (i == idMarkList.size() - 1) {
-                        queryModel += ")";
-                    } else {
-                        queryModel += ",";
-                    }
-                }
-
-                ResultSet modelSet = databaseProvider.select(queryModel);
-                try {
-                    while (modelSet.next()) {
-                        modelList.add(modelSet.getString("modelName"));
-                    }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+            if (!"All marks".equals(selectedItem)) {
+                carsModelStream = carModelProvider.getAllModelsForSpecificMark(selectedItem);
             }
 
             modelComboBox.removeAllItems();
             modelComboBox.addItem("All models");
-            for (int i = 0; i < modelList.size(); i++) {
-                modelComboBox.addItem(modelList.get(i));
-            }
+            carsModelStream.forEachOrdered(model -> modelComboBox.addItem(model));
         });
 
         modelComboBox = new JComboBox<>(new String[]{"All models"});
