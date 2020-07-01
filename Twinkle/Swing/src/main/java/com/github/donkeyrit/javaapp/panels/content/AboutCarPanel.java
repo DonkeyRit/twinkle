@@ -21,6 +21,7 @@ import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 
 public class AboutCarPanel extends CustomPanel {
 
@@ -65,6 +66,7 @@ public class AboutCarPanel extends CustomPanel {
     private JButton reloadButton;
     private JButton returnButton;
     private JButton actionWithCarButton;
+    private List<JLabel> carDetailsList;
 
     public AboutCarPanel(Car car) {
         setLayout(null);
@@ -81,6 +83,7 @@ public class AboutCarPanel extends CustomPanel {
         add(infoAboutCarScrollableContainer);
         add(reloadButton);
         add(returnButton);
+        carDetailsList.forEach(this::add);
     }
 
     private void initialize() {
@@ -92,38 +95,32 @@ public class AboutCarPanel extends CustomPanel {
         infoAboutCarScrollableContainer.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         infoAboutCarScrollableContainer.setBounds(300, 290, 285, 190);
 
-        ResultSet statusSet = database.select("SELECT * FROM renta WHERE idCar = " + car.getId() + " ORDER BY dataEnd, dataPlan DESC LIMIT 1");
-        String statusStr = "Свободно";
-        try {
-            while (statusSet.next()) {
-                Date rentDate = statusSet.getDate("dataEnd");
-                if (rentDate == null) {
-                    statusStr = "Busy";
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        String[] massArgs = new String[]{
+        carDetailsList = new ArrayList<>();
+        Map<String,String> carDetailsMap = Map.of(
                 "Model:", car.getModelName(),
                 "Mark:", car.getMarkName(),
                 "Year:", car.getModelYear().toString(),
                 "Type:", car.getBodyTypeName(),
-                "Cost per day:", car.getCost() + "",
-                "Status:", statusStr
-        };
-        for (int i = 0; i < 12; i++) {
-            JLabel temp = new JLabel(massArgs[i]);
-            if (i % 2 == 0) {
-                temp.setBounds(30, 300 + (i / 2) * 30, 80, 20);
-                temp.setFont(ALTER_FONT);
-            } else {
-                temp.setBounds(150, 300 + (i / 2) * 30, 120, 20);
-                temp.setFont(FONT);
-            }
+                "Cost per day:", car.getCost().toString(),
+                "Status:", car.getStatus().getUiValue()
+        );
 
-            add(temp);
+        int indexRow = 0;
+
+        for (Map.Entry<String, String> pair : carDetailsMap.entrySet()) {
+
+            JLabel labelKey = new JLabel(pair.getKey());
+            labelKey.setBounds(30, 300 + (indexRow / 2) * 30, 80, 20);
+            labelKey.setFont(ALTER_FONT);
+
+            JLabel labelValue = new JLabel(pair.getValue());
+            labelValue.setBounds(150, 300 + (indexRow / 2) * 30, 120, 20);
+            labelValue.setFont(FONT);
+
+            carDetailsList.add(labelKey);
+            carDetailsList.add(labelValue);
+
+            indexRow += 2;
         }
 
         reloadButton = new JButton(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "reload.png"));
@@ -136,7 +133,7 @@ public class AboutCarPanel extends CustomPanel {
 
         actionWithCarButton = new JButton("ACTION");
         actionWithCarButton.setBounds(300, 500, 150, 20);
-        if (statusStr.equals("Free")) {
+        if ("Free".equals("Free")) {
             actionWithCarButton.setText("Get rent");
             actionWithCarButton.addActionListener(e -> {
                 JButton tempBut = (JButton) e.getSource();
