@@ -1,13 +1,12 @@
-package com.github.donkeyrit.javaapp.panels.aboutcar;
+package com.github.donkeyrit.javaapp.panels.content;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.model.User;
-import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReloadButtonListener;
-import com.github.donkeyrit.javaapp.panels.aboutcar.listeners.ReturnButtonListener;
+import com.github.donkeyrit.javaapp.panels.content.listeners.ReloadButtonListener;
+import com.github.donkeyrit.javaapp.panels.content.listeners.ReturnButtonListener;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
-import com.github.donkeyrit.javaapp.panels.filter.model.CarFilter;
 import com.github.donkeyrit.javaapp.panels.filter.model.ContentFilter;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
