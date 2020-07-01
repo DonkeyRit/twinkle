@@ -1,5 +1,7 @@
 package com.github.donkeyrit.javaapp.model;
 
+import com.github.donkeyrit.javaapp.model.enums.CarStatus;
+
 import java.util.Date;
 
 public class Car {
@@ -12,9 +14,9 @@ public class Car {
     private String nameCountry;
     private String info;
     private String bodyTypeName;
-    private String status;
+    private CarStatus status;
 
-    public Car(int id, Date modelYear, Double cost, String modelName, String markName, String nameCountry, String info, String bodyTypeName, String status) {
+    public Car(int id, Date modelYear, Double cost, String modelName, String markName, String nameCountry, String info, String bodyTypeName, CarStatus status) {
         this.id = id;
         this.modelYear = modelYear;
         this.cost = cost;
@@ -52,7 +54,7 @@ public class Car {
     public String getBodyTypeName() {
         return bodyTypeName;
     }
-    public String getStatus() {
+    public CarStatus getStatus() {
         return status;
     }
 
@@ -96,7 +98,7 @@ public class Car {
             this.car.bodyTypeName = bodyTypeName;
             return this;
         }
-        public CarBuilder setStatus(String status) {
+        public CarBuilder setStatus(CarStatus status) {
            this.car.status = status;
             return this;
         }

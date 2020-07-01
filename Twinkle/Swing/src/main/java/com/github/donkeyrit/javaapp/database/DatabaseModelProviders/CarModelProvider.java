@@ -2,7 +2,9 @@ package com.github.donkeyrit.javaapp.database.DatabaseModelProviders;
 
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
+import com.github.donkeyrit.javaapp.model.enums.CarStatus;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,17 +34,21 @@ public class CarModelProvider {
         List<Car> result = new ArrayList<>();
         Car.CarBuilder carBuilder = new Car.CarBuilder();
 
-
         try (ResultSet carSet = provider.select(query)) {
             while (carSet.next()) {
+
+                int id = carSet.getInt("idCar");
+
                 carBuilder.setModelYear(carSet.getDate("modelYear"))
-                        .setImagesNum(carSet.getInt("idCar"))
+                        .setImagesNum(id)
                         .setCost(carSet.getDouble("cost"))
                         .setModelName(carSet.getString("modelName"))
                         .setMarkName(carSet.getString("markName"))
                         .setNameCountry(carSet.getString("nameCountry"))
                         .setInfo(carSet.getString("info"))
-                        .setBodyTypeName(carSet.getString("bodyTypeName"));
+                        .setBodyTypeName(carSet.getString("bodyTypeName"))
+                        .setStatus(getCarStatus(id));
+
                 result.add(carBuilder.create());
                 carBuilder.flush();
             }
@@ -115,5 +121,23 @@ public class CarModelProvider {
         }
 
         return carsModelList.stream();
+    }
+
+    private CarStatus getCarStatus(int id) {
+        final String query = String.format("SELECT * FROM renta WHERE idCar = %d ORDER BY dataEnd, dataPlan DESC LIMIT 1", id);
+        CarStatus result = CarStatus.OPEN;
+
+        try (ResultSet statusSet = provider.select(query)) {
+            while (statusSet.next()) {
+                Date rentDate = statusSet.getDate("dataEnd");
+                if (rentDate == null) {
+                    result = CarStatus.BUSY;
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return result;
     }
 }

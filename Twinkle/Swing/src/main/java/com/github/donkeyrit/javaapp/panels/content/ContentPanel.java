@@ -4,7 +4,6 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.CarModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
-import com.github.donkeyrit.javaapp.panels.CarPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.listeners.BackButtonListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.NavigationButtonListener;
@@ -101,7 +100,7 @@ public class ContentPanel extends CustomPanel {
         List<Car> carsOnThePanel = allCar.stream().skip(numOfPage * 4).limit(4).collect(Collectors.toList());
 
         for (int i = 0; i < carsOnThePanel.size(); i++) {
-            CarPanel currentCar = new CarPanel(carsOnThePanel.get(i).getId());
+            CarPanel currentCar = new CarPanel(carsOnThePanel.get(i));
             currentCar.setBorder(new LineBorder(new Color(0, 163, 163), 4));
             currentCar.setBounds(20, 40 + i * 120, 565, 100);
             carPanels.add(currentCar);
