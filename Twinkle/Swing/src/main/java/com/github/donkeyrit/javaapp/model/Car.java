@@ -15,8 +15,9 @@ public class Car {
     private String info;
     private String bodyTypeName;
     private CarStatus status;
+    private User currentHolder;
 
-    public Car(int id, Date modelYear, Double cost, String modelName, String markName, String nameCountry, String info, String bodyTypeName, CarStatus status) {
+    public Car(int id, Date modelYear, Double cost, String modelName, String markName, String nameCountry, String info, String bodyTypeName, CarStatus status, User currentHolder) {
         this.id = id;
         this.modelYear = modelYear;
         this.cost = cost;
@@ -26,36 +27,50 @@ public class Car {
         this.info = info;
         this.bodyTypeName = bodyTypeName;
         this.status = status;
+        this.currentHolder = currentHolder;
     }
 
-    private Car(){ }
+    private Car() {
+    }
 
     public int getId() {
         return id;
     }
+
     public Date getModelYear() {
         return modelYear;
     }
+
     public Double getCost() {
         return cost;
     }
+
     public String getModelName() {
         return modelName;
     }
+
     public String getMarkName() {
         return markName;
     }
+
     public String getNameCountry() {
         return nameCountry;
     }
+
     public String getInfo() {
         return info;
     }
+
     public String getBodyTypeName() {
         return bodyTypeName;
     }
+
     public CarStatus getStatus() {
         return status;
+    }
+
+    public User getCurrentHolder() {
+        return currentHolder;
     }
 
     public static class CarBuilder {
@@ -70,39 +85,53 @@ public class Car {
             this.car.id = imagesNum;
             return this;
         }
+
         public CarBuilder setModelYear(Date modelYear) {
             this.car.modelYear = modelYear;
             return this;
         }
+
         public CarBuilder setCost(Double cost) {
             this.car.cost = cost;
             return this;
         }
+
         public CarBuilder setModelName(String modelName) {
             this.car.modelName = modelName;
             return this;
         }
+
         public CarBuilder setMarkName(String markName) {
             this.car.markName = markName;
             return this;
         }
+
         public CarBuilder setNameCountry(String nameCountry) {
             this.car.nameCountry = nameCountry;
             return this;
         }
+
         public CarBuilder setInfo(String info) {
             this.car.info = info;
             return this;
         }
+
         public CarBuilder setBodyTypeName(String bodyTypeName) {
             this.car.bodyTypeName = bodyTypeName;
             return this;
         }
+
         public CarBuilder setStatus(CarStatus status) {
-           this.car.status = status;
+            this.car.status = status;
             return this;
         }
-        public Car create(){
+
+        public CarBuilder setCurrentHolder(User user) {
+            this.car.currentHolder = user;
+            return this;
+        }
+
+        public Car create() {
             return this.car;
         }
 

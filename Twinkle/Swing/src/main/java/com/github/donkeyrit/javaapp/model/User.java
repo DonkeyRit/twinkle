@@ -6,6 +6,8 @@ package com.github.donkeyrit.javaapp.model;
  * and open the template in the editor.
  */
 
+import java.util.Objects;
+
 /**
  *
  * @author Dima
@@ -49,5 +51,20 @@ public class User {
         this.login = login;
         this.password = password;
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return role == user.role &&
+                login.equals(user.login) &&
+                password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(login, password, role);
     }
 }

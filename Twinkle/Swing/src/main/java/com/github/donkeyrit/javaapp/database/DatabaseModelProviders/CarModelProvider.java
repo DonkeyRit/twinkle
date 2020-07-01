@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp.database.DatabaseModelProviders;
 
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
+import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.model.enums.CarStatus;
 
 import java.sql.Date;
@@ -47,7 +48,8 @@ public class CarModelProvider {
                         .setNameCountry(carSet.getString("nameCountry"))
                         .setInfo(carSet.getString("info"))
                         .setBodyTypeName(carSet.getString("bodyTypeName"))
-                        .setStatus(getCarStatus(id));
+                        .setStatus(getCarStatus(id))
+                        .setCurrentHolder(getCurrentHolderForSpecificCar(id));
 
                 result.add(carBuilder.create());
                 carBuilder.flush();
@@ -133,6 +135,32 @@ public class CarModelProvider {
                 if (rentDate == null) {
                     result = CarStatus.BUSY;
                 }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return result;
+    }
+
+    private User getCurrentHolderForSpecificCar(int idCar){
+        final String queryToDatabase = String.format(
+                "SELECT * FROM user WHERE idUser = (" +
+                        "SELECT idUser FROM client WHERE idClient = (" +
+                        "SELECT idClient FROM renta WHERE idCar = %d " +
+                        "ORDER BY dataEnd,dataPlan DESC LIMIT 1))",
+                idCar
+        );
+        User result = null;
+
+        try (ResultSet resultSet = provider.select(queryToDatabase)) {
+            while (resultSet.next()) {
+
+                String login = resultSet.getString("login");
+                String password = resultSet.getString("password");
+                boolean role = resultSet.getBoolean("role");
+
+                result = new User(login, password, role);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

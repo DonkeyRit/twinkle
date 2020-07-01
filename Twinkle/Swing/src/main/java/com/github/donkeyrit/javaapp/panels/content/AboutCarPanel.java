@@ -4,6 +4,7 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.model.enums.CarStatus;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.listeners.ReloadButtonListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.ReturnButtonListener;
@@ -20,8 +21,8 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class AboutCarPanel extends CustomPanel {
 
@@ -45,18 +46,23 @@ public class AboutCarPanel extends CustomPanel {
     public void setFilter(ContentFilter<Car> filter) {
         this.filter = filter;
     }
+
     public void setNumPage(int numPage) {
         this.numPage = numPage;
     }
+
     public void setStartBut(int startBut) {
         this.startBut = startBut;
     }
+
     public ContentFilter<Car> getFilter() {
         return filter;
     }
+
     public int getNumPage() {
         return numPage;
     }
+
     public int getStartBut() {
         return startBut;
     }
@@ -84,6 +90,9 @@ public class AboutCarPanel extends CustomPanel {
         add(reloadButton);
         add(returnButton);
         carDetailsList.forEach(this::add);
+        if (actionWithCarButton != null) {
+            add(actionWithCarButton);
+        }
     }
 
     private void initialize() {
@@ -96,7 +105,7 @@ public class AboutCarPanel extends CustomPanel {
         infoAboutCarScrollableContainer.setBounds(300, 290, 285, 190);
 
         carDetailsList = new ArrayList<>();
-        Map<String,String> carDetailsMap = Map.of(
+        Map<String, String> carDetailsMap = Map.of(
                 "Model:", car.getModelName(),
                 "Mark:", car.getMarkName(),
                 "Year:", car.getModelYear().toString(),
@@ -131,9 +140,10 @@ public class AboutCarPanel extends CustomPanel {
         returnButton.setBounds(570, 0, 16, 16);
         returnButton.addActionListener(new ReturnButtonListener());
 
-        actionWithCarButton = new JButton("ACTION");
+        actionWithCarButton = new JButton("");
         actionWithCarButton.setBounds(300, 500, 150, 20);
-        if ("Free".equals("Free")) {
+
+        if (car.getStatus() == CarStatus.OPEN) {
             actionWithCarButton.setText("Get rent");
             actionWithCarButton.addActionListener(e -> {
                 JButton tempBut = (JButton) e.getSource();
@@ -475,201 +485,185 @@ public class AboutCarPanel extends CustomPanel {
                 });
                 add(back);
             });
-            add(actionWithCarButton);
-        } else {
+        } else if (car.getCurrentHolder() != null && car.getCurrentHolder().equals(user)) {
+            actionWithCarButton.setText("Return car");
+            actionWithCarButton.addActionListener(e -> {
+                JButton tempBut = (JButton) e.getSource();
+                JPanel tempPanel = (JPanel) tempBut.getParent();
+                tempPanel.remove(infoAboutCarScrollableContainer);
+                tempPanel.remove(tempBut);
 
-            String queryToDatabase = "SELECT * FROM user WHERE idUser = (SELECT idUser FROM client WHERE idClient = (SELECT idClient FROm renta WHERE idCar = " + car.getId() + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))";
-            ResultSet checkUserSet = database.select(queryToDatabase);
-            boolean isTrue = false;
-            try {
-                while (checkUserSet.next()) {
-                    if (user.getLogin().equals(checkUserSet.getString("login")) && user.getPassword().equals(checkUserSet.getString("password"))) {
-                        isTrue = true;
+                Box box = Box.createVerticalBox();
+                String queryReturnCar = "SELECT * FROM injury";
+                ResultSet queryReturnCarSer = database.select(queryReturnCar);
+                ArrayList<String> injuryNames = new ArrayList<>();
+                try {
+                    while (queryReturnCarSer.next()) {
+                        injuryNames.add(queryReturnCarSer.getString("injuryName"));
                     }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
 
-            if (isTrue) {
-                actionWithCarButton.setText("Return car");
-                actionWithCarButton.addActionListener(e -> {
-                    JButton tempBut = (JButton) e.getSource();
-                    JPanel tempPanel = (JPanel) tempBut.getParent();
-                    tempPanel.remove(infoAboutCarScrollableContainer);
-                    tempPanel.remove(tempBut);
+                ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
+                for (String injuryName : injuryNames) {
+                    JCheckBox temp = new JCheckBox(injuryName);
+                    checkBoxes.add(temp);
+                    box.add(temp);
+                }
+                box.setBorder(new TitledBorder("Types of damage"));
+                box.setBounds(330, 290, 250, 150);
+                tempPanel.add(box);
 
-                    Box box = Box.createVerticalBox();
-                    String queryReturnCar = "SELECT * FROM injury";
-                    ResultSet queryReturnCarSer = database.select(queryReturnCar);
-                    ArrayList<String> injuryNames = new ArrayList<>();
-                    try {
-                        while (queryReturnCarSer.next()) {
-                            injuryNames.add(queryReturnCarSer.getString("injuryName"));
-                        }
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
+                JButton countButton = new JButton("Count");
+                countButton.addActionListener(e13 -> {
+                    JButton selectedButton = (JButton) e13.getSource();
+                    JPanel selecButPanel = (JPanel) selectedButton.getParent();
 
-                    ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
-                    for (String injuryName : injuryNames) {
-                        JCheckBox temp = new JCheckBox(injuryName);
-                        checkBoxes.add(temp);
-                        box.add(temp);
-                    }
-                    box.setBorder(new TitledBorder("Types of damage"));
-                    box.setBounds(330, 290, 250, 150);
-                    tempPanel.add(box);
-
-                    JButton countButton = new JButton("Count");
-                    countButton.addActionListener(e13 -> {
-                        JButton selectedButton = (JButton) e13.getSource();
-                        JPanel selecButPanel = (JPanel) selectedButton.getParent();
-
-                        Component[] listMas = selecButPanel.getComponents();
-                        for (Component litmas : listMas) {
-                            if (litmas.getClass().toString().contains("JLabel")) {
-                                JLabel label = (JLabel) litmas;
-                                if (label.getText().contains("Sum")) {
-                                    selecButPanel.remove(label);
-                                }
+                    Component[] listMas = selecButPanel.getComponents();
+                    for (Component litmas : listMas) {
+                        if (litmas.getClass().toString().contains("JLabel")) {
+                            JLabel label = (JLabel) litmas;
+                            if (label.getText().contains("Sum")) {
+                                selecButPanel.remove(label);
                             }
                         }
+                    }
 
 
-                        JButton newReturnButton = new JButton("Return");
-                        newReturnButton.setBounds(330, 500, 120, 30);
-                        newReturnButton.addActionListener(e131 -> {
-                            String injuryForCar = "";
-                            for (JCheckBox checkBox : checkBoxes) {
-                                if (checkBox.isSelected()) {
-                                    injuryForCar = checkBox.getText();
-                                }
+                    JButton newReturnButton = new JButton("Return");
+                    newReturnButton.setBounds(330, 500, 120, 30);
+                    newReturnButton.addActionListener(e131 -> {
+                        String injuryForCar = "";
+                        for (JCheckBox checkBox : checkBoxes) {
+                            if (checkBox.isSelected()) {
+                                injuryForCar = checkBox.getText();
                             }
-                            Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-                            calendar.setTime(new Date());
-                            int currYear = calendar.get(Calendar.YEAR);
-                            int currMont = calendar.get(Calendar.MONTH);
-                            int currDay = calendar.get(Calendar.DATE);
-
-                            String dataStr = currYear + "-" + currMont + "-" + currDay;
-                            String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE idCar = " + car.getId() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');";
-                            database.update(updateQuery);
-
-                            String idRentaStr = "SELECT idRenta FROM renta WHERE idCar = " + car.getId() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
-                            ResultSet rentaSet = database.select(idRentaStr);
-                            int idRentaNum = 0;
-                            try {
-                                while (rentaSet.next()) {
-                                    idRentaNum = rentaSet.getInt("idRenta");
-                                }
-                            } catch (SQLException ex) {
-                                ex.printStackTrace();
-                            }
-
-                            String idInjuryStr = "SELECT idInjury FROM injury WHERE injuryName = '" + injuryForCar + "'";
-                            ResultSet injurySet = database.select(idInjuryStr);
-                            int idInjuryNum = 0;
-                            try {
-                                while (injurySet.next()) {
-                                    idInjuryNum = injurySet.getInt("idInjury");
-                                }
-                            } catch (SQLException ex) {
-                                ex.printStackTrace();
-                            }
-
-                            database.insert("INSERT INTO  resultinginjury(idRenta,idInjury) VALUES(" + idRentaNum + "," + idInjuryNum + ")");
-
-                            remove(box);
-                            remove(newReturnButton);
-                            remove(countButton);
-                            Component[] listMas1 = selecButPanel.getComponents();
-                            for (Component litmas : listMas1) {
-                                if (litmas.getClass().toString().contains("JLabel")) {
-                                    JLabel label = (JLabel) litmas;
-                                    if (label.getText().contains("Sum")) {
-                                        remove(label);
-                                    }
-                                }
-                            }
-                            JTextArea textArea12 = new JTextArea(car.getInfo());
-                            textArea12.setLineWrap(true);
-                            JScrollPane scrollPane12 = new JScrollPane(textArea12);
-                            scrollPane12.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-                            scrollPane12.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-                            scrollPane12.setBounds(300, 290, 285, 190);
-                            add(scrollPane12);
-                            revalidate();
-                            repaint();
-                        });
-                        tempPanel.add(newReturnButton);
-
-
+                        }
                         Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
                         calendar.setTime(new Date());
                         int currYear = calendar.get(Calendar.YEAR);
                         int currMont = calendar.get(Calendar.MONTH);
                         int currDay = calendar.get(Calendar.DATE);
 
-                        String queryToDb = "SELECT login,idCar,join1.idUser,dataStart,dataPlan,dataEnd FROM\n" +
-                                "(SELECT idCar,idUSer,renta.idClient,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.idClient = client.idClient) as join1\n" +
-                                "INNER JOIN user ON join1.idUser = user.idUser WHERE login = '" + user.getLogin() + "' AND idCar = " + car.getId() + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;";
+                        String dataStr = currYear + "-" + currMont + "-" + currDay;
+                        String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE idCar = " + car.getId() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');";
+                        database.update(updateQuery);
 
-                        ResultSet queryToDbSet = database.select(queryToDb);
-                        Date startRentaDate;
-                        Date dataRentaPlan = null;
+                        String idRentaStr = "SELECT idRenta FROM renta WHERE idCar = " + car.getId() + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
+                        ResultSet rentaSet = database.select(idRentaStr);
+                        int idRentaNum = 0;
                         try {
-                            while (queryToDbSet.next()) {
-                                dataRentaPlan = queryToDbSet.getDate("dataPlan");
+                            while (rentaSet.next()) {
+                                idRentaNum = rentaSet.getInt("idRenta");
                             }
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
 
-                        Date currentGetData = new Date(currYear, currMont, currDay);
-                        startRentaDate = new Date(currYear, currMont + 1, currDay);
-
-                        JLabel labelCostRenta = new JLabel("5000");
-                        labelCostRenta.setBounds(480, 460, 120, 30);
-
-                        if (currentGetData.after(startRentaDate)) {
-                            labelCostRenta.setText("Sum = 0");
-                        } else {
-                            double costForTheRent;
-
-                            long difference = startRentaDate.getTime() - currentGetData.getTime();
-                            int days = (int) (difference / (24 * 60 * 60 * 1000));
-                            costForTheRent = (days + 1f) * car.getCost();
-
-
-                            if (currentGetData.after(dataRentaPlan)) {
-                                long diff = currentGetData.getTime() - dataRentaPlan.getTime();
-                                int overDay = (int) (difference / (24 * 60 * 60 * 1000));
-                                costForTheRent += (car.getCost() * overDay) * 0.2;
+                        String idInjuryStr = "SELECT idInjury FROM injury WHERE injuryName = '" + injuryForCar + "'";
+                        ResultSet injurySet = database.select(idInjuryStr);
+                        int idInjuryNum = 0;
+                        try {
+                            while (injurySet.next()) {
+                                idInjuryNum = injurySet.getInt("idInjury");
                             }
-
-                            for (int i = 0; i < checkBoxes.size(); i++) {
-                                if (checkBoxes.get(i).isSelected()) {
-                                    costForTheRent += (i + 1) * 50000;
-                                }
-                            }
-
-                            labelCostRenta.setText("Sum " + costForTheRent + "");
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
                         }
 
-                        tempPanel.add(labelCostRenta);
+                        database.insert("INSERT INTO  resultinginjury(idRenta,idInjury) VALUES(" + idRentaNum + "," + idInjuryNum + ")");
 
-                        tempPanel.revalidate();
-                        tempPanel.repaint();
+                        remove(box);
+                        remove(newReturnButton);
+                        remove(countButton);
+                        Component[] listMas1 = selecButPanel.getComponents();
+                        for (Component litmas : listMas1) {
+                            if (litmas.getClass().toString().contains("JLabel")) {
+                                JLabel label = (JLabel) litmas;
+                                if (label.getText().contains("Sum")) {
+                                    remove(label);
+                                }
+                            }
+                        }
+                        JTextArea textArea12 = new JTextArea(car.getInfo());
+                        textArea12.setLineWrap(true);
+                        JScrollPane scrollPane12 = new JScrollPane(textArea12);
+                        scrollPane12.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                        scrollPane12.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                        scrollPane12.setBounds(300, 290, 285, 190);
+                        add(scrollPane12);
+                        revalidate();
+                        repaint();
                     });
-                    countButton.setBounds(330, 460, 120, 30);
-                    tempPanel.add(countButton);
+                    tempPanel.add(newReturnButton);
+
+
+                    Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                    calendar.setTime(new Date());
+                    int currYear = calendar.get(Calendar.YEAR);
+                    int currMont = calendar.get(Calendar.MONTH);
+                    int currDay = calendar.get(Calendar.DATE);
+
+                    String queryToDb = "SELECT login,idCar,join1.idUser,dataStart,dataPlan,dataEnd FROM\n" +
+                            "(SELECT idCar,idUSer,renta.idClient,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.idClient = client.idClient) as join1\n" +
+                            "INNER JOIN user ON join1.idUser = user.idUser WHERE login = '" + user.getLogin() + "' AND idCar = " + car.getId() + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;";
+
+                    ResultSet queryToDbSet = database.select(queryToDb);
+                    Date startRentaDate;
+                    Date dataRentaPlan = null;
+                    try {
+                        while (queryToDbSet.next()) {
+                            dataRentaPlan = queryToDbSet.getDate("dataPlan");
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    Date currentGetData = new Date(currYear, currMont, currDay);
+                    startRentaDate = new Date(currYear, currMont + 1, currDay);
+
+                    JLabel labelCostRenta = new JLabel("5000");
+                    labelCostRenta.setBounds(480, 460, 120, 30);
+
+                    if (currentGetData.after(startRentaDate)) {
+                        labelCostRenta.setText("Sum = 0");
+                    } else {
+                        double costForTheRent;
+
+                        long difference = startRentaDate.getTime() - currentGetData.getTime();
+                        int days = (int) (difference / (24 * 60 * 60 * 1000));
+                        costForTheRent = (days + 1f) * car.getCost();
+
+
+                        if (currentGetData.after(dataRentaPlan)) {
+                            long diff = currentGetData.getTime() - dataRentaPlan.getTime();
+                            int overDay = (int) (difference / (24 * 60 * 60 * 1000));
+                            costForTheRent += (car.getCost() * overDay) * 0.2;
+                        }
+
+                        for (int i = 0; i < checkBoxes.size(); i++) {
+                            if (checkBoxes.get(i).isSelected()) {
+                                costForTheRent += (i + 1) * 50000;
+                            }
+                        }
+
+                        labelCostRenta.setText("Sum " + costForTheRent + "");
+                    }
+
+                    tempPanel.add(labelCostRenta);
 
                     tempPanel.revalidate();
                     tempPanel.repaint();
                 });
-                add(actionWithCarButton);
-            }
+                countButton.setBounds(330, 460, 120, 30);
+                tempPanel.add(countButton);
+
+                tempPanel.revalidate();
+                tempPanel.repaint();
+            });
+        } else {
+            actionWithCarButton = null;
         }
     }
 
