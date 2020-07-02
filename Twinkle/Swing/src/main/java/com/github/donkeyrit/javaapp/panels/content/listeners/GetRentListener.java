@@ -14,11 +14,20 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 
 public class GetRentListener implements ActionListener {
 
     private final DatabaseProvider databaseProvider;
     private final AboutCarPanel aboutCarPanel;
+
+    private JLabel startYearsLabel;
+    private JLabel planYearsLabel;
+    private JLabel planPriceLabel;
+    private JButton countPrice;
+    private JButton back;
+    private Box yearsStart;
+    private Box yearsPlan;
 
     public GetRentListener(AboutCarPanel aboutCarPanel) {
         this.databaseProvider = ServiceContainer.getInstance().getDatabaseProvider();
@@ -28,6 +37,18 @@ public class GetRentListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        initialize(e);
+
+        aboutCarPanel.add(startYearsLabel);
+        aboutCarPanel.add(yearsStart);
+        aboutCarPanel.add(planYearsLabel);
+        aboutCarPanel.add(yearsPlan);
+        aboutCarPanel.add(planPriceLabel);
+        aboutCarPanel.add(countPrice);
+        aboutCarPanel.add(back);
+    }
+
+    public void initialize(ActionEvent e) {
         JButton tempBut = (JButton) e.getSource();
         tempBut.setVisible(false);
         JPanel tempPanel = (JPanel) tempBut.getParent();
@@ -41,14 +62,16 @@ public class GetRentListener implements ActionListener {
         }
 
         tempPanel.remove(temp);
-
         tempPanel.revalidate();
         tempPanel.repaint();
 
         ArrayList<JTextField> fields = new ArrayList<>();
         MaskFormatter formatter = null;
 
-        Box yearsStart = Box.createHorizontalBox();
+        startYearsLabel = new JLabel("Enter start rent date(гг.мм.дд)");
+        startYearsLabel.setBounds(330, 290, 300, 30);
+
+        yearsStart = Box.createHorizontalBox();
         for (int i = 0; i < 3; i++) {
             String form = "##";
             if (i == 0) {
@@ -67,9 +90,11 @@ public class GetRentListener implements ActionListener {
             yearsStart.add(ssnField);
         }
         yearsStart.setBounds(350, 320, 200, 30);
-        aboutCarPanel.add(yearsStart);
 
-        Box yearsPlan = Box.createHorizontalBox();
+        planYearsLabel = new JLabel("Enter end rent date(г.м.д)");
+        planYearsLabel.setBounds(330, 370, 300, 30);
+
+        yearsPlan = Box.createHorizontalBox();
         for (int i = 0; i < 3; i++) {
             String form = "##";
             if (i == 0) {
@@ -88,21 +113,11 @@ public class GetRentListener implements ActionListener {
             yearsPlan.add(tempField);
         }
         yearsPlan.setBounds(350, 400, 200, 30);
-        aboutCarPanel.add(yearsPlan);
 
-        JLabel startYearsLabel = new JLabel("Enter start rent date(гг.мм.дд)");
-        startYearsLabel.setBounds(330, 290, 300, 30);
-        aboutCarPanel.add(startYearsLabel);
-
-        JLabel planYearsLabel = new JLabel("Enter end rent date(г.м.д)");
-        planYearsLabel.setBounds(330, 370, 300, 30);
-        aboutCarPanel.add(planYearsLabel);
-
-        JLabel planPriceLabel = new JLabel("Approximately cost: ");
+        planPriceLabel = new JLabel("Approximately cost: ");
         planPriceLabel.setBounds(330, 440, 300, 30);
-        aboutCarPanel.add(planPriceLabel);
 
-        JButton countPrice = new JButton("Count");
+        countPrice = new JButton("Count");
         Border borderButton = fields.get(0).getBorder();
         countPrice.setBounds(340, 480, 120, 30);
         countPrice.addActionListener(e1 -> {
@@ -327,9 +342,8 @@ public class GetRentListener implements ActionListener {
             aboutCarPanel.revalidate();
             aboutCarPanel.repaint();
         });
-        aboutCarPanel.add(countPrice);
 
-        JButton back = new JButton("Return");
+        back = new JButton("Return");
         back.setBounds(460, 480, 100, 30);
         back.addActionListener(e12 -> {
             JButton selecBut = (JButton) e12.getSource();
@@ -365,6 +379,5 @@ public class GetRentListener implements ActionListener {
             scrollPane1.setBounds(300, 290, 285, 190);
             aboutCarPanel.add(scrollPane1);
         });
-        aboutCarPanel.add(back);
     }
 }
