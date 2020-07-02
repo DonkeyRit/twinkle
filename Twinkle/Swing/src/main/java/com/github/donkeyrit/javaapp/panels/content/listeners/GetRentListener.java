@@ -3,23 +3,32 @@ package com.github.donkeyrit.javaapp.panels.content.listeners;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.content.AboutCarPanel;
+import com.github.donkeyrit.javaapp.utils.IValidationEngine;
+import com.github.donkeyrit.javaapp.utils.ValidationEngine;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.BorderUIResource;
+import javax.swing.plaf.basic.BasicBorders;
+import javax.swing.plaf.metal.MetalBorders;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class GetRentListener implements ActionListener {
 
+    private static final Border TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE =  new LineBorder(Color.RED, 4);
+    private static final Border DEFAULT_TEXT_FIELD_BORDER = new BorderUIResource(
+            new BorderUIResource.CompoundBorderUIResource(new MetalBorders.TextFieldBorder(), new BasicBorders.MarginBorder()));
+
     private final DatabaseProvider databaseProvider;
     private final AboutCarPanel aboutCarPanel;
+    private final IValidationEngine validationEngine;
 
     private Box yearsStart;
     private JLabel startYearsLabel;
@@ -37,6 +46,7 @@ public class GetRentListener implements ActionListener {
 
     public GetRentListener(AboutCarPanel aboutCarPanel) {
         this.databaseProvider = ServiceContainer.getInstance().getDatabaseProvider();
+        this.validationEngine = new ValidationEngine();
         this.aboutCarPanel = aboutCarPanel;
     }
 
@@ -45,7 +55,8 @@ public class GetRentListener implements ActionListener {
 
         try {
             initialize(e);
-        }catch (ParseException ex){
+            configureValidations();
+        } catch (ParseException ex) {
             ex.printStackTrace();
         }
 
@@ -81,7 +92,6 @@ public class GetRentListener implements ActionListener {
         startYearsLabel = new JLabel("Enter start rent date(гг.мм.дд)");
         startYearsLabel.setBounds(330, 290, 300, 30);
 
-
         MaskFormatter twoDigitsFormat = new MaskFormatter("##");
         twoDigitsFormat.setPlaceholderCharacter('0');
 
@@ -90,12 +100,15 @@ public class GetRentListener implements ActionListener {
 
         startYear = new JFormattedTextField(fourDigitsFormat);
         startYear.setHorizontalAlignment(JTextField.CENTER);
+        startYear.setBorder(DEFAULT_TEXT_FIELD_BORDER);
 
         startMonth = new JFormattedTextField(twoDigitsFormat);
         startMonth.setHorizontalAlignment(JTextField.CENTER);
+        startMonth.setBorder(DEFAULT_TEXT_FIELD_BORDER);
 
         startDay = new JFormattedTextField(twoDigitsFormat);
         startDay.setHorizontalAlignment(JTextField.CENTER);
+        startDay.setBorder(DEFAULT_TEXT_FIELD_BORDER);
 
         yearsStart = Box.createHorizontalBox();
         yearsStart.add(startYear);
@@ -126,12 +139,15 @@ public class GetRentListener implements ActionListener {
 
         endYear = new JFormattedTextField(fourDigitsFormat);
         endYear.setHorizontalAlignment(JTextField.CENTER);
+        endYear.setBorder(DEFAULT_TEXT_FIELD_BORDER);
 
         endMonth = new JFormattedTextField(twoDigitsFormat);
         endMonth.setHorizontalAlignment(JTextField.CENTER);
+        endMonth.setBorder(DEFAULT_TEXT_FIELD_BORDER);
 
         endDay = new JFormattedTextField(twoDigitsFormat);
         endDay.setHorizontalAlignment(JTextField.CENTER);
+        endDay.setBorder(DEFAULT_TEXT_FIELD_BORDER);
 
         yearsPlan = Box.createHorizontalBox();
         yearsPlan.add(endYear);
@@ -162,10 +178,12 @@ public class GetRentListener implements ActionListener {
         planPriceLabel.setBounds(330, 440, 300, 30);
 
         countPrice = new JButton("Count");
-        Border borderButton = fields.get(0).getBorder();
         countPrice.setBounds(340, 480, 120, 30);
         countPrice.addActionListener(e1 -> {
-            Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+
+            validationEngine.validate();
+
+            /*Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
             calendar.setTime(new Date());
             int currYear = calendar.get(Calendar.YEAR);
             int currMont = calendar.get(Calendar.MONTH);
@@ -382,7 +400,7 @@ public class GetRentListener implements ActionListener {
                     }
                     planPriceLabel.setText("Incorrect date: ");
                 }
-            }
+            }*/
             aboutCarPanel.revalidate();
             aboutCarPanel.repaint();
         });
@@ -423,5 +441,27 @@ public class GetRentListener implements ActionListener {
             scrollPane1.setBounds(300, 290, 285, 190);
             aboutCarPanel.add(scrollPane1);
         });
+    }
+
+    private void configureValidations() {
+
+        Consumer<JFormattedTextField> setBorderIfIncorrectValue = textField -> textField.setBorder(TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE);
+        Consumer<JFormattedTextField> setBorderIfCorrectValue = textField -> textField.setBorder(DEFAULT_TEXT_FIELD_BORDER);
+
+        validationEngine
+                // Reset styles
+                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(startYear))
+                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(startMonth))
+                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(startDay))
+                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(endYear))
+                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(endMonth))
+                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(endDay))
+                // Check if fields have a default value
+                .addRule(() -> startYear.getText().equals("0000"), o -> setBorderIfIncorrectValue.accept(startYear))
+                .addRule(() -> startMonth.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(startMonth))
+                .addRule(() -> startDay.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(startDay))
+                .addRule(() -> endYear.getText().equals("0000"), o -> setBorderIfIncorrectValue.accept(endYear))
+                .addRule(() -> endMonth.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(endMonth))
+                .addRule(() -> endDay.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(endDay));
     }
 }
