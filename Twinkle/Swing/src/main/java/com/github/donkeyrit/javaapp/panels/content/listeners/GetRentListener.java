@@ -13,21 +13,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.*;
-import java.util.List;
 
 public class GetRentListener implements ActionListener {
 
     private final DatabaseProvider databaseProvider;
     private final AboutCarPanel aboutCarPanel;
 
+    private Box yearsStart;
     private JLabel startYearsLabel;
+    private JFormattedTextField startYear;
+    private JFormattedTextField startMonth;
+    private JFormattedTextField startDay;
+    private Box yearsPlan;
+    private JFormattedTextField endYear;
+    private JFormattedTextField endMonth;
+    private JFormattedTextField endDay;
     private JLabel planYearsLabel;
     private JLabel planPriceLabel;
     private JButton countPrice;
     private JButton back;
-    private Box yearsStart;
-    private Box yearsPlan;
 
     public GetRentListener(AboutCarPanel aboutCarPanel) {
         this.databaseProvider = ServiceContainer.getInstance().getDatabaseProvider();
@@ -37,7 +43,11 @@ public class GetRentListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        initialize(e);
+        try {
+            initialize(e);
+        }catch (ParseException ex){
+            ex.printStackTrace();
+        }
 
         aboutCarPanel.add(startYearsLabel);
         aboutCarPanel.add(yearsStart);
@@ -48,7 +58,7 @@ public class GetRentListener implements ActionListener {
         aboutCarPanel.add(back);
     }
 
-    public void initialize(ActionEvent e) {
+    public void initialize(ActionEvent e) throws ParseException {
         JButton tempBut = (JButton) e.getSource();
         tempBut.setVisible(false);
         JPanel tempPanel = (JPanel) tempBut.getParent();
@@ -71,7 +81,27 @@ public class GetRentListener implements ActionListener {
         startYearsLabel = new JLabel("Enter start rent date(гг.мм.дд)");
         startYearsLabel.setBounds(330, 290, 300, 30);
 
+
+        MaskFormatter twoDigitsFormat = new MaskFormatter("##");
+        twoDigitsFormat.setPlaceholderCharacter('0');
+
+        MaskFormatter fourDigitsFormat = new MaskFormatter("####");
+        fourDigitsFormat.setPlaceholderCharacter('0');
+
+        startYear = new JFormattedTextField(fourDigitsFormat);
+        startYear.setHorizontalAlignment(JTextField.CENTER);
+
+        startMonth = new JFormattedTextField(twoDigitsFormat);
+        startMonth.setHorizontalAlignment(JTextField.CENTER);
+
+        startDay = new JFormattedTextField(twoDigitsFormat);
+        startDay.setHorizontalAlignment(JTextField.CENTER);
+
         yearsStart = Box.createHorizontalBox();
+        yearsStart.add(startYear);
+        yearsStart.add(startMonth);
+        yearsStart.add(startDay);
+        /*Obsolete*/
         for (int i = 0; i < 3; i++) {
             String form = "##";
             if (i == 0) {
@@ -87,14 +117,28 @@ public class GetRentListener implements ActionListener {
             ssnField.setHorizontalAlignment(JTextField.CENTER);
             formatter.setPlaceholderCharacter('0');
             fields.add(ssnField);
-            yearsStart.add(ssnField);
         }
+        /*Obsolete*/
         yearsStart.setBounds(350, 320, 200, 30);
 
         planYearsLabel = new JLabel("Enter end rent date(г.м.д)");
         planYearsLabel.setBounds(330, 370, 300, 30);
 
+        endYear = new JFormattedTextField(fourDigitsFormat);
+        endYear.setHorizontalAlignment(JTextField.CENTER);
+
+        endMonth = new JFormattedTextField(twoDigitsFormat);
+        endMonth.setHorizontalAlignment(JTextField.CENTER);
+
+        endDay = new JFormattedTextField(twoDigitsFormat);
+        endDay.setHorizontalAlignment(JTextField.CENTER);
+
         yearsPlan = Box.createHorizontalBox();
+        yearsPlan.add(endYear);
+        yearsPlan.add(endMonth);
+        yearsPlan.add(endDay);
+
+        /*Obsolete*/
         for (int i = 0; i < 3; i++) {
             String form = "##";
             if (i == 0) {
@@ -110,8 +154,8 @@ public class GetRentListener implements ActionListener {
 
             tempField.setHorizontalAlignment(JTextField.CENTER);
             fields.add(tempField);
-            yearsPlan.add(tempField);
         }
+        /*Obsolete*/
         yearsPlan.setBounds(350, 400, 200, 30);
 
         planPriceLabel = new JLabel("Approximately cost: ");
