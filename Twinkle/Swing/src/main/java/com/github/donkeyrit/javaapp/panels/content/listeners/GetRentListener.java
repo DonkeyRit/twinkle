@@ -16,13 +16,21 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class GetRentListener implements ActionListener {
 
+    private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     private static final Border TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE = new LineBorder(Color.RED, 4);
+    private static Consumer<JFormattedTextField> SET_BORDER_FOR_TEXT_FIELD_WITH_INCORRECT_VALUE = textField -> textField.setBorder(TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE);
     private static final Border DEFAULT_TEXT_FIELD_BORDER = new BorderUIResource(
             new BorderUIResource.CompoundBorderUIResource(new MetalBorders.TextFieldBorder(), new BasicBorders.MarginBorder()));
 
@@ -181,230 +189,118 @@ public class GetRentListener implements ActionListener {
         countPrice.setBounds(340, 480, 120, 30);
         countPrice.addActionListener(e1 -> {
 
-            clearStyle();
+            setBorderForAllTextField(DEFAULT_TEXT_FIELD_BORDER);
 
             if (validationEngine.validate()) {
-                
-            }
+                LocalDate now = LocalDate.now();
 
-            /*Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-            calendar.setTime(new Date());
-            int currYear = calendar.get(Calendar.YEAR);
-            int currMont = calendar.get(Calendar.MONTH);
-            int currDay = calendar.get(Calendar.DATE);
+                try {
+                    LocalDate requiredStartDate = LocalDate.of(
+                            Integer.parseInt(startYear.getText()),
+                            Integer.parseInt(startMonth.getText()),
+                            Integer.parseInt(startDay.getText())
+                    );
 
-            ArrayList<Integer> yList = new ArrayList<>();
-            int count = 0;
-            for (JTextField field : fields) {
-                if (!field.getText().equals("0000")) {
-                    if (!field.getText().equals("00")) {
-                        count++;
-                        field.setBorder(borderButton);
-                    } else {
-                        field.setBorder(new LineBorder(Color.RED, 4));
-                    }
-                } else {
-                    field.setBorder(new LineBorder(Color.RED, 4));
-                }
-            }
-            if (count == fields.size()) {
-                int tempNum = Integer.parseInt(fields.get(0).getText());
-                if (tempNum < currYear || tempNum > currYear + 2) {
-                    fields.get(0).setBorder(new LineBorder(Color.RED, 4));
-                } else {
-                    fields.get(0).setBorder(borderButton);
-                    yList.add(tempNum);
-                }
+                    LocalDate requiredEndDate = LocalDate.of(
+                            Integer.parseInt(endYear.getText()),
+                            Integer.parseInt(endMonth.getText()),
+                            Integer.parseInt(endDay.getText())
+                    );
 
-                tempNum = Integer.parseInt(fields.get(1).getText());
-                if (tempNum < 0 || tempNum > 12) {
-                    fields.get(1).setBorder(new LineBorder(Color.RED, 4));
-                } else {
-                    if (Integer.parseInt(fields.get(0).getText()) == currYear && tempNum < currMont) {
-                        fields.get(1).setBorder(new LineBorder(Color.RED, 4));
-                    } else {
-                        fields.get(1).setBorder(borderButton);
-                        yList.add(tempNum);
-                    }
-                }
+                    if (requiredStartDate.isAfter(now) || now.isBefore(requiredEndDate)) {
+                        long rentDuration = ChronoUnit.DAYS.between(requiredStartDate, requiredEndDate);
+                        planPriceLabel.setText(String.format("Approximately cost: %f на %d", rentDuration * aboutCarPanel.getCar().getCost(), rentDuration));
 
-                tempNum = Integer.parseInt(fields.get(2).getText());
-                if (tempNum < 0 || tempNum > 28) {
-                    fields.get(2).setBorder(new LineBorder(Color.RED, 4));
-                } else {
-                    if (Integer.parseInt(fields.get(0).getText()) == currYear && Integer.parseInt(fields.get(1).getText()) == currMont && tempNum < currDay) {
-                        fields.get(2).setBorder(new LineBorder(Color.RED, 4));
-                    } else {
-                        fields.get(2).setBorder(borderButton);
-                        yList.add(tempNum);
-                    }
-                }
-
-                tempNum = Integer.parseInt(fields.get(3).getText());
-                if (tempNum < currYear || tempNum > currYear + 4) {
-                    fields.get(3).setBorder(new LineBorder(Color.RED, 4));
-                } else {
-                    if (tempNum >= Integer.parseInt(fields.get(0).getText())) {
-                        fields.get(3).setBorder(borderButton);
-                        yList.add(tempNum);
-                    } else {
-                        fields.get(3).setBorder(new LineBorder(Color.RED, 4));
-                    }
-                }
-
-                tempNum = Integer.parseInt(fields.get(4).getText());
-                if (tempNum < 0 || tempNum > 12) {
-                    fields.get(4).setBorder(new LineBorder(Color.RED, 4));
-                } else {
-                    if (Integer.parseInt(fields.get(3).getText()) == Integer.parseInt(fields.get(0).getText())) {
-                        if (tempNum >= Integer.parseInt(fields.get(1).getText())) {
-                            fields.get(4).setBorder(borderButton);
-                            yList.add(tempNum);
-                        } else {
-                            fields.get(4).setBorder(new LineBorder(Color.RED, 4));
-                        }
-                    } else {
-                        if (Integer.parseInt(fields.get(3).getText()) > Integer.parseInt(fields.get(0).getText())) {
-                            fields.get(4).setBorder(borderButton);
-                            yList.add(tempNum);
-                        } else {
-                            fields.get(4).setBorder(new LineBorder(Color.RED, 4));
-                        }
-                    }
-                }
-
-                tempNum = Integer.parseInt(fields.get(5).getText());
-                if (tempNum < 0 || tempNum > 28) {
-                    fields.get(5).setBorder(new LineBorder(Color.RED, 4));
-                } else {
-                    if (Integer.parseInt(fields.get(3).getText()) == Integer.parseInt(fields.get(0).getText())) {
-                        if (Integer.parseInt(fields.get(4).getText()) == Integer.parseInt(fields.get(1).getText())) {
-                            if (tempNum > Integer.parseInt(fields.get(2).getText())) {
-                                fields.get(5).setBorder(borderButton);
-                                yList.add(tempNum);
-                            } else {
-                                fields.get(5).setBorder(new LineBorder(Color.RED, 4));
-                            }
-                        } else {
-                            if (Integer.parseInt(fields.get(4).getText()) > Integer.parseInt(fields.get(1).getText())) {
-                                fields.get(5).setBorder(borderButton);
-                                yList.add(tempNum);
-                            } else {
-                                fields.get(5).setBorder(new LineBorder(Color.RED, 4));
-                            }
-                        }
-                    } else {
-                        if (Integer.parseInt(fields.get(3).getText()) > Integer.parseInt(fields.get(0).getText())) {
-                            fields.get(5).setBorder(borderButton);
-                            yList.add(tempNum);
-                        } else {
-                            fields.get(5).setBorder(new LineBorder(Color.RED, 4));
-                        }
-                    }
-                }
-            }
-
-            if (yList.size() == 6) {
-                Date startDateGetCar = new Date(yList.get(0), yList.get(1), yList.get(2));
-                Date planDateReturnCar = new Date(yList.get(3), yList.get(4), yList.get(5));
-
-                long difference = planDateReturnCar.getTime() - startDateGetCar.getTime();
-                int days = (int) (difference / (24 * 60 * 60 * 1000));
-                planPriceLabel.setText("Approximately cost: " + (days + 1) * aboutCarPanel.getCar().getCost() + " на " + (days + 1));
-
-                JButton buttonGetCar = new JButton("Get rent.");
-                buttonGetCar.addActionListener(e11 -> {
-                    String checkQuery = "SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = " + "'" + aboutCarPanel.getUser().getLogin() + "'";
-                    ResultSet checkClientSet = databaseProvider.select(checkQuery);
-                    int idClient = 0;
-                    try {
-                        while (checkClientSet.next()) {
-                            idClient = checkClientSet.getInt("idClient");
-                        }
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    if (idClient == 0) {
-                        planPriceLabel.setText("Please, fill data");
-                    } else {
-
-                        String queryToDB = "SELECT * FROM renta where idClient = (SELECT idClient FROM client WHERE idUser = (SELECT idUser FROM user WHERE login = '" + aboutCarPanel.getUser().getLogin() + "')) ORDER BY dataEnd, dataPlan DESC LIMIT 1";
-                        ResultSet checkRentaSet = databaseProvider.select(queryToDB);
-                        System.out.println(queryToDB);
-                        boolean isHaveRenta = false;
-                        try {
-                            while (checkRentaSet.next()) {
-                                Date rentDate = checkRentaSet.getDate("dataEnd");
-                                if (rentDate == null) {
-                                    isHaveRenta = true;
+                        JButton buttonGetCar = new JButton("Get rent.");
+                        /*buttonGetCar.addActionListener(e11 -> {
+                            String checkQuery = "SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = " + "'" + aboutCarPanel.getUser().getLogin() + "'";
+                            ResultSet checkClientSet = databaseProvider.select(checkQuery);
+                            int idClient = 0;
+                            try {
+                                while (checkClientSet.next()) {
+                                    idClient = checkClientSet.getInt("idClient");
                                 }
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
                             }
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
-                        }
 
-                        if (isHaveRenta) {
-                            planPriceLabel.setText("You cannot take more than one car at a time");
-                        } else {
-                            String insertRenta = "INSERT INTO renta(idClient,idCar,dataStart,dataPlan) VALUES (" + idClient + "," + aboutCarPanel.getCar().getId();
+                            if (idClient == 0) {
+                                planPriceLabel.setText("Please, fill data");
+                            } else {
 
-                            String startDataIn = "'" + yList.get(0) + "-" + yList.get(1) + "-" + yList.get(2) + "'";
-                            String planDataIn = "'" + yList.get(3) + "-" + yList.get(4) + "-" + yList.get(5) + "'";
-
-                            insertRenta += "," + startDataIn + "," + planDataIn + ")";
-
-                            databaseProvider.insert(insertRenta);
-
-                            JButton selecBut = (JButton) e11.getSource();
-                            JPanel selecPane = (JPanel) selecBut.getParent();
-
-                            Component[] compons = selecPane.getComponents();
-                            for (Component compon : compons) {
-                                if (compon.getClass().toString().contains("JButton")) {
-                                    JButton button = (JButton) compon;
-                                    if (button.getText().contains("Get rent") || button.getText().contains("Return")) {
-                                        selecPane.remove(button);
+                                String queryToDB = "SELECT * FROM renta where idClient = (SELECT idClient FROM client WHERE idUser = (SELECT idUser FROM user WHERE login = '" + aboutCarPanel.getUser().getLogin() + "')) ORDER BY dataEnd, dataPlan DESC LIMIT 1";
+                                ResultSet checkRentaSet = databaseProvider.select(queryToDB);
+                                System.out.println(queryToDB);
+                                boolean isHaveRenta = false;
+                                try {
+                                    while (checkRentaSet.next()) {
+                                        Date rentDate = checkRentaSet.getDate("dataEnd");
+                                        if (rentDate == null) {
+                                            isHaveRenta = true;
+                                        }
                                     }
+                                } catch (SQLException ex) {
+                                    ex.printStackTrace();
+                                }
+
+                                if (isHaveRenta) {
+                                    planPriceLabel.setText("You cannot take more than one car at a time");
+                                } else {
+                                    String insertRenta = "INSERT INTO renta(idClient,idCar,dataStart,dataPlan) VALUES (" + idClient + "," + aboutCarPanel.getCar().getId();
+
+                                    String startDataIn = "'" + yList.get(0) + "-" + yList.get(1) + "-" + yList.get(2) + "'";
+                                    String planDataIn = "'" + yList.get(3) + "-" + yList.get(4) + "-" + yList.get(5) + "'";
+
+                                    insertRenta += "," + startDataIn + "," + planDataIn + ")";
+
+                                    databaseProvider.insert(insertRenta);
+
+                                    JButton selecBut = (JButton) e11.getSource();
+                                    JPanel selecPane = (JPanel) selecBut.getParent();
+
+                                    Component[] compons = selecPane.getComponents();
+                                    for (Component compon : compons) {
+                                        if (compon.getClass().toString().contains("JButton")) {
+                                            JButton button = (JButton) compon;
+                                            if (button.getText().contains("Get rent") || button.getText().contains("Return")) {
+                                                selecPane.remove(button);
+                                            }
+                                        }
+                                    }
+
+                                    selecPane.remove(startYearsLabel);
+
+                                    selecPane.remove(planPriceLabel);
+                                    selecPane.remove(planYearsLabel);
+                                    selecPane.remove(countPrice);
+                                    selecPane.remove(yearsPlan);
+                                    selecPane.remove(yearsStart);
+                                    selecPane.revalidate();
+                                    selecPane.repaint();
+
+
+                                    JTextArea textArea1 = new JTextArea(aboutCarPanel.getCar().getInfo());
+                                    textArea1.setLineWrap(true);
+                                    JScrollPane scrollPane1 = new JScrollPane(textArea1);
+                                    scrollPane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                                    scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                                    scrollPane1.setBounds(300, 290, 285, 190);
+                                    aboutCarPanel.add(scrollPane1);
+                                    System.out.println(insertRenta);
                                 }
                             }
-
-                            selecPane.remove(startYearsLabel);
-
-                            selecPane.remove(planPriceLabel);
-                            selecPane.remove(planYearsLabel);
-                            selecPane.remove(countPrice);
-                            selecPane.remove(yearsPlan);
-                            selecPane.remove(yearsStart);
-                            selecPane.revalidate();
-                            selecPane.repaint();
-
-
-                            JTextArea textArea1 = new JTextArea(aboutCarPanel.getCar().getInfo());
-                            textArea1.setLineWrap(true);
-                            JScrollPane scrollPane1 = new JScrollPane(textArea1);
-                            scrollPane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-                            scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-                            scrollPane1.setBounds(300, 290, 285, 190);
-                            aboutCarPanel.add(scrollPane1);
-                            System.out.println(insertRenta);
-                        }
+                        });*/
+                        buttonGetCar.setBounds(375, 510, 150, 30);
+                        aboutCarPanel.add(buttonGetCar);
+                    } else {
+                        planPriceLabel.setText("Incorrect date: ");
                     }
-                });
-                buttonGetCar.setBounds(375, 510, 150, 30);
-                aboutCarPanel.add(buttonGetCar);
-            } else {
-                Component[] compons = tempPanel.getComponents();
-                for (Component compon : compons) {
-                    if (compon.getClass().toString().contains("JButton")) {
-                        JButton button = (JButton) compon;
-                        if (button.getText().contains("Get rent")) {
-                            tempPanel.remove(button);
-                        }
-                    }
-                    planPriceLabel.setText("Incorrect date: ");
+
+                } catch (DateTimeException ex) {
+                    setBorderForAllTextField(TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE);
                 }
-            }*/
+            }
+
             aboutCarPanel.revalidate();
             aboutCarPanel.repaint();
         });
@@ -448,20 +344,18 @@ public class GetRentListener implements ActionListener {
     }
 
     private void configureValidations() {
-
-        Consumer<JFormattedTextField> setBorderIfIncorrectValue = textField -> textField.setBorder(TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE);
         validationEngine
                 // Check if fields have a default value
-                .addRule(() -> !startYear.getText().equals("0000"), o -> setBorderIfIncorrectValue.accept(startYear))
-                .addRule(() -> !startMonth.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(startMonth))
-                .addRule(() -> !startDay.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(startDay))
-                .addRule(() -> !endYear.getText().equals("0000"), o -> setBorderIfIncorrectValue.accept(endYear))
-                .addRule(() -> !endMonth.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(endMonth))
-                .addRule(() -> !endDay.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(endDay));
+                .addRule(() -> !startYear.getText().equals("0000"), o -> SET_BORDER_FOR_TEXT_FIELD_WITH_INCORRECT_VALUE.accept(startYear))
+                .addRule(() -> !startMonth.getText().equals("00"), o -> SET_BORDER_FOR_TEXT_FIELD_WITH_INCORRECT_VALUE.accept(startMonth))
+                .addRule(() -> !startDay.getText().equals("00"), o -> SET_BORDER_FOR_TEXT_FIELD_WITH_INCORRECT_VALUE.accept(startDay))
+                .addRule(() -> !endYear.getText().equals("0000"), o -> SET_BORDER_FOR_TEXT_FIELD_WITH_INCORRECT_VALUE.accept(endYear))
+                .addRule(() -> !endMonth.getText().equals("00"), o -> SET_BORDER_FOR_TEXT_FIELD_WITH_INCORRECT_VALUE.accept(endMonth))
+                .addRule(() -> !endDay.getText().equals("00"), o -> SET_BORDER_FOR_TEXT_FIELD_WITH_INCORRECT_VALUE.accept(endDay));
     }
 
-    private void clearStyle() {
-        Consumer<JFormattedTextField> setDefaultBorderForTextField = textField -> textField.setBorder(DEFAULT_TEXT_FIELD_BORDER);
+    private void setBorderForAllTextField(Border border) {
+        Consumer<JFormattedTextField> setDefaultBorderForTextField = textField -> textField.setBorder(border);
         setDefaultBorderForTextField.accept(startYear);
         setDefaultBorderForTextField.accept(startMonth);
         setDefaultBorderForTextField.accept(startDay);
