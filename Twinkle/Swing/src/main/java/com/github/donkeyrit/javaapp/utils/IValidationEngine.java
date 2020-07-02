@@ -6,5 +6,5 @@ import java.util.function.Supplier;
 public interface IValidationEngine {
 
     IValidationEngine addRule(Supplier<Boolean> rule, Consumer<Object> action);
-    void validate();
+    boolean validate();
 }

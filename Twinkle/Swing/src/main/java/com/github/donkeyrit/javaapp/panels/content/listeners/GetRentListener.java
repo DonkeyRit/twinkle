@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 
 public class GetRentListener implements ActionListener {
 
-    private static final Border TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE =  new LineBorder(Color.RED, 4);
+    private static final Border TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE = new LineBorder(Color.RED, 4);
     private static final Border DEFAULT_TEXT_FIELD_BORDER = new BorderUIResource(
             new BorderUIResource.CompoundBorderUIResource(new MetalBorders.TextFieldBorder(), new BasicBorders.MarginBorder()));
 
@@ -181,7 +181,11 @@ public class GetRentListener implements ActionListener {
         countPrice.setBounds(340, 480, 120, 30);
         countPrice.addActionListener(e1 -> {
 
-            validationEngine.validate();
+            clearStyle();
+
+            if (validationEngine.validate()) {
+                
+            }
 
             /*Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
             calendar.setTime(new Date());
@@ -446,22 +450,23 @@ public class GetRentListener implements ActionListener {
     private void configureValidations() {
 
         Consumer<JFormattedTextField> setBorderIfIncorrectValue = textField -> textField.setBorder(TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE);
-        Consumer<JFormattedTextField> setBorderIfCorrectValue = textField -> textField.setBorder(DEFAULT_TEXT_FIELD_BORDER);
-
         validationEngine
-                // Reset styles
-                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(startYear))
-                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(startMonth))
-                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(startDay))
-                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(endYear))
-                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(endMonth))
-                .addRule(() -> true, o -> setBorderIfCorrectValue.accept(endDay))
                 // Check if fields have a default value
-                .addRule(() -> startYear.getText().equals("0000"), o -> setBorderIfIncorrectValue.accept(startYear))
-                .addRule(() -> startMonth.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(startMonth))
-                .addRule(() -> startDay.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(startDay))
-                .addRule(() -> endYear.getText().equals("0000"), o -> setBorderIfIncorrectValue.accept(endYear))
-                .addRule(() -> endMonth.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(endMonth))
-                .addRule(() -> endDay.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(endDay));
+                .addRule(() -> !startYear.getText().equals("0000"), o -> setBorderIfIncorrectValue.accept(startYear))
+                .addRule(() -> !startMonth.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(startMonth))
+                .addRule(() -> !startDay.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(startDay))
+                .addRule(() -> !endYear.getText().equals("0000"), o -> setBorderIfIncorrectValue.accept(endYear))
+                .addRule(() -> !endMonth.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(endMonth))
+                .addRule(() -> !endDay.getText().equals("00"), o -> setBorderIfIncorrectValue.accept(endDay));
+    }
+
+    private void clearStyle() {
+        Consumer<JFormattedTextField> setDefaultBorderForTextField = textField -> textField.setBorder(DEFAULT_TEXT_FIELD_BORDER);
+        setDefaultBorderForTextField.accept(startYear);
+        setDefaultBorderForTextField.accept(startMonth);
+        setDefaultBorderForTextField.accept(startDay);
+        setDefaultBorderForTextField.accept(endYear);
+        setDefaultBorderForTextField.accept(endMonth);
+        setDefaultBorderForTextField.accept(endDay);
     }
 }

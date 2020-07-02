@@ -14,10 +14,14 @@ public class ValidationEngine implements IValidationEngine {
     }
 
     @Override
-    public void validate() {
+    public boolean validate() {
         for (ValidationBinder binder : validationBinders) {
-            binder.validate();
+            if (!binder.validate()) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     @Override
@@ -35,10 +39,13 @@ public class ValidationEngine implements IValidationEngine {
             this.action = action;
         }
 
-        public void validate() {
+        public boolean validate() {
             if (rule.get()) {
-                action.accept(null);
+                return true;
             }
+
+            action.accept(null);
+            return false;
         }
     }
 }
