@@ -86,7 +86,10 @@ public class LoginPanel extends CustomPanel {
                     if (currentUser != null) {
 
                         this.serviceContainer.setUser(currentUser);
-                        this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel());
+                        this.uiManager.getLayout()
+                                .setHeader(new HeaderPanel())
+                                .setSidebar(new FilterPanel())
+                                .setContent(new ContentPanel());
 
                     } else {
 
@@ -105,7 +108,7 @@ public class LoginPanel extends CustomPanel {
 
         register = new JButton("Log in");
         register.setBounds(448, 320, 80, 20);
-        register.addActionListener(e -> this.uiManager.setWindowPanels(new SignInPanel()));
+        register.addActionListener(e -> this.uiManager.getLayout().setFullPagePanel(new SignInPanel()));
     }
 
     @Override

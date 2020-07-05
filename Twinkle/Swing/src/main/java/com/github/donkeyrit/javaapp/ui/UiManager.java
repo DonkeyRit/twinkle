@@ -1,9 +1,5 @@
 package com.github.donkeyrit.javaapp.ui;
 
-import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
-
-import javax.swing.*;
-
 public class UiManager {
 
     private Frame frame;
@@ -24,28 +20,5 @@ public class UiManager {
         layout = new WindowLayout(canvas);
 
         frame.initialize(canvas);
-    }
-
-    /**
-     * WindowPanel is a type panel on the all window.
-     *
-     * @param panels
-     */
-    public void setWindowPanels(CustomPanel... panels) {
-        canvas.removeAll();
-        canvas.revalidate();
-        canvas.repaint();
-        for (CustomPanel panel : panels) {
-            panel.setBounds(panel.getBoundsRectangle());
-            canvas.add(panel);
-        }
-    }
-
-    public void redrawSpecificPanel(JPanel previousPanel, CustomPanel newPanel) {
-        newPanel.setBounds(newPanel.getBoundsRectangle());
-        canvas.remove(previousPanel);
-        canvas.add(newPanel);
-        canvas.revalidate();
-        canvas.repaint();
     }
 }

@@ -79,9 +79,8 @@ public class CarPanel extends CustomPanel {
             newPanel.setFilter(container.getCarFilter());
             newPanel.setNumPage(container.numOfPage);
             newPanel.setStartBut(container.startBut);
-            newPanel.setBounds(250, 100, 605, 550);
 
-            uiManager.redrawSpecificPanel(container, newPanel);
+            uiManager.getLayout().setContent(newPanel);
         });
     }
 

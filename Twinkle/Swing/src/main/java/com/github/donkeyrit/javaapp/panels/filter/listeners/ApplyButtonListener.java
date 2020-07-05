@@ -7,7 +7,6 @@ import com.github.donkeyrit.javaapp.panels.filter.model.CarFilter;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -49,14 +48,6 @@ public class ApplyButtonListener implements ActionListener {
             carFilter.addBodyTypesFilter(selectedBodyTypes);
         }
 
-        Component[] mas = this.uiManager.getCanvas().getComponents();
-        JPanel contentPanel = null;
-        for (Component ma : mas) {
-            if (ma.getClass().toString().contains("ContentPanel") || ma.getClass().toString().contains("AboutCarPanel")) {
-                contentPanel = (JPanel) ma;
-            }
-        }
-
-        uiManager.redrawSpecificPanel(contentPanel, new ContentPanel(carFilter));
+        uiManager.getLayout().setContent(new ContentPanel(carFilter));
     }
 }

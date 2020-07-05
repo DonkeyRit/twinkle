@@ -83,11 +83,7 @@ public class ContentPanel extends CustomPanel {
         ImageIcon iconExit = ResourceManager.getImageIconFromResources(Assets.BUTTONS, "reload.png");
         reloadButton.setIcon(iconExit);
         reloadButton.setHorizontalTextPosition(SwingConstants.LEFT);
-        reloadButton.addActionListener(e -> {
-            JButton selectedButton = (JButton) e.getSource();
-            JPanel outerPanel = (JPanel) selectedButton.getParent().getParent();
-            uiManager.redrawSpecificPanel(outerPanel, new ContentPanel());
-        });
+        reloadButton.addActionListener(e -> uiManager.getLayout().setContent(new ContentPanel()));
     }
 
     private void initializeCarList() {

@@ -107,7 +107,10 @@ public class SignInPanel extends CustomPanel {
 
                         userModelProvider.addUser(newUser);
                         serviceContainer.setUser(newUser);
-                        uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel());
+                        uiManager.getLayout()
+                                .setHeader(new HeaderPanel())
+                                .setSidebar(new FilterPanel())
+                                .setContent(new ContentPanel());
                     }
                 }
             }
@@ -120,7 +123,7 @@ public class SignInPanel extends CustomPanel {
         backButton.setBounds(500, 360, 28, 30);
         backButton.setHorizontalTextPosition(SwingConstants.LEFT);
         backButton.setIcon(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "return.png"));
-        backButton.addActionListener(e -> uiManager.setWindowPanels(new LoginPanel()));
+        backButton.addActionListener(e -> uiManager.getLayout().setFullPagePanel(new LoginPanel()));
     }
 
     @Override

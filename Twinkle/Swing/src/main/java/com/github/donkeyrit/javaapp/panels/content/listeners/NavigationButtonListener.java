@@ -22,7 +22,8 @@ public class NavigationButtonListener implements ActionListener {
         JButton selectedButton = (JButton) e.getSource();
         int numPage = Integer.parseInt(selectedButton.getText());
         ContentPanel outerPanel = (ContentPanel) selectedButton.getParent().getParent();
-        uiManager.redrawSpecificPanel(outerPanel,new ContentPanel(outerPanel.getCarFilter(), --numPage));
+
+        uiManager.getLayout().setContent(new ContentPanel(outerPanel.getCarFilter(), --numPage));
     }
 
 }

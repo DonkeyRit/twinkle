@@ -35,6 +35,11 @@ public class WindowLayout {
         this.content = content;
         return this;
     }
+    public WindowLayout removeContent() {
+        SetSpecificPanel(this.content, null);
+        this.content = null;
+        return this;
+    }
 
     private CustomPanel fullPagePanel;
     public CustomPanel getFullPagePanel() {
@@ -74,8 +79,11 @@ public class WindowLayout {
             canvas.remove(previousPanel);
         }
 
-        newPanel.setBounds(newPanel.getBoundsRectangle());
-        canvas.add(newPanel);
+        if(newPanel != null){
+            newPanel.setBounds(newPanel.getBoundsRectangle());
+            canvas.add(newPanel);
+        }
+
         canvas.revalidate();
         canvas.repaint();
     }

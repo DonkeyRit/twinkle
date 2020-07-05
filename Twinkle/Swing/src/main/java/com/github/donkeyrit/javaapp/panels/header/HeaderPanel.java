@@ -42,19 +42,26 @@ public class HeaderPanel extends CustomPanel {
         logoButton = new JButton();
         logoButton.setBounds(30, 10, 60, 60);
         setIconToButton(logoButton, ResourceManager.getImageIconFromResources(Assets.LOGO, "logo.png"));
-        logoButton.addActionListener(e -> this.uiManager.setWindowPanels(new HeaderPanel(), new FilterPanel(), new ContentPanel()));
-
+        logoButton.addActionListener(e -> this.uiManager.getLayout()
+                .setHeader(new HeaderPanel())
+                .setSidebar(new FilterPanel())
+                .setContent(new ContentPanel())
+        );
         userAvatarButton = new JButton();
         userAvatarButton.setBounds(725, 10, 60, 60);
         setIconToButton(userAvatarButton, ResourceManager.getImageIconFromResources(Assets.MINI_AVATAR, String.format("%d.png", currentUser.getAvatarNumber())));
-        userAvatarButton.addActionListener(e -> uiManager.setWindowPanels(new HeaderPanel(), new UserActionsProfilePanel()));
+        userAvatarButton.addActionListener(e -> uiManager.getLayout()
+                .setHeader(new HeaderPanel())
+                .setSidebar(new UserActionsProfilePanel())
+                .removeContent()
+        );
 
         exitButton = new JButton();
         exitButton.setBounds(795, 10, 60, 60);
         setIconToButton(exitButton, ResourceManager.getImageIconFromResources(Assets.BUTTONS, "exit.png"));
         exitButton.addActionListener(e -> {
             ServiceContainer.getInstance().setUser(null);
-            uiManager.setWindowPanels(new LoginPanel());
+            uiManager.getLayout().setFullPagePanel(new LoginPanel());
         });
     }
 
