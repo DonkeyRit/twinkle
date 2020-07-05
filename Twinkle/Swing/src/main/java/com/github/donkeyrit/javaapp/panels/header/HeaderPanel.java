@@ -2,7 +2,7 @@ package com.github.donkeyrit.javaapp.panels.header;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.User;
-import com.github.donkeyrit.javaapp.panels.ChooseActionPanel;
+import com.github.donkeyrit.javaapp.panels.maintenance.UserActionsProfilePanel;
 import com.github.donkeyrit.javaapp.panels.filter.FilterPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
@@ -47,7 +47,7 @@ public class HeaderPanel extends CustomPanel {
         userAvatarButton = new JButton();
         userAvatarButton.setBounds(725, 10, 60, 60);
         setIconToButton(userAvatarButton, ResourceManager.getImageIconFromResources(Assets.MINI_AVATAR, String.format("%d.png", currentUser.getAvatarNumber())));
-        userAvatarButton.addActionListener(e -> uiManager.setWindowPanels(new HeaderPanel(), new ChooseActionPanel()));
+        userAvatarButton.addActionListener(e -> uiManager.setWindowPanels(new HeaderPanel(), new UserActionsProfilePanel()));
 
         exitButton = new JButton();
         exitButton.setBounds(795, 10, 60, 60);
