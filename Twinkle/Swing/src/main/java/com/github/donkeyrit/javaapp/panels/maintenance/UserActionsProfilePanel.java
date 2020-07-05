@@ -77,12 +77,6 @@ public class UserActionsProfilePanel extends CustomPanel {
                 }
 
                 uiManager.getLayout().setContent(actionPanel);
-
-                /*actionPanel.setBounds(250, 100, 605, 550);
-                panel.add(actionPanel);
-
-                panel.revalidate();
-                panel.repaint();*/
             });
             userActionButtonsList.add(userActionButton);
         }
