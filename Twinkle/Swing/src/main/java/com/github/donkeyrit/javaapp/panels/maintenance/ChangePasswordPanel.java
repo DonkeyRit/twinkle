@@ -8,7 +8,8 @@ import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
-import com.github.donkeyrit.javaapp.validation.ValidationEngine;
+import com.github.donkeyrit.javaapp.utils.IValidationEngine;
+import com.github.donkeyrit.javaapp.utils.ValidationEngine;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -17,7 +18,7 @@ import java.awt.*;
 public class ChangePasswordPanel extends CustomPanel {
 
     private final UserModelProvider userModelProvider;
-    private final ValidationEngine validator;
+    private final IValidationEngine validator;
     private final User user;
 
     private Box mainBox;
@@ -87,20 +88,20 @@ public class ChangePasswordPanel extends CustomPanel {
 
     private void configureValidator() {
 
-        validator.addRule(o -> new String(oldPasswordField.getPassword()).isEmpty(), o -> oldPasswordField.setState("Please, enter old password", Color.RED))
-                .addRule(o -> new String(newPasswordField.getPassword()).isEmpty(), o -> newPasswordField.setState("Please, enter new password", Color.RED))
-                .addRule(o -> new String(repeatNewPasswordField.getPassword()).isEmpty(), o -> repeatNewPasswordField.setState("Please, repeat new password", Color.RED))
-                .addRule(o -> new String(newPasswordField.getPassword()).equals(new String(repeatNewPasswordField.getPassword())), o -> {
+        validator.addRule(() -> new String(oldPasswordField.getPassword()).isEmpty(), o -> oldPasswordField.setState("Please, enter old password", Color.RED))
+                .addRule(() -> new String(newPasswordField.getPassword()).isEmpty(), o -> newPasswordField.setState("Please, enter new password", Color.RED))
+                .addRule(() -> new String(repeatNewPasswordField.getPassword()).isEmpty(), o -> repeatNewPasswordField.setState("Please, repeat new password", Color.RED))
+                .addRule(() -> new String(newPasswordField.getPassword()).equals(new String(repeatNewPasswordField.getPassword())), o -> {
                     newPasswordField.setState("Password does't match", Color.RED);
                     repeatNewPasswordField.setState("Password does't match", Color.RED);
                     newPasswordField.setText("");
                     repeatNewPasswordField.setText("");
                 })
-                .addRule(o -> SecurityProvider.sha1(new String(oldPasswordField.getPassword())).equals(user.getPassword()), o -> {
+                .addRule(() -> SecurityProvider.sha1(new String(oldPasswordField.getPassword())).equals(user.getPassword()), o -> {
                     oldPasswordField.setText("");
                     oldPasswordField.setState("Incorrect password", Color.RED);
                 })
-                .addRule(o -> new String(oldPasswordField.getPassword()).equals(new String(newPasswordField.getPassword())), o -> {
+                .addRule(() -> new String(oldPasswordField.getPassword()).equals(new String(newPasswordField.getPassword())), o -> {
                     oldPasswordField.setState("Old and new match", Color.RED);
                     newPasswordField.setState("Old and new match", Color.RED);
                     oldPasswordField.setText("");
