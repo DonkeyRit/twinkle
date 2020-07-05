@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp.database.DatabaseModelProviders;
 
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.security.SecurityProvider;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,6 +47,16 @@ public class UserModelProvider {
                 user.getPassword()
         );
         provider.insert(query);
+    }
+
+    public void updateUserPassword(User currentUser, String password) {
+        final String updateUserQuery = String.format(
+                "UPDATE user SET password = '%s' WHERE login = '%s'",
+                password,
+                currentUser.getLogin()
+        );
+
+        provider.update(updateUserQuery);
     }
 
     public User getSpecificUserByCredentials(String login, String password) {

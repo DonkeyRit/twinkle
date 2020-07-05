@@ -1,11 +1,10 @@
 package com.github.donkeyrit.javaapp.model.enums;
 
 import com.github.donkeyrit.javaapp.panels.ChangeDataDatabasePanel;
-import com.github.donkeyrit.javaapp.panels.ChangePasswordPanel;
+import com.github.donkeyrit.javaapp.panels.maintenance.ChangePasswordPanel;
 import com.github.donkeyrit.javaapp.panels.PrivateDataPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 
-import javax.swing.*;
 import java.util.function.Supplier;
 
 public enum UserAction {
