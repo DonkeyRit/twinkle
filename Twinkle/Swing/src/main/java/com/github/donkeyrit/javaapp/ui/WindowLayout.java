@@ -21,7 +21,7 @@ public class WindowLayout {
         return sidebar;
     }
     public WindowLayout setSidebar(CustomPanel sidebar) {
-        SetSpecificPanel(this.header, header);
+        SetSpecificPanel(this.sidebar, sidebar);
         this.sidebar = sidebar;
         return this;
     }
@@ -31,7 +31,7 @@ public class WindowLayout {
         return content;
     }
     public WindowLayout setContent(CustomPanel content) {
-        SetSpecificPanel(this.header, header);
+        SetSpecificPanel(this.content, content);
         this.content = content;
         return this;
     }
@@ -70,8 +70,11 @@ public class WindowLayout {
             this.fullPagePanel = null;
         }
 
+        if(previousPanel != null){
+            canvas.remove(previousPanel);
+        }
+
         newPanel.setBounds(newPanel.getBoundsRectangle());
-        canvas.remove(previousPanel);
         canvas.add(newPanel);
         canvas.revalidate();
         canvas.repaint();

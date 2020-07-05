@@ -3,6 +3,7 @@ package com.github.donkeyrit.javaapp.model.enums;
 import com.github.donkeyrit.javaapp.panels.ChangeDataDatabasePanel;
 import com.github.donkeyrit.javaapp.panels.ChangePasswordPanel;
 import com.github.donkeyrit.javaapp.panels.PrivateDataPanel;
+import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 
 import javax.swing.*;
 import java.util.function.Supplier;
@@ -15,13 +16,13 @@ public enum UserAction {
 
     private String label;
     private boolean isRequiredAdmin;
-    private Supplier<JPanel> actionPanel;
+    private Supplier<CustomPanel> actionPanel;
 
     public String getLabel() {
         return label;
     }
 
-    public Supplier<JPanel> getActionPanel() {
+    public Supplier<CustomPanel> getActionPanel() {
         return actionPanel;
     }
 
@@ -38,7 +39,7 @@ public enum UserAction {
         UserAction[] actions = UserAction.values();
 
         for (int i = 0; i < actions.length; i++) {
-            if(actions[i].getLabel().equals(label)){
+            if (actions[i].getLabel().equals(label)) {
                 return actions[i];
             }
         }
@@ -46,7 +47,7 @@ public enum UserAction {
         throw new IllegalArgumentException("label");
     }
 
-    UserAction(String label, boolean isRequiredAdmin, Supplier<JPanel> actionPanel) {
+    UserAction(String label, boolean isRequiredAdmin, Supplier<CustomPanel> actionPanel) {
         this.label = label;
         this.isRequiredAdmin = isRequiredAdmin;
         this.actionPanel = actionPanel;

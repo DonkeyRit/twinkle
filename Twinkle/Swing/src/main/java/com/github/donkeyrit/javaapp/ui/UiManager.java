@@ -1,18 +1,21 @@
 package com.github.donkeyrit.javaapp.ui;
 
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
-import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 
 import javax.swing.*;
 
 public class UiManager {
 
     private Frame frame;
-    private Canvas canvas;
-    private WindowLayout layout;
 
+    private Canvas canvas;
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    private WindowLayout layout;
+    public WindowLayout getLayout() {
+        return layout;
     }
 
     public UiManager() {

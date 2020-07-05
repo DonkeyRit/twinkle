@@ -3,11 +3,9 @@ package com.github.donkeyrit.javaapp.panels.maintenance;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.model.enums.UserAction;
-import com.github.donkeyrit.javaapp.panels.ChangeDataDatabasePanel;
-import com.github.donkeyrit.javaapp.panels.ChangePasswordPanel;
-import com.github.donkeyrit.javaapp.panels.PrivateDataPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.ui.Canvas;
+import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +17,7 @@ public class UserActionsProfilePanel extends CustomPanel {
 
     private final static Font FONT = new Font("Arial", Font.BOLD, 13);
 
+    private UiManager uiManager;
     private final Canvas panel;
     private final User user;
 
@@ -29,6 +28,7 @@ public class UserActionsProfilePanel extends CustomPanel {
         setLayout(null);
 
         ServiceContainer container = ServiceContainer.getInstance();
+        this.uiManager = container.getUiManager();
         this.user = container.getUser();
         this.panel = container.getUiManager().getCanvas();
 
@@ -61,7 +61,7 @@ public class UserActionsProfilePanel extends CustomPanel {
                     }
                 }
 
-                JPanel actionPanel = null;
+                CustomPanel actionPanel = null;
                 UserAction userAction = UserAction.valueOfFromLabel(selectedUserAction.getText());
 
                 switch (userAction){
@@ -76,11 +76,13 @@ public class UserActionsProfilePanel extends CustomPanel {
                         break;
                 }
 
-                actionPanel.setBounds(250, 100, 605, 550);
+                uiManager.getLayout().setContent(actionPanel);
+
+                /*actionPanel.setBounds(250, 100, 605, 550);
                 panel.add(actionPanel);
 
                 panel.revalidate();
-                panel.repaint();
+                panel.repaint();*/
             });
             userActionButtonsList.add(userActionButton);
         }
