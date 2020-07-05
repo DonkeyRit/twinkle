@@ -9,6 +9,7 @@ public class UiManager {
 
     private Frame frame;
     private Canvas canvas;
+    private WindowLayout layout;
 
     public Canvas getCanvas() {
         return canvas;
@@ -17,6 +18,7 @@ public class UiManager {
     public UiManager() {
         frame = new Frame("Rent car");
         canvas = new Canvas();
+        layout = new WindowLayout(canvas);
 
         frame.initialize(canvas);
     }
