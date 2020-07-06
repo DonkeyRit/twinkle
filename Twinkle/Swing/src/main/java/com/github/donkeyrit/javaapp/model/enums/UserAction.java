@@ -1,6 +1,6 @@
 package com.github.donkeyrit.javaapp.model.enums;
 
-import com.github.donkeyrit.javaapp.panels.ChangeDataDatabasePanel;
+import com.github.donkeyrit.javaapp.panels.maintenance.ApplicationInformationPanel;
 import com.github.donkeyrit.javaapp.panels.maintenance.ChangePasswordPanel;
 import com.github.donkeyrit.javaapp.panels.maintenance.PersonalInformationPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
@@ -11,7 +11,7 @@ public enum UserAction {
 
     CHANGE_PASSWORD("Change password", false, ChangePasswordPanel::new),
     PERSONAL_DATA("Personal data", false, PersonalInformationPanel::new),
-    CHANGE_DATA_IN_DB("To change the data", true, ChangeDataDatabasePanel::new);
+    CHANGE_DATA_IN_DB("To change the data", true, ApplicationInformationPanel::new);
 
     private String label;
     private boolean isRequiredAdmin;

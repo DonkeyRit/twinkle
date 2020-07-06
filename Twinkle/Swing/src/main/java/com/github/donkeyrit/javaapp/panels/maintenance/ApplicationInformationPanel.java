@@ -1,4 +1,4 @@
-package com.github.donkeyrit.javaapp.panels;
+package com.github.donkeyrit.javaapp.panels.maintenance;
 
 import com.github.donkeyrit.javaapp.components.MyTableModel;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
@@ -10,9 +10,9 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ChangeDataDatabasePanel extends CustomPanel {
+public class ApplicationInformationPanel extends CustomPanel {
 
-    public ChangeDataDatabasePanel() {
+    public ApplicationInformationPanel() {
         setLayout(null);
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
