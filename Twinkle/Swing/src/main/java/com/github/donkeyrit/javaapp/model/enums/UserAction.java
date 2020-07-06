@@ -2,7 +2,7 @@ package com.github.donkeyrit.javaapp.model.enums;
 
 import com.github.donkeyrit.javaapp.panels.ChangeDataDatabasePanel;
 import com.github.donkeyrit.javaapp.panels.maintenance.ChangePasswordPanel;
-import com.github.donkeyrit.javaapp.panels.PrivateDataPanel;
+import com.github.donkeyrit.javaapp.panels.maintenance.PersonalInformationPanel;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 
 import java.util.function.Supplier;
@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 public enum UserAction {
 
     CHANGE_PASSWORD("Change password", false, ChangePasswordPanel::new),
-    PERSONAL_DATA("Personal data", false, PrivateDataPanel::new),
+    PERSONAL_DATA("Personal data", false, PersonalInformationPanel::new),
     CHANGE_DATA_IN_DB("To change the data", true, ChangeDataDatabasePanel::new);
 
     private String label;
