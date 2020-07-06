@@ -6,7 +6,7 @@ public class Client {
     private String middleName;
     private String address;
     private String phoneNumber;
-    private int idUser;
+    private int idUser = -1;
 
     public Client(String firstName, String secondName, String middleName, String address, String phoneNumber, int idUser) {
         this.firstName = firstName;

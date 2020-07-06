@@ -59,4 +59,30 @@ public class ClientModelProvider {
 
         return result;
     }
+
+    public void createClient(Client client, User user) {
+        String queryUser = String.format("SELECT idUser FROM user WHERE login = '%s'", user.getLogin());
+        int userId = -1;
+
+        try (ResultSet clientSet = provider.select(queryUser)) {
+            while (clientSet.next()) {
+                userId = clientSet.getInt("idUser");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        String query = String.format("INSERT INTO client(firstName,secondName,Patronimic,address,phoneNumber,idUser) VALUES ('%s','%s','%s','%s','%s',%d)",
+                client.getFirstName(), client.getSecondName(), client.getMiddleName(), client.getAddress(), client.getPhoneNumber(), userId
+        );
+
+        provider.insert(query);
+    }
+
+    public void updateClient(Client client) {
+        String query = String.format("UPDATE client SET firstName='%s', secondName='%s', Patronimic='%s', address='%s', phoneNumber='%s' WHERE idUser=%d",
+                client.getFirstName(), client.getSecondName(), client.getMiddleName(), client.getAddress(), client.getPhoneNumber(), client.getIdUser()
+        );
+        provider.update(query);
+    }
 }

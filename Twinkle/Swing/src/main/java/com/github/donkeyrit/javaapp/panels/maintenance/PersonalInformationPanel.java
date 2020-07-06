@@ -3,19 +3,21 @@ package com.github.donkeyrit.javaapp.panels.maintenance;
 import com.github.donkeyrit.javaapp.components.JCustomTextField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.ClientModelProvider;
-import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Client;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
+import com.github.donkeyrit.javaapp.utils.IValidationEngine;
+import com.github.donkeyrit.javaapp.utils.ValidationEngine;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class PersonalInformationPanel extends CustomPanel {
+
+    private final IValidationEngine validator;
 
     private Box box;
     private JCustomTextField firstNameTextField;
@@ -27,7 +29,9 @@ public class PersonalInformationPanel extends CustomPanel {
 
     public PersonalInformationPanel() {
         setLayout(null);
+        validator = new ValidationEngine();
 
+        configureValidator();
         initialize();
 
         box.add(firstNameTextField);
@@ -47,7 +51,6 @@ public class PersonalInformationPanel extends CustomPanel {
 
     private void initialize() {
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
-        DatabaseProvider database = serviceContainer.getDatabaseProvider();
         ClientModelProvider clientModelProvider = serviceContainer.getDatabaseProvider().getClientModelProvider();
 
         User user = serviceContainer.getUser();
@@ -82,50 +85,39 @@ public class PersonalInformationPanel extends CustomPanel {
 
         confirm = new JButton("Confirm");
         confirm.addActionListener(e -> {
-            /*int counter = 0;
-            ArrayList<String> inputData = new ArrayList<>();
-            for (JCustomTextField textField : fieldText) {
-                if (!textField.getText().isEmpty()) {
-                    counter++;
-                    inputData.add(textField.getText());
-                }
-            }
 
-            if (counter == fieldText.size()) {
-                if (infoUser.size() == 0) {
-                    StringBuilder createClient = new StringBuilder("INSERT INTO client(firstName,secondName,Patronimic,address,phoneNumber,idUser) VALUES (");
-                    for (JCustomTextField JCustomTextField : fieldText) {
-                        createClient.append("'").append(JCustomTextField.getText()).append("',");
-                    }
-                    createClient.append("(SELECT idUser FROM user WHERE login = '").append(user.getLogin()).append("'))");
+            if (validator.validate()) {
 
-                    database.insert(createClient.toString());
-                    for (JCustomTextField JCustomTextField : fieldText) {
-                        JCustomTextField.setState("Success", Color.green);
-                        JCustomTextField.setText("");
-                    }
+                if (client == null) {
+                    Client.ClientBuilder clientBuilder = new Client.ClientBuilder();
+                    Client newClient = clientBuilder.setFirstName(firstNameTextField.getText())
+                            .setSecondName(secondNameTextField.getText())
+                            .setMiddleName(middleNameTextField.getText())
+                            .setAddress(addressTextField.getText())
+                            .setPhoneNumber(phoneNumberTextField.getText())
+                            .create();
+                    clientModelProvider.createClient(newClient, user);
                 } else {
-                    String[] columnNames = new String[]{"firstName", "secondName", "Patronimic", "address", "phoneNumber"};
-                    StringBuilder updateClient = new StringBuilder("UPDATE client SET ");
-                    for (int i = 0; i < fieldText.size(); i++) {
-                        updateClient.append(columnNames[i]).append(" = '").append(fieldText.get(i).getText()).append("'");
-                        if (i != fieldText.size() - 1) {
-                            updateClient.append(",");
-                        }
-                    }
-                    updateClient.append(" WHERE idUser = (SELECT idUser FROM user WHERE login = '").append(user.getLogin()).append("')");
-                    database.update(updateClient.toString());
+                    clientModelProvider.updateClient(client);
                 }
-            } else {
-                for (JCustomTextField JCustomTextField : fieldText) {
-                    String previousText = JCustomTextField.getPlaceholder().substring(JCustomTextField.getPlaceholder().indexOf("Please") + 7);
-                    JCustomTextField.setState("Please," + previousText, Color.red);
+
+                for (JCustomTextField JCustomTextField : new JCustomTextField[]{firstNameTextField, secondNameTextField, middleNameTextField, addressTextField, phoneNumberTextField}) {
+                    JCustomTextField.setState("Success", Color.green);
+                    JCustomTextField.setText("");
                 }
             }
 
             revalidate();
-            repaint();*/
+            repaint();
         });
+    }
+
+    private void configureValidator() {
+        validator.addRule(() -> !firstNameTextField.getText().isEmpty(), o -> firstNameTextField.setState(firstNameTextField.getPlaceholder(), Color.red))
+                .addRule(() -> !secondNameTextField.getText().isEmpty(), o -> secondNameTextField.setState(secondNameTextField.getPlaceholder(), Color.red))
+                .addRule(() -> !middleNameTextField.getText().isEmpty(), o -> middleNameTextField.setState(middleNameTextField.getPlaceholder(), Color.red))
+                .addRule(() -> !addressTextField.getText().isEmpty(), o -> addressTextField.setState(addressTextField.getPlaceholder(), Color.red))
+                .addRule(() -> !phoneNumberTextField.getText().isEmpty(), o -> phoneNumberTextField.setState(phoneNumberTextField.getPlaceholder(), Color.red));
     }
 
     @Override
