@@ -62,7 +62,7 @@ public abstract class DatabaseProvider {
         ArrayList<String> tableNames = new ArrayList<>();
         try {
             DatabaseMetaData dbmd = connection.getMetaData();
-            ResultSet rs = dbmd.getTables(null, null, null, null);
+            ResultSet rs = dbmd.getTables("carrental", null, null, null);
             while (rs.next()) {
                 tableNames.add(rs.getString(3));
             }
