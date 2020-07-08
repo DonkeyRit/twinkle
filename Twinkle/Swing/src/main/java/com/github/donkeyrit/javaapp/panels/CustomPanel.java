@@ -1,4 +1,4 @@
-package com.github.donkeyrit.javaapp.panels.abstraction;
+package com.github.donkeyrit.javaapp.panels;
 
 import javax.swing.*;
 import java.awt.*;

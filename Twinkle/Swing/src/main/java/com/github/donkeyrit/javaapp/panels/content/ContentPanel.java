@@ -4,7 +4,7 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.CarModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.Car;
-import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.listeners.BackButtonListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.NavigationButtonListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.NextButtonListener;

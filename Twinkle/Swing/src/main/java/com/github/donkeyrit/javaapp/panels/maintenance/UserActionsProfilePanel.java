@@ -3,7 +3,7 @@ package com.github.donkeyrit.javaapp.panels.maintenance;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.model.enums.UserAction;
-import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.CustomPanel;
 import com.github.donkeyrit.javaapp.ui.Canvas;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 

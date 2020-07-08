@@ -3,7 +3,7 @@ package com.github.donkeyrit.javaapp.panels.maintenance;
 import com.github.donkeyrit.javaapp.components.MyTableModel;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
-import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.CustomPanel;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

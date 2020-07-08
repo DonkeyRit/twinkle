@@ -1,6 +1,6 @@
 package com.github.donkeyrit.javaapp.ui;
 
-import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.CustomPanel;
 
 import javax.swing.*;
 

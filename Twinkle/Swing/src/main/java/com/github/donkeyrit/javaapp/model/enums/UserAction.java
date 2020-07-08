@@ -3,7 +3,7 @@ package com.github.donkeyrit.javaapp.model.enums;
 import com.github.donkeyrit.javaapp.panels.maintenance.ApplicationInformationPanel;
 import com.github.donkeyrit.javaapp.panels.maintenance.ChangePasswordPanel;
 import com.github.donkeyrit.javaapp.panels.maintenance.PersonalInformationPanel;
-import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.CustomPanel;
 
 import java.util.function.Supplier;
 

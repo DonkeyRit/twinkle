@@ -3,7 +3,7 @@ package com.github.donkeyrit.javaapp.panels.filter;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.CarModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
-import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.filter.listeners.ApplyButtonListener;
 import com.github.donkeyrit.javaapp.panels.filter.listeners.ChangeValueMarkComboBoxListener;
 

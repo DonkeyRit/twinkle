@@ -4,7 +4,7 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.Car;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.model.enums.CarStatus;
-import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.listeners.GetRentListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.ReloadButtonListener;
 import com.github.donkeyrit.javaapp.panels.content.listeners.ReturnButtonListener;

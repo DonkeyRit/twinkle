@@ -8,7 +8,7 @@ import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.panels.filter.FilterPanel;
 import com.github.donkeyrit.javaapp.panels.header.HeaderPanel;
-import com.github.donkeyrit.javaapp.panels.abstraction.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
