@@ -1,6 +1,7 @@
 package com.github.donkeyrit.javaapp.panels.content.listeners;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
+import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.InjuryModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.content.AboutCarPanel;
 
@@ -11,12 +12,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.*;
 
 public class ReturnCarListener implements ActionListener {
 
     private final DatabaseProvider databaseProvider;
     private final AboutCarPanel aboutCarPanel;
+
+    private Box box;
+    private List<JCheckBox> injuriesType;
 
     public ReturnCarListener(AboutCarPanel aboutCarPanel) {
         this.databaseProvider = ServiceContainer.getInstance().getDatabaseProvider();
@@ -31,24 +36,16 @@ public class ReturnCarListener implements ActionListener {
         tempPanel.remove(aboutCarPanel.getInfoAboutCarScrollableContainer());
         tempPanel.remove(tempBut);
 
-        Box box = Box.createVerticalBox();
-        String queryReturnCar = "SELECT * FROM injury";
-        ResultSet queryReturnCarSer = databaseProvider.select(queryReturnCar);
-        ArrayList<String> injuryNames = new ArrayList<>();
-        try {
-            while (queryReturnCarSer.next()) {
-                injuryNames.add(queryReturnCarSer.getString("injuryName"));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        box = Box.createVerticalBox();
 
-        ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
-        for (String injuryName : injuryNames) {
-            JCheckBox temp = new JCheckBox(injuryName);
-            checkBoxes.add(temp);
+        InjuryModelProvider injuryModelProvider = databaseProvider.getInjuryModelProvider();
+        injuriesType = new ArrayList<>();
+        injuryModelProvider.getInjuries().forEach(injury -> {
+            JCheckBox temp = new JCheckBox(injury);
+            injuriesType.add(temp);
             box.add(temp);
-        }
+        });
+
         box.setBorder(new TitledBorder("Types of damage"));
         box.setBounds(330, 290, 250, 150);
         tempPanel.add(box);
@@ -73,7 +70,7 @@ public class ReturnCarListener implements ActionListener {
             newReturnButton.setBounds(330, 500, 120, 30);
             newReturnButton.addActionListener(e131 -> {
                 String injuryForCar = "";
-                for (JCheckBox checkBox : checkBoxes) {
+                for (JCheckBox checkBox : injuriesType) {
                     if (checkBox.isSelected()) {
                         injuryForCar = checkBox.getText();
                     }
@@ -180,8 +177,8 @@ public class ReturnCarListener implements ActionListener {
                     costForTheRent += (aboutCarPanel.getCar().getCost() * overDay) * 0.2;
                 }
 
-                for (int i = 0; i < checkBoxes.size(); i++) {
-                    if (checkBoxes.get(i).isSelected()) {
+                for (int i = 0; i < injuriesType.size(); i++) {
+                    if (injuriesType.get(i).isSelected()) {
                         costForTheRent += (i + 1) * 50000;
                     }
                 }

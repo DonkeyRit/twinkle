@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp.database;
 
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.CarModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.ClientModelProvider;
+import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.InjuryModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.UserModelProvider;
 
 import java.sql.*;
@@ -18,6 +19,7 @@ public abstract class DatabaseProvider {
         return new CarModelProvider(this);
     }
     public ClientModelProvider getClientModelProvider() {return new ClientModelProvider(this);}
+    public InjuryModelProvider getInjuryModelProvider() {return new InjuryModelProvider(this);}
 
     public DatabaseProvider() {
         initialize();
