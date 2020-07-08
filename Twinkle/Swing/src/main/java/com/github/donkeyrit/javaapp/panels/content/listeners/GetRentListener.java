@@ -1,7 +1,5 @@
 package com.github.donkeyrit.javaapp.panels.content.listeners;
 
-import com.github.donkeyrit.javaapp.container.ServiceContainer;
-import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.panels.content.AboutCarPanel;
 import com.github.donkeyrit.javaapp.utils.IValidationEngine;
 import com.github.donkeyrit.javaapp.utils.ValidationEngine;
@@ -16,25 +14,19 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
 import java.util.function.Consumer;
 
 public class GetRentListener implements ActionListener {
 
-    private static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     private static final Border TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE = new LineBorder(Color.RED, 4);
-    private static Consumer<JFormattedTextField> SET_BORDER_FOR_TEXT_FIELD_WITH_INCORRECT_VALUE = textField -> textField.setBorder(TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE);
+    private static final Consumer<JFormattedTextField> SET_BORDER_FOR_TEXT_FIELD_WITH_INCORRECT_VALUE = textField -> textField.setBorder(TEXT_FIELD_BORDER_WITH_INCORRECT_VALUE);
     private static final Border DEFAULT_TEXT_FIELD_BORDER = new BorderUIResource(
             new BorderUIResource.CompoundBorderUIResource(new MetalBorders.TextFieldBorder(), new BasicBorders.MarginBorder()));
 
-    private final DatabaseProvider databaseProvider;
     private final AboutCarPanel aboutCarPanel;
     private final IValidationEngine validationEngine;
 
@@ -53,7 +45,6 @@ public class GetRentListener implements ActionListener {
     private JButton back;
 
     public GetRentListener(AboutCarPanel aboutCarPanel) {
-        this.databaseProvider = ServiceContainer.getInstance().getDatabaseProvider();
         this.validationEngine = new ValidationEngine();
         this.aboutCarPanel = aboutCarPanel;
     }
@@ -94,9 +85,6 @@ public class GetRentListener implements ActionListener {
         tempPanel.revalidate();
         tempPanel.repaint();
 
-        ArrayList<JTextField> fields = new ArrayList<>();
-        MaskFormatter formatter = null;
-
         startYearsLabel = new JLabel("Enter start rent date(гг.мм.дд)");
         startYearsLabel.setBounds(330, 290, 300, 30);
 
@@ -122,24 +110,6 @@ public class GetRentListener implements ActionListener {
         yearsStart.add(startYear);
         yearsStart.add(startMonth);
         yearsStart.add(startDay);
-        /*Obsolete*/
-        for (int i = 0; i < 3; i++) {
-            String form = "##";
-            if (i == 0) {
-                form = "####";
-            }
-            try {
-                formatter = new MaskFormatter(form);
-                formatter.setPlaceholderCharacter('0');
-            } catch (Exception exec) {
-                exec.printStackTrace();
-            }
-            JFormattedTextField ssnField = new JFormattedTextField(formatter);
-            ssnField.setHorizontalAlignment(JTextField.CENTER);
-            formatter.setPlaceholderCharacter('0');
-            fields.add(ssnField);
-        }
-        /*Obsolete*/
         yearsStart.setBounds(350, 320, 200, 30);
 
         planYearsLabel = new JLabel("Enter end rent date(г.м.д)");
@@ -162,24 +132,6 @@ public class GetRentListener implements ActionListener {
         yearsPlan.add(endMonth);
         yearsPlan.add(endDay);
 
-        /*Obsolete*/
-        for (int i = 0; i < 3; i++) {
-            String form = "##";
-            if (i == 0) {
-                form = "####";
-            }
-            try {
-                formatter = new MaskFormatter(form);
-                formatter.setPlaceholderCharacter('0');
-            } catch (Exception exec) {
-                exec.printStackTrace();
-            }
-            JFormattedTextField tempField = new JFormattedTextField(formatter);
-
-            tempField.setHorizontalAlignment(JTextField.CENTER);
-            fields.add(tempField);
-        }
-        /*Obsolete*/
         yearsPlan.setBounds(350, 400, 200, 30);
 
         planPriceLabel = new JLabel("Approximately cost: ");
