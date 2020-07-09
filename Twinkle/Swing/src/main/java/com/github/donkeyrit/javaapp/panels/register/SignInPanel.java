@@ -6,16 +6,15 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.UserModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
-import com.github.donkeyrit.javaapp.panels.filter.FilterPanel;
-import com.github.donkeyrit.javaapp.panels.header.HeaderPanel;
 import com.github.donkeyrit.javaapp.panels.CustomPanel;
 import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
+import com.github.donkeyrit.javaapp.panels.filter.FilterPanel;
+import com.github.donkeyrit.javaapp.panels.header.HeaderPanel;
 import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
-import com.github.donkeyrit.javaapp.ui.Canvas;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
@@ -23,10 +22,9 @@ import java.awt.*;
 
 public class SignInPanel extends CustomPanel {
 
-    private ServiceContainer serviceContainer;
-    private DatabaseProvider databaseProvider;
-    private UiManager uiManager;
-    private Canvas canvas;
+    private final ServiceContainer serviceContainer;
+    private final DatabaseProvider databaseProvider;
+    private final UiManager uiManager;
 
     private JCustomTextField login;
     private JCustomPasswordField password;
@@ -41,7 +39,6 @@ public class SignInPanel extends CustomPanel {
         serviceContainer = ServiceContainer.getInstance();
         databaseProvider = serviceContainer.getDatabaseProvider();
         uiManager = serviceContainer.getUiManager();
-        canvas = uiManager.getCanvas();
 
         initialize();
 
@@ -71,8 +68,8 @@ public class SignInPanel extends CustomPanel {
         logInButton.addActionListener(e -> {
 
             boolean isOne = login.getText().isEmpty();
-            boolean isTwo = password.getText().isEmpty();
-            boolean isThree = reEnterPassword.getText().isEmpty();
+            boolean isTwo = new String(password.getPassword()).isEmpty();
+            boolean isThree = new String(reEnterPassword.getPassword()).isEmpty();
 
             if (isOne) {
                 login.setState("Please, enter login", Color.RED);
@@ -87,7 +84,7 @@ public class SignInPanel extends CustomPanel {
             }
 
             if (!isOne && !isTwo && !isThree) {
-                if (!password.getText().equals(reEnterPassword.getText())) {
+                if (!new String(password.getPassword()).equals(new String(reEnterPassword.getPassword()))) {
                     password.setState("Password do not match", Color.RED);
                     reEnterPassword.setState("Password do not match", Color.RED);
                 } else {
@@ -101,7 +98,7 @@ public class SignInPanel extends CustomPanel {
 
                         User newUser = new User(
                                 ShieldingProvider.shielding(login.getText()),
-                                SecurityProvider.sha1(ShieldingProvider.shielding(password.getText())),
+                                SecurityProvider.sha1(ShieldingProvider.shielding(new String(password.getPassword()))),
                                 false
                         );
 
@@ -115,8 +112,8 @@ public class SignInPanel extends CustomPanel {
                 }
             }
 
-            canvas.revalidate();
-            canvas.repaint();
+            revalidate();
+            repaint();
         });
 
         backButton = new JButton();
