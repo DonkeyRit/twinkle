@@ -4,7 +4,6 @@ import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.model.User;
 import com.github.donkeyrit.javaapp.model.enums.UserAction;
 import com.github.donkeyrit.javaapp.panels.CustomPanel;
-import com.github.donkeyrit.javaapp.ui.Canvas;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
@@ -18,7 +17,6 @@ public class UserActionsProfilePanel extends CustomPanel {
     private final static Font FONT = new Font("Arial", Font.BOLD, 13);
 
     private UiManager uiManager;
-    private final Canvas panel;
     private final User user;
 
     private JLabel labelActions;
@@ -30,7 +28,6 @@ public class UserActionsProfilePanel extends CustomPanel {
         ServiceContainer container = ServiceContainer.getInstance();
         this.uiManager = container.getUiManager();
         this.user = container.getUser();
-        this.panel = container.getUiManager().getCanvas();
 
         initialize();
 
@@ -64,7 +61,7 @@ public class UserActionsProfilePanel extends CustomPanel {
                 CustomPanel actionPanel = null;
                 UserAction userAction = UserAction.valueOfFromLabel(selectedUserAction.getText());
 
-                switch (userAction){
+                switch (userAction) {
                     case CHANGE_PASSWORD:
                         actionPanel = UserAction.CHANGE_PASSWORD.getActionPanel().get();
                         break;
