@@ -1,21 +1,20 @@
 package com.github.donkeyrit.javaapp.panels.login;
 
-import com.github.donkeyrit.javaapp.components.JCustomTextField;
 import com.github.donkeyrit.javaapp.components.JCustomPasswordField;
+import com.github.donkeyrit.javaapp.components.JCustomTextField;
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.DatabaseModelProviders.UserModelProvider;
 import com.github.donkeyrit.javaapp.database.DatabaseProvider;
 import com.github.donkeyrit.javaapp.model.User;
+import com.github.donkeyrit.javaapp.panels.CustomPanel;
+import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.panels.filter.FilterPanel;
 import com.github.donkeyrit.javaapp.panels.header.HeaderPanel;
 import com.github.donkeyrit.javaapp.panels.register.SignInPanel;
-import com.github.donkeyrit.javaapp.panels.CustomPanel;
-import com.github.donkeyrit.javaapp.panels.content.ContentPanel;
 import com.github.donkeyrit.javaapp.resources.Assets;
 import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
-import com.github.donkeyrit.javaapp.ui.Canvas;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
 import javax.swing.*;
@@ -26,7 +25,6 @@ public class LoginPanel extends CustomPanel {
     private final ServiceContainer serviceContainer;
     private final UiManager uiManager;
     private final DatabaseProvider databaseProvider;
-    private final Canvas panel;
 
     private JCustomTextField login;
     private JCustomPasswordField password;
@@ -39,7 +37,6 @@ public class LoginPanel extends CustomPanel {
 
         this.serviceContainer = ServiceContainer.getInstance();
         this.uiManager = serviceContainer.getUiManager();
-        this.panel = this.uiManager.getCanvas();
         this.databaseProvider = serviceContainer.getDatabaseProvider();
 
         initialize();
@@ -62,7 +59,7 @@ public class LoginPanel extends CustomPanel {
         signIn = new JButton("Sign in");
         signIn.addActionListener(e -> {
             boolean isOne = login.getText().isEmpty();
-            boolean isTwo = password.getText().isEmpty();
+            boolean isTwo = new String(password.getPassword()).isEmpty();
 
             if (isOne) {
                 login.setState("Please, enter login", Color.RED);
@@ -71,8 +68,8 @@ public class LoginPanel extends CustomPanel {
                 password.setState("Please, enter password", Color.RED);
             }
 
-            panel.revalidate();
-            panel.repaint();
+            revalidate();
+            repaint();
 
             if (!isOne && !isTwo) {
 
@@ -80,7 +77,7 @@ public class LoginPanel extends CustomPanel {
                 try {
                     User currentUser = provider.getSpecificUserByCredentials(
                             ShieldingProvider.shielding(login.getText()),
-                            SecurityProvider.sha1(ShieldingProvider.shielding(password.getText()))
+                            SecurityProvider.sha1(ShieldingProvider.shielding(new String(password.getPassword())))
                     );
 
                     if (currentUser != null) {
