@@ -16,6 +16,8 @@ import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
 import com.github.donkeyrit.javaapp.ui.UiManager;
+import com.github.donkeyrit.javaapp.utils.IValidationEngine;
+import com.github.donkeyrit.javaapp.utils.ValidationEngine;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +27,8 @@ public class LoginPanel extends CustomPanel {
     private final ServiceContainer serviceContainer;
     private final UiManager uiManager;
     private final DatabaseProvider databaseProvider;
+    private final UserModelProvider userModelProvider;
+    private final IValidationEngine validationEngine;
 
     private JCustomTextField login;
     private JCustomPasswordField password;
@@ -38,8 +42,11 @@ public class LoginPanel extends CustomPanel {
         this.serviceContainer = ServiceContainer.getInstance();
         this.uiManager = serviceContainer.getUiManager();
         this.databaseProvider = serviceContainer.getDatabaseProvider();
+        this.userModelProvider = this.databaseProvider.getUserModelProvider();
+        this.validationEngine = new ValidationEngine();
 
         initialize();
+        configureValidator();
 
         add(login);
         add(password);
@@ -58,46 +65,21 @@ public class LoginPanel extends CustomPanel {
 
         signIn = new JButton("Sign in");
         signIn.addActionListener(e -> {
-            boolean isOne = login.getText().isEmpty();
-            boolean isTwo = new String(password.getPassword()).isEmpty();
 
-            if (isOne) {
-                login.setState("Please, enter login", Color.RED);
+            if (validationEngine.validate()) {
+
+                User currentUser = userModelProvider.getSpecificUserByCredentials(
+                        ShieldingProvider.shielding(login.getText()),
+                        SecurityProvider.sha1(ShieldingProvider.shielding(new String(password.getPassword())))
+                );
+
+                this.serviceContainer.setUser(currentUser);
+                this.uiManager.getLayout()
+                        .setHeader(new HeaderPanel())
+                        .setSidebar(new FilterPanel())
+                        .setContent(new ContentPanel());
             }
-            if (isTwo) {
-                password.setState("Please, enter password", Color.RED);
-            }
-
-            revalidate();
-            repaint();
-
-            if (!isOne && !isTwo) {
-
-                UserModelProvider provider = databaseProvider.getUserModelProvider();
-                try {
-                    User currentUser = provider.getSpecificUserByCredentials(
-                            ShieldingProvider.shielding(login.getText()),
-                            SecurityProvider.sha1(ShieldingProvider.shielding(new String(password.getPassword())))
-                    );
-
-                    if (currentUser != null) {
-
-                        this.serviceContainer.setUser(currentUser);
-                        this.uiManager.getLayout()
-                                .setHeader(new HeaderPanel())
-                                .setSidebar(new FilterPanel())
-                                .setContent(new ContentPanel());
-
-                    } else {
-
-                        login.setState("Incorrect login", Color.RED);
-                        password.setState("Incorrect password", Color.RED);
-                    }
-
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-            }
+            
             revalidate();
             repaint();
         });
@@ -106,6 +88,20 @@ public class LoginPanel extends CustomPanel {
         register = new JButton("Log in");
         register.setBounds(448, 320, 80, 20);
         register.addActionListener(e -> this.uiManager.getLayout().setFullPagePanel(new SignInPanel()));
+    }
+
+    private void configureValidator() {
+        validationEngine.addRule(() -> login.getText().isEmpty(), o -> login.setState("Please, enter login", Color.RED))
+                .addRule(() -> password.getPassword().length == 0, o -> password.setState("Please, enter password", Color.RED))
+                .addRule(() -> userModelProvider.getSpecificUserByCredentials(
+                        ShieldingProvider.shielding(login.getText()),
+                        SecurityProvider.sha1(ShieldingProvider.shielding(new String(password.getPassword())))
+                        ) == null,
+                        o -> {
+                            login.setState("Incorrect login", Color.RED);
+                            password.setState("Incorrect password", Color.RED);
+                        }
+                );
     }
 
     @Override
