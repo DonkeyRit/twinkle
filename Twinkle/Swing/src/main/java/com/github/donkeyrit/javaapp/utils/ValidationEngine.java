@@ -16,7 +16,8 @@ public class ValidationEngine implements IValidationEngine {
     @Override
     public boolean validate() {
         for (ValidationBinder binder : validationBinders) {
-            if (!binder.validate()) {
+
+            if(!binder.validate()){
                 return false;
             }
         }
@@ -41,11 +42,11 @@ public class ValidationEngine implements IValidationEngine {
 
         public boolean validate() {
             if (rule.get()) {
-                return true;
+                action.accept(new Object());
+                return false;
             }
 
-            action.accept(null);
-            return false;
+            return true;
         }
     }
 }

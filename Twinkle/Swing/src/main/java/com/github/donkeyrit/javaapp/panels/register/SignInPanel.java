@@ -16,15 +16,20 @@ import com.github.donkeyrit.javaapp.resources.ResourceManager;
 import com.github.donkeyrit.javaapp.security.SecurityProvider;
 import com.github.donkeyrit.javaapp.security.ShieldingProvider;
 import com.github.donkeyrit.javaapp.ui.UiManager;
+import com.github.donkeyrit.javaapp.utils.IValidationEngine;
+import com.github.donkeyrit.javaapp.utils.ValidationEngine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class SignInPanel extends CustomPanel {
 
     private final ServiceContainer serviceContainer;
     private final DatabaseProvider databaseProvider;
     private final UiManager uiManager;
+    private final UserModelProvider userModelProvider;
+    private final IValidationEngine validationEngine;
 
     private JCustomTextField login;
     private JCustomPasswordField password;
@@ -38,8 +43,11 @@ public class SignInPanel extends CustomPanel {
 
         serviceContainer = ServiceContainer.getInstance();
         databaseProvider = serviceContainer.getDatabaseProvider();
+        userModelProvider = databaseProvider.getUserModelProvider();
         uiManager = serviceContainer.getUiManager();
+        validationEngine = new ValidationEngine();
 
+        configureValidator();
         initialize();
 
         add(login);
@@ -67,49 +75,19 @@ public class SignInPanel extends CustomPanel {
         logInButton.setBounds(358, 360, 135, 30);
         logInButton.addActionListener(e -> {
 
-            boolean isOne = login.getText().isEmpty();
-            boolean isTwo = new String(password.getPassword()).isEmpty();
-            boolean isThree = new String(reEnterPassword.getPassword()).isEmpty();
+            if (validationEngine.validate()) {
+                User newUser = new User(
+                        ShieldingProvider.shielding(login.getText()),
+                        SecurityProvider.sha1(ShieldingProvider.shielding(new String(password.getPassword()))),
+                        false
+                );
 
-            if (isOne) {
-                login.setState("Please, enter login", Color.RED);
-            }
-
-            if (isTwo) {
-                password.setState("Please, enter password", Color.RED);
-            }
-
-            if (isThree) {
-                reEnterPassword.setState("Please, repeat password", Color.RED);
-            }
-
-            if (!isOne && !isTwo && !isThree) {
-                if (!new String(password.getPassword()).equals(new String(reEnterPassword.getPassword()))) {
-                    password.setState("Password do not match", Color.RED);
-                    reEnterPassword.setState("Password do not match", Color.RED);
-                } else {
-
-                    UserModelProvider userModelProvider = databaseProvider.getUserModelProvider();
-                    User existingUser = userModelProvider.getSpecificUserByLogin(ShieldingProvider.shielding(login.getText()));
-
-                    if (existingUser != null) {
-                        login.setState("Login already exist", Color.RED);
-                    } else {
-
-                        User newUser = new User(
-                                ShieldingProvider.shielding(login.getText()),
-                                SecurityProvider.sha1(ShieldingProvider.shielding(new String(password.getPassword()))),
-                                false
-                        );
-
-                        userModelProvider.addUser(newUser);
-                        serviceContainer.setUser(newUser);
-                        uiManager.getLayout()
-                                .setHeader(new HeaderPanel())
-                                .setSidebar(new FilterPanel())
-                                .setContent(new ContentPanel());
-                    }
-                }
+                userModelProvider.addUser(newUser);
+                serviceContainer.setUser(newUser);
+                uiManager.getLayout()
+                        .setHeader(new HeaderPanel())
+                        .setSidebar(new FilterPanel())
+                        .setContent(new ContentPanel());
             }
 
             revalidate();
@@ -121,6 +99,19 @@ public class SignInPanel extends CustomPanel {
         backButton.setHorizontalTextPosition(SwingConstants.LEFT);
         backButton.setIcon(ResourceManager.getImageIconFromResources(Assets.BUTTONS, "return.png"));
         backButton.addActionListener(e -> uiManager.getLayout().setFullPagePanel(new LoginPanel()));
+    }
+
+    private void configureValidator() {
+        validationEngine.addRule(() -> login.getText().isEmpty(), o -> login.setState("Please, enter login", Color.RED))
+                .addRule(() -> password.getPassword().length == 0, o -> password.setState("Please, enter password", Color.RED))
+                .addRule(() -> reEnterPassword.getPassword().length == 0, o -> reEnterPassword.setState("Please, repeat password", Color.RED))
+                .addRule(() -> !Arrays.equals(password.getPassword(), reEnterPassword.getPassword()), o -> {
+                    password.setState("Password do not match", Color.RED);
+                    reEnterPassword.setState("Password do not match", Color.RED);
+                })
+                .addRule(() -> userModelProvider.getSpecificUserByLogin(ShieldingProvider.shielding(login.getText())) != null,
+                        o -> login.setState("Login already exist", Color.RED)
+                );
     }
 
     @Override
