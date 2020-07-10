@@ -72,14 +72,8 @@ public class CarPanel extends CustomPanel {
         moreButton = new JButton("More");
         moreButton.setBounds(200, 70, 100, 20);
         moreButton.addActionListener(e -> {
-
             ContentPanel container = (ContentPanel) this.getParent();
-
-            AboutCarPanel newPanel = new AboutCarPanel(this.car);
-            newPanel.setFilter(container.getCarFilter());
-            newPanel.setNumPage(container.numOfPage);
-            newPanel.setStartBut(container.startBut);
-
+            AboutCarPanel newPanel = new AboutCarPanel(this.car, container.getCarFilter(), container.getNumOfPage());
             uiManager.getLayout().setContent(newPanel);
         });
     }

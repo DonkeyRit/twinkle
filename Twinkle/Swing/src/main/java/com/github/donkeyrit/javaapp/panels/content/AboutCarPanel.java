@@ -26,7 +26,8 @@ public class AboutCarPanel extends CustomPanel {
 
     private final Car car;
     private final User user;
-    private ContentFilter<Car> filter;
+    private final int numPage;
+    private final ContentFilter<Car> filter;
 
     private JScrollPane infoAboutCarScrollableContainer;
     private JButton reloadButton;
@@ -37,44 +38,27 @@ public class AboutCarPanel extends CustomPanel {
     public Car getCar() {
         return car;
     }
-
     public User getUser() {
         return user;
-    }
-
-    public JScrollPane getInfoAboutCarScrollableContainer() {
-        return infoAboutCarScrollableContainer;
-    }
-
-    // TODO Clean up
-    public void setFilter(ContentFilter<Car> filter) {
-        this.filter = filter;
-    }
-    public void setNumPage(int numPage) {
-        this.numPage = numPage;
-    }
-    public void setStartBut(int startBut) {
-        this.startBut = startBut;
-    }
-    public ContentFilter<Car> getFilter() {
-        return filter;
     }
     public int getNumPage() {
         return numPage;
     }
-    public int getStartBut() {
-        return startBut;
+    public ContentFilter<Car> getFilter() {
+        return filter;
+    }
+    public JScrollPane getInfoAboutCarScrollableContainer() {
+        return infoAboutCarScrollableContainer;
     }
 
-    private int numPage;
-    private int startBut;
-
-    public AboutCarPanel(Car car) {
+    public AboutCarPanel(Car car, ContentFilter<Car> filter, int numOfPage) {
         setLayout(null);
 
         ServiceContainer serviceContainer = ServiceContainer.getInstance();
         this.user = serviceContainer.getUser();
         this.car = car;
+        this.filter = filter;
+        this.numPage = numOfPage;
 
         initialize();
 

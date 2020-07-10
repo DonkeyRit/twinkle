@@ -24,13 +24,10 @@ import java.util.stream.IntStream;
 
 public class ContentPanel extends CustomPanel {
 
-    public int numOfPage = 0;
-    public int startBut = 1;
-
     private static final Font navigationButtonFont = new Font("Arial", Font.ITALIC, 10);
 
-    private DatabaseProvider databaseProvider;
-    private UiManager uiManager;
+    private final DatabaseProvider databaseProvider;
+    private final UiManager uiManager;
 
     private JLabel contentMainLabel;
     private JButton reloadButton;
@@ -38,7 +35,14 @@ public class ContentPanel extends CustomPanel {
     private Box navigationButtonsBox;
 
     private int countOfPages;
-    private ContentFilter<Car> carFilter;
+
+    private final int numOfPage;
+
+    public int getNumOfPage() {
+        return numOfPage;
+    }
+
+    private final ContentFilter<Car> carFilter;
 
     public ContentFilter<Car> getCarFilter() {
         return carFilter;

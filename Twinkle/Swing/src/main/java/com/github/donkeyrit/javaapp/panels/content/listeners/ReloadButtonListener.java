@@ -2,7 +2,7 @@ package com.github.donkeyrit.javaapp.panels.content.listeners;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.panels.content.AboutCarPanel;
-import com.github.donkeyrit.javaapp.ui.Canvas;
+import com.github.donkeyrit.javaapp.ui.WindowLayout;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,20 +13,12 @@ public class ReloadButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        Canvas panel = ServiceContainer.getInstance().getUiManager().getCanvas();
+        WindowLayout layout = ServiceContainer.getInstance().getUiManager().getLayout();
 
         JButton jButton = (JButton) e.getSource();
         AboutCarPanel oldPanel = (AboutCarPanel) jButton.getParent();
+        AboutCarPanel newPanel = new AboutCarPanel(oldPanel.getCar(), oldPanel.getFilter(), oldPanel.getNumPage());
 
-        AboutCarPanel newPanel = new AboutCarPanel(oldPanel.getCar());
-        newPanel.setFilter(oldPanel.getFilter());
-        newPanel.setNumPage(oldPanel.getNumPage());
-        newPanel.setStartBut(oldPanel.getStartBut());
-        newPanel.setBounds(250,100,605,550);
-
-        panel.remove(oldPanel);
-        panel.add(newPanel);
-        panel.revalidate();
-        panel.repaint();
+        layout.setContent(newPanel);
     }
 }

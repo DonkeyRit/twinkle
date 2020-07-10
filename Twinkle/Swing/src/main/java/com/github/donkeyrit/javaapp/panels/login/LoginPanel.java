@@ -79,7 +79,7 @@ public class LoginPanel extends CustomPanel {
                         .setSidebar(new FilterPanel())
                         .setContent(new ContentPanel());
             }
-            
+
             revalidate();
             repaint();
         });
