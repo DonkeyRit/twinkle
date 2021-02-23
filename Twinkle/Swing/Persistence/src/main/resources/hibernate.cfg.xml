@@ -7,15 +7,18 @@
         <property name="hibernate.connection.password">admin</property>
 
         <!-- SQL dialect -->
-        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
 
         <!-- Print executed SQL to stdout -->
         <property name="show_sql">true</property>
 
         <!-- Update database on startup -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
 
         <!-- Annotated entity classes -->
-        <mapping class="com.github.donkeyrit.model.Message"/>
+        <mapping class="com.github.donkeyrit.model.Vehicle"/>
+        <mapping class="com.github.donkeyrit.model.Client"/>
+        <mapping class="com.github.donkeyrit.model.User"/>
+        <mapping class="com.github.donkeyrit.model.Rent"/>
     </session-factory>
 </hibernate-configuration>
