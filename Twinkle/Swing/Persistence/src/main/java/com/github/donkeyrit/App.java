@@ -1,15 +1,10 @@
 package com.github.donkeyrit;
 
-import com.github.donkeyrit.model.Message;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  * Hello world!
@@ -25,7 +20,6 @@ public class App
         try {
             SessionFactory sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
             Session session = sessionFactory.openSession();
-            session.persist(new Message("Hello World"));
             session.close();
             sessionFactory.close();
         }
