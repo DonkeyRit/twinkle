@@ -2,6 +2,7 @@ package com.github.donkeyrit.javaapp;
 
 import com.github.donkeyrit.javaapp.container.ServiceContainer;
 import com.github.donkeyrit.javaapp.database.MySqlProvider;
+import com.github.donkeyrit.javaapp.database.PgSqlProvider;
 import com.github.donkeyrit.javaapp.panels.login.LoginPanel;
 import com.github.donkeyrit.javaapp.ui.UiManager;
 
@@ -17,7 +18,7 @@ public class EntryPoint {
 
     private void initialize() {
         ServiceContainer container = ServiceContainer.getInstance();
-        container.setDatabaseProvider(new MySqlProvider());
+        container.setDatabaseProvider(new PgSqlProvider());
         container.setUiManager(new UiManager());
         container.getUiManager().getLayout().setFullPagePanel(new LoginPanel());
     }
