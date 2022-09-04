@@ -5,9 +5,9 @@ import java.util.Properties;
 
 public class PgSqlProvider extends DatabaseProvider {
 
-    private static final String DB_CONNECTION = "jdbc:postgresql://localhost/carrental";
-    private static final String DB_USER = "postgres";
-    private static final String DB_PASSWORD = "Welcome01_";
+    private static final String DB_CONNECTION = "jdbc:postgresql://localhost:5432/carrental";
+    private static final String DB_USER = "twinkle_user";
+    private static final String DB_PASSWORD = "Sr412Tqew!";
 
     @Override
     protected void initialize() {
