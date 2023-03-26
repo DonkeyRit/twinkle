@@ -18,6 +18,8 @@ import javax.swing.text.*;
  * and open the template in the editor.
  */
 
+import com.github.donkeyrit.javaapp.utils.AssetsRetriever;
+
 /**
  *
  * @author Dima
@@ -227,7 +229,7 @@ public class EntryPoint {
         
         @Override
         public void paintComponent(Graphics g){
-            Image image = new ImageIcon("assets/background/enter.jpg").getImage(); 
+            Image image = AssetsRetriever.retrieveAssetFromResources("assets/background/enter.jpg"); 
             g.drawImage(image,0,0,this); 
             GradientPaint gp = new GradientPaint(0, 0, Color.RED,120, 120, Color.BLUE, true); 
             Graphics2D g2 = (Graphics2D)g;  
