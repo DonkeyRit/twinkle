@@ -9,6 +9,10 @@
   <artifactId>legacy</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
+  <properties>
+    <COMPILER.INCLUDE>com/github/donkeyrit/**</COMPILER.INCLUDE>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.postgresql</groupId>
