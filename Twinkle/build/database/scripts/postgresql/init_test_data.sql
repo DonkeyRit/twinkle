@@ -1,11 +1,11 @@
 INSERT INTO injury(injury_name)
 VALUES ('внутренние повреждения'),('внешние повреждения'),('отсутсвуют повреждения');
 
-INSERT INTO "user"(login,password,role)
+INSERT INTO "users"(login,password,role)
 VALUES ('cookie','bbf4aba56ecacb17e8d31d54b5c50fc955f25e0a',true),
        ('test','7c4a8d09ca3762af61e59520943dc26494f8941b',false);
 
-INSERT INTO "client"(first_name,second_name,middle_name,address,phone_number,id_user)
+INSERT INTO "clients"(first_name,second_name,middle_name,address,phone_number,id_user)
 VALUES ('dima','alekseev','andreevich','saratov','89170291265',1),
        ('Mikki','Rurg','John','New York','+345612',2);
 

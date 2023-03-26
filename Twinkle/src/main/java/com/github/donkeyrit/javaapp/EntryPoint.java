@@ -168,7 +168,7 @@ public class EntryPoint {
                         
                         
                         
-                        String query = String.format("SELECT count(idUser) as count, role FROM user WHERE login = '%s' AND password = '%s'",shielding(login.getText()),sha1(shielding(password.getText())));
+                        String query = String.format("SELECT id_user as count, role FROM users WHERE login = '%s' AND password = '%s'",shielding(login.getText()),sha1(shielding(password.getText())));
                         ResultSet userSet = database.select(query); 
                         boolean isCheckUser = false; 
                         boolean roleUser = false; 
