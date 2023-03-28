@@ -18,6 +18,10 @@ import javax.swing.text.*;
  * and open the template in the editor.
  */
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 /**
@@ -36,8 +40,24 @@ public class EntryPoint {
         /**
          * Application start
          */
+        testHibernate();
         System.out.println(new EntryPoint().sha1("qazxcftrew"));
         new EntryPoint().initGui();
+    }
+
+    private static void testHibernate()
+    {
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+        Session session = sessionFactory.openSession();
+
+        User user = new User("admin", "Welcome01!", true);
+
+        session.beginTransaction();
+        session.save(user);
+        session.getTransaction().commit();
+
+        session.close();
+        sessionFactory.close();
     }
     
     private String sha1(String input){
