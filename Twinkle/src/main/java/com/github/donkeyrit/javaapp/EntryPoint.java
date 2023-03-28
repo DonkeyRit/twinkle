@@ -359,7 +359,7 @@ public class EntryPoint {
         
         @Override
         public void paintComponent(Graphics g){
-            Image image = new ImageIcon("assets/background/enter.jpg").getImage(); 
+            Image image = AssetsRetriever.retrieveAssetFromResources("assets/background/enter.jpg"); 
             g.drawImage(image,0,0,this); 
             GradientPaint gp = new GradientPaint(0, 0, Color.RED,120, 120, Color.BLUE, true); 
             Graphics2D g2 = (Graphics2D)g;  
@@ -371,7 +371,7 @@ public class EntryPoint {
                 avatarNumber = random; 
             }
 				  
-            Image avatar = new ImageIcon("assets/avatar/" + avatarNumber + ".png").getImage(); 
+            Image avatar = AssetsRetriever.retrieveAssetFromResources("assets/avatar/" + avatarNumber + ".png"); 
             g.drawImage(avatar,380,100,this); 
         }
     }
@@ -938,13 +938,13 @@ public class EntryPoint {
         
         @Override
         public void paintComponent(Graphics g){
-            Image image = new ImageIcon("assets/cars/min/" + imagesNum + ".png").getImage(); 
+            Image image = AssetsRetriever.retrieveAssetFromResources("assets/cars/min/" + imagesNum + ".png"); 
             g.drawImage(image,10,10,this); 
             
-            Image country = new ImageIcon("assets/flags/" + nameCountry + ".png").getImage(); 
+            Image country = AssetsRetriever.retrieveAssetFromResources("assets/flags/" + nameCountry + ".png"); 
             g.drawImage(country,425,0,this);
             
-            Image statusImage = new ImageIcon("assets/status/" + status + ".png").getImage(); 
+            Image statusImage = AssetsRetriever.retrieveAssetFromResources("assets/status/" + status + ".png"); 
             g.drawImage(statusImage, 10, 10, this);
         }        
     }
@@ -1661,7 +1661,7 @@ public class EntryPoint {
         public void paintComponent(Graphics g){
             g.setColor(new Color(237,237,237)); 
             g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(),30,25); 
-            Image image = new ImageIcon("assets/cars/" + imagesNum + ".png").getImage(); 
+            Image image = AssetsRetriever.retrieveAssetFromResources("assets/cars/" + imagesNum + ".png"); 
             g.drawImage(image,30,10,this); 
             g.setColor(new Color(255,255,255));
             g.fillRect(20, 290, 260, 190);
@@ -1835,7 +1835,7 @@ public class EntryPoint {
             g.setColor(new Color(237,237,237)); 
             g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),30,25); 
             
-            Image image = new ImageIcon("assets/background/page.png").getImage(); 
+            Image image = AssetsRetriever.retrieveAssetFromResources("assets/background/page.png"); 
             g.drawImage(image,50,250,this); 
         }
     }
@@ -1944,7 +1944,7 @@ public class EntryPoint {
             g.setColor(new Color(237,237,237)); 
             g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),30,25); 
             
-            Image image = new ImageIcon("assets/background/fill_data.png").getImage(); 
+            Image image = AssetsRetriever.retrieveAssetFromResources("assets/background/fill_data.png"); 
             g.drawImage(image,50,310,this); 
         }
     }
