@@ -1,4 +1,4 @@
-package com.github.donkeyrit.javaapp;
+package com.github.donkeyrit.twinkle;
 
 
 import java.sql.*;

@@ -1,4 +1,4 @@
-package com.github.donkeyrit.javaapp.utils;
+package com.github.donkeyrit.twinkle.utils;
 
 import javax.swing.ImageIcon;
 

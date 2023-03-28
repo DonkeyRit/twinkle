@@ -6,11 +6,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.donkeyrit</groupId>
-  <artifactId>legacy</artifactId>
+  <artifactId>twinkle</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <properties>
-    <COMPILER.INCLUDE>com/github/donkeyrit/**</COMPILER.INCLUDE>
+    <COMPILER.INCLUDE>com/github/donkeyrit/twinkle/**</COMPILER.INCLUDE>
   </properties>
 
   <dependencies>

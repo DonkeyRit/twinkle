@@ -1,4 +1,4 @@
-package com.github.donkeyrit.javaapp;
+package com.github.donkeyrit.twinkle;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

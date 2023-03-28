@@ -1,4 +1,4 @@
-package com.github.donkeyrit.javaapp;
+package com.github.donkeyrit.twinkle;
 
 import java.security.MessageDigest;
 import javax.swing.*;
@@ -18,7 +18,7 @@ import javax.swing.text.*;
  * and open the template in the editor.
  */
 
-import com.github.donkeyrit.javaapp.utils.AssetsRetriever;
+import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 /**
  *
