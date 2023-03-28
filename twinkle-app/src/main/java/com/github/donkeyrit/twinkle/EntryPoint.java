@@ -303,7 +303,7 @@ public class EntryPoint {
                             rePassword.setText(""); 
                         }else{
                             data.add(shielding(login.getText())); 
-                            String query = String.format("SELECT count(idUser) as count FROM user WHERE login = '%s'",shielding(login.getText())); 
+                            String query = String.format("SELECT count(id_user) as count FROMusersWHERE login = '%s'",shielding(login.getText())); 
                             
                             ResultSet userSet = database.select(query); 
                             boolean isCheckUser = false; 
@@ -500,7 +500,7 @@ public class EntryPoint {
                             ex.printStackTrace();
                         }
 
-                        String queryModel = "SELECT modelName FROM model WHERE id_mark in ("; 
+                        String queryModel = "SELECT model_name FROM model WHERE id_mark in ("; 
                         for(int i = 0; i < idMarkList.size(); i++){ 
                             queryModel += idMarkList.get(i);
                             if(i == idMarkList.size() - 1){
@@ -513,7 +513,7 @@ public class EntryPoint {
                         ResultSet modelSet = database.select(queryModel); 
                         try{
                             while(modelSet.next()){
-                                modelList.add(modelSet.getString("modelName")); 
+                                modelList.add(modelSet.getString("model_name")); 
                             }
                         }catch(SQLException ex){
                             ex.printStackTrace();
@@ -599,7 +599,7 @@ public class EntryPoint {
                     
                     String selectedModel = modelCombo.getSelectedItem().toString(); 
                     if(!selectedModel.equals("All models")){
-                        resultCondition += "modelName = " + "'" + selectedModel + "'";
+                        resultCondition += "model_name = " + "'" + selectedModel + "'";
                     }else{
                         resultCondition += "!";
                     }
@@ -729,13 +729,13 @@ public class EntryPoint {
             }
             
             String query = "SELECT id_car FROM\n" +
-"                (SELECT id_car,modelYear,info,cost,modelName,id_body_type,mark_name,nameCountry FROM\n" +
-"                (SELECT id_car,modelYear,image,info,cost,modelName,id_body_type,mark_name,idCountry FROM \n" +
-"                (SELECT id_car,modelYear,image,info,cost,modelName,id_mark,id_body_type FROM car \n" +
+"                (SELECT id_car,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
+"                (SELECT id_car,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
+"                (SELECT id_car,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
 "                INNER JOIN model ON car.id_model = model.id_model) as join1\n" +
 "                INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n" +
-"                INNER JOIN country ON join2.idCountry = country.idCountry) as join3\n" +
-"                INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type " + conditionQuery + " ORDER BY modelYear DESC";
+"                INNER JOIN country ON join2.id_country = country.id_country) as join3\n" +
+"                INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type " + conditionQuery + " ORDER BY model_year DESC";
 
             ResultSet carsSet = database.select(query); 
             ArrayList<Integer> carsList = new ArrayList<Integer>(); 
@@ -850,23 +850,23 @@ public class EntryPoint {
             
             imagesNum = num; 
             setLayout(null); 
-            String query = "SELECT id_car,modelYear,info,cost,modelName,mark_name,nameCountry,body_type_name FROM\n" +
-                "(SELECT id_car,modelYear,info,cost,modelName,id_body_type,mark_name,nameCountry FROM\n" +
-                "(SELECT id_car,modelYear,image,info,cost,modelName,id_body_type,mark_name,idCountry FROM \n" +
-                "(SELECT id_car,modelYear,image,info,cost,modelName,id_mark,id_body_type FROM car \n" +
+            String query = "SELECT id_car,model_year,info,cost,model_name,mark_name,country_name,body_type_name FROM\n" +
+                "(SELECT id_car,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
+                "(SELECT id_car,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
+                "(SELECT id_car,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
                 "INNER JOIN model ON car.id_model = model.id_model) as join1\n" +
                 "INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n" +
-                "INNER JOIN country ON join2.idCountry = country.idCountry) as join3\n" +
+                "INNER JOIN country ON join2.id_country = country.id_country) as join3\n" +
                 "INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type WHERE id_car = " + imagesNum; 
             
             ResultSet carSet = database.select(query);
             try{
                 while(carSet.next()){ 
-                    modelYear = carSet.getDate("modelYear"); 
+                    modelYear = carSet.getDate("model_year"); 
                     cost = carSet.getDouble("cost");
-                    modelName = carSet.getString("modelName");
+                    modelName = carSet.getString("model_name");
                     markName = carSet.getString("markName");
-                    nameCountry = carSet.getString("nameCountry");
+                    nameCountry = carSet.getString("country_name");
                     info = carSet.getString("info");
                     bodyTypeName = carSet.getString("body_type_name");
                 }
@@ -1303,12 +1303,12 @@ public class EntryPoint {
                                     buttonGetCar.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
-                                            String checkQuery = "SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = " + "'" + user.getLogin() + "'";
+                                            String checkQuery = "SELECT id_client FROM client INNER JOINusersON client.id_user = user.id_user WHERE login = " + "'" + user.getLogin() + "'";
                                             ResultSet checkClientSet = database.select(checkQuery); 
                                             int idClient = 0; 
                                             try{
                                                 while(checkClientSet.next()){
-                                                    idClient = checkClientSet.getInt("idClient");
+                                                    idClient = checkClientSet.getInt("id_client");
                                                 }
                                             }catch(SQLException ex){
                                                 ex.printStackTrace();
@@ -1318,7 +1318,7 @@ public class EntryPoint {
                                                 planPriceLabel.setText("Please, fill data");
                                             }else{
                                                 
-                                                String queryToDB = "SELECT * FROM renta where idClient = (SELECT idClient FROM client WHERE idUser = (SELECT idUser FROM user WHERE login = '" + user.getLogin() + "')) ORDER BY dataEnd, dataPlan DESC LIMIT 1";
+                                                String queryToDB = "SELECT * FROM renta where id_client = (SELECT id_client FROM client WHERE id_user = (SELECT id_user FROM users WHERE login = '" + user.getLogin() + "')) ORDER BY dataEnd, dataPlan DESC LIMIT 1";
                                                 ResultSet checkRentaSet = database.select(queryToDB); 
                                                 System.out.println(queryToDB);
                                                 boolean isHaveRenta = false;
@@ -1336,7 +1336,7 @@ public class EntryPoint {
                                                 if(isHaveRenta){
                                                     planPriceLabel.setText("You cannot take more than one car at a time");
                                                 }else{
-                                                    String insertRenta = "INSERT INTO renta(idClient,id_car,dataStart,dataPlan) VALUES (" + idClient + "," + imagesNum; 
+                                                    String insertRenta = "INSERT INTO renta(id_client,id_car,dataStart,dataPlan) VALUES (" + idClient + "," + imagesNum; 
                                                
                                                     String startDataIn = "'" + yList.get(0) + "-" + yList.get(1) + "-" + yList.get(2) + "'"; 
                                                     String planDataIn = "'" + yList.get(3) + "-" + yList.get(4) + "-" + yList.get(5) + "'"; 
@@ -1447,7 +1447,7 @@ public class EntryPoint {
                 add(actionWithCarButton); 
             }else{ 
                 
-                String queryToDatabase = "SELECT * FROM user WHERE idUser = (SELECT idUser FROM client WHERE idClient = (SELECT idClient FROm renta WHERE id_car = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))"; 
+                String queryToDatabase = "SELECT * FROM users WHERE id_user = (SELECT id_user FROM client WHERE id_client = (SELECT id_client FROm renta WHERE id_car = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))"; 
                 ResultSet checkUserSet = database.select(queryToDatabase); 
                 boolean isTrue = false; 
                 try{
@@ -1477,7 +1477,7 @@ public class EntryPoint {
                             ArrayList<String> injuryNames = new ArrayList<>(); 
                             try{
                                 while(queryReturnCarSer.next()){
-                                    injuryNames.add(queryReturnCarSer.getString("injuryName"));
+                                    injuryNames.add(queryReturnCarSer.getString("injury_name"));
                                 }
                             }catch(SQLException ex){
                                 ex.printStackTrace();
@@ -1532,32 +1532,32 @@ public class EntryPoint {
                                             int currDay = calendar.get(Calendar.DATE); 
                                             
                                             String dataStr = currYear + "-" + currMont + "-" + currDay;
-                                            String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE id_car = " + imagesNum + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');"; 
+                                            String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOIN users ON client.id_user = user.id_user WHERE login = '" + user.getLogin() + "');"; 
                                             database.update(updateQuery);
                                             
-                                            String idRentaStr = "SELECT idRenta FROM renta WHERE id_car = " + imagesNum + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
+                                            String idRentaStr = "SELECT id_rent FROM renta WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOINusersON client.id_user = user.id_user WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
                                             ResultSet rentaSet = database.select(idRentaStr);
                                             int idRentaNum = 0;
                                             try{
                                                 while(rentaSet.next()){
-                                                    idRentaNum = rentaSet.getInt("idRenta");
+                                                    idRentaNum = rentaSet.getInt("id_rent");
                                                 }
                                             }catch(SQLException ex){
                                                 ex.printStackTrace();
                                             }
                                             
-                                            String idInjuryStr = "SELECT idInjury FROM injury WHERE injuryName = '" + injuryForCar +"'";
+                                            String idInjuryStr = "SELECT id_injury FROM injury WHERE injury_name = '" + injuryForCar +"'";
                                             ResultSet injurySet = database.select(idInjuryStr);
                                             int idInjuryNum = 0;
                                             try{
                                                 while(injurySet.next()){
-                                                    idInjuryNum = injurySet.getInt("idInjury");
+                                                    idInjuryNum = injurySet.getInt("id_injury");
                                                 }
                                             }catch(SQLException ex){
                                                 ex.printStackTrace();
                                             }
                                             
-                                            database.insert("INSERT INTO  resultinginjury(idRenta,idInjury) VALUES(" + idRentaNum + "," + idInjuryNum + ")");
+                                            database.insert("INSERT INTO  resultinginjury(id_rent,id_injury) VALUES(" + idRentaNum + "," + idInjuryNum + ")");
                                             
                                             remove(box);
                                             remove(newReturnButton);
@@ -1591,9 +1591,9 @@ public class EntryPoint {
                                     int currMont = calendar.get(Calendar.MONTH); 
                                     int currDay = calendar.get(Calendar.DATE); 
                                     
-                                    String queryToDb = "SELECT login,id_car,join1.idUser,dataStart,dataPlan,dataEnd FROM\n" +
-                                    "(SELECT id_car,idUSer,renta.idClient,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.idClient = client.idClient) as join1\n" +
-                                    "INNER JOIN user ON join1.idUser = user.idUser WHERE login = '" + user.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;"; 
+                                    String queryToDb = "SELECT login,id_car,join1.id_user,dataStart,dataPlan,dataEnd FROM\n" +
+                                    "(SELECT id_car,id_user,renta.id_client,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.id_client = client.id_client) as join1\n" +
+                                    "INNER JOINusersON join1.id_user = user.id_user WHERE login = '" + user.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;"; 
                                     
                                     ResultSet queryToDbSet = database.select(queryToDb); 
                                     Date startRentaDate = null;
@@ -1794,7 +1794,7 @@ public class EntryPoint {
                                     fieldPass.get(1).setPhColor(Color.RED); 
                                     fieldPass.get(1).setText("");
                                 }else{                                 
-                                    String updateUserQuery = "UPDATE user SET password = '" + sha1(fieldPass.get(1).getText()) + "'" + " WHERE login = '" + user.getLogin() + "'";
+                                    String updateUserQuery = "UPDATEusersSET password = '" + sha1(fieldPass.get(1).getText()) + "'" + " WHERE login = '" + user.getLogin() + "'";
                                     database.update(updateUserQuery);
                                     user.setPassword(sha1(fieldPass.get(1).getText()));
                                     
@@ -1845,7 +1845,7 @@ public class EntryPoint {
         public PrivateDataPanel() {
             setLayout(null);
             
-            String queryUser = "SELECT firstName,secondName,Patronimic,address,phoneNumber FROM client where idUser = (SELECT idUser FROM user WHERE login = '" + user.getLogin() + "')"; 
+            String queryUser = "SELECT first_name,second_name,middle_name,address,phone_number FROM client where id_user = (SELECT id_user FROMusersWHERE login = '" + user.getLogin() + "')"; 
             ResultSet userSet = database.select(queryUser);
             ArrayList<String> infoUser = new ArrayList<String>(); 
             try{
@@ -1863,7 +1863,7 @@ public class EntryPoint {
             box.setBounds(202,10, 200, 250);
             box.setBorder(new TitledBorder("Personal information"));
             
-            String[] placeholders = new String[]{"Enter firstName","Enter secondName","Enter patronimic","Enter address","Enter phoneNumber"};
+            String[] placeholders = new String[]{"Enter first_name","Enter second_name","Enter middle_name","Enter address","Enter phone_number"};
             ArrayList<JCTextField> fieldText = new ArrayList<JCTextField>();
             for(int i = 0; i < placeholders.length; i++){
                 JCTextField tempField = new JCTextField(); 
@@ -1893,11 +1893,11 @@ public class EntryPoint {
                    
                    if(counter == fieldText.size()){
                        if(infoUser.size() == 0){
-                           String createClient = "INSERT INTO client(firstName,secondName,Patronimic,address,phoneNumber,idUser) VALUES (";
+                           String createClient = "INSERT INTO client(first_name,second_name,middle_name,address,phone_number,id_user) VALUES (";
                            for(int i = 0; i < fieldText.size(); i++){
                                createClient += "'" + fieldText.get(i).getText() + "',";
                            }
-                           createClient += "(SELECT idUser FROM user WHERE login = '" + user.getLogin() + "'))";
+                           createClient += "(SELECT id_user FROMusersWHERE login = '" + user.getLogin() + "'))";
                            
                            database.insert(createClient);
                            for(int i = 0 ; i < fieldText.size(); i++){
@@ -1906,7 +1906,7 @@ public class EntryPoint {
                                fieldText.get(i).setPhColor(Color.green);
                            }
                        }else{
-                           String[] columnNames = new String[]{"firstName","secondName","Patronimic","address","phoneNumber"};
+                           String[] columnNames = new String[]{"first_name","second_name","middle_name","address","phone_number"};
                            String updateClient = "UPDATE client SET ";
                            for(int i = 0 ; i < fieldText.size(); i++){
                                updateClient += columnNames[i] + " = '" + fieldText.get(i).getText() +"'";
@@ -1914,7 +1914,7 @@ public class EntryPoint {
                                    updateClient +=",";
                                }
                            }
-                           updateClient += " WHERE idUser = (SELECT idUser FROM user WHERE login = '" + user.getLogin() + "')";
+                           updateClient += " WHERE id_user = (SELECT id_user FROMusersWHERE login = '" + user.getLogin() + "')";
                            database.update(updateClient);
                        }
                    }else{
