@@ -464,12 +464,12 @@ public class EntryPoint {
             mainLabel.setBounds(40, 10, 140, 20); 
             add(mainLabel);
             
-            ResultSet markSet = database.select("SELECT DISTINCT(markName) FROM mark"); 
+            ResultSet markSet = database.select("SELECT DISTINCT(mark_name) FROM mark"); 
             ArrayList<String> markList = new ArrayList<String>(); 
             markList.add(0,"All marks"); 
             try { 
                 while(markSet.next()){
-                    markList.add(markSet.getString("markName")); 
+                    markList.add(markSet.getString("mark_name")); 
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -490,17 +490,17 @@ public class EntryPoint {
                     ArrayList<String> modelList = new ArrayList<String>(); 
                     
                     if(!markSelected.equals("All marks")){ 
-                        ResultSet idMarkSet = database.select("SELECT idMark FROM mark WHERE markName = '" + markSelected + "'"); 
+                        ResultSet idMarkSet = database.select("SELECT id_mark FROM mark WHERE mark_name = '" + markSelected + "'"); 
 
                         try {
                             while(idMarkSet.next()){
-                                idMarkList.add(idMarkSet.getInt("idMark")); 
+                                idMarkList.add(idMarkSet.getInt("id_mark")); 
                             }
                         } catch (SQLException ex) {
                             ex.printStackTrace();
                         }
 
-                        String queryModel = "SELECT modelName FROM model WHERE idMark in ("; 
+                        String queryModel = "SELECT modelName FROM model WHERE id_mark in ("; 
                         for(int i = 0; i < idMarkList.size(); i++){ 
                             queryModel += idMarkList.get(i);
                             if(i == idMarkList.size() - 1){
@@ -530,7 +530,7 @@ public class EntryPoint {
             add(markCombo); 
             add(modelCombo); 
 
-            ResultSet priceSet = database.select("SELECT MAX(cost) as price FROM car ORDER BY cost "); 
+            ResultSet priceSet = database.select("SELECT MAX(cost) as price FROM car"); 
             int d = 1; 
             try{
                 while(priceSet.next()){
@@ -555,11 +555,11 @@ public class EntryPoint {
             price.setBounds(10, 150, 180, 45);
             add(price); 
             
-            ResultSet bodyTypeSet = database.select("SELECT DISTINCT(bodyTypeName) FROM bodytype"); 
+            ResultSet bodyTypeSet = database.select("SELECT DISTINCT(body_type_name) FROM body_type"); 
             ArrayList<String> bodyTypeList = new ArrayList<String>(); 
             try {
                 while(bodyTypeSet.next()){
-                    bodyTypeList.add(bodyTypeSet.getString("bodyTypeName")); 
+                    bodyTypeList.add(bodyTypeSet.getString("body_type_name")); 
                 }
             } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -590,7 +590,7 @@ public class EntryPoint {
                     
                     String selectedMark = markCombo.getSelectedItem().toString(); 
                     if(!selectedMark.equals("All marks")){
-                        resultCondition += "markName = " + "'" + selectedMark + "'";
+                        resultCondition += "mark_name = " + "'" + selectedMark + "'";
                     }else{
                         resultCondition += "!";
                     }
@@ -626,7 +626,7 @@ public class EntryPoint {
                     if(selectedCB.size() == 0){
                         resultCondition += "!";
                     }else{
-                        selectedCheckBoxes += "bodyTypeName IN (";
+                        selectedCheckBoxes += "body_type_name IN (";
                         for(int i = 0; i < selectedCB.size(); i++){
                             selectedCheckBoxes += "'" + selectedCB.get(i) + "'";
                             if(i != selectedCB.size() - 1){
@@ -728,21 +728,21 @@ public class EntryPoint {
                 conditionQuery = "WHERE " + condition;
             }
             
-            String query = "SELECT idCar FROM\n" +
-"                (SELECT idCar,modelYear,info,cost,modelName,idBodyType,markName,nameCountry FROM\n" +
-"                (SELECT idCar,modelYear,image,info,cost,modelName,idBodyType,markName,idCountry FROM \n" +
-"                (SELECT idCar,modelYear,image,info,cost,modelName,idMark,idBodyType FROM car \n" +
-"                INNER JOIN model ON car.idModel = model.idModel) as join1\n" +
-"                INNER JOIN mark ON join1.idMark = mark.idMark) as join2\n" +
+            String query = "SELECT id_car FROM\n" +
+"                (SELECT id_car,modelYear,info,cost,modelName,id_body_type,mark_name,nameCountry FROM\n" +
+"                (SELECT id_car,modelYear,image,info,cost,modelName,id_body_type,mark_name,idCountry FROM \n" +
+"                (SELECT id_car,modelYear,image,info,cost,modelName,id_mark,id_body_type FROM car \n" +
+"                INNER JOIN model ON car.id_model = model.id_model) as join1\n" +
+"                INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n" +
 "                INNER JOIN country ON join2.idCountry = country.idCountry) as join3\n" +
-"                INNER JOIN bodytype ON join3.idBodyType = bodytype.idBodyType " + conditionQuery + " ORDER BY modelYear DESC";
+"                INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type " + conditionQuery + " ORDER BY modelYear DESC";
 
             ResultSet carsSet = database.select(query); 
             ArrayList<Integer> carsList = new ArrayList<Integer>(); 
             int numString = 0; 
             try{
                 while(carsSet.next()){
-                    carsList.add(carsSet.getInt("idCar")); 
+                    carsList.add(carsSet.getInt("id_car")); 
                 }
                 carsSet.last(); 
                 numString = carsSet.getRow(); 
@@ -835,7 +835,7 @@ public class EntryPoint {
         CarPanel(int num){
             
             
-            ResultSet statusSet = database.select("SELECT * FROM renta WHERE idCar = " + num + " ORDER BY dataEnd, dataPlan DESC LIMIT 1"); 
+            ResultSet statusSet = database.select("SELECT * FROM renta WHERE id_car = " + num + " ORDER BY dataEnd, dataPlan DESC LIMIT 1"); 
             status = "open"; 
             try{
                 while(statusSet.next()){
@@ -850,14 +850,14 @@ public class EntryPoint {
             
             imagesNum = num; 
             setLayout(null); 
-            String query = "SELECT idCar,modelYear,info,cost,modelName,markName,nameCountry,bodyTypeName FROM\n" +
-                "(SELECT idCar,modelYear,info,cost,modelName,idBodyType,markName,nameCountry FROM\n" +
-                "(SELECT idCar,modelYear,image,info,cost,modelName,idBodyType,markName,idCountry FROM \n" +
-                "(SELECT idCar,modelYear,image,info,cost,modelName,idMark,idBodyType FROM car \n" +
-                "INNER JOIN model ON car.idModel = model.idModel) as join1\n" +
-                "INNER JOIN mark ON join1.idMark = mark.idMark) as join2\n" +
+            String query = "SELECT id_car,modelYear,info,cost,modelName,mark_name,nameCountry,body_type_name FROM\n" +
+                "(SELECT id_car,modelYear,info,cost,modelName,id_body_type,mark_name,nameCountry FROM\n" +
+                "(SELECT id_car,modelYear,image,info,cost,modelName,id_body_type,mark_name,idCountry FROM \n" +
+                "(SELECT id_car,modelYear,image,info,cost,modelName,id_mark,id_body_type FROM car \n" +
+                "INNER JOIN model ON car.id_model = model.id_model) as join1\n" +
+                "INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n" +
                 "INNER JOIN country ON join2.idCountry = country.idCountry) as join3\n" +
-                "INNER JOIN bodytype ON join3.idBodyType = bodytype.idBodyType WHERE idCar = " + imagesNum; 
+                "INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type WHERE id_car = " + imagesNum; 
             
             ResultSet carSet = database.select(query);
             try{
@@ -868,7 +868,7 @@ public class EntryPoint {
                     markName = carSet.getString("markName");
                     nameCountry = carSet.getString("nameCountry");
                     info = carSet.getString("info");
-                    bodyTypeName = carSet.getString("bodyTypeName");
+                    bodyTypeName = carSet.getString("body_type_name");
                 }
             }catch(SQLException ex){
                 ex.printStackTrace();
@@ -1007,7 +1007,7 @@ public class EntryPoint {
             scrollPane.setBounds(300, 290, 285, 190); 
             add(scrollPane); 
             
-            ResultSet statusSet = database.select("SELECT * FROM renta WHERE idCar = " + imagesNum + " ORDER BY dataEnd, dataPlan DESC LIMIT 1"); 
+            ResultSet statusSet = database.select("SELECT * FROM renta WHERE id_car = " + imagesNum + " ORDER BY dataEnd, dataPlan DESC LIMIT 1"); 
             String statusStr = "Свободно"; 
             try{
                 while(statusSet.next()){
@@ -1336,7 +1336,7 @@ public class EntryPoint {
                                                 if(isHaveRenta){
                                                     planPriceLabel.setText("You cannot take more than one car at a time");
                                                 }else{
-                                                    String insertRenta = "INSERT INTO renta(idClient,idCar,dataStart,dataPlan) VALUES (" + idClient + "," + imagesNum; 
+                                                    String insertRenta = "INSERT INTO renta(idClient,id_car,dataStart,dataPlan) VALUES (" + idClient + "," + imagesNum; 
                                                
                                                     String startDataIn = "'" + yList.get(0) + "-" + yList.get(1) + "-" + yList.get(2) + "'"; 
                                                     String planDataIn = "'" + yList.get(3) + "-" + yList.get(4) + "-" + yList.get(5) + "'"; 
@@ -1447,7 +1447,7 @@ public class EntryPoint {
                 add(actionWithCarButton); 
             }else{ 
                 
-                String queryToDatabase = "SELECT * FROM user WHERE idUser = (SELECT idUser FROM client WHERE idClient = (SELECT idClient FROm renta WHERE idCar = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))"; 
+                String queryToDatabase = "SELECT * FROM user WHERE idUser = (SELECT idUser FROM client WHERE idClient = (SELECT idClient FROm renta WHERE id_car = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))"; 
                 ResultSet checkUserSet = database.select(queryToDatabase); 
                 boolean isTrue = false; 
                 try{
@@ -1532,10 +1532,10 @@ public class EntryPoint {
                                             int currDay = calendar.get(Calendar.DATE); 
                                             
                                             String dataStr = currYear + "-" + currMont + "-" + currDay;
-                                            String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE idCar = " + imagesNum + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');"; 
+                                            String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE id_car = " + imagesNum + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "');"; 
                                             database.update(updateQuery);
                                             
-                                            String idRentaStr = "SELECT idRenta FROM renta WHERE idCar = " + imagesNum + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
+                                            String idRentaStr = "SELECT idRenta FROM renta WHERE id_car = " + imagesNum + " AND idClient = (SELECT idClient FROM client INNER JOIN user ON client.idUser = user.idUser WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
                                             ResultSet rentaSet = database.select(idRentaStr);
                                             int idRentaNum = 0;
                                             try{
@@ -1591,9 +1591,9 @@ public class EntryPoint {
                                     int currMont = calendar.get(Calendar.MONTH); 
                                     int currDay = calendar.get(Calendar.DATE); 
                                     
-                                    String queryToDb = "SELECT login,idCar,join1.idUser,dataStart,dataPlan,dataEnd FROM\n" +
-                                    "(SELECT idCar,idUSer,renta.idClient,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.idClient = client.idClient) as join1\n" +
-                                    "INNER JOIN user ON join1.idUser = user.idUser WHERE login = '" + user.getLogin() + "' AND idCar = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;"; 
+                                    String queryToDb = "SELECT login,id_car,join1.idUser,dataStart,dataPlan,dataEnd FROM\n" +
+                                    "(SELECT id_car,idUSer,renta.idClient,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.idClient = client.idClient) as join1\n" +
+                                    "INNER JOIN user ON join1.idUser = user.idUser WHERE login = '" + user.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;"; 
                                     
                                     ResultSet queryToDbSet = database.select(queryToDb); 
                                     Date startRentaDate = null;
