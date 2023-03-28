@@ -47,20 +47,26 @@ public class EntryPoint {
 
     private static void testHibernate()
     {
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+        SessionFactory sessionFactory = new Configuration()
+            .configure()
+            .buildSessionFactory();
         Session session = sessionFactory.openSession();
 
-        User user = new User("admin", "Welcome01!", true);
+        com.github.donkeyrit.twinkle.dal.models.User user = new com.github.donkeyrit.twinkle.dal.models.User();
+        user.setLogin("admin");
+        String password = sha1("Welcome01!");
+        user.setPassword(password);
+        user.setRole(true);
 
         session.beginTransaction();
-        session.save(user);
+        session.persist(user);
         session.getTransaction().commit();
 
         session.close();
         sessionFactory.close();
     }
     
-    private String sha1(String input){
+    private static String sha1(String input){
         /**
          * Method convert input string into
          * hash with method sha1-1
