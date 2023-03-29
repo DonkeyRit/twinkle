@@ -22,6 +22,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 /**
@@ -52,7 +53,7 @@ public class EntryPoint {
             .buildSessionFactory();
         Session session = sessionFactory.openSession();
 
-        com.github.donkeyrit.twinkle.dal.models.User user = new com.github.donkeyrit.twinkle.dal.models.User();
+        User user = new User();
         user.setLogin("admin");
         String password = sha1("Welcome01!");
         user.setPassword(password);
