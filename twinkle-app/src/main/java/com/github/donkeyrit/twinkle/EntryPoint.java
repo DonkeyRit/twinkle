@@ -18,7 +18,15 @@ import javax.swing.text.*;
  * and open the template in the editor.
  */
 
+import org.hibernate.cfg.Configuration;
+
+import com.github.donkeyrit.twinkle.dal.models.User;
+import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 /**
  *
@@ -26,6 +34,12 @@ import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
  */
 public class EntryPoint {
     
+    // Repositories
+
+    private final UserRepository userRepository; 
+
+    // Repositories
+
     JFrame frame; 
     JPanel panel; 
     DataBase database; 
@@ -36,11 +50,22 @@ public class EntryPoint {
         /**
          * Application start
          */
-        System.out.println(new EntryPoint().sha1("qazxcftrew"));
+        new EntryPoint();
+        System.out.println(EntryPoint.sha1("qazxcftrew"));
         new EntryPoint().initGui();
     }
+
+    public EntryPoint()
+    {
+        EntityManagerFactory sessionFactory = new Configuration()
+            .configure()
+            .buildSessionFactory();
+        EntityManager session = sessionFactory.createEntityManager();
+
+        this.userRepository = new UserRepositoryImpl(session);
+    }
     
-    private String sha1(String input){
+    private static String sha1(String input){
         /**
          * Method convert input string into
          * hash with method sha1-1
@@ -166,35 +191,21 @@ public class EntryPoint {
                     
                     if(!isOne && !isTwo){ 
                         
-                        
-                        
-                        String query = String.format("SELECT id_user as count, role FROM users WHERE login = '%s' AND password = '%s'",shielding(login.getText()),sha1(shielding(password.getText())));
-                        ResultSet userSet = database.select(query); 
-                        boolean isCheckUser = false; 
-                        boolean roleUser = false; 
-                        try{ 
-                            int tempNum = 0; 
-                            while(userSet.next()){ 
-                                tempNum = userSet.getInt("count"); 
-                                roleUser = userSet.getBoolean("role");
-                            }
-                            isCheckUser = (tempNum != 0)? true : false; 
-                            
-                        }catch(SQLException ex){ 
-                            ex.printStackTrace();
-                        }
-                        
-                        if(isCheckUser){ 
-					
+                        String shieldingLogin = shielding(login.getText());
+                        String shieldingPass = sha1(shielding(password.getText()));
+                        Optional<User> currentUser = userRepository.getByLoginAndPassword(shieldingLogin, shieldingPass);
+
+                        if(currentUser.isPresent())
+                        {
                             panel.removeAll(); 
                             panel.revalidate(); 
                             panel.repaint(); 
                             showContent(); 
                             
-                            user = new User(shielding(login.getText()),sha1(password.getText()),roleUser);
-                            
-                        }else{ 
-					
+                            user = currentUser.get();
+                        }
+                        else
+                        {
                             login.setPlaceholder("Incorrect login"); 
                             login.setPhColor(Color.RED); 
                             login.setText(""); 
@@ -291,8 +302,10 @@ public class EntryPoint {
                         rePassword.setPhColor(Color.RED); 
                     }
                     
-                    if(!isOne && !isTwo && !isThree){ 
-                        if(!password.getText().equals(rePassword.getText())){ 
+                    if(!isOne && !isTwo && !isThree)
+                    { 
+                        if(!password.getText().equals(rePassword.getText()))
+                        { 
                             
                             password.setPlaceholder("Password do not match"); 
                             password.setPhColor(Color.RED); 
@@ -301,31 +314,21 @@ public class EntryPoint {
                             rePassword.setPlaceholder("Password do not match"); 
                             rePassword.setPhColor(Color.RED); 
                             rePassword.setText(""); 
-                        }else{
+                        }else
+                        {
                             data.add(shielding(login.getText())); 
-                            String query = String.format("SELECT count(id_user) as count FROMusersWHERE login = '%s'",shielding(login.getText())); 
                             
-                            ResultSet userSet = database.select(query); 
-                            boolean isCheckUser = false; 
-                            try{ 
-                                int tempNum = 0; 
-                                while(userSet.next()){ 
-                                    tempNum = userSet.getInt("count"); 
-                                }
-                                isCheckUser = (tempNum != 0)? true : false; 
-                            
-                            }catch(SQLException ex){
-                                ex.printStackTrace();
-                            } 
-                            
-                            if(isCheckUser){ 
+                            if(userRepository.isUserExist(shielding(login.getText())))
+                            {
                                 login.setPlaceholder("Login already exist"); 
                                 login.setPhColor(Color.RED); 
                                 login.setText("");
-                            }else{
+                            }
+                            else
+                            {
                                 data.add(sha1(shielding(password.getText()))); 
                                 user = new User(login.getText(),sha1(password.getText()),false); 
-                                database.insert("INSERT INTO user(login,password,role) VALUES ('" + data.get(0) + "','" + data.get(1) + "',0)"); 
+                                userRepository.insert(user);
                                 panel.removeAll(); 
                                 panel.revalidate();
                                 panel.repaint(); 
