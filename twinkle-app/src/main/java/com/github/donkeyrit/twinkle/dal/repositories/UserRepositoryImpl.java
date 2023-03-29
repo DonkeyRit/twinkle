@@ -20,23 +20,43 @@ public class UserRepositoryImpl implements UserRepository
     @Override
     public Optional<User> getByLoginAndPassword(String login, String password) 
     {
-        session.getTransaction().begin();
-        Optional<User> result = Optional.empty();
         TypedQuery<User> query = session.createQuery("SELECT u FROM User u WHERE u.login = :login AND u.password = :password", User.class);
         query.setParameter("login", login);
         query.setParameter("password", password);
         try 
         {
             User user = query.getSingleResult();
-            result = Optional.of(user);
+            return Optional.of(user);
         } 
         catch (NoResultException e) 
         {
-
+            return Optional.empty();
         }
-        
-        session.getTransaction().commit();
-        return result;
     }
+
+    @Override
+    public boolean isUserExist(String login) 
+    {
+        TypedQuery<User> query = session.createQuery("SELECT u FROM User u WHERE u.login = :login", User.class);
+        query.setParameter("login", login);
+        try 
+        {
+            User user = query.getSingleResult();
+            return true;
+        } 
+        catch (NoResultException e) 
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public void insert(User user) 
+    {
+        session.getTransaction().begin();
+        session.persist(user);
+        session.getTransaction().commit();
+    }
+
     
 }
