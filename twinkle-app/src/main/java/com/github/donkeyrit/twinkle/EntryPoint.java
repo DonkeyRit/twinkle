@@ -23,6 +23,9 @@ import org.hibernate.cfg.Configuration;
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.panels.Login.LoginPanel;
+import com.github.donkeyrit.twinkle.panels.Login.listeners.LoginActionListener;
+import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 import jakarta.persistence.EntityManager;
@@ -51,7 +54,7 @@ public class EntryPoint {
          * Application start
          */
         new EntryPoint();
-        System.out.println(EntryPoint.sha1("qazxcftrew"));
+        System.out.println(HashManager.generateHash("qazxcftrew"));
         new EntryPoint().initGui();
     }
 
@@ -65,26 +68,6 @@ public class EntryPoint {
         this.userRepository = new UserRepositoryImpl(session);
     }
     
-    private static String sha1(String input){
-        /**
-         * Method convert input string into
-         * hash with method sha1-1
-         */
-        String res = "";
-        try{
-            MessageDigest mDigest = MessageDigest.getInstance("SHA1");
-            byte[] result = mDigest.digest(input.getBytes());
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < result.length; i++) {
-                sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            res = sb.toString();
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-         
-        return res;
-    }
     
     private static String shielding(String input) {
         /**
@@ -126,9 +109,13 @@ public class EntryPoint {
         panel.setBackground(new Color(255,255,255)); 
         panel.setLayout(null); 
        
-        showAuthorization(); 
+        //showAuthorization(); 
 
-        frame.getContentPane().add(BorderLayout.CENTER,panel); 
+        LoginPanel loginPanel = new LoginPanel();
+        ActionListener loginActionListener = new LoginActionListener(userRepository, loginPanel);
+        loginPanel.addLoginActionListener(loginActionListener);
+
+        frame.getContentPane().add(BorderLayout.CENTER, loginPanel); 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         frame.setSize(875,700); 
         frame.setResizable(false);
@@ -192,7 +179,7 @@ public class EntryPoint {
                     if(!isOne && !isTwo){ 
                         
                         String shieldingLogin = shielding(login.getText());
-                        String shieldingPass = sha1(shielding(password.getText()));
+                        String shieldingPass = HashManager.generateHash(shielding(password.getText()));
                         Optional<User> currentUser = userRepository.getByLoginAndPassword(shieldingLogin, shieldingPass);
 
                         if(currentUser.isPresent())
@@ -326,8 +313,8 @@ public class EntryPoint {
                             }
                             else
                             {
-                                data.add(sha1(shielding(password.getText()))); 
-                                user = new User(login.getText(),sha1(password.getText()),false); 
+                                data.add(HashManager.generateHash(shielding(password.getText()))); 
+                                user = new User(login.getText(),HashManager.generateHash(password.getText()),false); 
                                 userRepository.insert(user);
                                 panel.removeAll(); 
                                 panel.revalidate();
@@ -1786,7 +1773,7 @@ public class EntryPoint {
                     }
                     
                     if(!isOne && !isTwo && !isThree){ 
-                        if(sha1(fieldPass.get(0).getText()).equals(user.getPassword())){
+                        if(HashManager.generateHash(fieldPass.get(0).getText()).equals(user.getPassword())){
                             if(fieldPass.get(1).getText().equals(fieldPass.get(2).getText())){
                                 if(fieldPass.get(0).getText().equals(fieldPass.get(1).getText())){
                                     fieldPass.get(0).setPlaceholder("Old and new match"); 
@@ -1797,9 +1784,9 @@ public class EntryPoint {
                                     fieldPass.get(1).setPhColor(Color.RED); 
                                     fieldPass.get(1).setText("");
                                 }else{                                 
-                                    String updateUserQuery = "UPDATEusersSET password = '" + sha1(fieldPass.get(1).getText()) + "'" + " WHERE login = '" + user.getLogin() + "'";
+                                    String updateUserQuery = "UPDATEusersSET password = '" + HashManager.generateHash(fieldPass.get(1).getText()) + "'" + " WHERE login = '" + user.getLogin() + "'";
                                     database.update(updateUserQuery);
-                                    user.setPassword(sha1(fieldPass.get(1).getText()));
+                                    user.setPassword(HashManager.generateHash(fieldPass.get(1).getText()));
                                     
                                     for(int i = 0; i < fieldPass.size(); i++){
                                         fieldPass.get(i).setText("");
