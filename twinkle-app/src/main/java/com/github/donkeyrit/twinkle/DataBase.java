@@ -29,7 +29,7 @@ public class DataBase
         ResultSet rs = null;
         try 
         {
-            Statement s = connect.createStatement();
+            Statement s = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = s.executeQuery(query);
         } 
         catch (SQLException e) 
