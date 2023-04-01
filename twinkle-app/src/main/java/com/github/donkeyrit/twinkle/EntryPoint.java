@@ -1,6 +1,5 @@
 package com.github.donkeyrit.twinkle;
 
-import java.security.MessageDigest;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -305,7 +304,7 @@ public class EntryPoint {
                         {
                             data.add(shielding(login.getText())); 
                             
-                            if(userRepository.isUserExist(shielding(login.getText())))
+                            if(!userRepository.isUserExist(shielding(login.getText())))
                             {
                                 login.setPlaceholder("Login already exist"); 
                                 login.setPhColor(Color.RED); 
