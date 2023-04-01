@@ -1,6 +1,7 @@
 package com.github.donkeyrit.twinkle.panels.Signup.listeners;
 
 import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.panels.Signup.SignupPanel;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.dal.models.User;
@@ -12,11 +13,13 @@ public class SignupActionListener implements ActionListener
 {
     private final UserRepository userRepository;
     private final SignupPanel panel;
+    private final MainFrame frame;
 
-    public SignupActionListener(UserRepository userRepository, SignupPanel panel) 
+    public SignupActionListener(UserRepository userRepository, SignupPanel panel, MainFrame mainFrame) 
     {
         this.userRepository = userRepository;
         this.panel = panel;
+        this.frame = mainFrame;
     }
 
     @Override
@@ -48,6 +51,6 @@ public class SignupActionListener implements ActionListener
         User user = new User(username, passwordHash, false); 
         userRepository.insert(user);
 
-        panel.setErorr("Registration successful!");
+        frame.showContent();
     }
 }

@@ -4,25 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 import java.util.*;
 import java.util.Date;
 import javax.swing.border.*;
 import javax.swing.table.*;
 import javax.swing.text.*;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import org.hibernate.cfg.Configuration;
 
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
+import com.github.donkeyrit.twinkle.panels.Content.ContentCompositePanel;
 import com.github.donkeyrit.twinkle.panels.Login.LoginPanel;
 import com.github.donkeyrit.twinkle.panels.Login.listeners.LoginActionListener;
 import com.github.donkeyrit.twinkle.panels.Signup.SignupPanel;
@@ -40,16 +33,14 @@ import jakarta.persistence.EntityManagerFactory;
 public class EntryPoint {
     
     // Repositories
-
     private final UserRepository userRepository; 
 
-    // Repositories
 
-    JFrame frame; 
-    JPanel panel; 
-    DataBase database; 
+    private MainFrame mainFrame;
+    private JPanel panel; 
+    private DataBase database; 
     private int avatarNumber = 0; 
-    User user; 
+    private User user; 
     
     public static void main(String[] args){
         /**
@@ -69,81 +60,32 @@ public class EntryPoint {
         this.userRepository = new UserRepositoryImpl(session);
     }
     
-    
-    private static String shielding(String input) {
-        /**
-         * Method escaped input string from special characters
-         * which may protect from sql injection attasks
-         */
-        if (input == null || input.isEmpty()) {
-            return "";
-        }
-        int len = input.length();
-        final StringBuilder result = new StringBuilder(len + len / 4);
-        final StringCharacterIterator iterator = new StringCharacterIterator(input);
-        char ch = iterator.current();
-        while (ch != CharacterIterator.DONE) {
-            if (ch == '\n') {
-                result.append("\\n");
-            } else if (ch == '\r') {
-                result.append("\\r");
-            } else if (ch == '\'') {
-                result.append("\\\'");
-            } else if (ch == '"') {
-                result.append("\\\"");
-            } else {
-                result.append(ch);
-            }
-            ch = iterator.next();
-        }
-        return result.toString();
-    }
-    
     private void initGui()
     {
         database = new DataBase(); 
-        MainFrame mainFrame = new MainFrame("Rent car");
+        this.mainFrame = new MainFrame("Rent car");
 
         LoginPanel loginPanel = new LoginPanel();
-        ActionListener loginActionListener = new LoginActionListener(userRepository, loginPanel);
+        ActionListener loginActionListener = new LoginActionListener(userRepository, loginPanel, mainFrame);
         loginPanel.addLoginActionListener(loginActionListener);
-        loginPanel.addSignupActionListener(e -> mainFrame.SetPanel("Signup"));
-        mainFrame.addPanel("Login", loginPanel);
+        loginPanel.addSignupActionListener(e -> this.mainFrame.showSignupPanel());
+        this.mainFrame.setLoginPanel(loginPanel);
 
         SignupPanel sigupPanel = new SignupPanel();
-        ActionListener sigupActionListener = new SignupActionListener(userRepository, sigupPanel);
+        ActionListener sigupActionListener = new SignupActionListener(userRepository, sigupPanel, mainFrame);
         sigupPanel.addSignupActionListener(sigupActionListener);
-        sigupPanel.addLoginActionListener(e -> mainFrame.SetPanel("Login"));
-        mainFrame.addPanel("Signup", sigupPanel);
+        sigupPanel.addLoginActionListener(e -> this.mainFrame.showLoginPanel());
+        this.mainFrame.setSignupPanel(sigupPanel);
 
-        mainFrame.setVisible(true);
+        ContentCompositePanel contentPanel = new ContentCompositePanel(this);
+        this.mainFrame.setContentCompositePanel(contentPanel);
+        panel = contentPanel;
 
-        /**
-         * Method configure initial state of panel
-         */ 
-        // frame = new JFrame();
-        
-    
-        // panel = new JPanel(); 
-        // panel.setBackground(new Color(255,255,255)); 
-        // panel.setLayout(null); 
-       
-        //showAuthorization(); 
-
-        // frame.getContentPane().add(BorderLayout.CENTER, loginPanel); 
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        // frame.setSize(875,700); 
-        // frame.setResizable(false);
-        // frame.setVisible(true); 
+        this.mainFrame.setVisible(true);
     }
-    
-    private void showAuthorization(){ 
-        JPanel enterPanel = new EnterPanel(); 
-        enterPanel.setBounds(0,0,875,700); 
-        panel.add(enterPanel); 
-    }
-    
-    private void showContent(){
+
+    private void showContent()
+    {
         JPanel header = new HeaderPanel(); 
         header.setBounds(0,0,875,80); 
         panel.add(header); 
@@ -156,233 +98,11 @@ public class EntryPoint {
         content.setBounds(250,100,605,550); 
         panel.add(content); 
     }
-    
-    private class EnterPanel extends JPanel{ 
-        
-        public EnterPanel() {
-            setLayout(null); 
-            
-            JCTextField login = new JCTextField(); 
-            login.setPlaceholder("Enter login"); 
-            login.setBounds(358, 240, 170, 30); 
-            add(login); 
-            
-            JPaswordField password = new JPaswordField(); 
-            password.setPlaceholder("Enter password"); 
-            password.setBounds(358, 280, 170, 30); 
-            add(password); 
-            
-            JButton butSignIn = new JButton("Sign in"); 
-            butSignIn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    boolean isOne = login.getText().isEmpty(); 
-                    boolean isTwo = password.getText().isEmpty(); 
-                    
-                    if(isOne){ 
-                        login.setPlaceholder("Please, enter login"); 
-                        login.setPhColor(Color.RED); 
-                    }
-                    if(isTwo){ 
-                        password.setPlaceholder("Please, enter password"); 
-                        password.setPhColor(Color.RED);
-                    }
-                    
-                    panel.revalidate(); 
-                    panel.repaint(); 
-                    
-                    if(!isOne && !isTwo){ 
-                        
-                        String shieldingLogin = shielding(login.getText());
-                        String shieldingPass = HashManager.generateHash(shielding(password.getText()));
-                        Optional<User> currentUser = userRepository.getByLoginAndPassword(shieldingLogin, shieldingPass);
 
-                        if(currentUser.isPresent())
-                        {
-                            panel.removeAll(); 
-                            panel.revalidate(); 
-                            panel.repaint(); 
-                            showContent(); 
-                            
-                            user = currentUser.get();
-                        }
-                        else
-                        {
-                            login.setPlaceholder("Incorrect login"); 
-                            login.setPhColor(Color.RED); 
-                            login.setText(""); 
-						
-                            password.setPlaceholder("Incorrect password"); 
-                            password.setPhColor(Color.RED);
-                            password.setText(""); 
-                        }
-                    }
-                    revalidate(); 
-                    repaint(); 
-                }
-            });
-            butSignIn.setBounds(358,320,80,20); 
-            add(butSignIn); 
-            
-            JButton butLogIn = new JButton("Log in"); 
-            butLogIn.setBounds(448,320,80,20); 
-            butLogIn.addActionListener(new ActionListener(){ 
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    panel.removeAll(); 
-                    panel.revalidate();
-                    panel.repaint(); 
-                    JPanel registrationPanel = new RegistrationPanel();
-                    registrationPanel.setBounds(0, 0, 875, 700); 
-                    panel.add(registrationPanel); 
-                }
-            });
-            add(butLogIn); 
-        }
-        
-        @Override
-        public void paintComponent(Graphics g){
-            Image image = AssetsRetriever.retrieveAssetFromResources("assets/background/enter.jpg"); 
-            g.drawImage(image,0,0,this); 
-            GradientPaint gp = new GradientPaint(0, 0, Color.RED,120, 120, Color.BLUE, true); 
-            Graphics2D g2 = (Graphics2D)g;  
-            g2.setPaint(gp); 
-            g2.fillRoundRect(338, 230, 208, 130, 30, 15); 
-				  
-            int random = (int) (Math.random() * 6 + 1); 
-            if(avatarNumber == 0){ 
-                avatarNumber = random; 
-            }		  
-            Image avatar = new ImageIcon("assets/avatar/" + avatarNumber + ".png").getImage(); 
-            g.drawImage(avatar,380,100,this); 
-        }
-        
-    }
     
-    private class RegistrationPanel extends JPanel{
-        
-        public RegistrationPanel() {
-            setLayout(null); 
-            
-            JCTextField login = new JCTextField(); 
-            login.setPlaceholder("Enter login"); 
-            login.setBounds(358, 240, 170, 30); 
-            add(login); 
-				
-            JPaswordField password = new JPaswordField(); 
-            password.setPlaceholder("Enter password"); 
-            password.setBounds(358, 280, 170, 30); 
-            add(password); 
-				
-            JPaswordField rePassword = new JPaswordField(); 
-            rePassword.setPlaceholder("Repeat password"); 
-            rePassword.setBounds(358, 320, 170, 30); 
-            add(rePassword); 
-            
-            JButton regButton = new JButton("Log in"); 
-            regButton.setBounds(358, 360, 135, 30);
-            regButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    ArrayList<String> data = new ArrayList<String>(); 
-                    boolean isOne = login.getText().isEmpty(); 
-                    boolean isTwo = password.getText().isEmpty(); 
-                    boolean isThree = rePassword.getText().isEmpty(); 
-                    
-                    if(isOne){
-                        login.setPlaceholder("Please, enter login"); 
-                        login.setPhColor(Color.RED); 
-                    }
-						
-                    if(isTwo){
-                        password.setPlaceholder("Please, enter password"); 
-                        password.setPhColor(Color.RED); 
-                    }
-						
-                    if(isThree){
-                        rePassword.setPlaceholder("Please, repeat password"); 
-                        rePassword.setPhColor(Color.RED); 
-                    }
-                    
-                    if(!isOne && !isTwo && !isThree)
-                    { 
-                        if(!password.getText().equals(rePassword.getText()))
-                        { 
-                            
-                            password.setPlaceholder("Password do not match"); 
-                            password.setPhColor(Color.RED); 
-                            password.setText(""); 
-								
-                            rePassword.setPlaceholder("Password do not match"); 
-                            rePassword.setPhColor(Color.RED); 
-                            rePassword.setText(""); 
-                        }else
-                        {
-                            data.add(shielding(login.getText())); 
-                            
-                            if(!userRepository.isUserExist(shielding(login.getText())))
-                            {
-                                login.setPlaceholder("Login already exist"); 
-                                login.setPhColor(Color.RED); 
-                                login.setText("");
-                            }
-                            else
-                            {
-                                data.add(HashManager.generateHash(shielding(password.getText()))); 
-                                user = new User(login.getText(),HashManager.generateHash(password.getText()),false); 
-                                userRepository.insert(user);
-                                panel.removeAll(); 
-                                panel.revalidate();
-                                panel.repaint(); 
-                                showContent(); 
-                            }
-                        }
-                    }
-                    
-                    panel.revalidate(); 
-                    panel.repaint(); 
-                }
-            });
-            add(regButton); 
-            
-            JButton backButton = new JButton(); 
-            backButton.setBounds(500, 360, 28, 30);
-            ImageIcon icon = new ImageIcon("assets/buttons/return.png"); 
-            backButton.setIcon(icon); 
-            backButton.setHorizontalTextPosition(SwingConstants.LEFT);
-            backButton.addActionListener(new ActionListener(){  
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    panel.removeAll(); 
-                    panel.revalidate();
-                    panel.repaint(); 
-                    showAuthorization(); 
-                }
-            });
-            add(backButton); 
-        }
-        
-        @Override
-        public void paintComponent(Graphics g){
-            Image image = AssetsRetriever.retrieveAssetFromResources("assets/background/enter.jpg"); 
-            g.drawImage(image,0,0,this); 
-            GradientPaint gp = new GradientPaint(0, 0, Color.RED,120, 120, Color.BLUE, true); 
-            Graphics2D g2 = (Graphics2D)g;  
-            g2.setPaint(gp); 
-            g2.fillRoundRect(338, 230, 208, 180, 30, 15); 
-				  
-            int random = (int) (Math.random() * 6 + 1); 
-            if(avatarNumber == 0){ 
-                avatarNumber = random; 
-            }
-				  
-            Image avatar = AssetsRetriever.retrieveAssetFromResources("assets/avatar/" + avatarNumber + ".png"); 
-            g.drawImage(avatar,380,100,this); 
-        }
-    }
-    
-    private class HeaderPanel extends JPanel{       
-        HeaderPanel(){
+    public class HeaderPanel extends JPanel{       
+        public HeaderPanel()
+        {
             this.setLayout(null);
             JButton logo = new JButton(); 
             logo.addActionListener(new ActionListener(){
@@ -444,7 +164,7 @@ public class EntryPoint {
                 public void actionPerformed(ActionEvent e) {
                     user = null;
                     panel.removeAll(); 
-                    showAuthorization(); 
+                    mainFrame.showLoginPanel();
                     panel.revalidate();
                     panel.repaint(); 
                 }    
@@ -459,8 +179,8 @@ public class EntryPoint {
         }
     }
     
-    private class FilterPanel extends JPanel{ 
-        FilterPanel(){
+    public class FilterPanel extends JPanel{ 
+        public FilterPanel(){
             setLayout(null); 
             
             JLabel mainLabel = new JLabel("Применить фильтр"); 
@@ -683,12 +403,12 @@ public class EntryPoint {
         }
     }
     
-    private class ContentPanel extends JPanel{ 
+    public class ContentPanel extends JPanel{ 
         int numOfPage = 1; 
         int startBut = 1; 
         String conditionPanel = ""; 
         
-        ContentPanel(String condition, int ... args){
+        public ContentPanel(String condition, int ... args){
             setLayout(null); 
             conditionPanel = condition; 
             

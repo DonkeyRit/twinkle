@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.util.Optional;
 
 import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.panels.Login.LoginPanel;
 
@@ -12,11 +13,13 @@ public class LoginActionListener implements ActionListener
 {
     private UserRepository userRepository;
     private LoginPanel panel;
+    private MainFrame frame;
 
-    public LoginActionListener(UserRepository userRepository, LoginPanel panel)
+    public LoginActionListener(UserRepository userRepository, LoginPanel panel, MainFrame mainFrame)
     {
         this.userRepository = userRepository;
         this.panel = panel;
+        this.frame = mainFrame;
     }
 
     @Override
@@ -38,6 +41,6 @@ public class LoginActionListener implements ActionListener
             return;
         }
         
-        this.panel.setErorr("Success");
+        frame.showContent();
     }
 }

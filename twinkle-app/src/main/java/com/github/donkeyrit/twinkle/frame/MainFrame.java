@@ -1,6 +1,11 @@
 package com.github.donkeyrit.twinkle.frame;
 
 import javax.swing.*;
+
+import com.github.donkeyrit.twinkle.panels.Content.ContentCompositePanel;
+import com.github.donkeyrit.twinkle.panels.Login.LoginPanel;
+import com.github.donkeyrit.twinkle.panels.Signup.SignupPanel;
+
 import java.awt.*;
 
 public class MainFrame extends JFrame 
@@ -25,12 +30,42 @@ public class MainFrame extends JFrame
         add(container, BorderLayout.CENTER);
     }
 
-    public void SetPanel(String key)
+    public void setLoginPanel(LoginPanel loginPanel)
+    {
+        addPanel("login", loginPanel);
+    }
+
+    public void showLoginPanel()
+    {
+        setPanel("login");
+    }
+
+    public void setSignupPanel(SignupPanel signupPanel)
+    {
+        addPanel("signup", signupPanel);
+    }
+
+    public void showSignupPanel()
+    {
+        setPanel("signup");
+    }
+
+    public void setContentCompositePanel(ContentCompositePanel contentCompositePanel)
+    {
+        addPanel("content", contentCompositePanel);
+    }
+
+    public void showContent()
+    {
+        setPanel("content");
+    }
+
+    private void setPanel(String key)
     {
         this.cardLayout.show(container, key);
     }
 
-    public void addPanel(String key, JPanel panel)
+    private void addPanel(String key, JPanel panel)
     {
         container.add(panel, key);
     }
