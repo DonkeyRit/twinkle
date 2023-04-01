@@ -39,7 +39,7 @@ public class EntryPoint {
     private MainFrame mainFrame;
     private JPanel panel; 
     private DataBase database; 
-    private int avatarNumber = 0; 
+    private int avatarNumber = 1; 
     private User user; 
     
     public static void main(String[] args){
@@ -116,7 +116,7 @@ public class EntryPoint {
             });
             
             logo.setBounds(30, 10, 60, 60); 
-            ImageIcon icon = new ImageIcon("assets/logo/logo.png"); 
+            ImageIcon icon = AssetsRetriever.retrieveAssetImageIconFromResources("assets/logo/logo.png"); 
             logo.setIcon(icon);  
             logo.setHorizontalTextPosition(SwingConstants.LEFT);
             logo.setBorderPainted(false); 
@@ -142,7 +142,7 @@ public class EntryPoint {
                 }
             });
             avatar.setBounds(725, 10, 60, 60); 
-            ImageIcon iconAvatar = new ImageIcon("assets/avatar/mini_avatar/" + avatarNumber + ".png"); 
+            ImageIcon iconAvatar = AssetsRetriever.retrieveAssetImageIconFromResources("assets/avatar/mini_avatar/" + avatarNumber + ".png"); 
             avatar.setIcon(iconAvatar); 
             avatar.setHorizontalTextPosition(SwingConstants.LEFT);
             avatar.setBorderPainted(false);
@@ -153,7 +153,7 @@ public class EntryPoint {
 
             JButton exit = new JButton(); 
             exit.setBounds(795,10,60,60); 
-            ImageIcon iconExit = new ImageIcon("assets/buttons/exit.png"); 
+            ImageIcon iconExit = AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/exit.png"); 
             exit.setIcon(iconExit); 
             exit.setHorizontalTextPosition(SwingConstants.LEFT);
             exit.setBorderPainted(false);
@@ -420,7 +420,7 @@ public class EntryPoint {
             
             JButton reload = new JButton(); 
             reload.setBounds(568, 10,16,16); 
-            ImageIcon iconExit = new ImageIcon("assets/buttons/reload.png"); 
+            ImageIcon iconExit = AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/reload.png"); 
             reload.setIcon(iconExit); 
             reload.setHorizontalTextPosition(SwingConstants.LEFT);
             reload.addActionListener(new ActionListener(){ 
@@ -508,7 +508,7 @@ public class EntryPoint {
             buttonBox.setBounds(205, 520, 400, 30); 
             
             if(startBut > 5){ 
-                JButton backBut = new JButton(new ImageIcon("assets/buttons/back.png")); 
+                JButton backBut = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/back.png")); 
                 backBut.addActionListener(new NextBackListener()); 
                 
                 
@@ -528,7 +528,7 @@ public class EntryPoint {
             }
             
             if(m != (num + 1)){ 
-                JButton nextBut = new JButton(new ImageIcon("assets/buttons/next.png")); 
+                JButton nextBut = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/next.png")); 
                 nextBut.addActionListener(new NextBackListener()); 
                 
                 
@@ -663,13 +663,13 @@ public class EntryPoint {
         
         @Override
         public void paintComponent(Graphics g){
-            Image image = AssetsRetriever.retrieveAssetFromResources("assets/cars/min/" + imagesNum + ".png"); 
+            Image image = AssetsRetriever.retrieveAssetImageFromResources("assets/cars/min/" + imagesNum + ".png"); 
             g.drawImage(image,10,10,this); 
             
-            Image country = AssetsRetriever.retrieveAssetFromResources("assets/flags/" + nameCountry + ".png"); 
+            Image country = AssetsRetriever.retrieveAssetImageFromResources("assets/flags/" + nameCountry + ".png"); 
             g.drawImage(country,425,0,this);
             
-            Image statusImage = AssetsRetriever.retrieveAssetFromResources("assets/status/" + status + ".png"); 
+            Image statusImage = AssetsRetriever.retrieveAssetImageFromResources("assets/status/" + status + ".png"); 
             g.drawImage(statusImage, 10, 10, this);
         }        
     }
@@ -763,7 +763,7 @@ public class EntryPoint {
                 add(temp); 
             }
             
-            JButton reloadButton = new JButton(new ImageIcon("assets/buttons/reload.png")); 
+            JButton reloadButton = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/reload.png")); 
             reloadButton.setBounds(550,0,16,16); 
             reloadButton.addActionListener(new ActionListener() {
                 @Override
@@ -788,7 +788,7 @@ public class EntryPoint {
             });
             add(reloadButton);
             
-            JButton returnButton = new JButton(new ImageIcon("assets/buttons/return.png"));
+            JButton returnButton = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/return.png"));
             returnButton.setBounds(570,0,16,16);
             returnButton.addActionListener(new ActionListener(){
                 @Override
@@ -1386,7 +1386,7 @@ public class EntryPoint {
         public void paintComponent(Graphics g){
             g.setColor(new Color(237,237,237)); 
             g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(),30,25); 
-            Image image = AssetsRetriever.retrieveAssetFromResources("assets/cars/" + imagesNum + ".png"); 
+            Image image = AssetsRetriever.retrieveAssetImageFromResources("assets/cars/" + imagesNum + ".png"); 
             g.drawImage(image,30,10,this); 
             g.setColor(new Color(255,255,255));
             g.fillRect(20, 290, 260, 190);
@@ -1560,7 +1560,7 @@ public class EntryPoint {
             g.setColor(new Color(237,237,237)); 
             g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),30,25); 
             
-            Image image = AssetsRetriever.retrieveAssetFromResources("assets/background/page.png"); 
+            Image image = AssetsRetriever.retrieveAssetImageFromResources("assets/background/page.png"); 
             g.drawImage(image,50,250,this); 
         }
     }
@@ -1669,7 +1669,7 @@ public class EntryPoint {
             g.setColor(new Color(237,237,237)); 
             g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),30,25); 
             
-            Image image = AssetsRetriever.retrieveAssetFromResources("assets/background/fill_data.png"); 
+            Image image = AssetsRetriever.retrieveAssetImageFromResources("assets/background/fill_data.png"); 
             g.drawImage(image,50,310,this); 
         }
     }
