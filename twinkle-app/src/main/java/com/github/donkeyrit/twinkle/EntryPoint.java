@@ -560,11 +560,11 @@ public class EntryPoint {
         CarPanel(int num){
             
             
-            ResultSet statusSet = database.select("SELECT * FROM renta WHERE id_car = " + num + " ORDER BY dataEnd, dataPlan DESC LIMIT 1"); 
+            ResultSet statusSet = database.select("SELECT * FROM rent WHERE id_car = " + num + " ORDER BY end_date, plan_date DESC LIMIT 1"); 
             status = "open"; 
             try{
                 while(statusSet.next()){
-                    Date rentDate = statusSet.getDate("dataEnd"); 
+                    Date rentDate = statusSet.getDate("end_date"); 
                     if(rentDate == null){ 
                         status = "lock"; 
                     }
@@ -590,7 +590,7 @@ public class EntryPoint {
                     modelYear = carSet.getDate("model_year"); 
                     cost = carSet.getDouble("cost");
                     modelName = carSet.getString("model_name");
-                    markName = carSet.getString("markName");
+                    markName = carSet.getString("mark_name");
                     nameCountry = carSet.getString("country_name");
                     info = carSet.getString("info");
                     bodyTypeName = carSet.getString("body_type_name");
@@ -732,11 +732,11 @@ public class EntryPoint {
             scrollPane.setBounds(300, 290, 285, 190); 
             add(scrollPane); 
             
-            ResultSet statusSet = database.select("SELECT * FROM renta WHERE id_car = " + imagesNum + " ORDER BY dataEnd, dataPlan DESC LIMIT 1"); 
+            ResultSet statusSet = database.select("SELECT * FROM rent WHERE id_car = " + imagesNum + " ORDER BY end_date, plan_date DESC LIMIT 1"); 
             String statusStr = "Свободно"; 
             try{
                 while(statusSet.next()){
-                    Date rentDate = statusSet.getDate("dataEnd"); 
+                    Date rentDate = statusSet.getDate("end_date"); 
                     if(rentDate == null){ 
                         statusStr = "Busy"; 
                     }
@@ -1043,13 +1043,13 @@ public class EntryPoint {
                                                 planPriceLabel.setText("Please, fill data");
                                             }else{
                                                 
-                                                String queryToDB = "SELECT * FROM renta where id_client = (SELECT id_client FROM client WHERE id_user = (SELECT id_user FROM users WHERE login = '" + user.getLogin() + "')) ORDER BY dataEnd, dataPlan DESC LIMIT 1";
+                                                String queryToDB = "SELECT * FROM rent where id_client = (SELECT id_client FROM client WHERE id_user = (SELECT id_user FROM users WHERE login = '" + user.getLogin() + "')) ORDER BY end_date, plan_date DESC LIMIT 1";
                                                 ResultSet checkRentaSet = database.select(queryToDB); 
                                                 System.out.println(queryToDB);
                                                 boolean isHaveRenta = false;
                                                 try{
                                                     while(checkRentaSet.next()){
-                                                        Date rentDate = checkRentaSet.getDate("dataEnd");
+                                                        Date rentDate = checkRentaSet.getDate("end_date");
                                                         if(rentDate == null){ 
                                                             isHaveRenta = true;; 
                                                         }
@@ -1061,7 +1061,7 @@ public class EntryPoint {
                                                 if(isHaveRenta){
                                                     planPriceLabel.setText("You cannot take more than one car at a time");
                                                 }else{
-                                                    String insertRenta = "INSERT INTO renta(id_client,id_car,dataStart,dataPlan) VALUES (" + idClient + "," + imagesNum; 
+                                                    String insertRenta = "INSERT INTO rent(id_client,id_car,start_date,plan_date) VALUES (" + idClient + "," + imagesNum; 
                                                
                                                     String startDataIn = "'" + yList.get(0) + "-" + yList.get(1) + "-" + yList.get(2) + "'"; 
                                                     String planDataIn = "'" + yList.get(3) + "-" + yList.get(4) + "-" + yList.get(5) + "'"; 
@@ -1172,7 +1172,7 @@ public class EntryPoint {
                 add(actionWithCarButton); 
             }else{ 
                 
-                String queryToDatabase = "SELECT * FROM users WHERE id_user = (SELECT id_user FROM client WHERE id_client = (SELECT id_client FROm renta WHERE id_car = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1))"; 
+                String queryToDatabase = "SELECT * FROM users WHERE id_user = (SELECT id_user FROM client WHERE id_client = (SELECT id_client FROm rent WHERE id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1))"; 
                 ResultSet checkUserSet = database.select(queryToDatabase); 
                 boolean isTrue = false; 
                 try{
@@ -1257,10 +1257,10 @@ public class EntryPoint {
                                             int currDay = calendar.get(Calendar.DATE); 
                                             
                                             String dataStr = currYear + "-" + currMont + "-" + currDay;
-                                            String updateQuery = "UPDATE renta SET dataEnd = '" + dataStr + "' WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOIN users ON client.id_user = user.id_user WHERE login = '" + user.getLogin() + "');"; 
+                                            String updateQuery = "UPDATE rent SET end_date = '" + dataStr + "' WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOIN users ON client.id_user = user.id_user WHERE login = '" + user.getLogin() + "');"; 
                                             database.update(updateQuery);
                                             
-                                            String idRentaStr = "SELECT id_rent FROM renta WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOINusersON client.id_user = user.id_user WHERE login = '" + user.getLogin() + "') AND dataEnd = '" + dataStr + "'";
+                                            String idRentaStr = "SELECT id_rent FROM rent WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOINusersON client.id_user = user.id_user WHERE login = '" + user.getLogin() + "') AND end_date = '" + dataStr + "'";
                                             ResultSet rentaSet = database.select(idRentaStr);
                                             int idRentaNum = 0;
                                             try{
@@ -1316,17 +1316,17 @@ public class EntryPoint {
                                     int currMont = calendar.get(Calendar.MONTH); 
                                     int currDay = calendar.get(Calendar.DATE); 
                                     
-                                    String queryToDb = "SELECT login,id_car,join1.id_user,dataStart,dataPlan,dataEnd FROM\n" +
-                                    "(SELECT id_car,id_user,renta.id_client,dataStart,dataPlan,dataEnd FROM renta INNER JOIN client ON renta.id_client = client.id_client) as join1\n" +
-                                    "INNER JOINusersON join1.id_user = user.id_user WHERE login = '" + user.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY dataEnd,dataPlan DESC LIMIT 1;"; 
+                                    String queryToDb = "SELECT login,id_car,join1.id_user,start_date,plan_date,end_date FROM\n" +
+                                    "(SELECT id_car,id_user,rent.id_client,start_date,plan_date,end_date FROM rent INNER JOIN client ON rent.id_client = client.id_client) as join1\n" +
+                                    "INNER JOINusersON join1.id_user = user.id_user WHERE login = '" + user.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1;"; 
                                     
                                     ResultSet queryToDbSet = database.select(queryToDb); 
                                     Date startRentaDate = null;
                                     Date dataRentaPlan = null;
                                     try{
                                         while(queryToDbSet.next()){
-                                            startRentaDate = queryToDbSet.getDate("dataStart");
-                                            dataRentaPlan = queryToDbSet.getDate("dataPlan");
+                                            startRentaDate = queryToDbSet.getDate("start_date");
+                                            dataRentaPlan = queryToDbSet.getDate("plan_date");
                                         }
                                     }catch(SQLException ex){
                                         ex.printStackTrace();
