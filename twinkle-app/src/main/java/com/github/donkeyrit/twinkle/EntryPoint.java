@@ -22,8 +22,11 @@ import org.hibernate.cfg.Configuration;
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.panels.Login.LoginPanel;
 import com.github.donkeyrit.twinkle.panels.Login.listeners.LoginActionListener;
+import com.github.donkeyrit.twinkle.panels.Signup.SignupPanel;
+import com.github.donkeyrit.twinkle.panels.Signup.listeners.SignupActionListener;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
@@ -52,7 +55,6 @@ public class EntryPoint {
         /**
          * Application start
          */
-        new EntryPoint();
         System.out.println(HashManager.generateHash("qazxcftrew"));
         new EntryPoint().initGui();
     }
@@ -97,28 +99,42 @@ public class EntryPoint {
         return result.toString();
     }
     
-    private void initGui(){
-        /**
-         * Method configure initial state of panel
-         */ 
-        frame = new JFrame("Rent car");
+    private void initGui()
+    {
         database = new DataBase(); 
-        
-        panel = new JPanel(); 
-        panel.setBackground(new Color(255,255,255)); 
-        panel.setLayout(null); 
-       
-        //showAuthorization(); 
+        MainFrame mainFrame = new MainFrame("Rent car");
 
         LoginPanel loginPanel = new LoginPanel();
         ActionListener loginActionListener = new LoginActionListener(userRepository, loginPanel);
         loginPanel.addLoginActionListener(loginActionListener);
+        loginPanel.addSignupActionListener(e -> mainFrame.SetPanel("Signup"));
+        mainFrame.addPanel("Login", loginPanel);
 
-        frame.getContentPane().add(BorderLayout.CENTER, loginPanel); 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        frame.setSize(875,700); 
-        frame.setResizable(false);
-        frame.setVisible(true); 
+        SignupPanel sigupPanel = new SignupPanel();
+        ActionListener sigupActionListener = new SignupActionListener(userRepository, sigupPanel);
+        sigupPanel.addSignupActionListener(sigupActionListener);
+        sigupPanel.addLoginActionListener(e -> mainFrame.SetPanel("Login"));
+        mainFrame.addPanel("Signup", sigupPanel);
+
+        mainFrame.setVisible(true);
+
+        /**
+         * Method configure initial state of panel
+         */ 
+        // frame = new JFrame();
+        
+    
+        // panel = new JPanel(); 
+        // panel.setBackground(new Color(255,255,255)); 
+        // panel.setLayout(null); 
+       
+        //showAuthorization(); 
+
+        // frame.getContentPane().add(BorderLayout.CENTER, loginPanel); 
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+        // frame.setSize(875,700); 
+        // frame.setResizable(false);
+        // frame.setVisible(true); 
     }
     
     private void showAuthorization(){ 

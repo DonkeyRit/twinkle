@@ -12,6 +12,7 @@ public class SignupPanel extends JPanel
     private JButton registerButton;
     private JButton loginButton;
     private JLabel errorLabel;
+    
 
     public SignupPanel() 
     {
