@@ -7,12 +7,17 @@ import java.net.URL;
 
 public class AssetsRetriever 
 {
-    public static Image retrieveAssetFromResources(String relativePath)
+    public static Image retrieveAssetImageFromResources(String relativePath)
+    {
+        return retrieveAssetImageIconFromResources(relativePath).getImage();
+    }
+
+    public static ImageIcon retrieveAssetImageIconFromResources(String relativePath)
     {
         URL iconUrl = AssetsRetriever.class
             .getClassLoader()
             .getResource(relativePath);
             
-        return new ImageIcon(iconUrl).getImage();
+        return new ImageIcon(iconUrl);
     }
 }
