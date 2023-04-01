@@ -28,6 +28,7 @@ public class LoginPanel extends JPanel
         // Create title label
         JLabel titleLabel = new JLabel("Login");
         titleLabel.setFont(new Font("Helvetica Neue", Font.BOLD, 24));
+        titleLabel.setForeground(new Color(255, 255, 255, 150)); 
         gbc.gridwidth = 2;
         add(titleLabel, gbc);
         
