@@ -41,6 +41,7 @@ public class SignupActionListener implements ActionListener
         if(!userRepository.isUserExist(username))
         {
             panel.setErorr("Login already exist");
+            return;
         }
         
         String passwordHash = HashManager.generateHash(password);

@@ -1,11 +1,11 @@
 package com.github.donkeyrit.twinkle.panels.Login;
 
+import com.github.donkeyrit.twinkle.security.HashManager;
+import com.github.donkeyrit.twinkle.styles.Colors;
+
 import java.awt.event.ActionListener;
 import java.awt.*;
-
 import javax.swing.*;
-
-import com.github.donkeyrit.twinkle.security.HashManager;
 
 public class LoginPanel extends JPanel 
 {
@@ -28,15 +28,16 @@ public class LoginPanel extends JPanel
         // Create title label
         JLabel titleLabel = new JLabel("Login");
         titleLabel.setFont(new Font("Helvetica Neue", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(255, 255, 255, 150)); 
+        titleLabel.setForeground(Colors.AUTHORIZATION_LABEL_FOREGROUND_COLOR); 
         gbc.gridwidth = 2;
         add(titleLabel, gbc);
         
         // Create login field with placeholder
         gbc.gridy++;
         gbc.gridwidth = 1;
+        
         JLabel loginLabel = new JLabel("Login");
-        loginLabel.setForeground(new Color(255, 255, 255, 150)); // Placeholder color
+        loginLabel.setForeground(Colors.AUTHORIZATION_LABEL_FOREGROUND_COLOR); // Placeholder color
         add(loginLabel, gbc);
         
         gbc.gridx++;
@@ -50,8 +51,9 @@ public class LoginPanel extends JPanel
         // Create password field with placeholder
         gbc.gridy++;
         gbc.gridx = 0;
+
         JLabel passwordLabel = new JLabel("Password");
-        passwordLabel.setForeground(new Color(255, 255, 255, 150)); // Placeholder color
+        passwordLabel.setForeground(Colors.AUTHORIZATION_LABEL_FOREGROUND_COLOR); // Placeholder color
         add(passwordLabel, gbc);
         
         gbc.gridx++;
@@ -66,6 +68,7 @@ public class LoginPanel extends JPanel
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
+
         loginButton = new JButton("Login");
         loginButton.setBackground(new Color(18, 140, 126));
         loginButton.setForeground(Color.WHITE);
@@ -80,8 +83,8 @@ public class LoginPanel extends JPanel
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         signupButton = new JButton("Don't have an account? Sign up");
-        signupButton.setBackground(new Color(40, 40, 40));
-        signupButton.setForeground(Color.WHITE);
+        signupButton.setBackground(Colors.AUTHORIZATION_BACKGROUND_COLOR);
+        signupButton.setForeground(Colors.AUTHORIZATION_BUTTON_FOREGROUD_COLOR);
         signupButton.setFocusPainted(false);
         signupButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         signupButton.setOpaque(true);
@@ -96,7 +99,7 @@ public class LoginPanel extends JPanel
         errorLabel.setForeground(Color.RED);
         add(errorLabel, gbc);
 
-        setBackground(new Color(39, 40, 34));
+        setBackground(Colors.AUTHORIZATION_BACKGROUND_COLOR);
     }
     
     public String getUsername() 

@@ -4,6 +4,8 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
+import com.github.donkeyrit.twinkle.styles.Colors;
+
 public class SignupPanel extends JPanel 
 {
     private JTextField usernameField;
@@ -18,97 +20,103 @@ public class SignupPanel extends JPanel
     {
         // Set layout
         setLayout(new GridBagLayout());
-        setBackground(new Color(33, 33, 33));
-
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Create username label
+        // Create title label
+        JLabel titleLabel = new JLabel("Signup");
+        titleLabel.setFont(new Font("Helvetica Neue", Font.BOLD, 24));
+        titleLabel.setForeground(Colors.AUTHORIZATION_LABEL_FOREGROUND_COLOR); 
+        gbc.gridwidth = 2;
+        add(titleLabel, gbc);
+
+        // Create username label and text field
+        gbc.gridy++;
+        gbc.gridwidth = 1;
+
         JLabel usernameLabel = new JLabel("Username");
-        usernameLabel.setForeground(new Color(239, 239, 239));
+        usernameLabel.setForeground(Colors.AUTHORIZATION_LABEL_FOREGROUND_COLOR);
         add(usernameLabel, gbc);
-        gbc.gridy++;
 
-        // Create password lable
+        gbc.gridx++;
+        usernameField = new JTextField(20);
+        usernameField.setOpaque(false);
+        usernameField.setForeground(Color.WHITE);
+        usernameField.setCaretColor(Color.WHITE);
+        usernameField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        add(usernameField, gbc);
+
+        // Create password lable and text field
+        gbc.gridy++;
+        gbc.gridx = 0;
+
         JLabel passwordLabel = new JLabel("Password");
-        passwordLabel.setForeground(new Color(239, 239, 239));
+        passwordLabel.setForeground(Colors.AUTHORIZATION_LABEL_FOREGROUND_COLOR);
         add(passwordLabel, gbc);
-        gbc.gridy++;
 
-        // Create confirm password label
+        gbc.gridx++;
+        passwordField = new JPasswordField(20);
+        passwordField.setOpaque(false); // Make transparent
+        passwordField.setForeground(Color.WHITE);
+        passwordField.setCaretColor(Color.WHITE);
+        passwordField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        add(passwordField, gbc);
+
+        // Create confirm password label and text field
+        gbc.gridy++;
+        gbc.gridx = 0;
+        
         JLabel confirmPasswordLabel = new JLabel("Confirm Password");
-        confirmPasswordLabel.setForeground(new Color(239, 239, 239));
+        confirmPasswordLabel.setForeground(Colors.AUTHORIZATION_LABEL_FOREGROUND_COLOR);
         add(confirmPasswordLabel, gbc);
 
         gbc.gridx++;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1;
-
-        // Create username text field
-        usernameField = new JTextField(20);
-        usernameField.setOpaque(false);
-        usernameField.setForeground(new Color(239, 239, 239));
-        usernameField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(239, 239, 239)));
-        usernameField.setCaretColor(new Color(239, 239, 239));
-        usernameField.setHorizontalAlignment(JTextField.RIGHT);
-        add(usernameField, gbc);
-        gbc.gridy++;
-
-        // Create password text field
-        passwordField = new JPasswordField(20);
-        passwordField.setOpaque(false);
-        passwordField.setForeground(new Color(239, 239, 239));
-        passwordField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(239, 239, 239)));
-        passwordField.setCaretColor(new Color(239, 239, 239));
-        passwordField.setHorizontalAlignment(JTextField.RIGHT);
-        add(passwordField, gbc);
-        gbc.gridy++;
-
-        // Create confirm password text field
         confirmPasswordField = new JPasswordField(20);
-        confirmPasswordField.setOpaque(false);
-        confirmPasswordField.setForeground(new Color(239, 239, 239));
-        confirmPasswordField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(239, 239, 239)));
-        confirmPasswordField.setCaretColor(new Color(239, 239, 239));
-        confirmPasswordField.setHorizontalAlignment(JTextField.RIGHT);
+        confirmPasswordField.setOpaque(false); // Make transparent
+        confirmPasswordField.setForeground(Color.WHITE);
+        confirmPasswordField.setCaretColor(Color.WHITE);
+        confirmPasswordField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         add(confirmPasswordField, gbc);
+        
+        // Create register button
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
-        
-        // Create register button
-        registerButton = new JButton("Register");
-        registerButton.setFocusPainted(false);
-        registerButton.setForeground(new Color(239, 239, 239));
-        registerButton.setBackground(new Color(59, 89, 152));
-        registerButton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(59, 89, 152)),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        add(registerButton, gbc);
-        gbc.gridy++;
 
+        registerButton = new JButton("Register");
+        registerButton.setBackground(new Color(18, 140, 126));
+        registerButton.setForeground(Color.WHITE);
+        registerButton.setFocusPainted(false);
+        registerButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        registerButton.setOpaque(true);
+        registerButton.setBorderPainted(false);
+        add(registerButton, gbc);
+        
         // Create login link
-        loginButton = new JButton("Already have an account? Login");
-        loginButton.setForeground(new Color(239, 239, 239));
-        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        add(loginButton, gbc);
         gbc.gridy++;
-        errorLabel = new JLabel("");
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        loginButton = new JButton("Already have an account? Login");
+        loginButton.setBackground(Colors.AUTHORIZATION_BUTTON_BACKGROUND_COLOR);
+        loginButton.setForeground(Colors.AUTHORIZATION_BUTTON_FOREGROUD_COLOR);
+        loginButton.setFocusPainted(false);
+        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        loginButton.setOpaque(true);
+        loginButton.setBorderPainted(false);
+        add(loginButton, gbc);
 
         // Create error block
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        errorLabel = new JLabel("");
         errorLabel.setForeground(new Color(255, 0, 0));
         add(errorLabel, gbc);
-    
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+
+        setBackground(Colors.AUTHORIZATION_BACKGROUND_COLOR);
     }
 
 
