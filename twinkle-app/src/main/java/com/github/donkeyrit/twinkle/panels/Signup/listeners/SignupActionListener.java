@@ -54,6 +54,7 @@ public class SignupActionListener implements ActionListener
         userRepository.insert(user);
 
 		UserInformation.setUser(user);
+		panel.reset();
         container.showPanel(Constants.CONTENT_PANEL_KEY);
     }
 }

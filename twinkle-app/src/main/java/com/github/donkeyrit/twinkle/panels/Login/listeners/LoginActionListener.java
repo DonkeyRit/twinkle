@@ -44,6 +44,7 @@ public class LoginActionListener implements ActionListener
         }
 
 		UserInformation.setUser(currentUser.get());
+		panel.reset();
         container.showPanel(Constants.CONTENT_PANEL_KEY);
     }
 }

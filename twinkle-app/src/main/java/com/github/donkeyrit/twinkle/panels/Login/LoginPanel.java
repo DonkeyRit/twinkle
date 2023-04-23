@@ -3,6 +3,8 @@ package com.github.donkeyrit.twinkle.panels.login;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.panels.login.listeners.LoginActionListener;
 import com.github.donkeyrit.twinkle.listeners.PanelSwitcherActionListener;
+import com.github.donkeyrit.twinkle.listeners.ResetablePanelSwitcherActionListener;
+import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.utils.Constants;
@@ -12,7 +14,7 @@ import com.google.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
 
-public class LoginPanel extends JPanel 
+public class LoginPanel extends JPanel implements ResettablePanel
 {
     private JTextField loginField;
     private JPasswordField passwordField;
@@ -108,7 +110,7 @@ public class LoginPanel extends JPanel
         signupButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         signupButton.setOpaque(true);
         signupButton.setBorderPainted(false);
-		signupButton.addActionListener(new PanelSwitcherActionListener(mainFrame.getSwitchedPanel()));
+		signupButton.addActionListener(new ResetablePanelSwitcherActionListener(mainFrame.getSwitchedPanel(), this));
         add(signupButton, gbc);
 
         // Create error label
@@ -139,4 +141,11 @@ public class LoginPanel extends JPanel
         this.revalidate();
         this.repaint();
     }
+
+	public void reset()
+	{
+		loginField.setText("");
+		passwordField.setText("");
+		errorLabel.setText("");
+	}
 }
