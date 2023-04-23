@@ -4,6 +4,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
 import com.github.donkeyrit.twinkle.panels.signup.SignupPanel;
+import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.utils.Constants;
 
@@ -52,6 +53,7 @@ public class SignupActionListener implements ActionListener
         User user = new User(username, passwordHash, false); 
         userRepository.insert(user);
 
+		UserInformation.setUser(user);
         container.showPanel(Constants.CONTENT_PANEL_KEY);
     }
 }

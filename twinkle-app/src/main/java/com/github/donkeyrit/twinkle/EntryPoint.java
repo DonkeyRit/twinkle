@@ -11,7 +11,7 @@ import javax.swing.table.*;
 import javax.swing.text.*;
 import org.hibernate.cfg.Configuration;
 
-import com.github.donkeyrit.twinkle.dal.models.User;
+import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
@@ -36,12 +36,9 @@ public class EntryPoint {
     // Repositories
     private final UserRepository userRepository; 
 
-
     private MainFrame mainFrame;
     private JPanel panel; 
     private DataBase database; 
-    private int avatarNumber = 1; 
-    private User user; 
     
     public static void main(String[] args){
         /**
@@ -934,7 +931,7 @@ public class EntryPoint {
                                     buttonGetCar.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
-                                            String checkQuery = "SELECT id_client FROM clients INNER JOINusersON client.id_user = user.id_user WHERE login = " + "'" + user.getLogin() + "'";
+                                            String checkQuery = "SELECT id_client FROM clients INNER JOINusersON client.id_user = user.id_user WHERE login = " + "'" + UserInformation.getLogin() + "'";
                                             ResultSet checkClientSet = database.select(checkQuery); 
                                             int idClient = 0; 
                                             try{
@@ -949,7 +946,7 @@ public class EntryPoint {
                                                 planPriceLabel.setText("Please, fill data");
                                             }else{
                                                 
-                                                String queryToDB = "SELECT * FROM rent where id_client = (SELECT id_clients FROM client WHERE id_user = (SELECT id_user FROM users WHERE login = '" + user.getLogin() + "')) ORDER BY end_date, plan_date DESC LIMIT 1";
+                                                String queryToDB = "SELECT * FROM rent where id_client = (SELECT id_clients FROM client WHERE id_user = (SELECT id_user FROM users WHERE login = '" + UserInformation.getLogin() + "')) ORDER BY end_date, plan_date DESC LIMIT 1";
                                                 ResultSet checkRentaSet = database.select(queryToDB); 
                                                 System.out.println(queryToDB);
                                                 boolean isHaveRenta = false;
@@ -1083,7 +1080,7 @@ public class EntryPoint {
                 boolean isTrue = false; 
                 try{
                     while(checkUserSet.next()){
-                        if(user.getLogin().equals(checkUserSet.getString("login")) && user.getPassword().equals(checkUserSet.getString("password"))){
+                        if(UserInformation.getLogin().equals(checkUserSet.getString("login")) && UserInformation.getPassword().equals(checkUserSet.getString("password"))){
                             isTrue = true; 
                         }
                     }
@@ -1163,10 +1160,10 @@ public class EntryPoint {
                                             int currDay = calendar.get(Calendar.DATE); 
                                             
                                             String dataStr = currYear + "-" + currMont + "-" + currDay;
-                                            String updateQuery = "UPDATE rent SET end_date = '" + dataStr + "' WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOIN users ON client.id_user = user.id_user WHERE login = '" + user.getLogin() + "');"; 
+                                            String updateQuery = "UPDATE rent SET end_date = '" + dataStr + "' WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOIN users ON client.id_user = user.id_user WHERE login = '" + UserInformation.getLogin() + "');"; 
                                             database.update(updateQuery);
                                             
-                                            String idRentaStr = "SELECT id_rent FROM rent WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOINusersON client.id_user = user.id_user WHERE login = '" + user.getLogin() + "') AND end_date = '" + dataStr + "'";
+                                            String idRentaStr = "SELECT id_rent FROM rent WHERE id_car = " + imagesNum + " AND id_client = (SELECT id_client FROM client INNER JOINusersON client.id_user = user.id_user WHERE login = '" + UserInformation.getLogin() + "') AND end_date = '" + dataStr + "'";
                                             ResultSet rentaSet = database.select(idRentaStr);
                                             int idRentaNum = 0;
                                             try{
@@ -1224,7 +1221,7 @@ public class EntryPoint {
                                     
                                     String queryToDb = "SELECT login,id_car,join1.id_user,start_date,plan_date,end_date FROM\n" +
                                     "(SELECT id_car,id_user,rent.id_client,start_date,plan_date,end_date FROM rent INNER JOIN client ON rent.id_client = client.id_client) as join1\n" +
-                                    "INNER JOINusersON join1.id_user = user.id_user WHERE login = '" + user.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1;"; 
+                                    "INNER JOINusersON join1.id_user = user.id_user WHERE login = '" + UserInformation.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1;"; 
                                     
                                     ResultSet queryToDbSet = database.select(queryToDb); 
                                     Date startRentaDate = null;
@@ -1307,7 +1304,7 @@ public class EntryPoint {
             ArrayList<String> actions = new ArrayList<String>(); 
             actions.add("Change password");
             actions.add("Personal data");
-            if(user.isRole()){ 
+            if(UserInformation.isRole()){ 
                 actions.add("To change the data");
             }
             
@@ -1335,7 +1332,7 @@ public class EntryPoint {
                         
                         Component[] componentsPanel = (Component[]) panel.getComponents();
                         for(int i = 0; i < componentsPanel.length; i++){
-                            if(!(componentsPanel[i].getClass().toString().indexOf("ChooseActionPanel") > -1 || componentsPanel[i].getClass().toString().indexOf("HeaderPanel") > -1 )){
+                            if(!(componentsPanel[i].getClass().toString().indexOf("EntryPoint$ChooseActionPanel") > -1 || componentsPanel[i].getClass().toString().indexOf("HeaderPanel") > -1 )){
                                 panel.remove((JPanel) componentsPanel[i]); 
                             }
                         }
@@ -1343,13 +1340,13 @@ public class EntryPoint {
                         String selectedTextButton = selectedTmp1.getText(); 
                         
                         JPanel rightPanel = null; 
-                        if(selectedTextButton.equals("Сменить пароль")){
+                        if(selectedTextButton.equals("Change password")){
                             rightPanel = new ChangePasswordPanel();
                         }
-                        if(selectedTextButton.equals("Личные данные")){
+                        if(selectedTextButton.equals("Personal data")){
                             rightPanel = new PrivateDataPanel();
                         }
-                        if(selectedTextButton.equals("Изменить данные")){
+                        if(selectedTextButton.equals("To change the data")){
                             rightPanel = new ChangeDataDatabasePanel();
                         }
                         rightPanel.setBounds(250,100,605,550);
@@ -1414,7 +1411,7 @@ public class EntryPoint {
                     }
                     
                     if(!isOne && !isTwo && !isThree){ 
-                        if(HashManager.generateHash(fieldPass.get(0).getText()).equals(user.getPassword())){
+                        if(HashManager.generateHash(fieldPass.get(0).getText()).equals(UserInformation.getPassword())){
                             if(fieldPass.get(1).getText().equals(fieldPass.get(2).getText())){
                                 if(fieldPass.get(0).getText().equals(fieldPass.get(1).getText())){
                                     fieldPass.get(0).setPlaceholder("Old and new match"); 
@@ -1425,9 +1422,11 @@ public class EntryPoint {
                                     fieldPass.get(1).setPhColor(Color.RED); 
                                     fieldPass.get(1).setText("");
                                 }else{                                 
-                                    String updateUserQuery = "UPDATEusersSET password = '" + HashManager.generateHash(fieldPass.get(1).getText()) + "'" + " WHERE login = '" + user.getLogin() + "'";
+                                    String updateUserQuery = "UPDATE users SET password = '" + HashManager.generateHash(fieldPass.get(1).getText()) + "'" + " WHERE login = '" + UserInformation.getLogin() + "'";
                                     database.update(updateUserQuery);
-                                    user.setPassword(HashManager.generateHash(fieldPass.get(1).getText()));
+
+
+                                    UserInformation.setPassword(HashManager.generateHash(fieldPass.get(1).getText()));
                                     
                                     for(int i = 0; i < fieldPass.size(); i++){
                                         fieldPass.get(i).setText("");
@@ -1476,7 +1475,7 @@ public class EntryPoint {
         public PrivateDataPanel() {
             setLayout(null);
             
-            String queryUser = "SELECT first_name,second_name,middle_name,address,phone_number FROM client where id_user = (SELECT id_user FROMusersWHERE login = '" + user.getLogin() + "')"; 
+            String queryUser = "SELECT first_name,second_name,middle_name,address,phone_number FROM client where id_user = (SELECT id_user FROMusersWHERE login = '" + UserInformation.getLogin() + "')"; 
             ResultSet userSet = database.select(queryUser);
             ArrayList<String> infoUser = new ArrayList<String>(); 
             try{
@@ -1528,7 +1527,7 @@ public class EntryPoint {
                            for(int i = 0; i < fieldText.size(); i++){
                                createClient += "'" + fieldText.get(i).getText() + "',";
                            }
-                           createClient += "(SELECT id_user FROMusersWHERE login = '" + user.getLogin() + "'))";
+                           createClient += "(SELECT id_user FROMusersWHERE login = '" + UserInformation.getLogin() + "'))";
                            
                            database.insert(createClient);
                            for(int i = 0 ; i < fieldText.size(); i++){
@@ -1545,7 +1544,7 @@ public class EntryPoint {
                                    updateClient +=",";
                                }
                            }
-                           updateClient += " WHERE id_user = (SELECT id_user FROMusersWHERE login = '" + user.getLogin() + "')";
+                           updateClient += " WHERE id_user = (SELECT id_user FROMusersWHERE login = '" + UserInformation.getLogin() + "')";
                            database.update(updateClient);
                        }
                    }else{
