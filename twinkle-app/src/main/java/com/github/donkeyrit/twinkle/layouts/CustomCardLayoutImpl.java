@@ -31,5 +31,7 @@ public class CustomCardLayoutImpl extends CardLayout implements CustomCardLayout
 		this.container.removeAll();
 		this.container.add(panel, key);
 		this.show(container, key);
+		this.container.revalidate();
+		this.container.repaint();
 	}
 }
