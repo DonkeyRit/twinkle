@@ -1332,7 +1332,7 @@ public class EntryPoint {
                         
                         Component[] componentsPanel = (Component[]) panel.getComponents();
                         for(int i = 0; i < componentsPanel.length; i++){
-                            if(!(componentsPanel[i].getClass().toString().indexOf("EntryPoint$ChooseActionPanel") > -1 || componentsPanel[i].getClass().toString().indexOf("HeaderPanel") > -1 )){
+                            if(!(componentsPanel[i].getClass().toString().indexOf("EntryPoint$ChooseActionPanel") > -1 || componentsPanel[i].getClass().toString().indexOf("NavigationPanel") > -1 )){
                                 panel.remove((JPanel) componentsPanel[i]); 
                             }
                         }
