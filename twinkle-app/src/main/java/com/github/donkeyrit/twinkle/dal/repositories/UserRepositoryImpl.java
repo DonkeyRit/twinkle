@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
-import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
 
 import jakarta.persistence.EntityManager;

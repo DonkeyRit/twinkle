@@ -1,10 +1,11 @@
-package com.github.donkeyrit.twinkle.panels.Signup.listeners;
+package com.github.donkeyrit.twinkle.panels.signup.listeners;
 
-import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
-import com.github.donkeyrit.twinkle.frame.MainFrame;
-import com.github.donkeyrit.twinkle.panels.Signup.SignupPanel;
-import com.github.donkeyrit.twinkle.security.HashManager;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
+import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
+import com.github.donkeyrit.twinkle.panels.signup.SignupPanel;
+import com.github.donkeyrit.twinkle.security.HashManager;
+import com.github.donkeyrit.twinkle.utils.Constants;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -13,13 +14,13 @@ public class SignupActionListener implements ActionListener
 {
     private final UserRepository userRepository;
     private final SignupPanel panel;
-    private final MainFrame frame;
+    private final SwitchedPanel container;
 
-    public SignupActionListener(UserRepository userRepository, SignupPanel panel, MainFrame mainFrame) 
+    public SignupActionListener(UserRepository userRepository, SignupPanel panel, SwitchedPanel switchedPanel) 
     {
         this.userRepository = userRepository;
         this.panel = panel;
-        this.frame = mainFrame;
+        this.container = switchedPanel;
     }
 
     @Override
@@ -51,6 +52,6 @@ public class SignupActionListener implements ActionListener
         User user = new User(username, passwordHash, false); 
         userRepository.insert(user);
 
-        frame.showContent();
+        container.showPanel(Constants.CONTENT_PANEL_KEY);
     }
 }

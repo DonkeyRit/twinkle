@@ -1,25 +1,26 @@
-package com.github.donkeyrit.twinkle.panels.Login.listeners;
+package com.github.donkeyrit.twinkle.panels.login.listeners;
+
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.models.User;
+import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
+import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
+import com.github.donkeyrit.twinkle.utils.Constants;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Optional;
 
-import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
-import com.github.donkeyrit.twinkle.frame.MainFrame;
-import com.github.donkeyrit.twinkle.dal.models.User;
-import com.github.donkeyrit.twinkle.panels.Login.LoginPanel;
-
 public class LoginActionListener implements ActionListener
 {
     private UserRepository userRepository;
     private LoginPanel panel;
-    private MainFrame frame;
+    private SwitchedPanel container;
 
-    public LoginActionListener(UserRepository userRepository, LoginPanel panel, MainFrame mainFrame)
+    public LoginActionListener(UserRepository userRepository, LoginPanel panel, SwitchedPanel switchedPanel)
     {
         this.userRepository = userRepository;
         this.panel = panel;
-        this.frame = mainFrame;
+        this.container = switchedPanel;
     }
 
     @Override
@@ -41,6 +42,6 @@ public class LoginActionListener implements ActionListener
             return;
         }
         
-        frame.showContent();
+        container.showPanel(Constants.CONTENT_PANEL_KEY);
     }
 }

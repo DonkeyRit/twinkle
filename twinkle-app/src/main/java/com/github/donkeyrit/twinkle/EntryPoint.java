@@ -13,15 +13,18 @@ import org.hibernate.cfg.Configuration;
 
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
-import com.github.donkeyrit.twinkle.dal.repositories.Interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
-import com.github.donkeyrit.twinkle.panels.Content.ContentCompositePanel;
-import com.github.donkeyrit.twinkle.panels.Login.LoginPanel;
-import com.github.donkeyrit.twinkle.panels.Login.listeners.LoginActionListener;
-import com.github.donkeyrit.twinkle.panels.Signup.SignupPanel;
-import com.github.donkeyrit.twinkle.panels.Signup.listeners.SignupActionListener;
+import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
+import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
+import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
+import com.github.donkeyrit.twinkle.panels.login.listeners.LoginActionListener;
+import com.github.donkeyrit.twinkle.panels.navigation.NavigationPanel;
+import com.github.donkeyrit.twinkle.panels.signup.SignupPanel;
+import com.github.donkeyrit.twinkle.panels.signup.listeners.SignupActionListener;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
+import com.github.donkeyrit.twinkle.utils.Constants;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -63,122 +66,27 @@ public class EntryPoint {
     private void initGui()
     {
         database = new DataBase(); 
-        this.mainFrame = new MainFrame("Rent car");
+        this.mainFrame = new MainFrame("Rent car", new SwitchedPanel());
+		SwitchedPanel switchedPanel = this.mainFrame.getSwitchedPanel();
 
-        LoginPanel loginPanel = new LoginPanel();
-        ActionListener loginActionListener = new LoginActionListener(userRepository, loginPanel, mainFrame);
-        loginPanel.addLoginActionListener(loginActionListener);
-        loginPanel.addSignupActionListener(e -> this.mainFrame.showSignupPanel());
-        this.mainFrame.setLoginPanel(loginPanel);
+        LoginPanel loginPanel = new LoginPanel(userRepository, mainFrame);
+        switchedPanel.addPanel(Constants.LOGIN_PANEL_KEY, loginPanel);
 
-        SignupPanel sigupPanel = new SignupPanel();
-        ActionListener sigupActionListener = new SignupActionListener(userRepository, sigupPanel, mainFrame);
-        sigupPanel.addSignupActionListener(sigupActionListener);
-        sigupPanel.addLoginActionListener(e -> this.mainFrame.showLoginPanel());
-        this.mainFrame.setSignupPanel(sigupPanel);
+        SignupPanel sigupPanel = new SignupPanel(userRepository, mainFrame);
+        switchedPanel.addPanel(Constants.SIGUP_PANEL_KEY, sigupPanel);
 
-        ContentCompositePanel contentPanel = new ContentCompositePanel(this);
-        this.mainFrame.setContentCompositePanel(contentPanel);
+        ContentCompositePanel contentPanel = new ContentCompositePanel();
+		contentPanel
+			.setNavigationPanel(new NavigationPanel(mainFrame, contentPanel, this))
+			.setSidebarPanel(new FilterPanel())
+			.setContentPanel(new ContentPanel(""));
+        switchedPanel.addPanel(Constants.CONTENT_PANEL_KEY, contentPanel);
         panel = contentPanel;
 
+		switchedPanel.showPanel(Constants.LOGIN_PANEL_KEY);
         this.mainFrame.setVisible(true);
     }
 
-    private void showContent()
-    {
-        JPanel header = new HeaderPanel(); 
-        header.setBounds(0,0,875,80); 
-        panel.add(header); 
-        
-        JPanel filter = new FilterPanel(); 
-        filter.setBounds(30, 100, 200, 550); 
-        panel.add(filter); 
-        
-        JPanel content = new ContentPanel(""); 
-        content.setBounds(250,100,605,550); 
-        panel.add(content); 
-    }
-
-    
-    public class HeaderPanel extends JPanel{       
-        public HeaderPanel()
-        {
-            this.setLayout(null);
-            JButton logo = new JButton(); 
-            logo.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    panel.removeAll(); 
-                    panel.revalidate();
-                    panel.repaint(); 
-                    showContent(); 
-                }
-            });
-            
-            logo.setBounds(30, 10, 60, 60); 
-            ImageIcon icon = AssetsRetriever.retrieveAssetImageIconFromResources("assets/logo/logo.png"); 
-            logo.setIcon(icon);  
-            logo.setHorizontalTextPosition(SwingConstants.LEFT);
-            logo.setBorderPainted(false); 
-            logo.setFocusPainted(false);
-            logo.setContentAreaFilled(false); 
-            add(logo); 
-
-            JButton avatar = new JButton(); 
-            avatar.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    panel.removeAll();
-                    panel.revalidate();
-                    panel.repaint();
-
-                    JPanel headerPanel = new HeaderPanel();
-                    headerPanel.setBounds(0,0,875,80);
-                    panel.add(headerPanel);
-
-                    JPanel chooseActionPanel = new ChooseActionPanel();
-                    chooseActionPanel.setBounds(30, 100, 200, 550);
-                    panel.add(chooseActionPanel);
-                }
-            });
-            avatar.setBounds(725, 10, 60, 60); 
-            ImageIcon iconAvatar = AssetsRetriever.retrieveAssetImageIconFromResources("assets/avatar/mini_avatar/" + avatarNumber + ".png"); 
-            avatar.setIcon(iconAvatar); 
-            avatar.setHorizontalTextPosition(SwingConstants.LEFT);
-            avatar.setBorderPainted(false);
-            avatar.setFocusPainted(false);
-            avatar.setContentAreaFilled(false);
-            add(avatar);
-
-
-            JButton exit = new JButton(); 
-            exit.setBounds(795,10,60,60); 
-            ImageIcon iconExit = AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/exit.png"); 
-            exit.setIcon(iconExit); 
-            exit.setHorizontalTextPosition(SwingConstants.LEFT);
-            exit.setBorderPainted(false);
-            exit.setFocusPainted(false);
-            exit.setContentAreaFilled(false);
-            exit.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    user = null;
-                    panel.removeAll(); 
-                    mainFrame.showLoginPanel();
-                    panel.revalidate();
-                    panel.repaint(); 
-                }    
-            });
-            add(exit);
-        }
-        
-        @Override
-        public void paintComponent(Graphics g){
-            g.setColor(new Color(0,163,163)); 
-            g.fillRect(0,0,this.getWidth(),this.getHeight()); 
-        }
-    }
-    
     public class FilterPanel extends JPanel{ 
         public FilterPanel(){
             setLayout(null); 
@@ -1394,8 +1302,8 @@ public class EntryPoint {
         }
     }
     
-    private class ChooseActionPanel extends JPanel{
-        ChooseActionPanel(){
+    public class ChooseActionPanel extends JPanel{
+        public ChooseActionPanel(){
             setLayout(null);
             
             ArrayList<String> actions = new ArrayList<String>(); 

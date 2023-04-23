@@ -1,36 +1,61 @@
-package com.github.donkeyrit.twinkle.panels.Content;
-
-import java.awt.Color;
+package com.github.donkeyrit.twinkle.panels.content;
 
 import javax.swing.JPanel;
-
-import com.github.donkeyrit.twinkle.EntryPoint;
+import java.awt.Color;
 
 public class ContentCompositePanel extends JPanel
 {
+	private JPanel navigationPanel;
+	private JPanel sidebarPanel;
+	private JPanel contentPanel;
 
-    private EntryPoint entryPoint;
-
-    public ContentCompositePanel(EntryPoint entryPoint)
+    public ContentCompositePanel()
     {
-        this.entryPoint = entryPoint;
         setBackground(new Color(255,255,255)); 
         setLayout(null); 
-
-        showContent();
     }
 
-    private void showContent(){
-        JPanel header = entryPoint.new HeaderPanel(); 
-        header.setBounds(0,0,875,80); 
-        add(header); 
-        
-        JPanel filter = entryPoint.new FilterPanel(); 
-        filter.setBounds(30, 100, 200, 550); 
-        add(filter); 
-        
-        JPanel content = entryPoint.new ContentPanel(""); 
-        content.setBounds(250,100,605,550); 
-        add(content); 
-    }
+	public ContentCompositePanel setNavigationPanel(JPanel navigationPanel)
+	{
+		if(this.navigationPanel != null) this.remove(this.navigationPanel);
+
+		this.navigationPanel = navigationPanel;
+		if(this.navigationPanel != null) 
+		{
+			this.navigationPanel.setBounds(0,0,875,80);
+			this.add(this.navigationPanel);
+		}
+		
+		return this;
+	}
+
+	public ContentCompositePanel setSidebarPanel(JPanel sidebarPanel)
+	{
+		if(this.sidebarPanel != null) this.remove(this.sidebarPanel);
+		this.sidebarPanel = sidebarPanel;
+		if(this.sidebarPanel != null) 
+		{
+			this.sidebarPanel.setBounds(30, 100, 200, 550);
+			this.add(this.sidebarPanel);
+		}
+		return this;
+	}
+
+	public ContentCompositePanel setContentPanel(JPanel contentPanel)
+	{
+		if(this.contentPanel != null) this.remove(this.contentPanel);
+		this.contentPanel = contentPanel;
+		if(this.contentPanel != null) 
+		{
+			this.contentPanel.setBounds(250,100,605,550);
+			this.add(this.contentPanel);
+		}
+		return this;
+	}
+
+	public void show()
+	{
+		this.revalidate();
+		this.repaint();
+	}
 }
