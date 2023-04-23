@@ -1,11 +1,16 @@
-package com.github.donkeyrit.twinkle.panels.Login;
+package com.github.donkeyrit.twinkle.panels.login;
 
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.panels.login.listeners.LoginActionListener;
+import com.github.donkeyrit.twinkle.listeners.PanelSwitcherActionListener;
 import com.github.donkeyrit.twinkle.security.HashManager;
+import com.github.donkeyrit.twinkle.frame.MainFrame;
+import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.styles.Colors;
+import com.google.inject.Inject;
 
-import java.awt.event.ActionListener;
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
 public class LoginPanel extends JPanel 
 {
@@ -14,10 +19,22 @@ public class LoginPanel extends JPanel
     private JButton loginButton;
     private JButton signupButton;
     private JLabel errorLabel;
+
+	private final UserRepository userRepository;
+	private final MainFrame mainFrame;
     
-    public LoginPanel() 
+	@Inject
+    public LoginPanel(UserRepository userRepository, MainFrame mainFrame) 
     {
-        // Set layout
+		this.userRepository = userRepository;
+		this.mainFrame = mainFrame;
+
+        this.setUp();
+    }
+
+	private void setUp()
+	{
+		// Set layout
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -76,6 +93,7 @@ public class LoginPanel extends JPanel
         loginButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         loginButton.setOpaque(true);
         loginButton.setBorderPainted(false);
+		loginButton.addActionListener(new LoginActionListener(this.userRepository, this, this.mainFrame.getSwitchedPanel()));
         add(loginButton, gbc);
         
         // Create signup link
@@ -83,12 +101,14 @@ public class LoginPanel extends JPanel
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         signupButton = new JButton("Don't have an account? Sign up");
+		signupButton.setActionCommand(Constants.SIGUP_PANEL_KEY);
         signupButton.setBackground(Colors.AUTHORIZATION_BACKGROUND_COLOR);
         signupButton.setForeground(Colors.AUTHORIZATION_BUTTON_FOREGROUD_COLOR);
         signupButton.setFocusPainted(false);
         signupButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         signupButton.setOpaque(true);
         signupButton.setBorderPainted(false);
+		signupButton.addActionListener(new PanelSwitcherActionListener(mainFrame.getSwitchedPanel()));
         add(signupButton, gbc);
 
         // Create error label
@@ -100,7 +120,7 @@ public class LoginPanel extends JPanel
         add(errorLabel, gbc);
 
         setBackground(Colors.AUTHORIZATION_BACKGROUND_COLOR);
-    }
+	}
     
     public String getUsername() 
     {
@@ -118,15 +138,5 @@ public class LoginPanel extends JPanel
         errorLabel.setText(message);
         this.revalidate();
         this.repaint();
-    }
-
-    public void addLoginActionListener(ActionListener listener) 
-    {
-        loginButton.addActionListener(listener);
-    }
-
-    public void addSignupActionListener(ActionListener listener)
-    {
-        signupButton.addActionListener(listener);
     }
 }
