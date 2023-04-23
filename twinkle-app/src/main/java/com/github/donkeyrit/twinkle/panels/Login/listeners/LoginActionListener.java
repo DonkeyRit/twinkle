@@ -4,6 +4,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
 import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
+import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.utils.Constants;
 
 import java.awt.event.ActionListener;
@@ -41,7 +42,9 @@ public class LoginActionListener implements ActionListener
             this.panel.setErorr("Incorrect login or password.");
             return;
         }
-        
+
+		UserInformation.setUser(currentUser.get());
+		panel.reset();
         container.showPanel(Constants.CONTENT_PANEL_KEY);
     }
 }

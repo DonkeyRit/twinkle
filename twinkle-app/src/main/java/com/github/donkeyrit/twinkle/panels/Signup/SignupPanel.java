@@ -2,7 +2,8 @@ package com.github.donkeyrit.twinkle.panels.signup;
 
 import com.github.donkeyrit.twinkle.panels.signup.listeners.SignupActionListener;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
-import com.github.donkeyrit.twinkle.listeners.PanelSwitcherActionListener;
+import com.github.donkeyrit.twinkle.listeners.ResetablePanelSwitcherActionListener;
+import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.styles.Colors;
@@ -11,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class SignupPanel extends JPanel 
+public class SignupPanel extends JPanel implements ResettablePanel
 {
     private JTextField usernameField;
     private JPasswordField passwordField;
@@ -123,7 +124,7 @@ public class SignupPanel extends JPanel
         loginButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         loginButton.setOpaque(true);
         loginButton.setBorderPainted(false);
-		loginButton.addActionListener(new PanelSwitcherActionListener(this.mainFrame.getSwitchedPanel()));
+		loginButton.addActionListener(new ResetablePanelSwitcherActionListener(this.mainFrame.getSwitchedPanel(), this));
         add(loginButton, gbc);
 
         // Create error block
@@ -159,5 +160,15 @@ public class SignupPanel extends JPanel
         this.revalidate();
         this.repaint();
     }
+
+	public void reset()
+	{
+		usernameField.setText("");
+		passwordField.setText("");
+		confirmPasswordField.setText("");
+		registerButton.setText("");
+		loginButton.setText("");
+		errorLabel.setText("");
+	}
 }
     
