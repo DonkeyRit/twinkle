@@ -18,10 +18,8 @@ import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
 import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
 import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
-import com.github.donkeyrit.twinkle.panels.login.listeners.LoginActionListener;
 import com.github.donkeyrit.twinkle.panels.navigation.NavigationPanel;
 import com.github.donkeyrit.twinkle.panels.signup.SignupPanel;
-import com.github.donkeyrit.twinkle.panels.signup.listeners.SignupActionListener;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.utils.Constants;
@@ -549,7 +547,7 @@ public class EntryPoint {
                     Component[] mas = panel.getComponents(); 
                     ContentPanel temp = null; 
                     for(int i = 0; i < mas.length; i++){
-                        if(mas[i].getClass().toString().indexOf("ContentPanel") != -1){ 
+                        if(mas[i].getClass().toString().indexOf("EntryPoint$ContentPanel") != -1){ 
                             temp = (ContentPanel) mas[i]; 
                         }
                     }
@@ -936,7 +934,7 @@ public class EntryPoint {
                                     buttonGetCar.addActionListener(new ActionListener() {
                                         @Override
                                         public void actionPerformed(ActionEvent e) {
-                                            String checkQuery = "SELECT id_client FROM client INNER JOINusersON client.id_user = user.id_user WHERE login = " + "'" + user.getLogin() + "'";
+                                            String checkQuery = "SELECT id_client FROM clients INNER JOINusersON client.id_user = user.id_user WHERE login = " + "'" + user.getLogin() + "'";
                                             ResultSet checkClientSet = database.select(checkQuery); 
                                             int idClient = 0; 
                                             try{
@@ -951,7 +949,7 @@ public class EntryPoint {
                                                 planPriceLabel.setText("Please, fill data");
                                             }else{
                                                 
-                                                String queryToDB = "SELECT * FROM rent where id_client = (SELECT id_client FROM client WHERE id_user = (SELECT id_user FROM users WHERE login = '" + user.getLogin() + "')) ORDER BY end_date, plan_date DESC LIMIT 1";
+                                                String queryToDB = "SELECT * FROM rent where id_client = (SELECT id_clients FROM client WHERE id_user = (SELECT id_user FROM users WHERE login = '" + user.getLogin() + "')) ORDER BY end_date, plan_date DESC LIMIT 1";
                                                 ResultSet checkRentaSet = database.select(queryToDB); 
                                                 System.out.println(queryToDB);
                                                 boolean isHaveRenta = false;
@@ -1080,7 +1078,7 @@ public class EntryPoint {
                 add(actionWithCarButton); 
             }else{ 
                 
-                String queryToDatabase = "SELECT * FROM users WHERE id_user = (SELECT id_user FROM client WHERE id_client = (SELECT id_client FROm rent WHERE id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1))"; 
+                String queryToDatabase = "SELECT * FROM users WHERE id_user = (SELECT id_user FROM clients WHERE id_client = (SELECT id_client FROm rent WHERE id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1))"; 
                 ResultSet checkUserSet = database.select(queryToDatabase); 
                 boolean isTrue = false; 
                 try{
@@ -1540,7 +1538,7 @@ public class EntryPoint {
                            }
                        }else{
                            String[] columnNames = new String[]{"first_name","second_name","middle_name","address","phone_number"};
-                           String updateClient = "UPDATE client SET ";
+                           String updateClient = "UPDATE clients SET ";
                            for(int i = 0 ; i < fieldText.size(); i++){
                                updateClient += columnNames[i] + " = '" + fieldText.get(i).getText() +"'";
                                if(i != fieldText.size() - 1){
