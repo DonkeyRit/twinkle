@@ -1,23 +1,25 @@
 version: 0.2
 
+env:
+  variables:
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+
 phases:
   install:
-    runtime-versions:
-      java: corretto11
     commands:
-      - echo "Installing Maven"
-      - curl -sSL "https://apache.osuosl.org/maven/maven-3/3.8.3/binaries/apache-maven-3.8.3-bin.tar.gz" -o "apache-maven-3.8.3-bin.tar.gz"
-      - tar xzf apache-maven-3.8.3-bin.tar.gz
-      - export PATH=$PATH:$PWD/apache-maven-3.8.3/bin
-  pre_build:
-    commands:
-      - echo "Starting build"
+      - echo Entered the install phase...
+      - apt-get update -y
+      - apt-get install -y maven
+    finally:
+      - echo This always runs even if the update or install command fails 
   build:
     commands:
-      - mvn clean install
+      - echo Entered the build phase...
+      - echo Build started on `date`
+      - mvn clean install -f twinkle-app/pom.xml
+    finally:
+      - echo This always runs even if the install command fails
   post_build:
     commands:
-      - echo "Build complete"
-artifacts:
-  files:
-    - target/*.jar
+      - echo Entered the post_build phase...
+      - echo Build completed on `date`
