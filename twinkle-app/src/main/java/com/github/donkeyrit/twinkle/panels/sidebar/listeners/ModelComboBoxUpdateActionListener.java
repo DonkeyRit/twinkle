@@ -1,64 +1,43 @@
 package com.github.donkeyrit.twinkle.panels.sidebar.listeners;
 
-import com.github.donkeyrit.twinkle.DataBase;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelComboBoxUpdateActionListener implements ActionListener 
 {
+	private ModelOfCarRepository modelOfCarRepository;
 	private final JComboBox<MarkOfCar> markComboBox;
 	private final JComboBox<String> modelComboBox;
-	private final DataBase database;
 
-	public ModelComboBoxUpdateActionListener(JComboBox<MarkOfCar> markComboBox, JComboBox<String> modelComboBox, DataBase dataBase) 
+	public ModelComboBoxUpdateActionListener(
+		JComboBox<MarkOfCar> markComboBox, 
+		JComboBox<String> modelComboBox, 
+		ModelOfCarRepository modelOfCarRepository) 
 	{
 		this.markComboBox = markComboBox;
 		this.modelComboBox = modelComboBox;
-		this.database = dataBase;
+		this.modelOfCarRepository = modelOfCarRepository;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
 		MarkOfCar markSelected = (MarkOfCar) markComboBox.getSelectedItem();
-		List<Integer> idMarkList = new ArrayList<Integer>();
 		List<String> modelList = new ArrayList<String>();
 
-		if (!markSelected.getName().equals("All marks")) {
-			ResultSet idMarkSet = database.select("SELECT id_mark FROM mark WHERE mark_name = '" + markSelected + "'");
-
-			try {
-				while (idMarkSet.next()) {
-					idMarkList.add(idMarkSet.getInt("id_mark"));
-				}
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			}
-
-			String queryModel = "SELECT model_name FROM model WHERE id_mark in (";
-			for (int i = 0; i < idMarkList.size(); i++) {
-				queryModel += idMarkList.get(i);
-				if (i == idMarkList.size() - 1) {
-					queryModel += ")";
-				} else {
-					queryModel += ",";
-				}
-			}
-
-			ResultSet modelSet = database.select(queryModel);
-			try {
-				while (modelSet.next()) {
-					modelList.add(modelSet.getString("model_name"));
-				}
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			}
+		if(markSelected.getId() > -1)
+		{
+			int markId = markSelected.getId();
+			modelList = modelOfCarRepository
+				.getListByMark(markId)
+				.map(model -> model.getModelName())
+				.toList();
 		}
 
 		modelComboBox.removeAllItems();
@@ -67,5 +46,4 @@ public class ModelComboBoxUpdateActionListener implements ActionListener
 			modelComboBox.addItem(modelList.get(i));
 		}
 	}
-
 }

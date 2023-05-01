@@ -42,7 +42,7 @@ public class UserRepositoryImpl implements UserRepository
         query.setParameter("login", login);
         try 
         {
-            User user = query.getSingleResult();
+            query.getSingleResult();
             return true;
         } 
         catch (NoResultException e) 

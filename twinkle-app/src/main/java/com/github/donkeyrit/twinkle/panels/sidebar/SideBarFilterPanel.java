@@ -28,26 +28,30 @@ import com.github.donkeyrit.twinkle.EntryPoint;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
 import com.github.donkeyrit.twinkle.panels.sidebar.listeners.ModelComboBoxUpdateActionListener;
 import com.github.donkeyrit.twinkle.panels.sidebar.models.MarkComboBoxModel;
 
 public class SideBarFilterPanel extends JPanel
 { 
-	private MarkOfCarRepository markOfCarRepository;
 	private CarBodyTypeRepository carBodyTypeRepository;
+	private ModelOfCarRepository modelOfCarRepository;
+	private MarkOfCarRepository markOfCarRepository;
 
 	private final List<JCheckBox> bodyTypeCheckBoxes;
 	private final JComboBox<MarkOfCar> markComboBox;
 	private final JComboBox<String> modelComboBox;
 	
 	public SideBarFilterPanel(
+		ModelOfCarRepository modelOfCarRepository,
 		MarkOfCarRepository markOfCarRepository,
 		CarBodyTypeRepository carBodyTypeRepository,
 		EntryPoint point, DataBase database, JPanel panel)
 	{
 		setLayout(null); 
-		this.markOfCarRepository = markOfCarRepository;
 		this.carBodyTypeRepository = carBodyTypeRepository;
+		this.modelOfCarRepository = modelOfCarRepository;
+		this.markOfCarRepository = markOfCarRepository;
 		
 		JLabel mainLabel = new JLabel("Применить фильтр"); 
 		Font font = new Font("Arial", Font.BOLD, 13); 
@@ -57,7 +61,11 @@ public class SideBarFilterPanel extends JPanel
 		
 		this.markComboBox = createMarkComboBox();
 		this.modelComboBox = createModelComboBox();
-		this.markComboBox.addActionListener(new ModelComboBoxUpdateActionListener(this.markComboBox, this.modelComboBox, database));
+		ModelComboBoxUpdateActionListener modelActionListener = new ModelComboBoxUpdateActionListener(
+			this.markComboBox, 
+			this.modelComboBox, 
+			this.modelOfCarRepository);
+		this.markComboBox.addActionListener(modelActionListener);
 		add(markComboBox); 
 		add(modelComboBox);
 

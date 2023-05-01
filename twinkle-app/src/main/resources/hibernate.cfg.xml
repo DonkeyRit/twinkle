@@ -20,5 +20,6 @@
         <mapping class="com.github.donkeyrit.twinkle.dal.models.User"/>
         <mapping class="com.github.donkeyrit.twinkle.dal.models.MarkOfCar"/>
         <mapping class="com.github.donkeyrit.twinkle.dal.models.CarBodyType"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.ModelOfCar"/>
     </session-factory>
 </hibernate-configuration>
