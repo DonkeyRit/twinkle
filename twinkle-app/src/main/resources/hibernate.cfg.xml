@@ -18,5 +18,6 @@
 
         <!-- Names the annotated entity class -->
         <mapping class="com.github.donkeyrit.twinkle.dal.models.User"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.MarkOfCar"/>
     </session-factory>
 </hibernate-configuration>

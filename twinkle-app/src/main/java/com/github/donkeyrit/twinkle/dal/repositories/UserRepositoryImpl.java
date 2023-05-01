@@ -13,7 +13,8 @@ public class UserRepositoryImpl implements UserRepository
 {
     private EntityManager session;
     
-    public UserRepositoryImpl(EntityManager session) {
+    public UserRepositoryImpl(EntityManager session) 
+	{
         this.session = session;
     }
 
@@ -57,6 +58,4 @@ public class UserRepositoryImpl implements UserRepository
         session.persist(user);
         session.getTransaction().commit();
     }
-
-    
 }

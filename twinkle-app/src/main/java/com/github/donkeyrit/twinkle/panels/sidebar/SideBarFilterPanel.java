@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -23,14 +25,19 @@ import javax.swing.border.TitledBorder;
 
 import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.EntryPoint;
-import com.github.donkeyrit.twinkle.EntryPoint.ContentPanel;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 
 public class SideBarFilterPanel extends JPanel
 { 
+	private MarkOfCarRepository markOfCarRepository;
+	private CarBodyTypeRepository carBodyTypeRepository;
+
 	
-	public SideBarFilterPanel(EntryPoint point, DataBase database, JPanel panel)
+	public SideBarFilterPanel(MarkOfCarRepository markOfCarRepository, EntryPoint point, DataBase database, JPanel panel)
 	{
 		setLayout(null); 
+		this.markOfCarRepository = markOfCarRepository;
 		
 		JLabel mainLabel = new JLabel("Применить фильтр"); 
 		Font font = new Font("Arial", Font.BOLD, 13); 
@@ -38,24 +45,19 @@ public class SideBarFilterPanel extends JPanel
 		mainLabel.setBounds(40, 10, 140, 20); 
 		add(mainLabel);
 		
-		ResultSet markSet = database.select("SELECT DISTINCT(mark_name) FROM mark"); 
-		ArrayList<String> markList = new ArrayList<String>(); 
-		markList.add(0,"All marks"); 
-		try { 
-			while(markSet.next()){
-				markList.add(markSet.getString("mark_name")); 
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-		String[] markMas = markList.toArray(new String[markList.size()]); 
 		
-		JComboBox markCombo = new JComboBox(markMas); 
-		markCombo.setBounds(10, 40, 180, 20); 
-		JComboBox modelCombo = new JComboBox(new String[]{"All models"}); 
-		modelCombo.setBounds(10, 70, 180, 20); 
-		
-		markCombo.addActionListener(new ActionListener(){
+		// Replace with
+		List<String> marks = markOfCarRepository
+			.getList()
+			.map(mark -> mark.getName())
+			.collect(Collectors.toList());
+		marks.add(0, "All marks");
+
+		JComboBox<String> markComboBox = new JComboBox<String>(marks.toArray(String[]::new));
+		markComboBox .setBounds(10, 40, 180, 20); 
+		JComboBox<String> modelComboBox = new JComboBox<>(new String[]{"All models"});
+		modelComboBox.setBounds(10, 70, 180, 20); 
+		markComboBox.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				JComboBox temp = (JComboBox) e.getSource(); 
@@ -94,15 +96,15 @@ public class SideBarFilterPanel extends JPanel
 					}
 				}
 				
-				modelCombo.removeAllItems(); 
-				modelCombo.addItem("All models"); 
+				modelComboBox.removeAllItems(); 
+				modelComboBox.addItem("All models"); 
 				for(int i = 0; i < modelList.size(); i++){
-					modelCombo.addItem(modelList.get(i)); 
+					modelComboBox.addItem(modelList.get(i)); 
 				}
 			}
 		});
-		add(markCombo); 
-		add(modelCombo); 
+		add(markComboBox); 
+		add(modelComboBox);
 
 		ResultSet priceSet = database.select("SELECT MAX(cost) as price FROM car"); 
 		int d = 1; 
@@ -162,7 +164,7 @@ public class SideBarFilterPanel extends JPanel
 			public void actionPerformed(ActionEvent e) { 
 				String resultCondition = ""; 
 				
-				String selectedMark = markCombo.getSelectedItem().toString(); 
+				String selectedMark = markComboBox.getSelectedItem().toString(); 
 				if(!selectedMark.equals("All marks")){
 					resultCondition += "mark_name = " + "'" + selectedMark + "'";
 				}else{
@@ -171,7 +173,7 @@ public class SideBarFilterPanel extends JPanel
 				
 				resultCondition += ":"; 
 				
-				String selectedModel = modelCombo.getSelectedItem().toString(); 
+				String selectedModel = modelComboBox.getSelectedItem().toString(); 
 				if(!selectedModel.equals("All models")){
 					resultCondition += "model_name = " + "'" + selectedModel + "'";
 				}else{

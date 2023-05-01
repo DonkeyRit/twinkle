@@ -12,7 +12,9 @@ import javax.swing.text.*;
 import org.hibernate.cfg.Configuration;
 
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
+import com.github.donkeyrit.twinkle.dal.repositories.MarkOfCarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
@@ -36,6 +38,7 @@ public class EntryPoint {
     
     // Repositories
     private final UserRepository userRepository; 
+	private final MarkOfCarRepository markOfCarRepository;
 
     private MainFrame mainFrame;
     private JPanel panel; 
@@ -57,6 +60,7 @@ public class EntryPoint {
         EntityManager session = sessionFactory.createEntityManager();
 
         this.userRepository = new UserRepositoryImpl(session);
+		this.markOfCarRepository = new MarkOfCarRepositoryImpl(session);
     }
     
     private void initGui()
@@ -74,7 +78,7 @@ public class EntryPoint {
         ContentCompositePanel contentPanel = new ContentCompositePanel();
 		contentPanel
 			.setNavigationPanel(new NavigationPanel(mainFrame, contentPanel, this))
-			.setSidebarPanel(new SideBarFilterPanel(this, database, contentPanel))
+			.setSidebarPanel(new SideBarFilterPanel(this.markOfCarRepository, this, database, contentPanel))
 			.setContentPanel(new ContentPanel(""));
         switchedPanel.addPanel(Constants.CONTENT_PANEL_KEY, contentPanel);
         panel = contentPanel;
