@@ -25,15 +25,20 @@ import javax.swing.border.TitledBorder;
 
 import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.EntryPoint;
+import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
+import com.github.donkeyrit.twinkle.panels.sidebar.listeners.ModelComboBoxUpdateActionListener;
+import com.github.donkeyrit.twinkle.panels.sidebar.models.MarkComboBoxModel;
 
 public class SideBarFilterPanel extends JPanel
 { 
 	private MarkOfCarRepository markOfCarRepository;
 	private CarBodyTypeRepository carBodyTypeRepository;
 
-	private List<JCheckBox> bodyTypeCheckBoxes;
+	private final List<JCheckBox> bodyTypeCheckBoxes;
+	private final JComboBox<MarkOfCar> markComboBox;
+	private final JComboBox<String> modelComboBox;
 	
 	public SideBarFilterPanel(
 		MarkOfCarRepository markOfCarRepository,
@@ -50,63 +55,9 @@ public class SideBarFilterPanel extends JPanel
 		mainLabel.setBounds(40, 10, 140, 20); 
 		add(mainLabel);
 		
-		
-		List<String> marks = markOfCarRepository
-			.getList()
-			.map(mark -> mark.getName())
-			.collect(Collectors.toList());
-		marks.add(0, "All marks");
-
-		JComboBox<String> markComboBox = new JComboBox<String>(marks.toArray(String[]::new));
-		markComboBox .setBounds(10, 40, 180, 20); 
-		JComboBox<String> modelComboBox = new JComboBox<>(new String[]{"All models"});
-		modelComboBox.setBounds(10, 70, 180, 20); 
-		markComboBox.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e){
-				JComboBox temp = (JComboBox) e.getSource(); 
-				String markSelected = (String) temp.getSelectedItem(); 
-				ArrayList<Integer> idMarkList = new ArrayList<Integer>(); 
-				ArrayList<String> modelList = new ArrayList<String>(); 
-				
-				if(!markSelected.equals("All marks")){ 
-					ResultSet idMarkSet = database.select("SELECT id_mark FROM mark WHERE mark_name = '" + markSelected + "'"); 
-
-					try {
-						while(idMarkSet.next()){
-							idMarkList.add(idMarkSet.getInt("id_mark")); 
-						}
-					} catch (SQLException ex) {
-						ex.printStackTrace();
-					}
-
-					String queryModel = "SELECT model_name FROM model WHERE id_mark in ("; 
-					for(int i = 0; i < idMarkList.size(); i++){ 
-						queryModel += idMarkList.get(i);
-						if(i == idMarkList.size() - 1){
-							queryModel += ")";
-						}else{
-							queryModel += ",";
-						}
-					}
-
-					ResultSet modelSet = database.select(queryModel); 
-					try{
-						while(modelSet.next()){
-							modelList.add(modelSet.getString("model_name")); 
-						}
-					}catch(SQLException ex){
-						ex.printStackTrace();
-					}
-				}
-				
-				modelComboBox.removeAllItems(); 
-				modelComboBox.addItem("All models"); 
-				for(int i = 0; i < modelList.size(); i++){
-					modelComboBox.addItem(modelList.get(i)); 
-				}
-			}
-		});
+		this.markComboBox = createMarkComboBox();
+		this.modelComboBox = createModelComboBox();
+		this.markComboBox.addActionListener(new ModelComboBoxUpdateActionListener(this.markComboBox, this.modelComboBox, database));
 		add(markComboBox); 
 		add(modelComboBox);
 
@@ -224,6 +175,26 @@ public class SideBarFilterPanel extends JPanel
 			}		
 		});
 		add(applyFilter);
+	}
+
+	private JComboBox<MarkOfCar> createMarkComboBox()
+	{
+		List<MarkOfCar> marks = markOfCarRepository
+			.getList()
+			.collect(Collectors.toList());
+
+		MarkComboBoxModel markComboBoxModel = new MarkComboBoxModel(marks, "All marks");
+		JComboBox<MarkOfCar> markComboBox = new JComboBox<MarkOfCar>(markComboBoxModel);
+		markComboBox.setBounds(10, 40, 180, 20); 
+
+		return markComboBox;
+	}
+
+	private JComboBox<String> createModelComboBox()
+	{
+		JComboBox<String> modelComboBox = new JComboBox<>(new String[]{"All models"});
+		modelComboBox.setBounds(10, 70, 180, 20); 
+		return modelComboBox;
 	}
 
 	private List<JCheckBox> createBodyTypeCheckBoxes() 

@@ -52,4 +52,10 @@ public class MarkOfCar
 		this.countryId = countryId;
 	}
 
+	@Override
+	public String toString() 
+	{
+		return name;
+	}
+
 }
