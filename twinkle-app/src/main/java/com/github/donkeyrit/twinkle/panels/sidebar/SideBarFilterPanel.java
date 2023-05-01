@@ -33,11 +33,16 @@ public class SideBarFilterPanel extends JPanel
 	private MarkOfCarRepository markOfCarRepository;
 	private CarBodyTypeRepository carBodyTypeRepository;
 
+	private List<JCheckBox> bodyTypeCheckBoxes;
 	
-	public SideBarFilterPanel(MarkOfCarRepository markOfCarRepository, EntryPoint point, DataBase database, JPanel panel)
+	public SideBarFilterPanel(
+		MarkOfCarRepository markOfCarRepository,
+		CarBodyTypeRepository carBodyTypeRepository,
+		EntryPoint point, DataBase database, JPanel panel)
 	{
 		setLayout(null); 
 		this.markOfCarRepository = markOfCarRepository;
+		this.carBodyTypeRepository = carBodyTypeRepository;
 		
 		JLabel mainLabel = new JLabel("Применить фильтр"); 
 		Font font = new Font("Arial", Font.BOLD, 13); 
@@ -46,7 +51,6 @@ public class SideBarFilterPanel extends JPanel
 		add(mainLabel);
 		
 		
-		// Replace with
 		List<String> marks = markOfCarRepository
 			.getList()
 			.map(mark -> mark.getName())
@@ -131,31 +135,7 @@ public class SideBarFilterPanel extends JPanel
 		price.setBounds(10, 150, 180, 45);
 		add(price); 
 		
-		ResultSet bodyTypeSet = database.select("SELECT DISTINCT(body_type_name) FROM body_type"); 
-		ArrayList<String> bodyTypeList = new ArrayList<String>(); 
-		try {
-			while(bodyTypeSet.next()){
-				bodyTypeList.add(bodyTypeSet.getString("body_type_name")); 
-			}
-		} catch (SQLException ex) {
-				ex.printStackTrace();
-		}
-		
-		Box box = Box.createVerticalBox(); 
-		ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>(); 
-		for(int i = 0; i < bodyTypeList.size(); i++){
-			JCheckBox temp = new JCheckBox(bodyTypeList.get(i)); 
-			checkBoxes.add(temp); 
-			box.add(temp); 
-		}
-		JScrollPane scrollPane = new JScrollPane(box); 
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED); 
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setBorder(new TitledBorder("Типы кузова")); 
-		scrollPane.setBounds(10, 225, 180, 270);
-		add(scrollPane);
-		
-		
+		this.bodyTypeCheckBoxes = createBodyTypeCheckBoxes();
 		
 		JButton applyFilter = new JButton("Apply"); 
 		applyFilter.setBounds(50, 520, 100, 20);
@@ -192,10 +172,10 @@ public class SideBarFilterPanel extends JPanel
 				
 				String selectedCheckBoxes = ""; 
 				ArrayList<String> selectedCB = new ArrayList<String>();
-				for(int i = 0; i< checkBoxes.size(); i++){
-					boolean isTrue = checkBoxes.get(i).isSelected(); 
+				for(int i = 0; i< bodyTypeCheckBoxes.size(); i++){
+					boolean isTrue = bodyTypeCheckBoxes.get(i).isSelected(); 
 					if(isTrue){
-						selectedCB.add(checkBoxes.get(i).getText());
+						selectedCB.add(bodyTypeCheckBoxes.get(i).getText());
 					} 
 				}
 				
@@ -244,6 +224,31 @@ public class SideBarFilterPanel extends JPanel
 			}		
 		});
 		add(applyFilter);
+	}
+
+	private List<JCheckBox> createBodyTypeCheckBoxes() 
+	{
+		Box box = Box.createVerticalBox();
+		List<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
+
+		List<JCheckBox> bodyTypeCheckBoxes = this.carBodyTypeRepository
+			.getList()
+			.map(bodyType -> {
+				JCheckBox checkBox = new JCheckBox(bodyType.getType()); 
+				checkBoxes.add(checkBox); 
+				box.add(checkBox);
+				return checkBox;
+			})
+			.collect(Collectors.toList());
+
+		JScrollPane scrollPane = new JScrollPane(box); 
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED); 
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setBorder(new TitledBorder("Типы кузова")); 
+		scrollPane.setBounds(10, 225, 180, 270);
+		add(scrollPane);
+
+		return bodyTypeCheckBoxes;
 	}
 	
 	@Override
