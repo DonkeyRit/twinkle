@@ -2,7 +2,6 @@ package com.github.donkeyrit.twinkle.panels.login;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.panels.login.listeners.LoginActionListener;
-import com.github.donkeyrit.twinkle.listeners.PanelSwitcherActionListener;
 import com.github.donkeyrit.twinkle.listeners.ResetablePanelSwitcherActionListener;
 import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
 import com.github.donkeyrit.twinkle.security.HashManager;
