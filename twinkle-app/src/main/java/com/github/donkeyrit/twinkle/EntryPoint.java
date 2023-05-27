@@ -129,14 +129,14 @@ public class EntryPoint {
             
             imagesNum = num; 
             setLayout(null); 
-            String query = "SELECT id_car,model_year,info,cost,model_name,mark_name,country_name,body_type_name FROM\n" +
-                "(SELECT id_car,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
-                "(SELECT id_car,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
-                "(SELECT id_car,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
+            String query = "SELECT id,model_year,info,cost,model_name,mark_name,country_name,body_type_name FROM\n" +
+                "(SELECT id,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
+                "(SELECT id,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
+                "(SELECT id,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
                 "INNER JOIN model ON car.id_model = model.id_model) as join1\n" +
                 "INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n" +
                 "INNER JOIN country ON join2.id_country = country.id_country) as join3\n" +
-                "INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type WHERE id_car = " + imagesNum; 
+                "INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type WHERE id = " + imagesNum; 
             
             ResultSet carSet = database.select(query);
             try{
@@ -872,7 +872,7 @@ public class EntryPoint {
                                     
                                     String queryToDb = "SELECT login,id_car,join1.id_user,start_date,plan_date,end_date FROM\n" +
                                     "(SELECT id_car,id_user,rent.id_client,start_date,plan_date,end_date FROM rent INNER JOIN client ON rent.id_client = client.id_client) as join1\n" +
-                                    "INNER JOINusersON join1.id_user = user.id_user WHERE login = '" + UserInformation.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1;"; 
+                                    "INNER JOIN users ON join1.id_user = user.id_user WHERE login = '" + UserInformation.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1;"; 
                                     
                                     ResultSet queryToDbSet = database.select(queryToDb); 
                                     Date startRentaDate = null;

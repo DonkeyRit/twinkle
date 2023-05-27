@@ -64,10 +64,10 @@ public class ContentPanel extends JPanel
 			conditionQuery = "WHERE " + condition;
 		}
 		
-		String query = "SELECT id_car FROM\n" +
-"                (SELECT id_car,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
-"                (SELECT id_car,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
-"                (SELECT id_car,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
+		String query = "SELECT id FROM\n" +
+"                (SELECT id,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
+"                (SELECT id,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
+"                (SELECT id,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
 "                INNER JOIN model ON car.id_model = model.id_model) as join1\n" +
 "                INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n" +
 "                INNER JOIN country ON join2.id_country = country.id_country) as join3\n" +
@@ -78,7 +78,7 @@ public class ContentPanel extends JPanel
 		int numString = 0; 
 		try{
 			while(carsSet.next()){
-				carsList.add(carsSet.getInt("id_car")); 
+				carsList.add(carsSet.getInt("id")); 
 			}
 			carsSet.last(); 
 			numString = carsSet.getRow(); 

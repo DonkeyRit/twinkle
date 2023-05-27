@@ -1,7 +1,6 @@
 package com.github.donkeyrit.twinkle.dal.contracts;
 
 import jakarta.persistence.EntityManager;
-import java.util.List;
 
 public abstract class BaseCrudRepository<T extends BaseDbModel> implements CrudRepository<T>
 {
@@ -13,9 +12,22 @@ public abstract class BaseCrudRepository<T extends BaseDbModel> implements CrudR
 	}
 
 	@Override
-	public boolean insert(T o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'insert'");
+	public boolean insert(T o) 
+	{
+		try
+		{
+			session.getTransaction().begin();
+			session.persist(o);
+			session.getTransaction().commit();
+			return true;
+		}
+		catch (Exception ex)
+		{
+			//TODO: Implement logger
+			System.out.printf("Exception occured in %s during inserting. Exception - %s", this,getClass().getName(), ex);
+		}
+
+		return false;
 	}
 
 	@Override
@@ -25,9 +37,22 @@ public abstract class BaseCrudRepository<T extends BaseDbModel> implements CrudR
 	}
 
 	@Override
-	public boolean delete(T o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
+	public boolean delete(T o) 
+	{
+		try
+		{
+			session.getTransaction().begin();
+			session.remove(o);
+			session.getTransaction().commit();
+			return true;
+		}
+		catch (Exception ex)
+		{
+			//TODO: Implement logger
+			System.out.printf("Exception occured in %s during removing. Exception - %s", this,getClass().getName(), ex);
+		}
+
+		return false;
 	}
 
 	@Override
