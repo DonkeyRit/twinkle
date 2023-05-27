@@ -45,13 +45,13 @@ CREATE TABLE "model" (
 );
 
 CREATE TABLE "car" (
-    id_car serial,
+    id serial,
     model_year timestamp not null,
     id_model int not null,
     info text not null,
     image int not null,
     cost decimal not null,
-    primary key (id_car)
+    primary key (id)
 );
 
 CREATE TABLE "rent" (
@@ -83,6 +83,6 @@ ALTER TABLE "model" ADD CONSTRAint Model_fk0 FOREIGN KEY (id_mark) REFERENCES "m
 ALTER TABLE "model" ADD CONSTRAint Model_fk1 FOREIGN KEY (id_body_type) REFERENCES "body_type"(id_body_type);
 ALTER TABLE "mark" ADD CONSTRAint Mark_fk0 FOREIGN KEY (id_country) REFERENCES "country"(id_country);
 ALTER TABLE "rent" ADD CONSTRAint Rent_fk0 FOREIGN KEY (id_client) REFERENCES "clients"(id_client);
-ALTER TABLE "rent" ADD CONSTRAint Rent_fk1 FOREIGN KEY (id_car) REFERENCES "car"(id_car);
+ALTER TABLE "rent" ADD CONSTRAint Rent_fk1 FOREIGN KEY (id_car) REFERENCES "car"(id);
 ALTER TABLE "resulting_injury" ADD CONSTRAint ResultingInjury_fk0 FOREIGN KEY (id_rent) REFERENCES "rent"(id_rent);
 ALTER TABLE "resulting_injury" ADD CONSTRAint ResultingInjury_fk1 FOREIGN KEY (id_injury) REFERENCES "injury"(id_injury);

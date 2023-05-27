@@ -97,7 +97,6 @@ public class ContentPanel extends JPanel
 		int start = (numOfPage - 1) * 4; 
 		int end = (numOfPage - 1) * 4 + size; 
 		
-		ArrayList<JPanel> panelList = new ArrayList<JPanel>(); 
 		for(int i = start,j = 0; i < end; i++,j++){
 			JPanel temp = point.new CarPanel(carsList.get(i)); 
 			temp.setBorder(new LineBorder(new Color(0,163,163), 4)); 
