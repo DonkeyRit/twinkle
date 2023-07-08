@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.*;
 import javax.swing.border.*;
 import com.github.donkeyrit.twinkle.DataBase;
-import com.github.donkeyrit.twinkle.EntryPoint;
 import com.github.donkeyrit.twinkle.panels.content.listeners.NextBackListener;
 import com.github.donkeyrit.twinkle.panels.content.listeners.ScrollPageListener;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
@@ -18,7 +17,7 @@ public class ContentPanel extends JPanel
 	public int startBut = 1; 
 	public String conditionPanel = ""; 
 	
-	public ContentPanel(EntryPoint point, JPanel panel, DataBase database, String condition, int ... args)
+	public ContentPanel(JPanel panel, DataBase database, String condition, int ... args)
 	{
 		setLayout(null); 
 		conditionPanel = condition; 
@@ -46,7 +45,7 @@ public class ContentPanel extends JPanel
 				}
 				
 				panel.remove(temp); 
-				JPanel content = new ContentPanel(point, panel, database, ""); 
+				JPanel content = new ContentPanel(panel, database, ""); 
 				content.setBounds(250,100,605,550); 
 				panel.add(content); 
 				panel.revalidate(); 
@@ -98,7 +97,7 @@ public class ContentPanel extends JPanel
 		int end = (numOfPage - 1) * 4 + size; 
 		
 		for(int i = start,j = 0; i < end; i++,j++){
-			JPanel temp = point.new CarPanel(carsList.get(i)); 
+			JPanel temp = new CarPanel(database, panel, carsList.get(i)); 
 			temp.setBorder(new LineBorder(new Color(0,163,163), 4)); 
 			temp.setBounds(20,40 + j * 120,565,100); 
 			add(temp); 
@@ -119,7 +118,7 @@ public class ContentPanel extends JPanel
 		
 		if(startBut > 5){ 
 			JButton backBut = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/back.png")); 
-			backBut.addActionListener(new NextBackListener(panel, database, point)); 
+			backBut.addActionListener(new NextBackListener(panel, database)); 
 			
 			
 			buttonBox.add(backBut); 
@@ -131,7 +130,7 @@ public class ContentPanel extends JPanel
 			JButton temp = new JButton(i + ""); 
 			
 			temp.setFont(buttonFont); 
-			temp.addActionListener(new ScrollPageListener(panel, database, point)); 
+			temp.addActionListener(new ScrollPageListener(panel, database)); 
 			
 			buttonBox.add(temp); 
 			buttonsList.add(temp); 
@@ -139,7 +138,7 @@ public class ContentPanel extends JPanel
 		
 		if(m != (num + 1)){ 
 			JButton nextBut = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/next.png")); 
-			nextBut.addActionListener(new NextBackListener(panel, database, point)); 
+			nextBut.addActionListener(new NextBackListener(panel, database)); 
 			
 			
 			buttonBox.add(nextBut); 

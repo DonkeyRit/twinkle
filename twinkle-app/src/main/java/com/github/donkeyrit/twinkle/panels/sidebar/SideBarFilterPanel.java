@@ -24,7 +24,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.TitledBorder;
 
 import com.github.donkeyrit.twinkle.DataBase;
-import com.github.donkeyrit.twinkle.EntryPoint;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
@@ -46,8 +45,9 @@ public class SideBarFilterPanel extends JPanel
 	public SideBarFilterPanel(
 		ModelOfCarRepository modelOfCarRepository,
 		MarkOfCarRepository markOfCarRepository,
-		CarBodyTypeRepository carBodyTypeRepository,
-		EntryPoint point, DataBase database, JPanel panel)
+		CarBodyTypeRepository carBodyTypeRepository, 
+		DataBase database, 
+		JPanel panel)
 	{
 		setLayout(null); 
 		this.carBodyTypeRepository = carBodyTypeRepository;
@@ -176,7 +176,7 @@ public class SideBarFilterPanel extends JPanel
 				}
 
 				panel.remove(temp); 
-				JPanel content = new ContentPanel(point, panel, database, resStr); 
+				JPanel content = new ContentPanel(panel, database, resStr); 
 				content.setBounds(250,100,605,550); 
 				panel.add(content); 
 				panel.revalidate(); 
