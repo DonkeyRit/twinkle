@@ -5,7 +5,7 @@ import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
 import com.github.donkeyrit.twinkle.panels.navigation.listeners.GoToSettingsPageActionListener;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.utils.Constants;
-import com.github.donkeyrit.twinkle.EntryPoint;
+import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.google.inject.Inject;
 
@@ -18,14 +18,14 @@ public class NavigationPanel extends JPanel
 {
 	private final ContentCompositePanel container;
 	private final MainFrame mainFrame;
-	private final EntryPoint entryPoint; //TODO: Remove this
+	private final DataBase database;
 
 	@Inject
-    public NavigationPanel(MainFrame mainFrame, ContentCompositePanel container, EntryPoint entryPoint)
+    public NavigationPanel(DataBase database, MainFrame mainFrame, ContentCompositePanel container)
     {
+		this.database = database;
 		this.container = container;
 		this.mainFrame = mainFrame;
-		this.entryPoint = entryPoint;
         this.setUp();
     }
 
@@ -51,7 +51,7 @@ public class NavigationPanel extends JPanel
 
 		// User 
         JButton avatar = new JButton(); 
-        avatar.addActionListener(new GoToSettingsPageActionListener(entryPoint, container));
+        avatar.addActionListener(new GoToSettingsPageActionListener(container, database, mainFrame.getSwitchedPanel()));
         avatar.setBounds(725, 10, 60, 60); 
 		//TODO: Fix problem with avatarNumber
         ImageIcon iconAvatar = AssetsRetriever.retrieveAssetImageIconFromResources("assets/avatar/mini_avatar/" + 2 + ".png"); 

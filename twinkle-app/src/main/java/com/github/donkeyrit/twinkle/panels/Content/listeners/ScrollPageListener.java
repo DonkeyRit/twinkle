@@ -9,19 +9,20 @@ import javax.swing.JPanel;
 
 import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
 import com.github.donkeyrit.twinkle.EntryPoint;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.DataBase;
 
 public class ScrollPageListener implements ActionListener
 { 
-	private JPanel panel;
 	private DataBase dataBase;
-	private EntryPoint entryPoint;
+	private JPanel panel;
+	private CarRepository carRepository;
 	
-	public ScrollPageListener(JPanel panel, DataBase dataBase, EntryPoint entryPoint) 
+	public ScrollPageListener(JPanel panel, CarRepository carRepository, DataBase dataBase) 
 	{
 		this.panel = panel;
 		this.dataBase = dataBase;
-		this.entryPoint = entryPoint;
+		this.carRepository = carRepository;
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public class ScrollPageListener implements ActionListener
 		}
 		
 		panel.remove(temp); 
-		JPanel content = new ContentPanel(this.entryPoint, this.panel, this.dataBase, temp.conditionPanel,numPage,temp.startBut); 
+		JPanel content = new ContentPanel(this.panel, this.dataBase, this.carRepository, temp.conditionPanel,numPage,temp.startBut); 
 		content.setBounds(250,100,605,550); 
 		panel.add(content); 
 		panel.revalidate(); 
