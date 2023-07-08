@@ -1,15 +1,15 @@
 package com.github.donkeyrit.twinkle.panels.content.listeners;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Component;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import com.github.donkeyrit.twinkle.DataBase;
-import com.github.donkeyrit.twinkle.EntryPoint;
 import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
+import com.github.donkeyrit.twinkle.EntryPoint;
+import com.github.donkeyrit.twinkle.DataBase;
 
 public class ScrollPageListener implements ActionListener
 { 

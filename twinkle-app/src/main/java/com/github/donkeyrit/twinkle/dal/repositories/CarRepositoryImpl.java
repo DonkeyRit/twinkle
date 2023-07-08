@@ -6,18 +6,18 @@ import com.github.donkeyrit.twinkle.dal.contracts.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 
 import jakarta.persistence.EntityManager;
-import java.util.List;
+import java.util.stream.Stream;
 
 public class CarRepositoryImpl extends BaseCrudRepository<Car> implements CarRepository
 {
-
 	public CarRepositoryImpl(EntityManager session) 
 	{
 		super(session);
 	}
 
 	@Override
-	public List<Car> getList(QueryFilter queryFilter) {
+	public Stream<Car> getList(QueryFilter queryFilter) 
+	{
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getList'");
 	}
