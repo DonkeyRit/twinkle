@@ -23,6 +23,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
 import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
+import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
 import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
 import com.github.donkeyrit.twinkle.panels.navigation.NavigationPanel;
 import com.github.donkeyrit.twinkle.panels.sidebar.SideBarFilterPanel;
@@ -49,6 +50,7 @@ public class EntryPoint {
     private MainFrame mainFrame;
     private JPanel panel; 
     private DataBase database; 
+	private EntryPoint point;
     
     public static void main(String[] args){
         /**
@@ -73,6 +75,7 @@ public class EntryPoint {
     
     private void initGui()
     {
+		point = this;
         database = new DataBase(); 
         this.mainFrame = new MainFrame("Rent car", new SwitchedPanel());
 		SwitchedPanel switchedPanel = this.mainFrame.getSwitchedPanel();
@@ -87,7 +90,7 @@ public class EntryPoint {
 		contentPanel
 			.setNavigationPanel(new NavigationPanel(mainFrame, contentPanel, this))
 			.setSidebarPanel(new SideBarFilterPanel(this.modelOfCarRepository, this.markOfCarRepository, this.carBodyTypeRepository, this, database, contentPanel))
-			.setContentPanel(new ContentPanel(""));
+			.setContentPanel(new ContentPanel(this, contentPanel, database, ""));
         switchedPanel.addPanel(Constants.CONTENT_PANEL_KEY, contentPanel);
         panel = contentPanel;
 
@@ -95,148 +98,7 @@ public class EntryPoint {
         this.mainFrame.setVisible(true);
     }
     
-    public class ContentPanel extends JPanel{ 
-        int numOfPage = 1; 
-        int startBut = 1; 
-        String conditionPanel = ""; 
-        
-        public ContentPanel(String condition, int ... args){
-            setLayout(null); 
-            conditionPanel = condition; 
-            
-            JLabel contentMainLabel = new JLabel("List of cars:"); 
-            Font font = new Font("Arial", Font.BOLD, 13); 
-            contentMainLabel.setFont(font); 
-            contentMainLabel.setBounds(250,10,100,20); 
-            add(contentMainLabel); 
-            
-            JButton reload = new JButton(); 
-            reload.setBounds(568, 10,16,16); 
-            ImageIcon iconExit = AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/reload.png"); 
-            reload.setIcon(iconExit); 
-            reload.setHorizontalTextPosition(SwingConstants.LEFT);
-            reload.addActionListener(new ActionListener(){ 
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Component[] mas = panel.getComponents(); 
-                    JPanel temp = null; 
-                    for(int i = 0; i < mas.length; i++){
-                        if(mas[i].getClass().toString().indexOf("ContentPanel") != -1){
-                            temp = (JPanel) mas[i];
-                        }
-                    }
-                    
-                    panel.remove(temp); 
-                    JPanel content = new ContentPanel(""); 
-                    content.setBounds(250,100,605,550); 
-                    panel.add(content); 
-                    panel.revalidate(); 
-                    panel.repaint(); 
-                }
-            });
-            add(reload);
-            
-            if(args.length != 0){ 
-                numOfPage = args[0]; 
-            }
-            
-            String conditionQuery = ""; 
-            if(!condition.equals("")){ 
-                conditionQuery = "WHERE " + condition;
-            }
-            
-            String query = "SELECT id_car FROM\n" +
-"                (SELECT id_car,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
-"                (SELECT id_car,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
-"                (SELECT id_car,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
-"                INNER JOIN model ON car.id_model = model.id_model) as join1\n" +
-"                INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n" +
-"                INNER JOIN country ON join2.id_country = country.id_country) as join3\n" +
-"                INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type " + conditionQuery + " ORDER BY model_year DESC";
-
-            ResultSet carsSet = database.select(query); 
-            ArrayList<Integer> carsList = new ArrayList<Integer>(); 
-            int numString = 0; 
-            try{
-                while(carsSet.next()){
-                    carsList.add(carsSet.getInt("id_car")); 
-                }
-                carsSet.last(); 
-                numString = carsSet.getRow(); 
-            }catch(SQLException ex){
-                ex.printStackTrace();
-            }
-            
-            int a  = numString - (numOfPage - 1) * 4; 
-            int size = 0; 
-            if(a > 4){ 
-                size = 4; 
-            }else{ 
-                size = a; 
-            }
-            
-            int start = (numOfPage - 1) * 4; 
-            int end = (numOfPage - 1) * 4 + size; 
-            
-            ArrayList<JPanel> panelList = new ArrayList<JPanel>(); 
-            for(int i = start,j = 0; i < end; i++,j++){
-                JPanel temp = new CarPanel(carsList.get(i)); 
-                temp.setBorder(new LineBorder(new Color(0,163,163), 4)); 
-                temp.setBounds(20,40 + j * 120,565,100); 
-                add(temp); 
-            }
-            
-            int num = (int)(Math.ceil(numString / 4f)); 
-            if(args.length != 0 && args.length > 1){
-                startBut = args[1]; 
-            }
-
-            int m = startBut + 5;
-            if(m > num){
-                m = num + 1;
-            }
-            
-            Box buttonBox = Box.createHorizontalBox(); 
-            buttonBox.setBounds(205, 520, 400, 30); 
-            
-            if(startBut > 5){ 
-                JButton backBut = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/back.png")); 
-                backBut.addActionListener(new NextBackListener()); 
-                
-                
-                buttonBox.add(backBut); 
-            }
-            
-            Font buttonFont = new Font("Arial", Font.ITALIC, 10); 
-            ArrayList<JButton> buttonsList = new ArrayList<JButton>(); 
-            for(int i = startBut; i < m; i++){
-                JButton temp = new JButton(i + ""); 
-                
-                temp.setFont(buttonFont); 
-                temp.addActionListener(new ScrollPageListener()); 
-                
-                buttonBox.add(temp); 
-                buttonsList.add(temp); 
-            }
-            
-            if(m != (num + 1)){ 
-                JButton nextBut = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/next.png")); 
-                nextBut.addActionListener(new NextBackListener()); 
-                
-                
-                buttonBox.add(nextBut); 
-            }  
-            add(buttonBox); 
-        }
-        
-        @Override
-        public void paintComponent(Graphics g){
-            g.setColor(new Color(237,237,237)); 
-            g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),30,25); 
-        }
-    }
-    
-    private class CarPanel extends JPanel{
+    public class CarPanel extends JPanel{
         
         private int imagesNum; 
         private Date modelYear; 
@@ -249,7 +111,7 @@ public class EntryPoint {
         private String status; 
         
         
-        CarPanel(int num){
+        public CarPanel(int num){
             
             
             ResultSet statusSet = database.select("SELECT * FROM rent WHERE id_car = " + num + " ORDER BY end_date, plan_date DESC LIMIT 1"); 
@@ -267,14 +129,14 @@ public class EntryPoint {
             
             imagesNum = num; 
             setLayout(null); 
-            String query = "SELECT id_car,model_year,info,cost,model_name,mark_name,country_name,body_type_name FROM\n" +
-                "(SELECT id_car,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
-                "(SELECT id_car,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
-                "(SELECT id_car,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
+            String query = "SELECT id,model_year,info,cost,model_name,mark_name,country_name,body_type_name FROM\n" +
+                "(SELECT id,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
+                "(SELECT id,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
+                "(SELECT id,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
                 "INNER JOIN model ON car.id_model = model.id_model) as join1\n" +
                 "INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n" +
                 "INNER JOIN country ON join2.id_country = country.id_country) as join3\n" +
-                "INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type WHERE id_car = " + imagesNum; 
+                "INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type WHERE id = " + imagesNum; 
             
             ResultSet carSet = database.select(query);
             try{
@@ -495,7 +357,7 @@ public class EntryPoint {
                     }
                     
                     panel.remove(temp); 
-                    JPanel contentPanel = new ContentPanel(filter, numPage,startBut); 
+                    JPanel contentPanel = new ContentPanel(point, panel, database, filter, numPage,startBut); 
                     contentPanel.setBounds(250,100,605,550); 
                     panel.add(contentPanel); 
                     panel.revalidate();
@@ -1010,7 +872,7 @@ public class EntryPoint {
                                     
                                     String queryToDb = "SELECT login,id_car,join1.id_user,start_date,plan_date,end_date FROM\n" +
                                     "(SELECT id_car,id_user,rent.id_client,start_date,plan_date,end_date FROM rent INNER JOIN client ON rent.id_client = client.id_client) as join1\n" +
-                                    "INNER JOINusersON join1.id_user = user.id_user WHERE login = '" + UserInformation.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1;"; 
+                                    "INNER JOIN users ON join1.id_user = user.id_user WHERE login = '" + UserInformation.getLogin() + "' AND id_car = " + imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1;"; 
                                     
                                     ResultSet queryToDbSet = database.select(queryToDb); 
                                     Date startRentaDate = null;
@@ -1438,61 +1300,6 @@ public class EntryPoint {
             g.setColor(new Color(237,237,237)); 
             g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),30,25); 
         }
-    }
-    
-    private class ScrollPageListener implements ActionListener{ 
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            
-            JButton pressButton = (JButton) e.getSource();
-            String textButton = pressButton.getText(); 
-            int numPage = Integer.parseInt(textButton); 
-            
-            Component[] mas = panel.getComponents(); 
-            ContentPanel temp = null; 
-            for(int i = 0; i < mas.length; i++){
-                if(mas[i].getClass().toString().indexOf("ContentPanel") != -1){
-                    temp = (ContentPanel) mas[i];
-                }
-            }
-            
-            panel.remove(temp); 
-            JPanel content = new ContentPanel(temp.conditionPanel,numPage,temp.startBut); 
-            content.setBounds(250,100,605,550); 
-            panel.add(content); 
-            panel.revalidate(); 
-            panel.repaint(); 
-        }
-        
-    }
-    
-    private class NextBackListener implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JButton selectedBut = (JButton) e.getSource(); 
-            ContentPanel outerPanel = (ContentPanel) selectedBut.getParent().getParent();
-            int numNowPage = outerPanel.startBut; 
-            
-            String nameBut = selectedBut.getIcon().toString();
-            int indexName = nameBut.lastIndexOf("/");
-            
-            panel.remove(outerPanel);
-            
-            JPanel addPanel = null;
-            if(nameBut.substring(indexName + 1, indexName + 5).equals("next")){
-                addPanel = new ContentPanel(outerPanel.conditionPanel,numNowPage + 5,numNowPage + 5);
-                panel.add(addPanel);
-            }else{
-               addPanel = new ContentPanel(outerPanel.conditionPanel,numNowPage - 5,numNowPage - 5);
-                panel.add(addPanel);
-            }
-            addPanel.setBounds(250,100,605,550);
-            panel.revalidate();
-            panel.repaint();
-        }
-        
     }
     
     private class MyTableModel extends AbstractTableModel{
