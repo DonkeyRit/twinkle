@@ -26,6 +26,7 @@ import javax.swing.border.TitledBorder;
 import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
 import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
@@ -45,7 +46,8 @@ public class SideBarFilterPanel extends JPanel
 	public SideBarFilterPanel(
 		ModelOfCarRepository modelOfCarRepository,
 		MarkOfCarRepository markOfCarRepository,
-		CarBodyTypeRepository carBodyTypeRepository, 
+		CarBodyTypeRepository carBodyTypeRepository,
+		CarRepository carRepository,
 		DataBase database, 
 		JPanel panel)
 	{
@@ -176,7 +178,7 @@ public class SideBarFilterPanel extends JPanel
 				}
 
 				panel.remove(temp); 
-				JPanel content = new ContentPanel(panel, database, resStr); 
+				JPanel content = new ContentPanel(panel, database, carRepository, resStr); 
 				content.setBounds(250,100,605,550); 
 				panel.add(content); 
 				panel.revalidate(); 

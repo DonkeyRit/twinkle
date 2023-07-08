@@ -11,10 +11,12 @@ import org.hibernate.cfg.Configuration;
 
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.dal.repositories.CarBodyTypeRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.MarkOfCarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.ModelOfCarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
@@ -44,6 +46,7 @@ public class EntryPoint {
 	private final MarkOfCarRepository markOfCarRepository;
 	private final CarBodyTypeRepository carBodyTypeRepository;
 	private final ModelOfCarRepository modelOfCarRepository;
+	private final CarRepository carRepository;
 
     private MainFrame mainFrame;
     private JPanel panel; 
@@ -68,6 +71,7 @@ public class EntryPoint {
 		this.markOfCarRepository = new MarkOfCarRepositoryImpl(session);
 		this.carBodyTypeRepository = new CarBodyTypeRepositoryImpl(session);
 		this.modelOfCarRepository = new ModelOfCarRepositoryImpl(session);
+		this.carRepository = new CarRepositoryImpl(session);
     }
     
     private void initGui()
@@ -85,8 +89,8 @@ public class EntryPoint {
         ContentCompositePanel contentPanel = new ContentCompositePanel();
 		contentPanel
 			.setNavigationPanel(new NavigationPanel(mainFrame, contentPanel, this))
-			.setSidebarPanel(new SideBarFilterPanel(this.modelOfCarRepository, this.markOfCarRepository, this.carBodyTypeRepository, database, contentPanel))
-			.setContentPanel(new ContentPanel(contentPanel, database, ""));
+			.setSidebarPanel(new SideBarFilterPanel(this.modelOfCarRepository, this.markOfCarRepository, this.carBodyTypeRepository, this.carRepository, database, contentPanel))
+			.setContentPanel(new ContentPanel(contentPanel, database, carRepository, ""));
         switchedPanel.addPanel(Constants.CONTENT_PANEL_KEY, contentPanel);
         panel = contentPanel;
 
