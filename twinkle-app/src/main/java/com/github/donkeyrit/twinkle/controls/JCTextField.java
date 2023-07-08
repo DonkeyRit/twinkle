@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle;
+package com.github.donkeyrit.twinkle.controls;
 
 import java.awt.*;
 import javax.swing.*;
