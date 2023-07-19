@@ -36,7 +36,6 @@ public class EntryPoint {
 	private final CarRepository carRepository;
 
     private MainFrame mainFrame;
-    private JPanel panel; 
     private DataBase database;
     
     public static void main(String[] args){
@@ -79,7 +78,6 @@ public class EntryPoint {
 			.setSidebarPanel(new SideBarFilterPanel(this.modelOfCarRepository, this.markOfCarRepository, this.carBodyTypeRepository, this.carRepository, database, contentPanel))
 			.setContentPanel(new ContentPanel(contentPanel, database, carRepository, ""));
         switchedPanel.addPanel(Constants.CONTENT_PANEL_KEY, contentPanel);
-        panel = contentPanel;
 
 		switchedPanel.showPanel(Constants.LOGIN_PANEL_KEY);
         this.mainFrame.setVisible(true);
