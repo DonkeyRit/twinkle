@@ -1,6 +1,5 @@
 package com.github.donkeyrit.twinkle;
 
-import javax.swing.*;
 import org.hibernate.cfg.Configuration;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -26,7 +25,8 @@ import com.github.donkeyrit.twinkle.panels.signup.SignupPanel;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.utils.Constants;
 
-public class EntryPoint {
+public class EntryPoint 
+{
     
     // Repositories
     private final UserRepository userRepository; 
@@ -38,7 +38,8 @@ public class EntryPoint {
     private MainFrame mainFrame;
     private DataBase database;
     
-    public static void main(String[] args){
+    public static void main(String[] args)
+	{
         /**
          * Application start
          */
@@ -53,6 +54,7 @@ public class EntryPoint {
             .buildSessionFactory();
         EntityManager session = sessionFactory.createEntityManager();
 
+		this.database = new DataBase();
         this.userRepository = new UserRepositoryImpl(session);
 		this.markOfCarRepository = new MarkOfCarRepositoryImpl(session);
 		this.carBodyTypeRepository = new CarBodyTypeRepositoryImpl(session);
@@ -62,7 +64,6 @@ public class EntryPoint {
     
     private void initGui()
     {
-        database = new DataBase(); 
         this.mainFrame = new MainFrame("Rent car", new SwitchedPanel());
 		SwitchedPanel switchedPanel = this.mainFrame.getSwitchedPanel();
 

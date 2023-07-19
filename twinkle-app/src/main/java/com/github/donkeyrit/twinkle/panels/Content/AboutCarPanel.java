@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 import javax.swing.border.*;
-import javax.swing.table.*;
 import javax.swing.text.*;
 
 import com.github.donkeyrit.twinkle.DataBase;
