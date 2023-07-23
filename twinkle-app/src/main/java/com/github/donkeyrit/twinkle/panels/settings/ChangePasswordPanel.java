@@ -8,7 +8,7 @@ import javax.swing.border.*;
 
 import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
-import com.github.donkeyrit.twinkle.controls.JPaswordField;
+import com.github.donkeyrit.twinkle.controls.input.JCustomPasswordField;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
@@ -22,9 +22,9 @@ public class ChangePasswordPanel extends JPanel {
 		mainBox.setBounds(202, 10, 200, 200);
 
 		String[] labels = new String[] { "Enter old pasword", "Enter new password", "Repeat new password" };
-		ArrayList<JPaswordField> fieldPass = new ArrayList<JPaswordField>();
+		ArrayList<JCustomPasswordField> fieldPass = new ArrayList<JCustomPasswordField>();
 		for (int i = 0; i < labels.length; i++) {
-			JPaswordField passw = new JPaswordField();
+			JCustomPasswordField passw = new JCustomPasswordField(20);
 			passw.setPlaceholder(labels[i]);
 			fieldPass.add(passw);
 			mainBox.add(passw);

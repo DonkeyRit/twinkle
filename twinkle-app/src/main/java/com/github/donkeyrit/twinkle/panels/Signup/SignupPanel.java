@@ -5,6 +5,7 @@ import com.github.donkeyrit.twinkle.panels.signup.listeners.SignupActionListener
 import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
 import com.github.donkeyrit.twinkle.controls.buttons.JConfirmationButton;
 import com.github.donkeyrit.twinkle.controls.buttons.JLinkButton;
+import com.github.donkeyrit.twinkle.controls.input.JCustomPasswordField;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.styles.Colors;
@@ -76,11 +77,7 @@ public class SignupPanel extends JPanel implements ResettablePanel
         add(passwordLabel, gbc);
 
         gbc.gridx++;
-        passwordField = new JPasswordField(20);
-        passwordField.setOpaque(false); // Make transparent
-        passwordField.setForeground(Color.WHITE);
-        passwordField.setCaretColor(Color.WHITE);
-        passwordField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        passwordField = new JCustomPasswordField(20);
         add(passwordField, gbc);
 
         // Create confirm password label and text field
@@ -92,11 +89,7 @@ public class SignupPanel extends JPanel implements ResettablePanel
         add(confirmPasswordLabel, gbc);
 
         gbc.gridx++;
-        confirmPasswordField = new JPasswordField(20);
-        confirmPasswordField.setOpaque(false); // Make transparent
-        confirmPasswordField.setForeground(Color.WHITE);
-        confirmPasswordField.setCaretColor(Color.WHITE);
-        confirmPasswordField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        confirmPasswordField = new JCustomPasswordField(20);
         add(confirmPasswordField, gbc);
         
         // Create register button

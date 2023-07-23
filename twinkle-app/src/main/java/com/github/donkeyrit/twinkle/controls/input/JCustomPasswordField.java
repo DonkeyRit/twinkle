@@ -1,30 +1,35 @@
-package com.github.donkeyrit.twinkle.controls;
+package com.github.donkeyrit.twinkle.controls.input;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.*;
+import java.awt.*;
 
-public class JPaswordField extends JPasswordField{
+public class JCustomPasswordField extends JPasswordField
+{
     private Dimension d = new Dimension(200,32);
     private String placeholder = "";
-    private Color phColor= new Color(0,0,0);
+    private Color phColor = new Color(0,0,0);
     private boolean band = true;
 
-    /** Constructor de clase */
-    public JPaswordField()
+    public JCustomPasswordField(int columns)
     {
-        super();
+        super(columns);
         setSize(d);
         setPreferredSize(d);
         setVisible(true);
         setMargin( new Insets(3,6,3,6));
+
+		setOpaque(false); // Make transparent
+        setForeground(Color.WHITE);
+        setCaretColor(Color.WHITE);
+        setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
         getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                band = (getText().length()>0) ? false:true ;
+                band = (getPassword().length > 0) ? false:true ;
             }
 
             @Override
@@ -40,7 +45,7 @@ public class JPaswordField extends JPasswordField{
 
     public void setPlaceholder(String placeholder)
     {
-        this.placeholder=placeholder;
+        this.placeholder = placeholder;
     }
 
     public String getPlaceholder()

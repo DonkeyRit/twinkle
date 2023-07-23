@@ -6,6 +6,7 @@ import com.github.donkeyrit.twinkle.panels.login.listeners.LoginActionListener;
 import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
 import com.github.donkeyrit.twinkle.controls.buttons.JConfirmationButton;
 import com.github.donkeyrit.twinkle.controls.buttons.JLinkButton;
+import com.github.donkeyrit.twinkle.controls.input.JCustomPasswordField;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.styles.Colors;
@@ -76,11 +77,8 @@ public class LoginPanel extends JPanel implements ResettablePanel
         add(passwordLabel, gbc);
         
         gbc.gridx++;
-        passwordField = new JPasswordField(20);
-        passwordField.setOpaque(false); // Make transparent
-        passwordField.setForeground(Color.WHITE);
-        passwordField.setCaretColor(Color.WHITE);
-        passwordField.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        passwordField = new JCustomPasswordField(20);
+        
         add(passwordField, gbc);
         
         // Create login button
