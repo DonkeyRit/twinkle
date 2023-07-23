@@ -1,9 +1,10 @@
 package com.github.donkeyrit.twinkle.panels.signup;
 
-import com.github.donkeyrit.twinkle.panels.signup.listeners.SignupActionListener;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.listeners.ResetablePanelSwitcherActionListener;
+import com.github.donkeyrit.twinkle.panels.signup.listeners.SignupActionListener;
 import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.controls.JConfirmationButton;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.styles.Colors;
@@ -102,13 +103,7 @@ public class SignupPanel extends JPanel implements ResettablePanel
         gbc.gridx = 0;
         gbc.gridwidth = 2;
 
-        registerButton = new JButton("Register");
-        registerButton.setBackground(new Color(18, 140, 126));
-        registerButton.setForeground(Color.WHITE);
-        registerButton.setFocusPainted(false);
-        registerButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        registerButton.setOpaque(true);
-        registerButton.setBorderPainted(false);
+        registerButton = new JConfirmationButton("Register");
 		registerButton.addActionListener(new SignupActionListener(this.userRepository, this, this.mainFrame.getSwitchedPanel()));
         add(registerButton, gbc);
         

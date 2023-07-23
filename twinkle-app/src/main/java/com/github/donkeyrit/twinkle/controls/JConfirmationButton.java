@@ -11,7 +11,6 @@ import java.awt.Font;
 
 public class JConfirmationButton extends JButton 
 {
-	private Font font;
     private Color backgroundColor;
     private Color foregroundColor;
     private Color hoverBackgroundColor;
