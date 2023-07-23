@@ -3,8 +3,9 @@ package com.github.donkeyrit.twinkle.panels.signup;
 import com.github.donkeyrit.twinkle.listeners.ResetablePanelSwitcherActionListener;
 import com.github.donkeyrit.twinkle.panels.signup.listeners.SignupActionListener;
 import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
+import com.github.donkeyrit.twinkle.controls.buttons.JConfirmationButton;
+import com.github.donkeyrit.twinkle.controls.buttons.JLinkButton;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
-import com.github.donkeyrit.twinkle.controls.JConfirmationButton;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.styles.Colors;
@@ -111,14 +112,7 @@ public class SignupPanel extends JPanel implements ResettablePanel
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
-        loginButton = new JButton("Already have an account? Login");
-		loginButton.setActionCommand(Constants.LOGIN_PANEL_KEY);
-        loginButton.setBackground(Colors.AUTHORIZATION_BUTTON_BACKGROUND_COLOR);
-        loginButton.setForeground(Colors.AUTHORIZATION_BUTTON_FOREGROUD_COLOR);
-        loginButton.setFocusPainted(false);
-        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        loginButton.setOpaque(true);
-        loginButton.setBorderPainted(false);
+        loginButton = new JLinkButton("Already have an account? Login");
 		loginButton.addActionListener(new ResetablePanelSwitcherActionListener(this.mainFrame.getSwitchedPanel(), this));
         add(loginButton, gbc);
 

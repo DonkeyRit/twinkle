@@ -1,16 +1,17 @@
 package com.github.donkeyrit.twinkle.panels.login;
 
-import com.github.donkeyrit.twinkle.controls.JConfirmationButton;
+import com.github.donkeyrit.twinkle.listeners.ResetablePanelSwitcherActionListener;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.panels.login.listeners.LoginActionListener;
-import com.github.donkeyrit.twinkle.listeners.ResetablePanelSwitcherActionListener;
 import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
+import com.github.donkeyrit.twinkle.controls.buttons.JConfirmationButton;
+import com.github.donkeyrit.twinkle.controls.buttons.JLinkButton;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.styles.Colors;
-import com.google.inject.Inject;
 
+import com.google.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
 
@@ -96,14 +97,7 @@ public class LoginPanel extends JPanel implements ResettablePanel
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
-        signupButton = new JButton("Don't have an account? Sign up");
-		signupButton.setActionCommand(Constants.SIGUP_PANEL_KEY);
-        signupButton.setBackground(Colors.AUTHORIZATION_BACKGROUND_COLOR);
-        signupButton.setForeground(Colors.AUTHORIZATION_BUTTON_FOREGROUD_COLOR);
-        signupButton.setFocusPainted(false);
-        signupButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        signupButton.setOpaque(true);
-        signupButton.setBorderPainted(false);
+        signupButton = new JLinkButton("Don't have an account? Sign up");
 		signupButton.addActionListener(new ResetablePanelSwitcherActionListener(mainFrame.getSwitchedPanel(), this));
         add(signupButton, gbc);
 

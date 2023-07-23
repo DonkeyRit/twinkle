@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle.controls;
+package com.github.donkeyrit.twinkle.controls.buttons;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
