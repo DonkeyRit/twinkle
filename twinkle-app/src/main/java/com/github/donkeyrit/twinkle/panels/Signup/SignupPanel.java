@@ -7,8 +7,8 @@ import com.github.donkeyrit.twinkle.controls.buttons.JConfirmationButton;
 import com.github.donkeyrit.twinkle.controls.buttons.JLinkButton;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
-import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.styles.Colors;
+import com.github.donkeyrit.twinkle.utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,7 +112,7 @@ public class SignupPanel extends JPanel implements ResettablePanel
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
-        loginButton = new JLinkButton("Already have an account? Login");
+        loginButton = new JLinkButton("Already have an account? Login", Constants.LOGIN_PANEL_KEY);
 		loginButton.addActionListener(new ResetablePanelSwitcherActionListener(this.mainFrame.getSwitchedPanel(), this));
         add(loginButton, gbc);
 

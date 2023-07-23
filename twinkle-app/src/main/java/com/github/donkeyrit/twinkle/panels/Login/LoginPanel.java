@@ -8,9 +8,8 @@ import com.github.donkeyrit.twinkle.controls.buttons.JConfirmationButton;
 import com.github.donkeyrit.twinkle.controls.buttons.JLinkButton;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
-import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.styles.Colors;
-
+import com.github.donkeyrit.twinkle.utils.Constants;
 import com.google.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
@@ -97,7 +96,7 @@ public class LoginPanel extends JPanel implements ResettablePanel
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
-        signupButton = new JLinkButton("Don't have an account? Sign up");
+        signupButton = new JLinkButton("Don't have an account? Sign up", Constants.SIGUP_PANEL_KEY);
 		signupButton.addActionListener(new ResetablePanelSwitcherActionListener(mainFrame.getSwitchedPanel(), this));
         add(signupButton, gbc);
 
