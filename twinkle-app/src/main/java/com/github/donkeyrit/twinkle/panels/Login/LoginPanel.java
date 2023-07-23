@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.panels.login;
 
-import com.github.donkeyrit.twinkle.controls.JCustomButton;
+import com.github.donkeyrit.twinkle.controls.JConfirmationButton;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.panels.login.listeners.LoginActionListener;
 import com.github.donkeyrit.twinkle.listeners.ResetablePanelSwitcherActionListener;
@@ -88,13 +88,7 @@ public class LoginPanel extends JPanel implements ResettablePanel
         gbc.gridx = 0;
         gbc.gridwidth = 2;
 
-        loginButton = new JCustomButton("Login");
-        loginButton.setBackground(new Color(18, 140, 126));
-        loginButton.setForeground(Color.WHITE);
-        loginButton.setFocusPainted(false);
-        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        loginButton.setOpaque(true);
-        loginButton.setBorderPainted(false);
+        loginButton = new JConfirmationButton("Login");
 		loginButton.addActionListener(new LoginActionListener(this.userRepository, this, this.mainFrame.getSwitchedPanel()));
         add(loginButton, gbc);
         

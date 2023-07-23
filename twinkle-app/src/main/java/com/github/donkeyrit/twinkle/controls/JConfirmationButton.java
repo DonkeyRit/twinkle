@@ -2,12 +2,14 @@ package com.github.donkeyrit.twinkle.controls;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Font;
 
 
-public class JCustomButton extends JButton 
+public class JConfirmationButton extends JButton 
 {
 	private Font font;
     private Color backgroundColor;
@@ -15,7 +17,7 @@ public class JCustomButton extends JButton
     private Color hoverBackgroundColor;
     private Color hoverForegroundColor;
 
-    public JCustomButton(String text) 
+    public JConfirmationButton(String text) 
 	{
         super(text);
 
@@ -43,6 +45,9 @@ public class JCustomButton extends JButton
         // Set initial background and foreground colors
         setBackground(backgroundColor);
         setForeground(foregroundColor);
+
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setOpaque(true);
 
         // Remove default border and focus indication
         setBorderPainted(false);
