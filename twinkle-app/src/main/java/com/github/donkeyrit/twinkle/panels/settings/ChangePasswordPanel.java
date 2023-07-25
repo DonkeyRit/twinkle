@@ -35,9 +35,9 @@ public class ChangePasswordPanel extends JPanel {
 		confirm.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				boolean isOne = fieldPass.get(0).getText().isEmpty();
-				boolean isTwo = fieldPass.get(1).getText().isEmpty();
-				boolean isThree = fieldPass.get(2).getText().isEmpty();
+				boolean isOne = fieldPass.get(0).getPassword().length == 0;
+				boolean isTwo = fieldPass.get(1).getPassword().length == 0;
+				boolean isThree = fieldPass.get(2).getPassword().length == 0;
 
 				if (isOne) {
 					fieldPass.get(0).setPlaceholder("Please, enter old password");
@@ -55,9 +55,9 @@ public class ChangePasswordPanel extends JPanel {
 				}
 
 				if (!isOne && !isTwo && !isThree) {
-					if (HashManager.generateHash(fieldPass.get(0).getText()).equals(UserInformation.getPassword())) {
-						if (fieldPass.get(1).getText().equals(fieldPass.get(2).getText())) {
-							if (fieldPass.get(0).getText().equals(fieldPass.get(1).getText())) {
+					if (HashManager.generateHash(new String(fieldPass.get(0).getPassword())).equals(UserInformation.getPassword())) {
+						if (new String(fieldPass.get(1).getPassword()).equals(new String(fieldPass.get(2).getPassword()))) {
+							if (new String(fieldPass.get(0).getPassword()).equals(new String(fieldPass.get(1).getPassword()))) {
 								fieldPass.get(0).setPlaceholder("Old and new match");
 								fieldPass.get(0).setPhColor(Color.RED);
 								fieldPass.get(0).setText("");
@@ -67,11 +67,11 @@ public class ChangePasswordPanel extends JPanel {
 								fieldPass.get(1).setText("");
 							} else {
 								String updateUserQuery = "UPDATE users SET password = '"
-										+ HashManager.generateHash(fieldPass.get(1).getText()) + "'"
+										+ HashManager.generateHash(new String(fieldPass.get(1).getPassword())) + "'"
 										+ " WHERE login = '" + UserInformation.getLogin() + "'";
 								database.update(updateUserQuery);
 
-								UserInformation.setPassword(HashManager.generateHash(fieldPass.get(1).getText()));
+								UserInformation.setPassword(HashManager.generateHash(new String(fieldPass.get(1).getPassword())));
 
 								for (int i = 0; i < fieldPass.size(); i++) {
 									fieldPass.get(i).setText("");

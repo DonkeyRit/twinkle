@@ -61,6 +61,12 @@ public class ChooseActionPanel extends JPanel {
 					if (selectedTextButton.equals("To change the data")) {
 						rightPanel = new ChangeDataDatabasePanel(database);
 					}
+
+					if(rightPanel == null)
+					{
+						return;
+					}
+
 					rightPanel.setBounds(250, 100, 605, 550);
 					panel.add(rightPanel);
 
