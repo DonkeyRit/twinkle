@@ -77,7 +77,7 @@ public class EntryPoint
 		contentPanel
 			.setNavigationPanel(new NavigationPanel(database, mainFrame, contentPanel))
 			.setSidebarPanel(new SideBarFilterPanel(this.modelOfCarRepository, this.markOfCarRepository, this.carBodyTypeRepository, this.carRepository, database, contentPanel))
-			.setContentPanel(new ContentPanel(contentPanel, database, carRepository, ""));
+			.setContentPanel(new ContentPanel(contentPanel, database,""));
         switchedPanel.addPanel(Constants.CONTENT_PANEL_KEY, contentPanel);
 
 		switchedPanel.showPanel(Constants.LOGIN_PANEL_KEY);

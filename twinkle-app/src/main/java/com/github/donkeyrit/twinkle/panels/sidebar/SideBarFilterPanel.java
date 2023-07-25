@@ -178,7 +178,7 @@ public class SideBarFilterPanel extends JPanel
 				}
 
 				panel.remove(temp); 
-				JPanel content = new ContentPanel(panel, database, carRepository, resStr); 
+				JPanel content = new ContentPanel(panel, database, resStr); 
 				content.setBounds(250,100,605,550); 
 				panel.add(content); 
 				panel.revalidate(); 

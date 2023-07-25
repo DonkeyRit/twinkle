@@ -1,13 +1,8 @@
 package com.github.donkeyrit.twinkle.panels.settings;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
 import java.util.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JPanel;
@@ -69,7 +64,6 @@ public class ChangeDataDatabasePanel extends JPanel {
 					}
 
 					JTable table = new JTable(new MyTableModel(database, selectedJToggleButton.getText()));
-					Dimension d = table.getPreferredSize();
 					JScrollPane pane = new JScrollPane(table);
 					pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 					pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
