@@ -9,7 +9,7 @@ import javax.swing.border.*;
 
 import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
-import com.github.donkeyrit.twinkle.controls.JCTextField;
+import com.github.donkeyrit.twinkle.controls.input.JCustomTextField;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 public class PrivateDataPanel extends JPanel {
@@ -38,9 +38,9 @@ public class PrivateDataPanel extends JPanel {
 
 		String[] placeholders = new String[] { "Enter first_name", "Enter second_name", "Enter middle_name",
 				"Enter address", "Enter phone_number" };
-		ArrayList<JCTextField> fieldText = new ArrayList<JCTextField>();
+		ArrayList<JCustomTextField> fieldText = new ArrayList<JCustomTextField>();
 		for (int i = 0; i < placeholders.length; i++) {
-			JCTextField tempField = new JCTextField();
+			JCustomTextField tempField = new JCustomTextField();
 			tempField.setPlaceholder(placeholders[i]);
 			fieldText.add(tempField);
 			box.add(tempField);

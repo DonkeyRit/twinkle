@@ -78,7 +78,6 @@ public class LoginPanel extends JPanel implements ResettablePanel
         
         gbc.gridx++;
         passwordField = new JCustomPasswordField(20);
-        
         add(passwordField, gbc);
         
         // Create login button

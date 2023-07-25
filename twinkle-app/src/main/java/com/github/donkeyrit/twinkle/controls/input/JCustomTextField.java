@@ -1,18 +1,17 @@
-package com.github.donkeyrit.twinkle.controls;
+package com.github.donkeyrit.twinkle.controls.input;
 
-import java.awt.*;
-import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.*;
+import java.awt.*;
 
-public class JCTextField extends JTextField{ 
-
+public class JCustomTextField extends JTextField
+{ 
     private Dimension d = new Dimension(200,32); 
     private String placeholder = "";
     private Color phColor= new Color(0,0,0);
     private boolean band = true;
 
-    /** Constructor de clase */
-    public JCTextField()
+    public JCustomTextField()
     {
         super(); 
         setSize(d); 
@@ -47,16 +46,19 @@ public class JCTextField extends JTextField{
         return placeholder;
     }
 
-    public Color getPhColor() {
+    public Color getPhColor() 
+	{
         return phColor;
     }
 
-    public void setPhColor(Color phColor) {
+    public void setPhColor(Color phColor) 
+	{
         this.phColor = phColor;
     }    
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) 
+	{
         super.paintComponent(g);
         g.setColor( new Color(phColor.getRed(),phColor.getGreen(),phColor.getBlue(),90));
         g.drawString((band)?placeholder:"",
