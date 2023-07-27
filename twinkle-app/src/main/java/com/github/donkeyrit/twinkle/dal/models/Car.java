@@ -5,15 +5,15 @@ import com.github.donkeyrit.twinkle.dal.contracts.BaseDbModel;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Entity
 @Table(name = "car")
@@ -26,7 +26,7 @@ public class Car extends BaseDbModel
 	private int id;
 
 	@Column(name = "model_year")
-	private Timestamp ModelYear;
+	private Date ModelYear;
 
 	private String info;
 
@@ -53,12 +53,12 @@ public class Car extends BaseDbModel
         this.id = id;
     }
 
-	public Timestamp getModelYear() 
+	public Date getModelYear() 
 	{
 		return ModelYear;
 	}
 
-	public void setModelYear(Timestamp modelYear) 
+	public void setModelYear(Date modelYear) 
 	{
 		ModelYear = modelYear;
 	}

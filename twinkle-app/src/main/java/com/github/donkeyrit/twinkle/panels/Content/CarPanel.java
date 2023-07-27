@@ -2,7 +2,6 @@ package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
-import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.DataBase;
 
@@ -19,12 +18,7 @@ public class CarPanel extends JPanel
 	private Car car;
 
 	private int imagesNum;
-	private Date modelYear;
-	private Double cost;
-	private String modelName;
-	private String markName;
 	private String nameCountry;
-	private String info;
 	private String bodyTypeName;
 	private String status;
 
@@ -58,12 +52,7 @@ public class CarPanel extends JPanel
 		ResultSet carSet = database.select(query);
 		try {
 			while (carSet.next()) {
-				modelYear = carSet.getDate("model_year");
-				cost = carSet.getDouble("cost");
-				modelName = carSet.getString("model_name");
-				markName = carSet.getString("mark_name");
 				nameCountry = carSet.getString("country_name");
-				info = carSet.getString("info");
 				bodyTypeName = carSet.getString("body_type_name");
 			}
 		} catch (SQLException ex) {
@@ -71,7 +60,6 @@ public class CarPanel extends JPanel
 		}
 
 		this.car = carRepository.getById(num);
-		ModelOfCar model = this.car.getModelOfCar();
 
 
 		Font font = new Font("Arial", Font.BOLD, 13);
@@ -82,7 +70,7 @@ public class CarPanel extends JPanel
 		modelLab.setFont(alterfont);
 		add(modelLab);
 
-		JLabel modelLabel = new JLabel(modelName);
+		JLabel modelLabel = new JLabel(this.car.getModelOfCar().getModelName());
 		modelLabel.setBounds(290, 10, 150, 15);
 		modelLabel.setFont(font);
 		add(modelLabel);
@@ -92,7 +80,7 @@ public class CarPanel extends JPanel
 		markLab.setFont(alterfont);
 		add(markLab);
 
-		JLabel markLabel = new JLabel(markName);
+		JLabel markLabel = new JLabel(this.car.getModelOfCar().getMark().getName());
 		markLabel.setBounds(290, 30, 150, 15);
 		markLabel.setFont(font);
 		add(markLabel);
@@ -130,12 +118,12 @@ public class CarPanel extends JPanel
 					database,
 					panel,
 					imagesNum, 
-					modelYear, 
-					cost, 
-					modelName, 
-					markName, 
+					car.getModelYear(), 
+					car.getCost(), 
+					car.getModelOfCar().getModelName(), 
+					car.getModelOfCar().getMark().getName(), 
 					nameCountry,
-					info, 
+					car.getInfo(), 
 					bodyTypeName);
 				newPanel.setFilter(temp.conditionPanel);
 				newPanel.setNumPage(temp.numOfPage);
