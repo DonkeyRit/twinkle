@@ -24,22 +24,11 @@ public class CarPanel extends JPanel
 
 	public CarPanel(CarRepository carRepository, DataBase database, JPanel panel, int num) 
 	{
-		ResultSet statusSet = database
-				.select("SELECT * FROM rent WHERE id_car = " + num + " ORDER BY end_date, plan_date DESC LIMIT 1");
-		status = "open";
-		try {
-			while (statusSet.next()) {
-				Date rentDate = statusSet.getDate("end_date");
-				if (rentDate == null) {
-					status = "lock";
-				}
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-
-		imagesNum = num;
 		setLayout(null);
+
+		status = getStatus(database, num);
+		imagesNum = num;
+		
 		String query = "SELECT id,model_year,info,cost,model_name,mark_name,country_name,body_type_name FROM\n"
 				+ "(SELECT id,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n"
 				+ "(SELECT id,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n"
@@ -137,6 +126,26 @@ public class CarPanel extends JPanel
 		});
 		add(moreButton);
 
+	}
+
+	//TODO: Extract to separate repository
+	private String getStatus(DataBase database, int num) 
+	{
+		ResultSet statusSet = database
+				.select("SELECT * FROM rent WHERE id_car = " + num + " ORDER BY end_date, plan_date DESC LIMIT 1");
+		String status = "open";
+		try {
+			while (statusSet.next()) {
+				Date rentDate = statusSet.getDate("end_date");
+				if (rentDate == null) {
+					status = "lock";
+				}
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		return status;
 	}
 
 	@Override
