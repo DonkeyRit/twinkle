@@ -2,6 +2,7 @@ package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.DataBase;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 
 import java.sql.SQLException;
 import java.sql.ResultSet;
@@ -23,7 +24,7 @@ public class CarPanel extends JPanel
 	private String bodyTypeName;
 	private String status;
 
-	public CarPanel(DataBase database, JPanel panel, int num) 
+	public CarPanel(CarRepository carRepository, DataBase database, JPanel panel, int num) 
 	{
 		ResultSet statusSet = database
 				.select("SELECT * FROM rent WHERE id_car = " + num + " ORDER BY end_date, plan_date DESC LIMIT 1");
@@ -117,6 +118,7 @@ public class CarPanel extends JPanel
 				}
 
 				AboutCarPanel newPanel = new AboutCarPanel(
+					carRepository,
 					database,
 					panel,
 					imagesNum, 

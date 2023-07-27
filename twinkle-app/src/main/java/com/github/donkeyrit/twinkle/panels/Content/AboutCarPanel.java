@@ -54,6 +54,7 @@ public class AboutCarPanel extends JPanel
 	}
 
 	public AboutCarPanel(
+		CarRepository carRepository,
 		DataBase database,
 		JPanel panel,
 		int imagesNum, 
@@ -131,6 +132,7 @@ public class AboutCarPanel extends JPanel
 					}
 				}
 				AboutCarPanel newPanel = new AboutCarPanel(
+					carRepository,
 					database,
 					panel,
 					imagesNum, 
@@ -169,7 +171,7 @@ public class AboutCarPanel extends JPanel
 				}
 
 				panel.remove(temp);
-				JPanel contentPanel = new ContentPanel(panel, database, filter, numPage, startBut);
+				JPanel contentPanel = new ContentPanel(panel, carRepository, database, filter, numPage, startBut);
 				contentPanel.setBounds(250, 100, 605, 550);
 				panel.add(contentPanel);
 				panel.revalidate();
