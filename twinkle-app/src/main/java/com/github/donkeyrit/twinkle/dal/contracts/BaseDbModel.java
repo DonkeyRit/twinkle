@@ -1,10 +1,13 @@
 package com.github.donkeyrit.twinkle.dal.contracts;
 
+import java.io.Serializable;
+
+import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-public abstract class BaseDbModel 
+public abstract class BaseDbModel implements Serializable
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,9 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.DataBase;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 
 import java.sql.SQLException;
 import java.sql.ResultSet;
@@ -13,7 +14,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class CarPanel extends JPanel 
-{
+{	
 	private int imagesNum;
 	private Date modelYear;
 	private Double cost;
@@ -65,6 +66,10 @@ public class CarPanel extends JPanel
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
+
+		Car car = carRepository.getById(num);
+
+
 
 		Font font = new Font("Arial", Font.BOLD, 13);
 		Font alterfont = new Font("Arial", Font.ITALIC, 13);
