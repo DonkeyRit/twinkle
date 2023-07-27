@@ -15,6 +15,8 @@ import java.awt.event.*;
 
 public class CarPanel extends JPanel 
 {	
+	private Car car;
+
 	private int imagesNum;
 	private Date modelYear;
 	private Double cost;
@@ -67,8 +69,7 @@ public class CarPanel extends JPanel
 			ex.printStackTrace();
 		}
 
-		Car car = carRepository.getById(num);
-
+		this.car = carRepository.getById(num);
 
 
 		Font font = new Font("Arial", Font.BOLD, 13);

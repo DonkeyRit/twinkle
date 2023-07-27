@@ -79,9 +79,7 @@ public abstract class BaseCrudRepository<T extends BaseDbModel> implements CrudR
 	@Override
 	public T getById(int id) 
 	{
-		Object t = session.find(entityClass, id);
-
-		return (T) t;
+		return session.find(entityClass, id);
 	}
 
 	@Override

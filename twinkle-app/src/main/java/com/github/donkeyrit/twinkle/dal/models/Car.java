@@ -2,15 +2,12 @@ package com.github.donkeyrit.twinkle.dal.models;
 
 import com.github.donkeyrit.twinkle.dal.contracts.BaseDbModel;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 import java.sql.Timestamp;
 
 @Entity
@@ -56,18 +53,18 @@ public class Car extends BaseDbModel
 		this.info = info;
 	}
 
-	// @Column(name = "image")
-	// private int imageId;
+	@Column(name = "image")
+	private int imageId;
 
-	// public int getImageId() 
-	// {
-	// 	return imageId;
-	// }
+	public int getImageId() 
+	{
+		return imageId;
+	}
 
-	// public void setImageId(int imageId) 
-	// {
-	// 	this.imageId = imageId;
-	// }
+	public void setImageId(int imageId) 
+	{
+		this.imageId = imageId;
+	}
 
 	private double cost;
 
@@ -80,21 +77,4 @@ public class Car extends BaseDbModel
 	{
 		this.cost = cost;
 	}
-
-	// @OneToOne(
-	// 	fetch = FetchType.LAZY,
-	// 	optional = false
-	// )
-	// @PrimaryKeyJoinColumn
-	// private ModelOfCar modelOfCar;
-
-	// public ModelOfCar getModelOfCar() 
-	// {
-	// 	return modelOfCar;
-	// }
-
-	// public void setModelOfCar(ModelOfCar modelOfCar) 
-	// {
-	// 	this.modelOfCar = modelOfCar;
-	// }
 }
