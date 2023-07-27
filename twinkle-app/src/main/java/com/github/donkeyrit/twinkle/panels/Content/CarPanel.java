@@ -2,6 +2,7 @@ package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.DataBase;
 
@@ -70,6 +71,7 @@ public class CarPanel extends JPanel
 		}
 
 		this.car = carRepository.getById(num);
+		ModelOfCar model = this.car.getModelOfCar();
 
 
 		Font font = new Font("Arial", Font.BOLD, 13);

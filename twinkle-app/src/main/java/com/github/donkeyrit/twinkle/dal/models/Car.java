@@ -4,21 +4,46 @@ import com.github.donkeyrit.twinkle.dal.contracts.BaseDbModel;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "car")
 public class Car extends BaseDbModel
 {
+	//#region Fields
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-    public int getId() 
+	@Column(name = "model_year")
+	private Timestamp ModelYear;
+
+	private String info;
+
+	@Column(name = "image")
+	private int imageId;
+
+	private double cost;
+
+	@OneToOne()
+	@JoinColumn(unique = true, name = "id_model")
+	private ModelOfCar modelOfCar;
+
+	//#endregion
+
+	//#region Getters/Setters
+
+	public int getId() 
 	{
         return id;
     }
@@ -27,9 +52,6 @@ public class Car extends BaseDbModel
 	{
         this.id = id;
     }
-
-	@Column(name = "model_year")
-	private Timestamp ModelYear;
 
 	public Timestamp getModelYear() 
 	{
@@ -40,9 +62,7 @@ public class Car extends BaseDbModel
 	{
 		ModelYear = modelYear;
 	}
-
-	private String info;
-
+	
 	public String getInfo() 
 	{
 		return info;
@@ -52,9 +72,6 @@ public class Car extends BaseDbModel
 	{
 		this.info = info;
 	}
-
-	@Column(name = "image")
-	private int imageId;
 
 	public int getImageId() 
 	{
@@ -66,8 +83,6 @@ public class Car extends BaseDbModel
 		this.imageId = imageId;
 	}
 
-	private double cost;
-
 	public double getCost() 
 	{
 		return cost;
@@ -77,4 +92,16 @@ public class Car extends BaseDbModel
 	{
 		this.cost = cost;
 	}
+
+	public ModelOfCar getModelOfCar() 
+	{
+		return modelOfCar;
+	}
+
+	public void setModelOfCar(ModelOfCar modelOfCar) 
+	{
+		this.modelOfCar = modelOfCar;
+	}
+
+	//#endregion
 }
