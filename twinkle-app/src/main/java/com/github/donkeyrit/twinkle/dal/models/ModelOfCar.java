@@ -27,8 +27,9 @@ public class ModelOfCar
 	@JoinColumn(unique = true, name = "id_mark")
 	private MarkOfCar mark;
 
-	@Column(name = "id_body_type")
-	private int bodyTypeId;
+	@OneToOne()
+	@JoinColumn(unique = true, name = "id_body_type")
+	private CarBodyType bodyType;
 
 	//#endregion
 
@@ -64,14 +65,14 @@ public class ModelOfCar
 		this.mark = mark;
 	}
 
-	public int getBodyTypeId() 
+	public CarBodyType getBodyType() 
 	{
-		return bodyTypeId;
+		return bodyType;
 	}
 
-	public void setBodyTypeId(int bodyTypeId)
+	public void setBodyTypeId(CarBodyType bodyType)
 	{
-		this.bodyTypeId = bodyTypeId;
+		this.bodyType = bodyType;
 	}
 
 	//#endregion

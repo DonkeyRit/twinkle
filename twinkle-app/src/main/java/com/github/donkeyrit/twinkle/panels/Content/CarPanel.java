@@ -15,12 +15,10 @@ import java.awt.event.*;
 
 public class CarPanel extends JPanel 
 {	
-	private Car car;
-
-	private int imagesNum;
 	private String nameCountry;
-	private String bodyTypeName;
 	private String status;
+	private int imagesNum;
+	private Car car;
 
 	public CarPanel(CarRepository carRepository, DataBase database, JPanel panel, int num) 
 	{
@@ -28,24 +26,6 @@ public class CarPanel extends JPanel
 
 		status = getStatus(database, num);
 		imagesNum = num;
-		
-		String query = "SELECT id,model_year,info,cost,model_name,mark_name,country_name,body_type_name FROM\n"
-				+ "(SELECT id,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n"
-				+ "(SELECT id,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n"
-				+ "(SELECT id,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n"
-				+ "INNER JOIN model ON car.id_model = model.id_model) as join1\n"
-				+ "INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n"
-				+ "INNER JOIN country ON join2.id_country = country.id_country) as join3\n"
-				+ "INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type WHERE id = " + imagesNum;
-
-		ResultSet carSet = database.select(query);
-		try {
-			while (carSet.next()) {
-				bodyTypeName = carSet.getString("body_type_name");
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
 
 		this.car = carRepository.getById(num);
 		this.nameCountry = car.getModelOfCar().getMark().getCountry().getCountryName();
@@ -78,7 +58,7 @@ public class CarPanel extends JPanel
 		bodyTypeLab.setFont(alterfont);
 		add(bodyTypeLab);
 
-		JLabel bodyTypeLabel = new JLabel(bodyTypeName);
+		JLabel bodyTypeLabel = new JLabel(car.getModelOfCar().getBodyType().getType());
 		bodyTypeLabel.setBounds(290, 50, 150, 15);
 		bodyTypeLabel.setFont(font);
 		add(bodyTypeLabel);
@@ -112,7 +92,7 @@ public class CarPanel extends JPanel
 					car.getModelOfCar().getMark().getName(), 
 					car.getModelOfCar().getMark().getCountry().getCountryName(),
 					car.getInfo(), 
-					bodyTypeName);
+					car.getModelOfCar().getBodyType().getType());
 				newPanel.setFilter(temp.conditionPanel);
 				newPanel.setNumPage(temp.numOfPage);
 				newPanel.setStartBut(temp.startBut);
