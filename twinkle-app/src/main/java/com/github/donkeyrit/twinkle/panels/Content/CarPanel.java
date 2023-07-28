@@ -74,7 +74,7 @@ public class CarPanel extends JPanel
 				Component[] mas = panel.getComponents();
 				ContentPanel temp = null;
 				for (int i = 0; i < mas.length; i++) {
-					if (mas[i].getClass().toString().indexOf("EntryPoint$ContentPanel") != -1) {
+					if (mas[i].getClass().toString().indexOf("ContentPanel") != -1) {
 						temp = (ContentPanel) mas[i];
 					}
 				}
