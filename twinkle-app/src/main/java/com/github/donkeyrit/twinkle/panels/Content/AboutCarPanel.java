@@ -13,6 +13,7 @@ import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 public class AboutCarPanel extends JPanel 
@@ -54,7 +55,7 @@ public class AboutCarPanel extends JPanel
 		return startBut;
 	}
 
-	public AboutCarPanel(CarRepository carRepository, DataBase database, JPanel panel, Car car) 
+	public AboutCarPanel(CarRepository carRepository, RentRepository rentRepository, DataBase database, JPanel panel, Car car) 
 	{
 		this.imagesNum = car.getImageId();
 		this.modelYear = car.getModelYear();
@@ -121,7 +122,7 @@ public class AboutCarPanel extends JPanel
 						temp = (AboutCarPanel) mas[i];
 					}
 				}
-				AboutCarPanel newPanel = new AboutCarPanel(carRepository, database, panel, car);
+				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, database, panel, car);
 				newPanel.setFilter(temp.getFilter());
 				newPanel.setNumPage(temp.getNumPage());
 				newPanel.setStartBut(temp.getStartBut());
@@ -150,7 +151,7 @@ public class AboutCarPanel extends JPanel
 				}
 
 				panel.remove(temp);
-				JPanel contentPanel = new ContentPanel(panel, carRepository, database, filter, numPage, startBut);
+				JPanel contentPanel = new ContentPanel(panel, carRepository, rentRepository, database, filter, numPage, startBut);
 				contentPanel.setBounds(250, 100, 605, 550);
 				panel.add(contentPanel);
 				panel.revalidate();

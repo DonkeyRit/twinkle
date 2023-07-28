@@ -29,6 +29,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepos
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
 import com.github.donkeyrit.twinkle.panels.sidebar.listeners.ModelComboBoxUpdateActionListener;
 import com.github.donkeyrit.twinkle.panels.sidebar.models.MarkComboBoxModel;
@@ -48,6 +49,7 @@ public class SideBarFilterPanel extends JPanel
 		MarkOfCarRepository markOfCarRepository,
 		CarBodyTypeRepository carBodyTypeRepository,
 		CarRepository carRepository,
+		RentRepository rentRepository,
 		DataBase database, 
 		JPanel panel)
 	{
@@ -178,7 +180,7 @@ public class SideBarFilterPanel extends JPanel
 				}
 
 				panel.remove(temp); 
-				JPanel content = new ContentPanel(panel, carRepository, database, resStr); 
+				JPanel content = new ContentPanel(panel, carRepository, rentRepository, database, resStr); 
 				content.setBounds(250,100,605,550); 
 				panel.add(content); 
 				panel.revalidate(); 

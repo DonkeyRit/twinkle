@@ -1,6 +1,7 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.DataBase;
@@ -20,7 +21,12 @@ public class CarPanel extends JPanel
 	private int imagesNum;
 	private Car car;
 
-	public CarPanel(CarRepository carRepository, DataBase database, JPanel panel, int carId) 
+	public CarPanel(
+		CarRepository carRepository, 
+		RentRepository rentRepository, 
+		DataBase database, 
+		JPanel panel,
+		int carId) 
 	{
 		setLayout(null);
 
@@ -81,7 +87,7 @@ public class CarPanel extends JPanel
 					return;
 				}
 
-				AboutCarPanel newPanel = new AboutCarPanel(carRepository, database, panel, car);
+				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, database, panel, car);
 				newPanel.setFilter(temp.conditionPanel);
 				newPanel.setNumPage(temp.numOfPage);
 				newPanel.setStartBut(temp.startBut);
