@@ -11,6 +11,7 @@ import javax.swing.text.*;
 
 import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
+import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
@@ -53,27 +54,16 @@ public class AboutCarPanel extends JPanel
 		return startBut;
 	}
 
-	public AboutCarPanel(
-		CarRepository carRepository,
-		DataBase database,
-		JPanel panel,
-		int imagesNum, 
-		Date modelYear, 
-		Double cost, 
-		String modelName, 
-		String markName,
-		String nameCountry, 
-		String info, 
-		String bodyTypeName) 
+	public AboutCarPanel(CarRepository carRepository, DataBase database, JPanel panel, Car car) 
 	{
-		this.imagesNum = imagesNum;
-		this.modelYear = modelYear;
-		this.cost = cost;
-		this.modelName = modelName;
-		this.markName = markName;
-		this.nameCountry = nameCountry;
-		this.info = info;
-		this.bodyTypeName = bodyTypeName;
+		this.imagesNum = car.getImageId();
+		this.modelYear = car.getModelYear();
+		this.cost = car.getCost();
+		this.modelName = car.getModelOfCar().getModelName();
+		this.markName = car.getModelOfCar().getMark().getName();
+		this.nameCountry = car.getModelOfCar().getMark().getCountry().getCountryName();
+		this.info = car.getInfo();
+		this.bodyTypeName = car.getModelOfCar().getBodyType().getType();
 
 		setLayout(null);
 
@@ -131,18 +121,7 @@ public class AboutCarPanel extends JPanel
 						temp = (AboutCarPanel) mas[i];
 					}
 				}
-				AboutCarPanel newPanel = new AboutCarPanel(
-					carRepository,
-					database,
-					panel,
-					imagesNum, 
-					modelYear, 
-					cost, 
-					modelName, 
-					markName, 
-					nameCountry,
-					info, 
-					bodyTypeName);
+				AboutCarPanel newPanel = new AboutCarPanel(carRepository, database, panel, car);
 				newPanel.setFilter(temp.getFilter());
 				newPanel.setNumPage(temp.getNumPage());
 				newPanel.setStartBut(temp.getStartBut());

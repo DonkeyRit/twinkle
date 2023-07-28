@@ -20,14 +20,14 @@ public class CarPanel extends JPanel
 	private int imagesNum;
 	private Car car;
 
-	public CarPanel(CarRepository carRepository, DataBase database, JPanel panel, int num) 
+	public CarPanel(CarRepository carRepository, DataBase database, JPanel panel, int carId) 
 	{
 		setLayout(null);
 
-		status = getStatus(database, num);
-		imagesNum = num;
+		status = getStatus(database, carId);
+		imagesNum = carId;
 
-		this.car = carRepository.getById(num);
+		this.car = carRepository.getById(carId);
 		this.nameCountry = car.getModelOfCar().getMark().getCountry().getCountryName();
 
 		Font font = new Font("Arial", Font.BOLD, 13);
@@ -81,18 +81,7 @@ public class CarPanel extends JPanel
 					return;
 				}
 
-				AboutCarPanel newPanel = new AboutCarPanel(
-					carRepository,
-					database,
-					panel,
-					imagesNum, 
-					car.getModelYear(), 
-					car.getCost(), 
-					car.getModelOfCar().getModelName(), 
-					car.getModelOfCar().getMark().getName(), 
-					car.getModelOfCar().getMark().getCountry().getCountryName(),
-					car.getInfo(), 
-					car.getModelOfCar().getBodyType().getType());
+				AboutCarPanel newPanel = new AboutCarPanel(carRepository, database, panel, car);
 				newPanel.setFilter(temp.conditionPanel);
 				newPanel.setNumPage(temp.numOfPage);
 				newPanel.setStartBut(temp.startBut);
