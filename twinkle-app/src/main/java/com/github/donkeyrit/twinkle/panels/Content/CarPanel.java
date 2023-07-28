@@ -41,7 +41,6 @@ public class CarPanel extends JPanel
 		ResultSet carSet = database.select(query);
 		try {
 			while (carSet.next()) {
-				nameCountry = carSet.getString("country_name");
 				bodyTypeName = carSet.getString("body_type_name");
 			}
 		} catch (SQLException ex) {
@@ -49,7 +48,7 @@ public class CarPanel extends JPanel
 		}
 
 		this.car = carRepository.getById(num);
-
+		this.nameCountry = car.getModelOfCar().getMark().getCountry().getCountryName();
 
 		Font font = new Font("Arial", Font.BOLD, 13);
 		Font alterfont = new Font("Arial", Font.ITALIC, 13);
@@ -111,7 +110,7 @@ public class CarPanel extends JPanel
 					car.getCost(), 
 					car.getModelOfCar().getModelName(), 
 					car.getModelOfCar().getMark().getName(), 
-					nameCountry,
+					car.getModelOfCar().getMark().getCountry().getCountryName(),
 					car.getInfo(), 
 					bodyTypeName);
 				newPanel.setFilter(temp.conditionPanel);

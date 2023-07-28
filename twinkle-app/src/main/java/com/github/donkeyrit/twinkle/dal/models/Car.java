@@ -4,9 +4,7 @@ import com.github.donkeyrit.twinkle.dal.contracts.BaseDbModel;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,9 +15,9 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "car")
-public class Car extends BaseDbModel
-{
-	//#region Fields
+public class Car extends BaseDbModel {
+	
+	// #region Fields
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,69 +37,56 @@ public class Car extends BaseDbModel
 	@JoinColumn(unique = true, name = "id_model")
 	private ModelOfCar modelOfCar;
 
-	//#endregion
+	// #endregion
+	// #region Getters/Setters
 
-	//#region Getters/Setters
+	public int getId() {
+		return id;
+	}
 
-	public int getId() 
-	{
-        return id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setId(int id) 
-	{
-        this.id = id;
-    }
-
-	public Date getModelYear() 
-	{
+	public Date getModelYear() {
 		return ModelYear;
 	}
 
-	public void setModelYear(Date modelYear) 
-	{
+	public void setModelYear(Date modelYear) {
 		ModelYear = modelYear;
 	}
-	
-	public String getInfo() 
-	{
+
+	public String getInfo() {
 		return info;
 	}
 
-	public void setInfo(String info) 
-	{
+	public void setInfo(String info) {
 		this.info = info;
 	}
 
-	public int getImageId() 
-	{
+	public int getImageId() {
 		return imageId;
 	}
 
-	public void setImageId(int imageId) 
-	{
+	public void setImageId(int imageId) {
 		this.imageId = imageId;
 	}
 
-	public double getCost() 
-	{
+	public double getCost() {
 		return cost;
 	}
 
-	public void setCost(double cost) 
-	{
+	public void setCost(double cost) {
 		this.cost = cost;
 	}
 
-	public ModelOfCar getModelOfCar() 
-	{
+	public ModelOfCar getModelOfCar() {
 		return modelOfCar;
 	}
 
-	public void setModelOfCar(ModelOfCar modelOfCar) 
-	{
+	public void setModelOfCar(ModelOfCar modelOfCar) {
 		this.modelOfCar = modelOfCar;
 	}
 
-	//#endregion
+	// #endregion
 }
