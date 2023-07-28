@@ -6,13 +6,10 @@ import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.DataBase;
 
-import java.sql.SQLException;
-import java.sql.ResultSet;
 import javax.swing.JPanel;
-import java.util.Date;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
+import java.awt.*;
 
 public class CarPanel extends JPanel 
 {	
@@ -30,7 +27,7 @@ public class CarPanel extends JPanel
 	{
 		setLayout(null);
 
-		status = getStatus(database, carId);
+		status = rentRepository.isTaken(carId) ? "lock" : "open";
 		imagesNum = carId;
 
 		this.car = carRepository.getById(carId);
@@ -100,26 +97,6 @@ public class CarPanel extends JPanel
 		});
 		add(moreButton);
 
-	}
-
-	//TODO: Extract to separate repository
-	private String getStatus(DataBase database, int num) 
-	{
-		ResultSet statusSet = database
-				.select("SELECT * FROM rent WHERE id_car = " + num + " ORDER BY end_date, plan_date DESC LIMIT 1");
-		String status = "open";
-		try {
-			while (statusSet.next()) {
-				Date rentDate = statusSet.getDate("end_date");
-				if (rentDate == null) {
-					status = "lock";
-				}
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-
-		return status;
 	}
 
 	@Override

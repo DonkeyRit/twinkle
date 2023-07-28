@@ -5,9 +5,14 @@ import com.github.donkeyrit.twinkle.dal.contracts.BaseDbModel;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.sql.Date;
 
+@Entity
+@Table(name = "rent")
 public class Rent extends BaseDbModel {
 
 	//#region Fields
