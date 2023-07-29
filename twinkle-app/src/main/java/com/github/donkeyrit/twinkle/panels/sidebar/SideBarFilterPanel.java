@@ -25,6 +25,7 @@ import javax.swing.border.TitledBorder;
 
 import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
@@ -106,6 +107,17 @@ public class SideBarFilterPanel extends JPanel
 		applyFilter.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) { 
+
+				CarQueryFilter filter = new CarQueryFilter();
+				filter.setSelectedMark(markComboBox.getItemAt(markComboBox.getSelectedIndex()));
+				filter.setSelectedModel(modelComboBox.getItemAt(modelComboBox.getSelectedIndex()));
+				filter.setSelectedPrice(price.getValue());
+				filter.setSelectedBodyTypes(bodyTypeCheckBoxes
+					.stream()
+					.filter(cb -> cb.isSelected())
+					.map(cb -> cb.getText())
+					.toList());
+
 				String resultCondition = ""; 
 				
 				String selectedMark = markComboBox.getSelectedItem().toString(); 
