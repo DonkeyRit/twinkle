@@ -5,6 +5,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.contracts.BaseCrudRepository;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -30,23 +31,28 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 		CriteriaQuery<Car> criteriaQuery = criteriaBuilder.createQuery(Car.class);
 
+		Join<Car, ModelOfCar> model = null;
+		Join<ModelOfCar, MarkOfCar> mark = null;
 		Root<Car> root = criteriaQuery.from(Car.class);
 		List<Predicate> predicates = new ArrayList<Predicate>(4);
-
-		if(queryFilter.getSelectedMark().isPresent()){
-
-			//root.join(root.get("null"), null)
-
-			//criteriaBuilder.equal(root.get("modelOfCar"), queryFilter.getSelectedMark().get().getId());
-		}
 
 		if(queryFilter.getSelectedModel().isPresent()){
 
 			String modelName = queryFilter.getSelectedModel().get();
-			Join<Car, ModelOfCar> model = root.join("modelOfCar");
+			model = root.join("modelOfCar");
 
-			Predicate pd = criteriaBuilder.equal(model.get("modelName"), modelName);
-			predicates.add(pd);
+			Predicate eqModelName = criteriaBuilder.equal(model.get("modelName"), modelName);
+			predicates.add(eqModelName);
+		}
+
+		if(queryFilter.getSelectedMark().isPresent()){
+
+			int markId = queryFilter.getSelectedMark().get().getId();
+			if(model == null) model = root.join("modelOfCar");
+			mark = model.join("mark");
+
+			Predicate eqMarkId = criteriaBuilder.equal(mark.get("id"), markId);
+			predicates.add(eqMarkId);
 		}
 
 		if(queryFilter.getSelectedPrice().isPresent()){
