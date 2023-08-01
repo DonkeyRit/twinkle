@@ -13,7 +13,7 @@ public class CarQueryFilter implements QueryFilter  {
 
 	private Optional<MarkOfCar> selectedMark;
 	private Optional<String> selectedModel;
-	private Optional<Integer> selectedPrice;
+	private Optional<Double> selectedPrice;
 	private List<String> selectedBodyTypes;
 
 	public CarQueryFilter()
@@ -39,10 +39,10 @@ public class CarQueryFilter implements QueryFilter  {
 	public void setSelectedModel(String selectedModel) {
 		this.selectedModel = Optional.of(selectedModel);
 	}
-	public Optional<Integer> getSelectedPrice() {
+	public Optional<Double> getSelectedPrice() {
 		return selectedPrice;
 	}
-	public void setSelectedPrice(int selectedPrice) {
+	public void setSelectedPrice(double selectedPrice) {
 		this.selectedPrice = Optional.of(selectedPrice);
 	}
 	public List<String> getSelectedBodyTypes() {

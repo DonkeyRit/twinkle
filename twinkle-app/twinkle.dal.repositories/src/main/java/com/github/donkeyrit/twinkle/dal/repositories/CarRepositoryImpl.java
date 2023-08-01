@@ -56,9 +56,10 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		}
 
 		if(queryFilter.getSelectedPrice().isPresent()){
+			double selectedPrice = queryFilter.getSelectedPrice().get();
 			Predicate leCostPredicate = criteriaBuilder.lessThan(
 				root.get("cost"), 
-				queryFilter.getSelectedPrice().get());
+				selectedPrice);
 
 			predicates.add(leCostPredicate);
 		}
