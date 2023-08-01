@@ -4,6 +4,7 @@ import com.github.donkeyrit.twinkle.dal.contracts.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CarQueryFilter implements QueryFilter  {
@@ -14,6 +15,14 @@ public class CarQueryFilter implements QueryFilter  {
 	private Optional<String> selectedModel;
 	private Optional<Integer> selectedPrice;
 	private List<String> selectedBodyTypes;
+
+	public CarQueryFilter()
+	{
+		this.selectedMark = Optional.empty();
+		this.selectedModel = Optional.empty();
+		this.selectedPrice = Optional.empty();
+		this.selectedBodyTypes = new ArrayList<String>(0);
+	}
 
 	//#endregion
 	//#region Getters/Setters
