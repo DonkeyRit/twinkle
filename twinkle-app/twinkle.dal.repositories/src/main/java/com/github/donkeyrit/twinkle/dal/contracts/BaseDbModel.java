@@ -2,7 +2,6 @@ package com.github.donkeyrit.twinkle.dal.contracts;
 
 import java.io.Serializable;
 
-import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
