@@ -3,37 +3,38 @@ package com.github.donkeyrit.twinkle.dal.repositories.filters;
 import com.github.donkeyrit.twinkle.dal.contracts.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 
+import java.util.Optional;
 import java.util.List;
 
 public class CarQueryFilter implements QueryFilter  {
 	
 	//#region Fields
 
-	private MarkOfCar selectedMark;
-	private String selectedModel;
-	private int selectedPrice;
+	private Optional<MarkOfCar> selectedMark;
+	private Optional<String> selectedModel;
+	private Optional<Integer> selectedPrice;
 	private List<String> selectedBodyTypes;
 
 	//#endregion
 	//#region Getters/Setters
 
-	public MarkOfCar getSelectedMark() {
+	public Optional<MarkOfCar> getSelectedMark() {
 		return selectedMark;
 	}
 	public void setSelectedMark(MarkOfCar selectedMark) {
-		this.selectedMark = selectedMark;
+		this.selectedMark = Optional.of(selectedMark);
 	}
-	public String getSelectedModel() {
+	public Optional<String> getSelectedModel() {
 		return selectedModel;
 	}
 	public void setSelectedModel(String selectedModel) {
-		this.selectedModel = selectedModel;
+		this.selectedModel = Optional.of(selectedModel);
 	}
-	public int getSelectedPrice() {
+	public Optional<Integer> getSelectedPrice() {
 		return selectedPrice;
 	}
 	public void setSelectedPrice(int selectedPrice) {
-		this.selectedPrice = selectedPrice;
+		this.selectedPrice = Optional.of(selectedPrice);
 	}
 	public List<String> getSelectedBodyTypes() {
 		return selectedBodyTypes;

@@ -5,7 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.stream.Stream;
 
-public abstract class BaseCrudRepository<T extends BaseDbModel> implements CrudRepository<T>
+public abstract class BaseCrudRepository<T extends BaseDbModel, T1 extends QueryFilter> implements CrudRepository<T,T1>
 {
 	protected EntityManager session;
 	private final Class<T> entityClass;
@@ -83,7 +83,7 @@ public abstract class BaseCrudRepository<T extends BaseDbModel> implements CrudR
 	}
 
 	@Override
-	public Stream<T> getList(QueryFilter queryFilter) 
+	public Stream<T> getList(T1 queryFilter) 
 	{
 		return session
 			.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass)
