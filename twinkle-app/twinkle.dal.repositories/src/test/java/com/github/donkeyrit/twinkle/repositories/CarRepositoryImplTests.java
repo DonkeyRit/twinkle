@@ -3,21 +3,20 @@ package com.github.donkeyrit.twinkle.repositories;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
-import com.github.donkeyrit.twinkle.dal.models.Car;
-import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
-import com.github.donkeyrit.twinkle.dal.models.Country;
-import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
+import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.utils.DaoFixture;
+import com.github.donkeyrit.twinkle.utils.DateFixture;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.hibernate.cfg.Configuration;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CarRepositoryImplTests extends Assertions {
 
@@ -31,54 +30,39 @@ public class CarRepositoryImplTests extends Assertions {
 		CarQueryFilter carQueryFilter = new CarQueryFilter();
 		carQueryFilter.setSelectedModel("Camry");
 
-		List<Car> expectedResult = new ArrayList<>(3);
+		//List<Car> expectedResult = new ArrayList<>(3);
+		ModelOfCar modelOfCar = DaoFixture.createModelOfCar(
+			1, 
+			"Camry", 
+			DaoFixture.createMarkOfCar(
+				1, 
+				"Toyota",
+				DaoFixture.createCountry(1, "Japan")), 
+			DaoFixture.createCarBodyType(1, "Sedan"));
 
-		Country country = new Country();
-		country.setId(1);
-		country.setCountryName("Japan");
-
-		MarkOfCar markOfCar = new MarkOfCar();
-		markOfCar.setId(1);
-		markOfCar.setName("Toyota");
-		markOfCar.setCountry(country);
-
-		CarBodyType carBodyType = new CarBodyType();
-		carBodyType.setId(1);
-		carBodyType.setType("Sedan");
-
-		ModelOfCar modelOfCar = new ModelOfCar();
-		modelOfCar.setId(1);
-		modelOfCar.setModelName("Camry");
-		modelOfCar.setMark(markOfCar);
-		modelOfCar.setBodyTypeId(carBodyType);
-
-		Car first = new Car();
-		first.setId(1);
-		Calendar cal = Calendar.getInstance();
-		first.setModelYear(getDate(2020, 0, 01));
-		first.setModelOfCar(modelOfCar);
-		first.setInfo("Toyota Camry 2020");
-		first.setImageId(1);
-		first.setCost(25000);
-		expectedResult.add(first);
-
-		Car second = new Car();
-		second.setId(2);
-		second.setModelYear(getDate(2021, 0, 01));
-		second.setModelOfCar(modelOfCar);
-		second.setInfo("Toyota Camry 2021");
-		second.setImageId(2);
-		second.setCost(26000);
-		expectedResult.add(second);
-
-		Car third = new Car();
-		third.setId(3);
-		third.setModelOfCar(modelOfCar);
-		third.setModelYear(getDate(2022, 0, 01));
-		third.setInfo("Toyota Camry 2022");
-		third.setImageId(3);
-		third.setCost(27000);
-		expectedResult.add(third);
+		List<Car> expectedResult = Arrays.asList(
+			DaoFixture.createCar(
+				1, 
+				DateFixture.getDate(2020, 0, 01), 
+				modelOfCar, 
+				"Toyota Camry 2020", 
+				1, 
+				25000),
+			DaoFixture.createCar(
+				2, 
+				DateFixture.getDate(2021, 0, 01), 
+				modelOfCar, 
+				"Toyota Camry 2021", 
+				2, 
+				26000),
+			DaoFixture.createCar(
+				3, 
+				DateFixture.getDate(2022, 0, 01), 
+				modelOfCar, 
+				"Toyota Camry 2022", 
+				3, 
+				27000)
+		);
 
 		// Act
 		List<Car> cars = carRepository.getList(carQueryFilter).toList();
@@ -86,21 +70,4 @@ public class CarRepositoryImplTests extends Assertions {
 		// Assert
 		assertThat(cars).hasSameElementsAs(expectedResult);
 	}
-
-	private static Date getDate(int year, int month, int day) {
-
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH, day);
-		cal.set(Calendar.HOUR, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-
-		Date date = new Date(cal.getTimeInMillis());
-		System.out.println(date);
-		return date;
-	}
-
 }
