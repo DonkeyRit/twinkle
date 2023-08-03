@@ -76,4 +76,44 @@ public class ModelOfCar
 	}
 
 	//#endregion
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Id;
+		result = prime * result + ((modelName == null) ? 0 : modelName.hashCode());
+		result = prime * result + ((mark == null) ? 0 : mark.hashCode());
+		result = prime * result + ((bodyType == null) ? 0 : bodyType.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ModelOfCar other = (ModelOfCar) obj;
+		if (Id != other.Id)
+			return false;
+		if (modelName == null) {
+			if (other.modelName != null)
+				return false;
+		} else if (!modelName.equals(other.modelName))
+			return false;
+		if (mark == null) {
+			if (other.mark != null)
+				return false;
+		} else if (!mark.equals(other.mark))
+			return false;
+		if (bodyType == null) {
+			if (other.bodyType != null)
+				return false;
+		} else if (!bodyType.equals(other.bodyType))
+			return false;
+		return true;
+	}
 }

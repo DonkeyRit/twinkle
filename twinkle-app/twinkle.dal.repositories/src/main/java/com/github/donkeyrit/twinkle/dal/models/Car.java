@@ -89,4 +89,48 @@ public class Car extends BaseDbModel {
 	}
 
 	// #endregion
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((ModelYear == null) ? 0 : ModelYear.hashCode());
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		result = prime * result + imageId;
+		long temp;
+		temp = Double.doubleToLongBits(cost);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((modelOfCar == null) ? 0 : modelOfCar.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Car other = (Car) obj;
+		if (id != other.id)
+			return false;
+		//TODO: Compare model year
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		if (imageId != other.imageId)
+			return false;
+		if (Double.doubleToLongBits(cost) != Double.doubleToLongBits(other.cost))
+			return false;
+		if (modelOfCar == null) {
+			if (other.modelOfCar != null)
+				return false;
+		} else if (!modelOfCar.equals(other.modelOfCar))
+			return false;
+		return true;
+	}
 }
