@@ -24,10 +24,17 @@
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
     </dependency>
+    <!-- Unit-tests-->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Unit-tests-->
   </dependencies>
 </project>
