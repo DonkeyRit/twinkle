@@ -13,6 +13,7 @@ import jakarta.persistence.EntityManager;
 import org.hibernate.cfg.Configuration;
 
 import org.assertj.core.api.Assertions;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -20,13 +21,20 @@ import java.util.List;
 
 public class CarRepositoryImplTests extends Assertions {
 
-	@Test
-	public void filterByModel_getList() {
-		// Arrange
-		EntityManagerFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+	private static CarRepository carRepository;
+
+	@BeforeClass public static void init(){
+		EntityManagerFactory sessionFactory = new Configuration()
+			.configure()
+			.buildSessionFactory();
 		EntityManager session = sessionFactory.createEntityManager();
 
-		CarRepository carRepository = new CarRepositoryImpl(session);
+		carRepository = new CarRepositoryImpl(session);
+	}
+
+	@Test public void filterByModel_getList() {
+		// Arrange
+		
 		CarQueryFilter carQueryFilter = new CarQueryFilter();
 		carQueryFilter.setSelectedModel("Camry");
 
