@@ -55,9 +55,6 @@ public class CarRepositoryImplTests extends Assertions {
 		Car first = new Car();
 		first.setId(1);
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 1988);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
 		first.setModelYear(getDate(2020, 0, 01));
 		first.setModelOfCar(modelOfCar);
 		first.setInfo("Toyota Camry 2020");
@@ -96,8 +93,14 @@ public class CarRepositoryImplTests extends Assertions {
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DAY_OF_MONTH, day);
+		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
 
-		return new Date(cal.getTimeInMillis());
+		Date date = new Date(cal.getTimeInMillis());
+		System.out.println(date);
+		return date;
 	}
 
 }

@@ -116,7 +116,11 @@ public class Car extends BaseDbModel {
 		Car other = (Car) obj;
 		if (id != other.id)
 			return false;
-		//TODO: Compare model year
+		if (ModelYear == null) {
+			if (other.ModelYear != null)
+				return false;
+		} else if (!ModelYear.equals(other.ModelYear))
+			return false;
 		if (info == null) {
 			if (other.info != null)
 				return false;
