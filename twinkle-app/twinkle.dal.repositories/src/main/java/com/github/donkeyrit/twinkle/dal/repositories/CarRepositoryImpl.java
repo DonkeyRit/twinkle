@@ -5,8 +5,10 @@ import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.contracts.BaseCrudRepository;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
@@ -33,6 +35,8 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 
 		Join<Car, ModelOfCar> model = null;
 		Join<ModelOfCar, MarkOfCar> mark = null;
+		Join<CarBodyType, ModelOfCar> carBodyType = null;
+
 		Root<Car> root = criteriaQuery.from(Car.class);
 		List<Predicate> predicates = new ArrayList<Predicate>(4);
 
@@ -66,6 +70,12 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 
 		if(!queryFilter.getSelectedBodyTypes().isEmpty()){
 
+			if(model == null) model = root.join("modelOfCar");
+			carBodyType = model.join("bodyType");
+
+			In<String> selectedCarBodyTypesPredicate = criteriaBuilder.in(carBodyType.get("type"));
+			selectedCarBodyTypesPredicate.in(queryFilter.getSelectedBodyTypes());
+			predicates.add(selectedCarBodyTypesPredicate);
 		}
 
 		criteriaQuery
