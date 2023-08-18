@@ -4,6 +4,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
+import com.github.donkeyrit.twinkle.dal.models.Country;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.models.Car;
@@ -100,6 +101,35 @@ public class CarRepositoryImplTests extends Assertions {
 				DaoFixture.createCar(4, DateFixture.getDate(2020, 0, 01), corollaCarModel, "Toyota Corolla 2020", 4, selectedPrice),
 				DaoFixture.createCar(93, DateFixture.getDate(2020, 0, 01), civicCarModel, "Honda Civic 2020", 93, selectedPrice));
 
+		// Act
+		List<Car> cars = carRepository.getList(carQueryFilter).toList();
+
+		// Assert
+		assertThat(cars).hasSameElementsAs(expectedResult);
+	}
+
+	@Test
+	public void filterByCarBodyTypes_getList() {
+		// Arrange
+		List<String> selectedCarBodyTypes = Arrays.asList("Convertible", "Truck");
+		CarQueryFilter carQueryFilter = new CarQueryFilter();
+		carQueryFilter.setSelectedBodyTypes(selectedCarBodyTypes);
+
+		CarBodyType convertibleBodyType = DaoFixture.createCarBodyType(4, "Convertible");
+		Country usa = DaoFixture.createCountry(3, "USA");
+		MarkOfCar fordMark = DaoFixture.createMarkOfCar(4, "Ford", usa);
+		MarkOfCar chevroletMark = DaoFixture.createMarkOfCar(5, "Chevrolet", usa);
+
+		ModelOfCar f150CarModel = DaoFixture.createModelOfCar(7, "F-150", fordMark, convertibleBodyType);
+		ModelOfCar silveradoCarModel = DaoFixture.createModelOfCar(10, "Silverado", chevroletMark, convertibleBodyType);
+
+		List<Car> expectedResult = Arrays.asList(
+				DaoFixture.createCar(19, DateFixture.getDate(2020, 0, 01), f150CarModel, "Nissan Altima 2020", 19, 27000),
+				DaoFixture.createCar(20, DateFixture.getDate(2021, 0, 01), f150CarModel, "Nissan Altima 2021", 20, 28000),
+				DaoFixture.createCar(21, DateFixture.getDate(2022, 0, 01), f150CarModel, "Nissan Altima 2022", 21, 29000),
+				DaoFixture.createCar(28, DateFixture.getDate(2020, 0, 01), silveradoCarModel, "Mercedes-Benz C-Class 2020", 28, 38000),
+				DaoFixture.createCar(29, DateFixture.getDate(2021, 0, 01), silveradoCarModel, "Mercedes-Benz C-Class 2021", 29, 39000),
+				DaoFixture.createCar(30, DateFixture.getDate(2022, 0, 01), silveradoCarModel, "Mercedes-Benz C-Class 2022", 30, 40000));
 		// Act
 		List<Car> cars = carRepository.getList(carQueryFilter).toList();
 

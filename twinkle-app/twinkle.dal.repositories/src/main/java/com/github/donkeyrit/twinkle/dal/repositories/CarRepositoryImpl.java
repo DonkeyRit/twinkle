@@ -74,7 +74,9 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 			carBodyType = model.join("bodyType");
 
 			In<String> selectedCarBodyTypesPredicate = criteriaBuilder.in(carBodyType.get("type"));
-			selectedCarBodyTypesPredicate.in(queryFilter.getSelectedBodyTypes());
+			for (String selectedCarBodyType : queryFilter.getSelectedBodyTypes()) {
+				selectedCarBodyTypesPredicate.value(selectedCarBodyType);
+			}
 			predicates.add(selectedCarBodyTypesPredicate);
 		}
 
