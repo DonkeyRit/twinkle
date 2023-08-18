@@ -40,7 +40,25 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		Root<Car> root = criteriaQuery.from(Car.class);
 		List<Predicate> predicates = new ArrayList<Predicate>(4);
 
-		if(queryFilter.getSelectedModel().isPresent()){
+		AddSelectedModelPredicate(criteriaBuilder, queryFilter, root, model, predicates);
+		AddSelectedMarkPredicate(criteriaBuilder, queryFilter, root, model, mark, predicates);
+		AddSelectedPricePredicate(criteriaBuilder, queryFilter, root, predicates);
+		AddSelectedBodyTypesPredicate(criteriaBuilder, queryFilter, root, model, mark, carBodyType, predicates);
+		
+		criteriaQuery.select(root).where(predicates.toArray(new Predicate[0]));
+
+		TypedQuery<Car> query = session.createQuery(criteriaQuery);
+		return query.getResultStream();
+	}
+
+	private void AddSelectedModelPredicate(
+		CriteriaBuilder criteriaBuilder, 
+		CarQueryFilter queryFilter, 
+		Root<Car> root,
+		Join<Car, ModelOfCar> model, 
+		List<Predicate> predicates) {
+
+		if (queryFilter.getSelectedModel().isPresent()) {
 
 			String modelName = queryFilter.getSelectedModel().get();
 			model = root.join("modelOfCar");
@@ -48,29 +66,58 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 			Predicate eqModelName = criteriaBuilder.equal(model.get("modelName"), modelName);
 			predicates.add(eqModelName);
 		}
+	}
 
-		if(queryFilter.getSelectedMark().isPresent()){
+	private void AddSelectedMarkPredicate(
+		CriteriaBuilder criteriaBuilder, 
+		CarQueryFilter queryFilter, 
+		Root<Car> root,
+		Join<Car, ModelOfCar> model,
+		Join<ModelOfCar, MarkOfCar> mark,
+		List<Predicate> predicates
+	) {
+
+		if (queryFilter.getSelectedMark().isPresent()) {
 
 			int markId = queryFilter.getSelectedMark().get().getId();
-			if(model == null) model = root.join("modelOfCar");
+			if (model == null)
+				model = root.join("modelOfCar");
 			mark = model.join("mark");
 
 			Predicate eqMarkId = criteriaBuilder.equal(mark.get("id"), markId);
 			predicates.add(eqMarkId);
 		}
+	}
 
-		if(queryFilter.getSelectedPrice().isPresent()){
+	private void AddSelectedPricePredicate(
+		CriteriaBuilder criteriaBuilder, 
+		CarQueryFilter queryFilter, 
+		Root<Car> root,
+		List<Predicate> predicates
+	)
+	{
+		if (queryFilter.getSelectedPrice().isPresent()) {
 			double selectedPrice = queryFilter.getSelectedPrice().get();
-			Predicate leCostPredicate = criteriaBuilder.lessThanOrEqualTo(
-				root.get("cost"), 
-				selectedPrice);
+			Predicate leCostPredicate = criteriaBuilder.lessThanOrEqualTo(root.get("cost"), selectedPrice);
 
 			predicates.add(leCostPredicate);
 		}
+	}
 
-		if(!queryFilter.getSelectedBodyTypes().isEmpty()){
+	private void AddSelectedBodyTypesPredicate(
+		CriteriaBuilder criteriaBuilder, 
+		CarQueryFilter queryFilter, 
+		Root<Car> root,
+		Join<Car, ModelOfCar> model,
+		Join<ModelOfCar, MarkOfCar> mark,
+		Join<CarBodyType, ModelOfCar> carBodyType,
+		List<Predicate> predicates
+	)
+	{
+		if (!queryFilter.getSelectedBodyTypes().isEmpty()) {
 
-			if(model == null) model = root.join("modelOfCar");
+			if (model == null)
+				model = root.join("modelOfCar");
 			carBodyType = model.join("bodyType");
 
 			In<String> selectedCarBodyTypesPredicate = criteriaBuilder.in(carBodyType.get("type"));
@@ -79,12 +126,5 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 			}
 			predicates.add(selectedCarBodyTypesPredicate);
 		}
-
-		criteriaQuery
-			.select(root)
-			.where(predicates.toArray(new Predicate[0]));
-
-		TypedQuery<Car> query = session.createQuery(criteriaQuery);
-		return query.getResultStream();
 	}
 }
