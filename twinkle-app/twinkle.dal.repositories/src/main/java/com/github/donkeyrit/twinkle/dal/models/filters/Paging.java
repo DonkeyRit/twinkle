@@ -22,5 +22,11 @@ public class Paging {
 	public int getPageSize() {
 		return pageSize;
 	}
+
 	//#endregion Getters
+
+	public Paging next()
+	{
+		return new Paging(this.pageNumber + 1, this.pageSize);
+	}
 }
