@@ -1,13 +1,12 @@
 package com.github.donkeyrit.twinkle.dal.repositories.filters;
 
-import com.github.donkeyrit.twinkle.dal.contracts.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarQueryFilter implements QueryFilter  {
+public class CarQueryFilter extends PagingFilter  {
 	
 	//#region Fields
 

@@ -3,10 +3,11 @@ package com.github.donkeyrit.twinkle.dal.repositories;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.contracts.BaseCrudRepository;
-import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
-import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
+import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.models.Car;
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -48,8 +49,11 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		criteriaQuery.select(root).where(predicates.toArray(new Predicate[0]));
 
 		TypedQuery<Car> query = session.createQuery(criteriaQuery);
+		AddPaging(query, queryFilter.getPaging());
 		return query.getResultStream();
 	}
+
+	//#region Create predicates
 
 	private void AddSelectedModelPredicate(
 		CriteriaBuilder criteriaBuilder, 
@@ -126,5 +130,15 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 			}
 			predicates.add(selectedCarBodyTypesPredicate);
 		}
+	}
+
+	//#endregion Create predicates
+
+	private <T> void AddPaging(TypedQuery<T> query, Paging paging){
+
+		int startIndex = (paging.getPageNumber() - 1) * paging.getPageSize();
+
+		query.setFirstResult(startIndex);
+		query.setMaxResults(paging.getPageSize());
 	}
 }
