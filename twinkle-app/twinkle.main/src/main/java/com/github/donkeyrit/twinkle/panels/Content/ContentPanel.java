@@ -19,6 +19,10 @@ import java.util.*;
 
 public class ContentPanel extends JPanel
 { 
+	private final JPanel panel;
+	private final CarRepository carRepository;
+	private final RentRepository rentRepository;
+	private final DataBase database;
 	private final CarQueryFilter filter;
 	
 	public CarQueryFilter getFilter() {
@@ -42,6 +46,10 @@ public class ContentPanel extends JPanel
 		CarQueryFilter filter)
 	{
 		setLayout(null); 
+		this.panel = panel;
+		this.carRepository = carRepository;
+		this.rentRepository = rentRepository;
+		this.database = database;
 		this.filter = filter;
 		
 		JLabel contentMainLabel = new JLabel("List of cars:"); 
@@ -95,32 +103,23 @@ public class ContentPanel extends JPanel
 	{
 		//TODO: Move to separate panel
 
+		int currentPageNumber = paging.getPageNumber();
+		int firstPageNumber = ((int)(currentPageNumber / 5)) * 5 + 1;
+		int endPageNumber = firstPageNumber + 4;
 
-
-		/* int num = (int)(Math.ceil(numString / 4f)); 
-		if(args.length != 0 && args.length > 1){
-			startBut = args[1]; 
-		}
-
-		int m = startBut + 5;
-		if(m > num){
-			m = num + 1;
-		}
-		
 		Box buttonBox = Box.createHorizontalBox(); 
 		buttonBox.setBounds(205, 520, 400, 30); 
 		
-		if(startBut > 5){ 
+		if(firstPageNumber >= 5){ 
 			JButton backBut = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/back.png")); 
 			backBut.addActionListener(new NextBackListener(panel, carRepository, rentRepository, database)); 
-			
 			
 			buttonBox.add(backBut); 
 		}
 		
 		Font buttonFont = new Font("Arial", Font.ITALIC, 10); 
 		ArrayList<JButton> buttonsList = new ArrayList<JButton>(); 
-		for(int i = startBut; i < m; i++){
+		for(int i = firstPageNumber; i < endPageNumber; i++){
 			JButton temp = new JButton(i + ""); 
 			
 			temp.setFont(buttonFont); 
@@ -129,15 +128,8 @@ public class ContentPanel extends JPanel
 			buttonBox.add(temp); 
 			buttonsList.add(temp); 
 		}
-		
-		if(m != (num + 1)){ 
-			JButton nextBut = new JButton(AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/next.png")); 
-			nextBut.addActionListener(new NextBackListener(panel, carRepository, rentRepository, database)); 
-			
-			
-			buttonBox.add(nextBut); 
-		}  
-		add(buttonBox);  */
+	
+		add(buttonBox); 
 	}
 	
 	@Override

@@ -19,8 +19,7 @@ public class NextBackListener implements ActionListener {
 	private DataBase dataBase;
 	private JPanel panel;
 
-	public NextBackListener(JPanel panel, CarRepository carRepository, RentRepository rentRepository,
-			DataBase dataBase) {
+	public NextBackListener(JPanel panel, CarRepository carRepository, RentRepository rentRepository, DataBase dataBase) {
 		this.panel = panel;
 		this.dataBase = dataBase;
 		this.carRepository = carRepository;
