@@ -84,9 +84,19 @@ public class ContentPanel extends JPanel
 			JPanel temp = new CarPanel(carRepository, rentRepository, database, panel, car.getId()); 
 			temp.setBorder(new LineBorder(new Color(0,163,163), 4)); 
 			temp.setBounds(20,40 + j * 120,565,100); 
+			j++;
 			add(temp); 
 		}
 		
+		ShowPageNumbers(filter.getPaging());
+	}
+
+	private void ShowPageNumbers(Paging paging)
+	{
+		//TODO: Move to separate panel
+
+
+
 		/* int num = (int)(Math.ceil(numString / 4f)); 
 		if(args.length != 0 && args.length > 1){
 			startBut = args[1]; 

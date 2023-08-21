@@ -22,7 +22,7 @@ public class CarQueryFilter extends PagingFilter  {
 		this.selectedModel = Optional.empty();
 		this.selectedPrice = Optional.empty();
 		this.selectedBodyTypes = new ArrayList<String>(0);
-		this.setPaging(new Paging(1, 5));
+		this.setPaging(new Paging(1, 4));
 	}
 
 	//#endregion

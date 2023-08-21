@@ -118,7 +118,7 @@ public class SideBarFilterPanel extends JPanel
 					.filter(cb -> cb.isSelected())
 					.map(cb -> cb.getText())
 					.toList());
-				filter.setPaging(new Paging(1, 5));
+				filter.setPaging(new Paging(1, 4));
 
 				Component[] mas = panel.getComponents(); 
 				JPanel temp = null; 
