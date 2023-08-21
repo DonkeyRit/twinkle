@@ -1,34 +1,48 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
+import com.github.donkeyrit.twinkle.panels.content.listeners.ScrollPageListener;
+import com.github.donkeyrit.twinkle.panels.content.listeners.NextBackListener;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
+import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
+import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
+import com.github.donkeyrit.twinkle.DataBase;
+
+import javax.swing.border.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
+import java.awt.*;
 import java.sql.*;
 import java.util.*;
-import javax.swing.border.*;
-import com.github.donkeyrit.twinkle.DataBase;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
-import com.github.donkeyrit.twinkle.panels.content.listeners.NextBackListener;
-import com.github.donkeyrit.twinkle.panels.content.listeners.ScrollPageListener;
-import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 public class ContentPanel extends JPanel
 { 
-	public int numOfPage = 1; 
-	public int startBut = 1; 
-	public String conditionPanel = ""; 
+	private final CarQueryFilter filter;
 	
+	public CarQueryFilter getFilter() {
+		return filter;
+	}
+
+	public ContentPanel(
+		JPanel panel, 
+		CarRepository carRepository, 
+		RentRepository rentRepository, 
+		DataBase database)
+	{
+		this(panel, carRepository, rentRepository, database, new CarQueryFilter());
+	}
+
 	public ContentPanel(
 		JPanel panel, 
 		CarRepository carRepository, 
 		RentRepository rentRepository, 
 		DataBase database, 
-		String condition, 
-		int ... args)
+		CarQueryFilter filter)
 	{
 		setLayout(null); 
-		conditionPanel = condition; 
+		this.filter = filter;
 		
 		JLabel contentMainLabel = new JLabel("List of cars:"); 
 		Font font = new Font("Arial", Font.BOLD, 13); 
@@ -53,7 +67,8 @@ public class ContentPanel extends JPanel
 				}
 				
 				panel.remove(temp); 
-				JPanel content = new ContentPanel(panel, carRepository, rentRepository, database, ""); 
+
+				JPanel content = new ContentPanel(panel, carRepository, rentRepository, database); 
 				content.setBounds(250,100,605,550); 
 				panel.add(content); 
 				panel.revalidate(); 
@@ -61,57 +76,18 @@ public class ContentPanel extends JPanel
 			}
 		});
 		add(reload);
-		
-		if(args.length != 0){ 
-			numOfPage = args[0]; 
-		}
-		
-		String conditionQuery = ""; 
-		if(!condition.equals("")){ 
-			conditionQuery = "WHERE " + condition;
-		}
-		
-		String query = "SELECT id FROM\n" +
-"                (SELECT id,model_year,info,cost,model_name,id_body_type,mark_name,country_name FROM\n" +
-"                (SELECT id,model_year,image,info,cost,model_name,id_body_type,mark_name,id_country FROM \n" +
-"                (SELECT id,model_year,image,info,cost,model_name,id_mark,id_body_type FROM car \n" +
-"                INNER JOIN model ON car.id_model = model.id_model) as join1\n" +
-"                INNER JOIN mark ON join1.id_mark = mark.id_mark) as join2\n" +
-"                INNER JOIN country ON join2.id_country = country.id_country) as join3\n" +
-"                INNER JOIN body_type ON join3.id_body_type = body_type.id_body_type " + conditionQuery + " ORDER BY model_year DESC";
 
-		ResultSet carsSet = database.select(query); 
-		ArrayList<Integer> carsList = new ArrayList<Integer>(); 
-		int numString = 0; 
-		try{
-			while(carsSet.next()){
-				carsList.add(carsSet.getInt("id")); 
-			}
-			carsSet.last(); 
-			numString = carsSet.getRow(); 
-		}catch(SQLException ex){
-			ex.printStackTrace();
-		}
+		java.util.List<Car> filteredCars = carRepository.getList(filter).toList();
+		int j = 0;
 		
-		int a  = numString - (numOfPage - 1) * 4; 
-		int size = 0; 
-		if(a > 4){ 
-			size = 4; 
-		}else{ 
-			size = a; 
-		}
-		
-		int start = (numOfPage - 1) * 4; 
-		int end = (numOfPage - 1) * 4 + size; 
-		
-		for(int i = start,j = 0; i < end; i++,j++){
-			JPanel temp = new CarPanel(carRepository, rentRepository, database, panel, carsList.get(i)); 
+		for (Car car : filteredCars) {
+			JPanel temp = new CarPanel(carRepository, rentRepository, database, panel, car.getId()); 
 			temp.setBorder(new LineBorder(new Color(0,163,163), 4)); 
 			temp.setBounds(20,40 + j * 120,565,100); 
 			add(temp); 
 		}
 		
-		int num = (int)(Math.ceil(numString / 4f)); 
+		/* int num = (int)(Math.ceil(numString / 4f)); 
 		if(args.length != 0 && args.length > 1){
 			startBut = args[1]; 
 		}
@@ -151,7 +127,7 @@ public class ContentPanel extends JPanel
 			
 			buttonBox.add(nextBut); 
 		}  
-		add(buttonBox); 
+		add(buttonBox);  */
 	}
 	
 	@Override

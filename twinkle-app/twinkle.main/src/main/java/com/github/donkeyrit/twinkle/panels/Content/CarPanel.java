@@ -92,10 +92,7 @@ public class CarPanel extends JPanel
 					return;
 				}
 
-				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, database, panel, car);
-				newPanel.setFilter(temp.conditionPanel);
-				newPanel.setNumPage(temp.numOfPage);
-				newPanel.setStartBut(temp.startBut);
+				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, database, panel, car, carQueryFilter);
 				newPanel.setBounds(250, 100, 605, 550);
 				panel.remove(temp);
 				panel.add(newPanel);

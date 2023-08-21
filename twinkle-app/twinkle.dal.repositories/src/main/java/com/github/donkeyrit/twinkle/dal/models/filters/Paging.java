@@ -2,11 +2,11 @@ package com.github.donkeyrit.twinkle.dal.models.filters;
 
 public class Paging {
 
-	public Paging(int pageNumber, int pageSize){
+	public Paging(int pageNumber, int pageSize) {
 		this.pageNumber = pageNumber;
 		this.pageSize = pageSize;
 	}
-	
+
 	// #region Fields
 
 	private final int pageNumber;
@@ -18,15 +18,18 @@ public class Paging {
 	public int getPageNumber() {
 		return pageNumber;
 	}
-	
+
 	public int getPageSize() {
 		return pageSize;
 	}
 
-	//#endregion Getters
+	// #endregion Getters
 
-	public Paging next()
-	{
+	public Paging next() {
 		return new Paging(this.pageNumber + 1, this.pageSize);
+	}
+
+	public Paging previous() {
+		return new Paging(this.pageNumber - 1, this.pageSize);
 	}
 }

@@ -25,6 +25,7 @@ import javax.swing.border.TitledBorder;
 
 import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
@@ -117,72 +118,8 @@ public class SideBarFilterPanel extends JPanel
 					.filter(cb -> cb.isSelected())
 					.map(cb -> cb.getText())
 					.toList());
+				filter.setPaging(new Paging(1, 5));
 
-				String resultCondition = ""; 
-				
-				String selectedMark = markComboBox.getSelectedItem().toString(); 
-				if(!selectedMark.equals("All marks")){
-					resultCondition += "mark_name = " + "'" + selectedMark + "'";
-				}else{
-					resultCondition += "!";
-				}
-				
-				resultCondition += ":"; 
-				
-				String selectedModel = modelComboBox.getSelectedItem().toString(); 
-				if(!selectedModel.equals("All models")){
-					resultCondition += "model_name = " + "'" + selectedModel + "'";
-				}else{
-					resultCondition += "!";
-				}
-				
-				resultCondition += ":"; 
-				
-				int selectedPrice = price.getValue(); 
-				if(selectedPrice != 0){
-					resultCondition += "cost < " + selectedPrice * 1000;
-				}else{
-					resultCondition += "!";
-				}
-				resultCondition += ":"; 
-				
-				String selectedCheckBoxes = ""; 
-				ArrayList<String> selectedCB = new ArrayList<String>();
-				for(int i = 0; i< bodyTypeCheckBoxes.size(); i++){
-					boolean isTrue = bodyTypeCheckBoxes.get(i).isSelected(); 
-					if(isTrue){
-						selectedCB.add(bodyTypeCheckBoxes.get(i).getText());
-					} 
-				}
-				
-				if(selectedCB.size() == 0){
-					resultCondition += "!";
-				}else{
-					selectedCheckBoxes += "body_type_name IN (";
-					for(int i = 0; i < selectedCB.size(); i++){
-						selectedCheckBoxes += "'" + selectedCB.get(i) + "'";
-						if(i != selectedCB.size() - 1){
-							selectedCheckBoxes += ",";
-						}
-					}
-					selectedCheckBoxes += ")";
-				}
-				resultCondition += selectedCheckBoxes;
-				
-				String res  = resultCondition.replaceAll("!", ""); 
-				String[] masive = res.split(":"); 
-				String resStr = ""; 
-				for(int i = 0; i < masive.length; i++){ 
-					if(masive[i].equals("")){
-						continue; 
-					}else{
-						resStr += masive[i]; 
-						if(i != masive.length - 1){ 
-							resStr += " AND "; 
-						}
-					}
-				}
-				
 				Component[] mas = panel.getComponents(); 
 				JPanel temp = null; 
 				for(int i = 0; i < mas.length; i++){
@@ -192,7 +129,7 @@ public class SideBarFilterPanel extends JPanel
 				}
 
 				panel.remove(temp); 
-				JPanel content = new ContentPanel(panel, carRepository, rentRepository, database, resStr); 
+				JPanel content = new ContentPanel(panel, carRepository, rentRepository, database, filter); 
 				content.setBounds(250,100,605,550); 
 				panel.add(content); 
 				panel.revalidate(); 

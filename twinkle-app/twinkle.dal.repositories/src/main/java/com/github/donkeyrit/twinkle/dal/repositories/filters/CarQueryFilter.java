@@ -1,6 +1,7 @@
 package com.github.donkeyrit.twinkle.dal.repositories.filters;
 
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 
 import java.util.Optional;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class CarQueryFilter extends PagingFilter  {
 		this.selectedModel = Optional.empty();
 		this.selectedPrice = Optional.empty();
 		this.selectedBodyTypes = new ArrayList<String>(0);
+		this.setPaging(new Paging(1, 5));
 	}
 
 	//#endregion

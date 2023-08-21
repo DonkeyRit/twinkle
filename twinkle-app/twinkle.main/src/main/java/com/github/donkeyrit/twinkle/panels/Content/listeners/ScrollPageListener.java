@@ -49,7 +49,7 @@ public class ScrollPageListener implements ActionListener
 		}
 
 		panel.remove(temp); 
-		JPanel content = new ContentPanel(this.panel, this.carRepository, this.rentRepository, this.dataBase, temp.conditionPanel,numPage,temp.startBut); 
+		JPanel content = new ContentPanel(this.panel, this.carRepository, this.rentRepository, this.dataBase, temp.getFilter()); 
 		content.setBounds(250,100,605,550); 
 		panel.add(content); 
 		panel.revalidate(); 

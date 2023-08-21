@@ -12,6 +12,7 @@ import javax.swing.text.*;
 import com.github.donkeyrit.twinkle.DataBase;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
@@ -27,35 +28,15 @@ public class AboutCarPanel extends JPanel
 	private String info;
 	private String bodyTypeName;
 
-	private String filter;
-	private int numPage;
-	private int startBut;
+	private CarQueryFilter carQueryFilter;
 
-	public void setFilter(String filter) {
-		this.filter = filter;
-	}
-
-	public void setNumPage(int numPage) {
-		this.numPage = numPage;
-	}
-
-	public void setStartBut(int startBut) {
-		this.startBut = startBut;
-	}
-
-	public String getFilter() {
-		return filter;
-	}
-
-	public int getNumPage() {
-		return numPage;
-	}
-
-	public int getStartBut() {
-		return startBut;
-	}
-
-	public AboutCarPanel(CarRepository carRepository, RentRepository rentRepository, DataBase database, JPanel panel, Car car) 
+	public AboutCarPanel(
+		CarRepository carRepository, 
+		RentRepository rentRepository, 
+		DataBase database, 
+		JPanel panel, 
+		Car car,
+		CarQueryFilter carQueryFilter) 
 	{
 		this.imagesNum = car.getImageId();
 		this.modelYear = car.getModelYear();
@@ -65,6 +46,7 @@ public class AboutCarPanel extends JPanel
 		this.nameCountry = car.getModelOfCar().getMark().getCountry().getCountryName();
 		this.info = car.getInfo();
 		this.bodyTypeName = car.getModelOfCar().getBodyType().getType();
+		this.carQueryFilter = carQueryFilter;
 
 		setLayout(null);
 
@@ -122,10 +104,7 @@ public class AboutCarPanel extends JPanel
 						temp = (AboutCarPanel) mas[i];
 					}
 				}
-				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, database, panel, car);
-				newPanel.setFilter(temp.getFilter());
-				newPanel.setNumPage(temp.getNumPage());
-				newPanel.setStartBut(temp.getStartBut());
+				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, database, panel, car, carQueryFilter);
 				newPanel.setBounds(250, 100, 605, 550);
 				panel.remove(temp);
 				panel.add(newPanel);
@@ -151,7 +130,7 @@ public class AboutCarPanel extends JPanel
 				}
 
 				panel.remove(temp);
-				JPanel contentPanel = new ContentPanel(panel, carRepository, rentRepository, database, filter, numPage, startBut);
+				JPanel contentPanel = new ContentPanel(panel, carRepository, rentRepository, database, carQueryFilter);
 				contentPanel.setBounds(250, 100, 605, 550);
 				panel.add(contentPanel);
 				panel.revalidate();
