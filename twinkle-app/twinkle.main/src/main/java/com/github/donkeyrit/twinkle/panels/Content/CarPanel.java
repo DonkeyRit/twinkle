@@ -4,7 +4,6 @@ import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
-import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.DataBase;
 
@@ -37,7 +36,6 @@ public class CarPanel extends JPanel
 		CarQueryFilter carQueryFilter = new CarQueryFilter();
 		carQueryFilter.setSelectedModel(this.car.getModelOfCar().getModelName());
 		carQueryFilter.setSelectedMark(this.car.getModelOfCar().getMark());
-		java.util.List<Car> cars = carRepository.getList(carQueryFilter).toList();
 
 		this.nameCountry = car.getModelOfCar().getMark().getCountry().getCountryName();
 
