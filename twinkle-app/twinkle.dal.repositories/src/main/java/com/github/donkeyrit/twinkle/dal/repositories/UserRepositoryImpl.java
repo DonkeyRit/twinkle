@@ -7,12 +7,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
+import com.google.inject.Inject;
 import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository
 {
     private EntityManager session;
     
+	@Inject
     public UserRepositoryImpl(EntityManager session) 
 	{
         this.session = session;

@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
-import com.github.donkeyrit.twinkle.bll.services.DefaultLoginService;
 import com.github.donkeyrit.twinkle.bll.services.contracts.LoginService;
+import com.github.donkeyrit.twinkle.dal.ioc.HibernateModules;
 import com.github.donkeyrit.twinkle.dal.repositories.CarBodyTypeRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.MarkOfCarRepositoryImpl;
@@ -25,12 +25,15 @@ import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
 import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
 import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
+import com.github.donkeyrit.twinkle.panels.ioc.SwingUiModules;
 import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
 import com.github.donkeyrit.twinkle.panels.navigation.NavigationPanel;
 import com.github.donkeyrit.twinkle.panels.sidebar.SideBarFilterPanel;
 import com.github.donkeyrit.twinkle.panels.signup.SignupPanel;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.utils.Constants;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class EntryPoint 
 {
@@ -73,15 +76,20 @@ public class EntryPoint
     
     private void initGui()
     {
+		// Services
+		Injector injector = Guice.createInjector(
+			new SwingUiModules(), 
+			new HibernateModules()
+		);
+
+        LoginService loginService = injector.getInstance(LoginService.class);
+		// Services
+
 		Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 		logger.info("Start application....");
 
         this.mainFrame = new MainFrame("Rent car", new SwitchedPanel());
 		SwitchedPanel switchedPanel = this.mainFrame.getSwitchedPanel();
-
-		// Services
-		LoginService loginService = new DefaultLoginService(userRepository);
-		// Services
 
         LoginPanel loginPanel = new LoginPanel(loginService, mainFrame);
         switchedPanel.addPanel(Constants.LOGIN_PANEL_KEY, loginPanel);
