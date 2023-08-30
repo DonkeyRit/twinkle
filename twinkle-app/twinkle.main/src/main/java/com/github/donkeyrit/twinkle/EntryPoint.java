@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import com.github.donkeyrit.twinkle.bll.services.DefaultLoginService;
+import com.github.donkeyrit.twinkle.bll.services.contracts.LoginService;
 import com.github.donkeyrit.twinkle.dal.repositories.CarBodyTypeRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.MarkOfCarRepositoryImpl;
@@ -77,7 +79,11 @@ public class EntryPoint
         this.mainFrame = new MainFrame("Rent car", new SwitchedPanel());
 		SwitchedPanel switchedPanel = this.mainFrame.getSwitchedPanel();
 
-        LoginPanel loginPanel = new LoginPanel(userRepository, mainFrame);
+		// Services
+		LoginService loginService = new DefaultLoginService(userRepository);
+		// Services
+
+        LoginPanel loginPanel = new LoginPanel(loginService, mainFrame);
         switchedPanel.addPanel(Constants.LOGIN_PANEL_KEY, loginPanel);
 
         SignupPanel sigupPanel = new SignupPanel(userRepository, mainFrame);
