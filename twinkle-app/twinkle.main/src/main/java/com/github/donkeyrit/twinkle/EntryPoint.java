@@ -7,8 +7,9 @@ import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import com.github.donkeyrit.twinkle.bll.ioc.ServicesModules;
 import com.github.donkeyrit.twinkle.bll.services.contracts.LoginService;
-import com.github.donkeyrit.twinkle.dal.ioc.HibernateModules;
+import com.github.donkeyrit.twinkle.dal.ioc.PersistanceModules;
 import com.github.donkeyrit.twinkle.dal.repositories.CarBodyTypeRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.MarkOfCarRepositoryImpl;
@@ -78,8 +79,9 @@ public class EntryPoint
     {
 		// Services
 		Injector injector = Guice.createInjector(
-			new SwingUiModules(), 
-			new HibernateModules()
+			new SwingUiModules(),
+			new ServicesModules(),
+			new PersistanceModules()
 		);
 
         LoginService loginService = injector.getInstance(LoginService.class);
