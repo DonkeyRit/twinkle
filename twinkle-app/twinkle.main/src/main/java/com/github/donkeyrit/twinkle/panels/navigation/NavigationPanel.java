@@ -1,31 +1,26 @@
 package com.github.donkeyrit.twinkle.panels.navigation;
 
-import com.github.donkeyrit.twinkle.listeners.PanelSwitcherActionListener;
-import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
-import com.github.donkeyrit.twinkle.panels.navigation.listeners.GoToSettingsPageActionListener;
+import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
+import com.github.donkeyrit.twinkle.events.contracts.LoginEventsListener;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
-import com.github.donkeyrit.twinkle.utils.Constants;
-import com.github.donkeyrit.twinkle.DataBase;
-import com.github.donkeyrit.twinkle.frame.MainFrame;
-import com.google.inject.Inject;
 
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import com.google.inject.Inject;
 
 public class NavigationPanel extends JPanel
 {
-	private final ContentCompositePanel container;
-	private final MainFrame mainFrame;
-	private final DataBase database;
+	private final LoginEventsListener loginEventsListener;
+	private final ContentEventsListener contentEventsListener;
 
 	@Inject
-    public NavigationPanel(DataBase database, MainFrame mainFrame, ContentCompositePanel container)
+    public NavigationPanel(ContentEventsListener contentEventsListener, LoginEventsListener loginEventsListener)
     {
-		this.database = database;
-		this.container = container;
-		this.mainFrame = mainFrame;
+		this.contentEventsListener = contentEventsListener;
+		this.loginEventsListener = loginEventsListener;
+
         this.setUp();
     }
 
@@ -33,11 +28,8 @@ public class NavigationPanel extends JPanel
 	{
 		this.setLayout(null);
 
-		PanelSwitcherActionListener panelSwitcheractionListener = new PanelSwitcherActionListener(this.mainFrame.getSwitchedPanel());
-
 		// Icon button
         JButton logo = new JButton(); 
-		logo.setActionCommand(Constants.CONTENT_PANEL_KEY);
         logo.setBounds(30, 10, 60, 60); 
         ImageIcon icon = AssetsRetriever.retrieveAssetImageIconFromResources("assets/logo/logo.png"); 
         logo.setIcon(icon);  
@@ -45,13 +37,13 @@ public class NavigationPanel extends JPanel
         logo.setBorderPainted(false); 
         logo.setFocusPainted(false);
         logo.setContentAreaFilled(false); 
-        logo.addActionListener(panelSwitcheractionListener);
+        logo.addActionListener(e -> this.contentEventsListener.onHomePageRequest());
 
         add(logo); 
 
 		// User 
         JButton avatar = new JButton(); 
-        avatar.addActionListener(new GoToSettingsPageActionListener(container, database, mainFrame.getSwitchedPanel()));
+        avatar.addActionListener(e -> this.contentEventsListener.onSettingsPageRequest());
         avatar.setBounds(725, 10, 60, 60); 
 		//TODO: Fix problem with avatarNumber
         ImageIcon iconAvatar = AssetsRetriever.retrieveAssetImageIconFromResources("assets/avatar/mini_avatar/" + 2 + ".png"); 
@@ -65,14 +57,13 @@ public class NavigationPanel extends JPanel
 		// Logout button
         JButton logoutButton = new JButton(); 
         logoutButton.setBounds(795,10,60,60); 
-		logoutButton.setActionCommand(Constants.LOGIN_PANEL_KEY);
         ImageIcon iconExit = AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/exit.png"); 
         logoutButton.setIcon(iconExit); 
         logoutButton.setHorizontalTextPosition(SwingConstants.LEFT);
         logoutButton.setBorderPainted(false);
         logoutButton.setFocusPainted(false);
         logoutButton.setContentAreaFilled(false);
-        logoutButton.addActionListener(panelSwitcheractionListener);
+        logoutButton.addActionListener(e -> this.loginEventsListener.onLoginRequest());
         add(logoutButton);
 	}
 }
