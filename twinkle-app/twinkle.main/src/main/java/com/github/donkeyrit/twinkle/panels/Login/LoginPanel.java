@@ -96,7 +96,6 @@ public class LoginPanel extends JPanel implements ResettablePanel {
 			}
 
 			UserInformation.setUser(authenticationResult.authenticatedUser().get());
-			this.reset();
 			this.loginEventsListener.onLoginSuccess();
 		});
 		add(loginButton, gbc);

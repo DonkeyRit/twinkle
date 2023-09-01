@@ -93,7 +93,7 @@ public class EntryPoint
 		LoginPanel loginPanel = injector.getInstance(LoginPanel.class);
         switchedPanel.addPanel(Constants.LOGIN_PANEL_KEY, loginPanel);
 
-        SignupPanel sigupPanel = new SignupPanel(userRepository, mainFrame);
+        SignupPanel sigupPanel = injector.getInstance(SignupPanel.class);
         switchedPanel.addPanel(Constants.SIGUP_PANEL_KEY, sigupPanel);
 
         ContentCompositePanel contentPanel = new ContentCompositePanel();

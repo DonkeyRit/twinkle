@@ -1,10 +1,11 @@
 package com.github.donkeyrit.twinkle.events;
 
 import com.github.donkeyrit.twinkle.events.contracts.LoginEventsListener;
-import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
 import com.github.donkeyrit.twinkle.panels.signup.SignupPanel;
+import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
 import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
+
 import com.google.inject.Inject;
 import javax.inject.Provider;
 
@@ -29,6 +30,14 @@ public class AuthenticationListener implements LoginEventsListener {
 	@Override
 	public void onLoginSuccess() {
 		System.out.println("Login was successfull.");
+	}
+
+	@Override
+	public void onLoginRequest() {
+		mainFrame
+			.getSwitchedPanel()
+			.addPanel(Constants.LOGIN_PANEL_KEY, loginPanelProvider.get())
+			.showPanel(Constants.LOGIN_PANEL_KEY);
 	}
 
 	@Override
