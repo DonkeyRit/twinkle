@@ -15,9 +15,10 @@ public class SwitchedPanel extends JPanel
         this.setLayout(this.layoutManager);
 	}
 
-	public void addPanel(String key, JPanel panel)
+	public SwitchedPanel addPanel(String key, JPanel panel)
 	{
 		this.layoutManager.putPanel(key, panel);
+		return this;
 	}
 
 	public void showPanel(String key)

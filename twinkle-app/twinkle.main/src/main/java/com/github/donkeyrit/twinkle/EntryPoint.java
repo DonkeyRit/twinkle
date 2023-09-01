@@ -8,7 +8,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import com.github.donkeyrit.twinkle.bll.ioc.ServicesModules;
-import com.github.donkeyrit.twinkle.bll.services.contracts.LoginService;
 import com.github.donkeyrit.twinkle.dal.ioc.PersistanceModules;
 import com.github.donkeyrit.twinkle.dal.repositories.CarBodyTypeRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
@@ -47,7 +46,6 @@ public class EntryPoint
 	private final CarRepository carRepository;
 	private final RentRepository rentRepository;
 
-    private MainFrame mainFrame;
     private DataBase database;
     
     public static void main(String[] args)
@@ -84,16 +82,15 @@ public class EntryPoint
 			new PersistanceModules()
 		);
 
-        LoginService loginService = injector.getInstance(LoginService.class);
+		MainFrame mainFrame = injector.getInstance(MainFrame.class);
 		// Services
-
+		
 		Logger logger = LoggerFactory.getLogger(EntryPoint.class);
 		logger.info("Start application....");
-
-        this.mainFrame = new MainFrame("Rent car", new SwitchedPanel());
-		SwitchedPanel switchedPanel = this.mainFrame.getSwitchedPanel();
-
-        LoginPanel loginPanel = new LoginPanel(loginService, mainFrame);
+		
+		SwitchedPanel switchedPanel = mainFrame.getSwitchedPanel();
+		
+		LoginPanel loginPanel = injector.getInstance(LoginPanel.class);
         switchedPanel.addPanel(Constants.LOGIN_PANEL_KEY, loginPanel);
 
         SignupPanel sigupPanel = new SignupPanel(userRepository, mainFrame);
@@ -107,6 +104,6 @@ public class EntryPoint
         switchedPanel.addPanel(Constants.CONTENT_PANEL_KEY, contentPanel);
 
 		switchedPanel.showPanel(Constants.LOGIN_PANEL_KEY);
-        this.mainFrame.setVisible(true);
+        mainFrame.setVisible(true);
     }
 }

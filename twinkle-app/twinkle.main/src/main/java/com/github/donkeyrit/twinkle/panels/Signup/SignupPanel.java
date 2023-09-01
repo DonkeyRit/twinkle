@@ -10,6 +10,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.styles.Colors;
 import com.github.donkeyrit.twinkle.utils.Constants;
+import com.google.inject.Inject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +28,7 @@ public class SignupPanel extends JPanel implements ResettablePanel
 	private final UserRepository userRepository;
 	private final MainFrame mainFrame;
 
+	@Inject
     public SignupPanel(UserRepository userRepository, MainFrame mainFrame) 
     {
         this.userRepository = userRepository;
