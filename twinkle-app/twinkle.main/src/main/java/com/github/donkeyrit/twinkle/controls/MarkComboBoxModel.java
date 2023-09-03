@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle.panels.sidebar.models;
+package com.github.donkeyrit.twinkle.controls;
 
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 

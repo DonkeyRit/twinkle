@@ -4,9 +4,10 @@ import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
 import com.github.donkeyrit.twinkle.events.contracts.LoginEventsListener;
 import com.github.donkeyrit.twinkle.events.AuthenticationListener;
 import com.github.donkeyrit.twinkle.events.ContentEventsListenerImpl;
-import com.github.donkeyrit.twinkle.panels.signup.SignupPanel;
-import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
-import com.github.donkeyrit.twinkle.panels.navigation.NavigationPanel;
+import com.github.donkeyrit.twinkle.panels.authentication.LoginPanel;
+import com.github.donkeyrit.twinkle.panels.authentication.SignupPanel;
+import com.github.donkeyrit.twinkle.panels.content.NavigationPanel;
+import com.github.donkeyrit.twinkle.panels.content.SideBarFilterPanel;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 
 import com.google.inject.AbstractModule;
@@ -31,5 +32,6 @@ public class SwingUiModules extends AbstractModule {
 		bind(LoginPanel.class);
 		bind(SignupPanel.class);
 		bind(NavigationPanel.class);
+		bind(SideBarFilterPanel.class);
 	}
 }

@@ -1,6 +1,7 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
+import com.google.inject.Inject;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 
 import jakarta.persistence.EntityManager;
@@ -11,6 +12,7 @@ public class MarkOfCarRepositoryImpl implements MarkOfCarRepository
 {
 	private EntityManager session;
     
+	@Inject
     public MarkOfCarRepositoryImpl(EntityManager session) 
 	{
         this.session = session;

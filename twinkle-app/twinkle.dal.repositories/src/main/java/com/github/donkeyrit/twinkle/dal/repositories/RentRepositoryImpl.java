@@ -1,6 +1,7 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
+import com.google.inject.Inject;
 import com.github.donkeyrit.twinkle.dal.contracts.BaseCrudRepository;
 import com.github.donkeyrit.twinkle.dal.contracts.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.Rent;
@@ -10,6 +11,7 @@ import jakarta.persistence.TypedQuery;
 
 public class RentRepositoryImpl extends BaseCrudRepository<Rent, QueryFilter> implements RentRepository {
 
+	@Inject
 	public RentRepositoryImpl(EntityManager session) {
 		super(session);
 	}

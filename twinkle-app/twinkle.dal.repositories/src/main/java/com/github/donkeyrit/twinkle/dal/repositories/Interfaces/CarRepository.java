@@ -6,5 +6,5 @@ import com.github.donkeyrit.twinkle.dal.models.Car;
 
 public interface CarRepository extends CrudRepository<Car, CarQueryFilter> 
 {
-	
+	int getMaxPrice();
 }

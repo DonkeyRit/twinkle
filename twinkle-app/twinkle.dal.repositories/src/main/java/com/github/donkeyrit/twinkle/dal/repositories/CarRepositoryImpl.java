@@ -18,12 +18,14 @@ import jakarta.persistence.criteria.Root;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
+import com.google.inject.Inject;
 import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> implements CarRepository {
 
+	@Inject
 	public CarRepositoryImpl(EntityManager session) {
 		super(session);
 	}
@@ -45,7 +47,7 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		AddSelectedMarkPredicate(criteriaBuilder, queryFilter, root, model, mark, predicates);
 		AddSelectedPricePredicate(criteriaBuilder, queryFilter, root, predicates);
 		AddSelectedBodyTypesPredicate(criteriaBuilder, queryFilter, root, model, mark, carBodyType, predicates);
-		
+
 		criteriaQuery.select(root).where(predicates.toArray(new Predicate[0]));
 
 		TypedQuery<Car> query = session.createQuery(criteriaQuery);
@@ -53,14 +55,10 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		return query.getResultStream();
 	}
 
-	//#region Create predicates
+	// #region Create predicates
 
-	private void AddSelectedModelPredicate(
-		CriteriaBuilder criteriaBuilder, 
-		CarQueryFilter queryFilter, 
-		Root<Car> root,
-		Join<Car, ModelOfCar> model, 
-		List<Predicate> predicates) {
+	private void AddSelectedModelPredicate(CriteriaBuilder criteriaBuilder, CarQueryFilter queryFilter, Root<Car> root,
+			Join<Car, ModelOfCar> model, List<Predicate> predicates) {
 
 		if (queryFilter.getSelectedModel().isPresent()) {
 
@@ -72,14 +70,8 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		}
 	}
 
-	private void AddSelectedMarkPredicate(
-		CriteriaBuilder criteriaBuilder, 
-		CarQueryFilter queryFilter, 
-		Root<Car> root,
-		Join<Car, ModelOfCar> model,
-		Join<ModelOfCar, MarkOfCar> mark,
-		List<Predicate> predicates
-	) {
+	private void AddSelectedMarkPredicate(CriteriaBuilder criteriaBuilder, CarQueryFilter queryFilter, Root<Car> root,
+			Join<Car, ModelOfCar> model, Join<ModelOfCar, MarkOfCar> mark, List<Predicate> predicates) {
 
 		if (queryFilter.getSelectedMark().isPresent()) {
 
@@ -93,13 +85,8 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		}
 	}
 
-	private void AddSelectedPricePredicate(
-		CriteriaBuilder criteriaBuilder, 
-		CarQueryFilter queryFilter, 
-		Root<Car> root,
-		List<Predicate> predicates
-	)
-	{
+	private void AddSelectedPricePredicate(CriteriaBuilder criteriaBuilder, CarQueryFilter queryFilter, Root<Car> root,
+			List<Predicate> predicates) {
 		if (queryFilter.getSelectedPrice().isPresent()) {
 			double selectedPrice = queryFilter.getSelectedPrice().get();
 			Predicate leCostPredicate = criteriaBuilder.lessThanOrEqualTo(root.get("cost"), selectedPrice);
@@ -108,16 +95,9 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		}
 	}
 
-	private void AddSelectedBodyTypesPredicate(
-		CriteriaBuilder criteriaBuilder, 
-		CarQueryFilter queryFilter, 
-		Root<Car> root,
-		Join<Car, ModelOfCar> model,
-		Join<ModelOfCar, MarkOfCar> mark,
-		Join<CarBodyType, ModelOfCar> carBodyType,
-		List<Predicate> predicates
-	)
-	{
+	private void AddSelectedBodyTypesPredicate(CriteriaBuilder criteriaBuilder, CarQueryFilter queryFilter,
+			Root<Car> root, Join<Car, ModelOfCar> model, Join<ModelOfCar, MarkOfCar> mark,
+			Join<CarBodyType, ModelOfCar> carBodyType, List<Predicate> predicates) {
 		if (!queryFilter.getSelectedBodyTypes().isEmpty()) {
 
 			if (model == null)
@@ -132,13 +112,26 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		}
 	}
 
-	//#endregion Create predicates
+	// #endregion Create predicates
 
-	private <T> void AddPaging(TypedQuery<T> query, Paging paging){
+	private <T> void AddPaging(TypedQuery<T> query, Paging paging) {
 
 		int startIndex = (paging.getPageNumber() - 1) * paging.getPageSize();
 
 		query.setFirstResult(startIndex);
 		query.setMaxResults(paging.getPageSize());
+	}
+
+	@Override
+	public int getMaxPrice() {
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<Double> criteriaQuery = criteriaBuilder.createQuery(Double.class);
+		Root<Car> carRoot = criteriaQuery.from(Car.class);
+
+		criteriaQuery.select(criteriaBuilder.max(carRoot.get("cost")));
+
+		TypedQuery<Double> typedQuery = session.createQuery(criteriaQuery);
+		Double maxCost = typedQuery.getSingleResult();
+		return (int) (maxCost.intValue() / 10000);
 	}
 }

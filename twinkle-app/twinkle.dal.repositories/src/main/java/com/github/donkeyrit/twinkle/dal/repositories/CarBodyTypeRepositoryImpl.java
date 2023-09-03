@@ -1,6 +1,7 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
+import com.google.inject.Inject;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 
 import jakarta.persistence.EntityManager;
@@ -13,6 +14,7 @@ public class CarBodyTypeRepositoryImpl implements CarBodyTypeRepository
 {
 	private EntityManager session;
 
+	@Inject
 	public CarBodyTypeRepositoryImpl(EntityManager session) 
 	{
 		this.session = session;

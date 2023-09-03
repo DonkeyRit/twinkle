@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle.panels.navigation;
+package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
 import com.github.donkeyrit.twinkle.events.contracts.LoginEventsListener;

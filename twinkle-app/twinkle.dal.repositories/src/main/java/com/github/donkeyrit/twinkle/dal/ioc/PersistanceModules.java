@@ -1,7 +1,18 @@
 package com.github.donkeyrit.twinkle.dal.ioc;
 
-import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.CarBodyTypeRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.MarkOfCarRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.ModelOfCarRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.RentRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -17,6 +28,11 @@ public class PersistanceModules extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(UserRepository.class).to(UserRepositoryImpl.class);
+		bind(ModelOfCarRepository.class).to(ModelOfCarRepositoryImpl.class);
+		bind(MarkOfCarRepository.class).to(MarkOfCarRepositoryImpl.class);
+		bind(CarBodyTypeRepository.class).to(CarBodyTypeRepositoryImpl.class);
+		bind(CarRepository.class).to(CarRepositoryImpl.class);
+		bind(RentRepository.class).to(RentRepositoryImpl.class);
 	}
 
 	@Provides

@@ -1,8 +1,8 @@
 package com.github.donkeyrit.twinkle.events;
 
 import com.github.donkeyrit.twinkle.events.contracts.LoginEventsListener;
-import com.github.donkeyrit.twinkle.panels.signup.SignupPanel;
-import com.github.donkeyrit.twinkle.panels.login.LoginPanel;
+import com.github.donkeyrit.twinkle.panels.authentication.LoginPanel;
+import com.github.donkeyrit.twinkle.panels.authentication.SignupPanel;
 import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 
