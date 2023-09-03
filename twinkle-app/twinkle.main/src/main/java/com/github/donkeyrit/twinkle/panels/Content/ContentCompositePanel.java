@@ -1,5 +1,6 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
+import com.google.inject.Inject;
 import javax.swing.JPanel;
 import java.awt.Color;
 
@@ -9,10 +10,13 @@ public class ContentCompositePanel extends JPanel
 	private JPanel sidebarPanel;
 	private JPanel contentPanel;
 
-    public ContentCompositePanel()
+	@Inject
+    public ContentCompositePanel(NavigationPanel navigationPanel, SideBarFilterPanel sideBarFilterPanel)
     {
         setBackground(new Color(255,255,255)); 
         setLayout(null); 
+		setNavigationPanel(navigationPanel);
+		setSidebarPanel(sideBarFilterPanel);
     }
 
 	public ContentCompositePanel setNavigationPanel(JPanel navigationPanel)

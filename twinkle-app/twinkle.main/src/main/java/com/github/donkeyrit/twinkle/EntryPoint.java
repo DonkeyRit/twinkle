@@ -80,14 +80,7 @@ public class EntryPoint
         SignupPanel sigupPanel = injector.getInstance(SignupPanel.class);
         switchedPanel.addPanel(Constants.SIGUP_PANEL_KEY, sigupPanel);
 
-		NavigationPanel navigationPanel = injector.getInstance(NavigationPanel.class);
-		SideBarFilterPanel sideBarFilterPanel = injector.getInstance(SideBarFilterPanel.class);
-
-        ContentCompositePanel contentPanel = new ContentCompositePanel();
-		contentPanel
-			.setNavigationPanel(navigationPanel)
-			.setSidebarPanel(sideBarFilterPanel)
-			.setContentPanel(new ContentPanel(contentPanel, this.carRepository, this.rentRepository, database));
+        ContentCompositePanel contentPanel = injector.getInstance(ContentCompositePanel.class);
         switchedPanel.addPanel(Constants.CONTENT_PANEL_KEY, contentPanel);
 
 		switchedPanel.showPanel(Constants.LOGIN_PANEL_KEY);
