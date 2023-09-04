@@ -52,6 +52,11 @@
         <artifactId>guice</artifactId>
         <version>5.0.1</version>
       </dependency>
+      <dependency>
+        <groupId>com.google.inject.extensions</groupId>
+        <artifactId>guice-assistedinject</artifactId>
+        <version>5.1.0</version>
+      </dependency>
       <!-- Logger dependencies -->
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>

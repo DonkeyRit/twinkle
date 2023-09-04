@@ -1,10 +1,12 @@
 package com.github.donkeyrit.twinkle.bll.services;
 
+import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
+import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 
@@ -59,5 +61,10 @@ public class DefaultCarService implements CarService {
 	@Override
 	public Stream<CarBodyType> getCarBodyTypes() {
 		return this.carBodyTypeRepository.getList();
+	}
+
+	@Override
+	public List<Car> getList(CarQueryFilter filter) {
+		return this.carRepository.getList(filter).toList();
 	}
 }

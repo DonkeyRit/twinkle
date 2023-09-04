@@ -6,4 +6,6 @@ public interface ContentEventsListener {
 	void onSettingsPageRequest();
 	void onHomePageRequest();
 	void onContentPageRequest(CarQueryFilter queryFilter);
+	void onNextContentPageRequest(int pageNumber);
+	void onNextContentPageRequest();
 }

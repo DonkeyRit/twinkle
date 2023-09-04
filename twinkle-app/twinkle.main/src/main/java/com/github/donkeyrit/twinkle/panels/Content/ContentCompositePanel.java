@@ -1,9 +1,15 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
+import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
+import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
+
+import com.google.inject.Singleton;
 import com.google.inject.Inject;
+
 import javax.swing.JPanel;
 import java.awt.Color;
 
+@Singleton
 public class ContentCompositePanel extends JPanel
 {
 	private JPanel navigationPanel;
@@ -11,12 +17,16 @@ public class ContentCompositePanel extends JPanel
 	private JPanel contentPanel;
 
 	@Inject
-    public ContentCompositePanel(NavigationPanel navigationPanel, SideBarFilterPanel sideBarFilterPanel)
-    {
+    public ContentCompositePanel(
+		NavigationPanel navigationPanel, 
+		SideBarFilterPanel sideBarFilterPanel, 
+		ContentPanelFactory contentPanelFactory
+	){
         setBackground(new Color(255,255,255)); 
         setLayout(null); 
 		setNavigationPanel(navigationPanel);
 		setSidebarPanel(sideBarFilterPanel);
+		setContentPanel(contentPanelFactory.create(new CarQueryFilter()));
     }
 
 	public ContentCompositePanel setNavigationPanel(JPanel navigationPanel)
@@ -55,11 +65,5 @@ public class ContentCompositePanel extends JPanel
 			this.add(this.contentPanel);
 		}
 		return this;
-	}
-
-	public void show()
-	{
-		this.revalidate();
-		this.repaint();
 	}
 }

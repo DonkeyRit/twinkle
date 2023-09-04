@@ -130,9 +130,9 @@ public class AboutCarPanel extends JPanel
 				}
 
 				panel.remove(temp);
-				JPanel contentPanel = new ContentPanel(panel, carRepository, rentRepository, database, carQueryFilter);
-				contentPanel.setBounds(250, 100, 605, 550);
-				panel.add(contentPanel);
+				//JPanel contentPanel = new ContentPanel(panel, carRepository, rentRepository, database, carQueryFilter);
+				//contentPanel.setBounds(250, 100, 605, 550);
+				//panel.add(contentPanel);
 				panel.revalidate();
 				panel.repaint();
 			}

@@ -1,40 +1,25 @@
 package com.github.donkeyrit.twinkle;
 
-import org.hibernate.cfg.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.donkeyrit.twinkle.bll.ioc.ServicesModules;
-import com.github.donkeyrit.twinkle.dal.ioc.PersistanceModules;
-import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
-import com.github.donkeyrit.twinkle.dal.repositories.RentRepositoryImpl;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
-import com.github.donkeyrit.twinkle.frame.MainFrame;
-import com.github.donkeyrit.twinkle.panels.authentication.LoginPanel;
-import com.github.donkeyrit.twinkle.panels.authentication.SignupPanel;
-import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
 import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
-import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
-import com.github.donkeyrit.twinkle.panels.content.NavigationPanel;
-import com.github.donkeyrit.twinkle.panels.content.SideBarFilterPanel;
+import com.github.donkeyrit.twinkle.panels.authentication.SignupPanel;
+import com.github.donkeyrit.twinkle.panels.authentication.LoginPanel;
+import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
 import com.github.donkeyrit.twinkle.panels.ioc.SwingUiModules;
+import com.github.donkeyrit.twinkle.dal.ioc.PersistanceModules;
+import com.github.donkeyrit.twinkle.bll.ioc.ServicesModules;
 import com.github.donkeyrit.twinkle.security.HashManager;
+import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.utils.Constants;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
+import com.google.inject.Injector;
+import com.google.inject.Guice;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class EntryPoint 
 {
     
     // Repositories
-	private final CarRepository carRepository;
-	private final RentRepository rentRepository;
-
-    private DataBase database;
     
     public static void main(String[] args)
 	{
@@ -43,18 +28,6 @@ public class EntryPoint
          */
         System.out.println(HashManager.generateHash("qazxcftrew"));
         new EntryPoint().initGui();
-    }
-
-    public EntryPoint()
-    {
-        EntityManagerFactory sessionFactory = new Configuration()
-            .configure()
-            .buildSessionFactory();
-        EntityManager session = sessionFactory.createEntityManager();
-
-		this.database = new DataBase();
-		this.carRepository = new CarRepositoryImpl(session);
-		this.rentRepository = new RentRepositoryImpl(session);
     }
     
     private void initGui()
