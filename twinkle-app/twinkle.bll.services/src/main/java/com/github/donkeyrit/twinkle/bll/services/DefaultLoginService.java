@@ -4,7 +4,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.bll.services.contracts.LoginService;
 import com.github.donkeyrit.twinkle.bll.models.AuthenticationResult;
-import com.github.donkeyrit.twinkle.security.HashManager;
+import com.github.donkeyrit.twinkle.bll.security.HashManager;
 
 import com.google.inject.Inject;
 import java.util.Optional;
