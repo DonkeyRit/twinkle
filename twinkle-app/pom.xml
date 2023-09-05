@@ -11,6 +11,7 @@
 
   <modules>
     <module>twinkle.dal.repositories</module>
+    <module>twinkle.bll.services</module>
     <module>twinkle.main</module>
   </modules>
 
