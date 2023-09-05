@@ -1,11 +1,11 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
-import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
-import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
-import com.github.donkeyrit.twinkle.DataBase;
+import com.github.donkeyrit.twinkle.dal.models.Car;
+
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 
 import javax.swing.JPanel;
 import javax.swing.*;
@@ -17,27 +17,16 @@ public class CarPanel extends JPanel
 	private String nameCountry;
 	private String status;
 	private int imagesNum;
-	private Car car;
 
-	public CarPanel(
-		CarRepository carRepository, 
-		RentRepository rentRepository, 
-		DataBase database, 
-		JPanel panel,
-		int carId) 
+	@Inject
+	public CarPanel(CarService carService, @Assisted Car car) 
 	{
 		setLayout(null);
 
-		status = rentRepository.isTaken(carId) ? "lock" : "open";
-		imagesNum = carId;
-
-		this.car = carRepository.getById(carId);
-
-		CarQueryFilter carQueryFilter = new CarQueryFilter();
-		carQueryFilter.setSelectedModel(this.car.getModelOfCar().getModelName());
-		carQueryFilter.setSelectedMark(this.car.getModelOfCar().getMark());
-
+		int carId = car.getId();
+		this.imagesNum = carId;
 		this.nameCountry = car.getModelOfCar().getMark().getCountry().getCountryName();
+		this.status = carService.isTaken(carId);
 
 		Font font = new Font("Arial", Font.BOLD, 13);
 		Font alterfont = new Font("Arial", Font.ITALIC, 13);
@@ -47,7 +36,7 @@ public class CarPanel extends JPanel
 		modelLab.setFont(alterfont);
 		add(modelLab);
 
-		JLabel modelLabel = new JLabel(this.car.getModelOfCar().getModelName());
+		JLabel modelLabel = new JLabel(car.getModelOfCar().getModelName());
 		modelLabel.setBounds(290, 10, 150, 15);
 		modelLabel.setFont(font);
 		add(modelLabel);
@@ -57,7 +46,7 @@ public class CarPanel extends JPanel
 		markLab.setFont(alterfont);
 		add(markLab);
 
-		JLabel markLabel = new JLabel(this.car.getModelOfCar().getMark().getName());
+		JLabel markLabel = new JLabel(car.getModelOfCar().getMark().getName());
 		markLabel.setBounds(290, 30, 150, 15);
 		markLabel.setFont(font);
 		add(markLabel);
@@ -77,25 +66,25 @@ public class CarPanel extends JPanel
 		moreButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Component[] mas = panel.getComponents();
-				ContentPanel temp = null;
-				for (int i = 0; i < mas.length; i++) {
-					if (mas[i].getClass().toString().indexOf("ContentPanel") != -1) {
-						temp = (ContentPanel) mas[i];
-					}
-				}
+				// Component[] mas = panel.getComponents();
+				// ContentPanel temp = null;
+				// for (int i = 0; i < mas.length; i++) {
+				// 	if (mas[i].getClass().toString().indexOf("ContentPanel") != -1) {
+				// 		temp = (ContentPanel) mas[i];
+				// 	}
+				// }
 
-				if(temp == null)
-				{
-					return;
-				}
+				// if(temp == null)
+				// {
+				// 	return;
+				// }
 
-				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, database, panel, car, carQueryFilter);
-				newPanel.setBounds(250, 100, 605, 550);
-				panel.remove(temp);
-				panel.add(newPanel);
-				panel.revalidate();
-				panel.repaint();
+				// AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, database, panel, car, carQueryFilter);
+				// newPanel.setBounds(250, 100, 605, 550);
+				// panel.remove(temp);
+				// panel.add(newPanel);
+				// panel.revalidate();
+				// panel.repaint();
 			}
 		});
 		add(moreButton);

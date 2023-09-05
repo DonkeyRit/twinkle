@@ -3,6 +3,7 @@ package com.github.donkeyrit.twinkle.bll.services;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
@@ -22,6 +23,7 @@ public class DefaultCarService implements CarService {
 	private final CarBodyTypeRepository carBodyTypeRepository;
 	private final ModelOfCarRepository modelOfCarRepository;
 	private final MarkOfCarRepository markOfCarRepository;
+	private final RentRepository rentRepository;
 	private final CarRepository carRepository;
 
 	@Inject
@@ -29,11 +31,13 @@ public class DefaultCarService implements CarService {
 		CarBodyTypeRepository carBodyTypeRepository,
 		ModelOfCarRepository modelOfCarRepository, 
 		MarkOfCarRepository markOfCarRepository,
+		RentRepository rentRepository,
 		CarRepository carRepository
 	) {
 		this.carBodyTypeRepository = carBodyTypeRepository;
 		this.modelOfCarRepository = modelOfCarRepository;
 		this.markOfCarRepository = markOfCarRepository;
+		this.rentRepository = rentRepository;
 		this.carRepository = carRepository;
 	}
 
@@ -66,5 +70,10 @@ public class DefaultCarService implements CarService {
 	@Override
 	public List<Car> getList(CarQueryFilter filter) {
 		return this.carRepository.getList(filter).toList();
+	}
+
+	@Override
+	public String isTaken(int carId) {
+		return rentRepository.isTaken(carId) ? "lock" : "open";
 	}
 }

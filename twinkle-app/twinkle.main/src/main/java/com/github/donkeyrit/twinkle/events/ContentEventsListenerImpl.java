@@ -1,8 +1,11 @@
 package com.github.donkeyrit.twinkle.events;
 
 import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
+import com.github.donkeyrit.twinkle.panels.ioc.factories.CarPanelFactory;
 import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
+import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
+import com.github.donkeyrit.twinkle.panels.content.CarPanel;
 import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
 import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
 
@@ -13,15 +16,19 @@ public class ContentEventsListenerImpl implements ContentEventsListener {
 
 	private final Provider<ContentCompositePanel> contentCompositePanelProvider;
 	private ContentCompositePanel contentCompositePanel;
+
 	private final ContentPanelFactory contentPanelFactory;
+	private final CarPanelFactory carPanelFactory;
 	
 	@Inject
 	public ContentEventsListenerImpl(
 		Provider<ContentCompositePanel> contentCompositePanelProvider,
-		ContentPanelFactory contentPanelFactory
+		ContentPanelFactory contentPanelFactory,
+		CarPanelFactory carPanelFactory
 	) {
 		this.contentCompositePanelProvider = contentCompositePanelProvider;
 		this.contentPanelFactory = contentPanelFactory;
+		this.carPanelFactory = carPanelFactory;
 	}
 
 	@Override
@@ -95,6 +102,11 @@ public class ContentEventsListenerImpl implements ContentEventsListener {
 		// panel.repaint(); 
 	}
 
+
+	@Override
+	public CarPanel onCarPanelCreateRequest(Car car) {
+		return this.carPanelFactory.create(car);
+	}
 
 	private ContentCompositePanel getContentCompositePanel(){
 		if(this.contentCompositePanel == null)

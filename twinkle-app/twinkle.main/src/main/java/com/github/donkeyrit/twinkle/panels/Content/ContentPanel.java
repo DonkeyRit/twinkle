@@ -8,6 +8,7 @@ import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -63,13 +64,12 @@ public class ContentPanel extends JPanel {
 		int j = 0;
 
 		for (Car car : filteredCars) {
-			// TODO: Show cars
-			// JPanel temp = new CarPanel(carRepository, rentRepository, database, panel,
-			// car.getId());
-			// temp.setBorder(new LineBorder(new Color(0,163,163), 4));
-			// temp.setBounds(20,40 + j * 120,565,100);
-			// j++;
-			// add(temp);
+
+			CarPanel panel = this.contentEventsListener.onCarPanelCreateRequest(car);
+			panel.setBorder(new LineBorder(new Color(0,163,163), 4));
+			panel.setBounds(20,40 + j * 120,565,100);
+			j++;
+			add(panel);
 		}
 
 		ShowPageNumbers(filter.getPaging());

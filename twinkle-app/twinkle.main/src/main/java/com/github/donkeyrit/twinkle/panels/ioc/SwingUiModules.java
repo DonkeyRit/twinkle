@@ -9,6 +9,7 @@ import com.github.donkeyrit.twinkle.panels.authentication.SignupPanel;
 import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
 import com.github.donkeyrit.twinkle.panels.content.NavigationPanel;
 import com.github.donkeyrit.twinkle.panels.content.SideBarFilterPanel;
+import com.github.donkeyrit.twinkle.panels.ioc.factories.CarPanelFactory;
 import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 
@@ -20,6 +21,7 @@ public class SwingUiModules extends AbstractModule {
 	@Override
 	protected void configure() {
 		install(new FactoryModuleBuilder().build(ContentPanelFactory.class));
+		install(new FactoryModuleBuilder().build(CarPanelFactory.class));
 		bind(MainFrame.class).toInstance(new MainFrame("Rent car"));
 
 		registerListeners();
