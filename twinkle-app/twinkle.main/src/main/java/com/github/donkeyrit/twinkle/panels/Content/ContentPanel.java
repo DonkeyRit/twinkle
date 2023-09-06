@@ -1,9 +1,9 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
-import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
+import com.github.donkeyrit.twinkle.panels.nestedpanels.PageNavigatorPanel;
 import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
@@ -13,12 +13,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Box;
 
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -72,44 +70,9 @@ public class ContentPanel extends JPanel {
 			add(panel);
 		}
 
-		ShowPageNumbers(filter.getPaging());
-	}
-
-	private void ShowPageNumbers(Paging paging) {
-		// TODO: Move to separate panel
-
-		int currentPageNumber = paging.getPageNumber();
-		int firstPageNumber = ((int) (currentPageNumber / 5)) * 5 + 1;
-		int endPageNumber = firstPageNumber + 4;
-
-		Box buttonBox = Box.createHorizontalBox();
-		buttonBox.setBounds(205, 520, 400, 30);
-
-		if (firstPageNumber >= 5) {
-			JButton backBut = new JButton(
-					AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/back.png"));
-			backBut.addActionListener(e -> contentEventsListener.onNextContentPageRequest());
-
-			buttonBox.add(backBut);
-		}
-
-		Font buttonFont = new Font("Arial", Font.ITALIC, 10);
-		ArrayList<JButton> buttonsList = new ArrayList<JButton>();
-		for (int i = firstPageNumber; i < endPageNumber; i++) {
-			JButton temp = new JButton(i + "");
-
-			temp.setFont(buttonFont);
-			temp.addActionListener(e -> {
-				JButton pressButton = (JButton) e.getSource();
-				int pageNumber = Integer.parseInt(pressButton.getText());
-				contentEventsListener.onNextContentPageRequest(pageNumber);
-			});
-
-			buttonBox.add(temp);
-			buttonsList.add(temp);
-		}
-
-		add(buttonBox);
+		PageNavigatorPanel panel = new PageNavigatorPanel(1, 4, 20);
+		panel.setBounds(205, 520, 400, 30);
+		add(panel);
 	}
 
 	@Override
