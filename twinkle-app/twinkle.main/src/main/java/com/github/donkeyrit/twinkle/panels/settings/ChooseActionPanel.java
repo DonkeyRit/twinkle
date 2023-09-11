@@ -58,9 +58,6 @@ public class ChooseActionPanel extends JPanel {
 					if (selectedTextButton.equals("Personal data")) {
 						rightPanel = new PrivateDataPanel(database);
 					}
-					if (selectedTextButton.equals("To change the data")) {
-						rightPanel = new ChangeDataDatabasePanel(database);
-					}
 
 					if(rightPanel == null)
 					{
