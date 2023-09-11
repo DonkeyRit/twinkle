@@ -9,6 +9,7 @@ import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,10 +18,12 @@ import javax.swing.JPanel;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.Inject;
 
-import java.util.List;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
 
 public class ContentPanel extends JPanel {
 	private final CarQueryFilter filter;
@@ -38,45 +41,54 @@ public class ContentPanel extends JPanel {
 		CarService carService, 
 		@Assisted CarQueryFilter filter
 	) {
-		setLayout(null);
+		setLayout(new BorderLayout());
+
 		this.contentEventsListener = contentEventsListener;
 		this.carService = carService;
-
 		this.filter = filter;
 
+		// Header panel
+		JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+		// Header label
 		JLabel contentMainLabel = new JLabel("List of cars:");
 		Font font = new Font("Arial", Font.BOLD, 13);
 		contentMainLabel.setFont(font);
 		contentMainLabel.setBounds(250, 10, 100, 20);
-		add(contentMainLabel);
+		headerPanel.add(contentMainLabel);
 
+		// Reload button
 		JButton reload = new JButton();
 		reload.setBounds(568, 10, 16, 16);
 		ImageIcon iconExit = AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/reload.png");
 		reload.setIcon(iconExit);
 		reload.setHorizontalTextPosition(SwingConstants.LEFT);
 		reload.addActionListener(e -> contentEventsListener.onHomePageRequest());
-		add(reload);
+		headerPanel.add(reload);
 
+		add(headerPanel, BorderLayout.NORTH);
+
+		// Cars container
+		JPanel carsContainer = new JPanel();
+        carsContainer.setLayout(new BoxLayout(carsContainer, BoxLayout.Y_AXIS));
+        
 		List<Car> filteredCars = this.carService.getList(filter);
-		int j = 0;
-
 		for (Car car : filteredCars) {
-
 			CarPanel panel = this.contentEventsListener.onCarPanelCreateRequest(car);
-			panel.setBorder(new LineBorder(new Color(0,163,163), 4));
-			panel.setBounds(20,40 + j * 120,565,100);
-			j++;
-			add(panel);
+            panel.setBorder(new LineBorder(new Color(0, 163, 163), 4));
+            carsContainer.add(panel);
 		}
+		add(carsContainer, BorderLayout.CENTER);
 
 		PageNavigatorPanel panel = new PageNavigatorPanel(1, 4, 20);
 		panel.setBounds(205, 520, 400, 30);
-		add(panel);
+		add(panel, BorderLayout.SOUTH);
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.setColor(new Color(237, 237, 237));
 		g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(), 30, 25);
 	}
