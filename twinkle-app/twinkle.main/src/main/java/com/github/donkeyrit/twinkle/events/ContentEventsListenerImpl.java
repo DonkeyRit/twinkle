@@ -1,6 +1,7 @@
 package com.github.donkeyrit.twinkle.events;
 
 import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
+import com.github.donkeyrit.twinkle.panels.settings.AdminSideActionMenuPanel;
 import com.github.donkeyrit.twinkle.panels.ioc.factories.CarPanelFactory;
 import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
 import com.github.donkeyrit.twinkle.dal.models.Car;
@@ -16,6 +17,7 @@ public class ContentEventsListenerImpl implements ContentEventsListener {
 
 	private final Provider<ContentCompositePanel> contentCompositePanelProvider;
 	private ContentCompositePanel contentCompositePanel;
+	private final Provider<AdminSideActionMenuPanel> sideActionMenuPanelProvider;
 
 	private final ContentPanelFactory contentPanelFactory;
 	private final CarPanelFactory carPanelFactory;
@@ -23,18 +25,21 @@ public class ContentEventsListenerImpl implements ContentEventsListener {
 	@Inject
 	public ContentEventsListenerImpl(
 		Provider<ContentCompositePanel> contentCompositePanelProvider,
+		Provider<AdminSideActionMenuPanel> sideActionMenuPanelProvider,
 		ContentPanelFactory contentPanelFactory,
 		CarPanelFactory carPanelFactory
 	) {
 		this.contentCompositePanelProvider = contentCompositePanelProvider;
+		this.sideActionMenuPanelProvider = sideActionMenuPanelProvider;
 		this.contentPanelFactory = contentPanelFactory;
 		this.carPanelFactory = carPanelFactory;
 	}
 
 	@Override
 	public void onSettingsPageRequest() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'onSettingsPageRequest'");
+		AdminSideActionMenuPanel sideActionMenuPanel = sideActionMenuPanelProvider.get();
+		getContentCompositePanel().setSidebarPanel(sideActionMenuPanel);
+		getContentCompositePanel().setContentPanel(null);
 	}
 
 	@Override

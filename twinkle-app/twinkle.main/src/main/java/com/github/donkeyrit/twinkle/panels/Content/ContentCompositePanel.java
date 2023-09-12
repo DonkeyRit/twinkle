@@ -40,6 +40,8 @@ public class ContentCompositePanel extends JPanel
 			this.add(this.navigationPanel);
 		}
 		
+		this.revalidate();
+		this.repaint();
 		return this;
 	}
 
@@ -52,6 +54,9 @@ public class ContentCompositePanel extends JPanel
 			this.sidebarPanel.setBounds(30, 100, 200, 550);
 			this.add(this.sidebarPanel);
 		}
+
+		this.revalidate();
+		this.repaint();
 		return this;
 	}
 
@@ -64,6 +69,9 @@ public class ContentCompositePanel extends JPanel
 			this.contentPanel.setBounds(250,100,605,550);
 			this.add(this.contentPanel);
 		}
+
+		this.revalidate();
+		this.repaint();
 		return this;
 	}
 }

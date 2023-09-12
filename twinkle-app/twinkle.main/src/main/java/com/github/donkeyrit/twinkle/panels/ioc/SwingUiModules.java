@@ -11,6 +11,7 @@ import com.github.donkeyrit.twinkle.panels.content.NavigationPanel;
 import com.github.donkeyrit.twinkle.panels.content.SideBarFilterPanel;
 import com.github.donkeyrit.twinkle.panels.ioc.factories.CarPanelFactory;
 import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
+import com.github.donkeyrit.twinkle.panels.settings.AdminSideActionMenuPanel;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 
 import com.google.inject.AbstractModule;
@@ -39,5 +40,6 @@ public class SwingUiModules extends AbstractModule {
 		bind(NavigationPanel.class);
 		bind(SideBarFilterPanel.class);
 		bind(ContentCompositePanel.class);	
+		bind(AdminSideActionMenuPanel.class);
 	}
 }
