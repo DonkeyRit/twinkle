@@ -2,7 +2,7 @@ package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.Car;
-import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
+import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
 import com.github.donkeyrit.twinkle.panels.nestedpanels.PageNavigatorPanel;
 import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
@@ -28,7 +28,7 @@ import java.util.List;
 public class ContentPanel extends JPanel {
 	private final CarQueryFilter filter;
 
-	private final ContentEventsListener contentEventsListener;
+	private final NavigationPanelEventsListener contentEventsListener;
 	private final CarService carService;
 
 	public CarQueryFilter getFilter() {
@@ -37,7 +37,7 @@ public class ContentPanel extends JPanel {
 
 	@Inject
 	public ContentPanel(
-		ContentEventsListener contentEventsListener, 
+		NavigationPanelEventsListener contentEventsListener, 
 		CarService carService, 
 		@Assisted CarQueryFilter filter
 	) {

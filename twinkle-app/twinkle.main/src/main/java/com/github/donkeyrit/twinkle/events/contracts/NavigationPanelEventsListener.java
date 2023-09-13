@@ -4,7 +4,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.panels.content.CarPanel;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 
-public interface ContentEventsListener {
+public interface NavigationPanelEventsListener {
 	void onSettingsPageRequest();
 	void onHomePageRequest();
 	void onContentPageRequest(CarQueryFilter queryFilter);

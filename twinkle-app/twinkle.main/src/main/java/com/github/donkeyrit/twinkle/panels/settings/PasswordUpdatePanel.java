@@ -1,20 +1,21 @@
 package com.github.donkeyrit.twinkle.panels.settings;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.border.*;
-
-import com.github.donkeyrit.twinkle.DataBase;
-import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.controls.input.JCustomPasswordField;
-import com.github.donkeyrit.twinkle.security.HashManager;
+import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
+import com.google.inject.Inject;
+import com.github.donkeyrit.twinkle.security.HashManager;
 
-public class ChangePasswordPanel extends JPanel {
+import javax.swing.border.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+import java.util.*;
 
-	public ChangePasswordPanel(DataBase database) {
+public class PasswordUpdatePanel extends JPanel {
+
+	@Inject
+	public PasswordUpdatePanel() {
 		setLayout(null);
 
 		Box mainBox = Box.createVerticalBox();
@@ -69,7 +70,7 @@ public class ChangePasswordPanel extends JPanel {
 								String updateUserQuery = "UPDATE users SET password = '"
 										+ HashManager.generateHash(new String(fieldPass.get(1).getPassword())) + "'"
 										+ " WHERE login = '" + UserInformation.getLogin() + "'";
-								database.update(updateUserQuery);
+								//database.update(updateUserQuery); TODO: Update password
 
 								UserInformation.setPassword(HashManager.generateHash(new String(fieldPass.get(1).getPassword())));
 

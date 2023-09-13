@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
-import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
+import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
@@ -40,7 +40,7 @@ public class SideBarFilterPanel extends JPanel {
 	private final CarService carService;
 
 	@Inject
-	public SideBarFilterPanel(ContentEventsListener contentEventsListener, CarService carService) {
+	public SideBarFilterPanel(NavigationPanelEventsListener contentEventsListener, CarService carService) {
 		setLayout(null);
 		this.carService = carService;
 

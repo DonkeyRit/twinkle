@@ -1,6 +1,8 @@
 package com.github.donkeyrit.twinkle.panels.settings;
 
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
+import com.github.donkeyrit.twinkle.events.contracts.AdminSidePanelEventsListener;
+import com.google.inject.Inject;
 
 import java.awt.Graphics;
 import java.awt.event.*;
@@ -12,10 +14,15 @@ import java.util.*;
 
 public class AdminSideActionMenuPanel extends JPanel {
 
-	private final List<JToggleButton> buttonActions = new ArrayList<>();
+	private final List<JToggleButton> buttonActions;
+	private final AdminSidePanelEventsListener eventsListener;
 
-    public AdminSideActionMenuPanel() {
+	@Inject
+    public AdminSideActionMenuPanel(AdminSidePanelEventsListener eventsListener) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+		this.eventsListener = eventsListener;
+		this.buttonActions = new ArrayList<>(3);
 
         JLabel labelActions = new JLabel("List of actions");
         Font font = new Font("Arial", Font.BOLD, 13);
@@ -49,38 +56,25 @@ public class AdminSideActionMenuPanel extends JPanel {
     }
 
     private void handleActionSelected(ActionEvent e) {
-        // JToggleButton selectedButton = (JToggleButton) e.getSource();
+        JToggleButton selectedButton = (JToggleButton) e.getSource();
 
-        // // Deselect other buttons
-        // for (JToggleButton btn : buttonActions) {
-        //     if (btn != selectedButton) {
-        //         btn.setSelected(false);
-        //     }
-        // }
+        // Deselect other buttons
+        for (JToggleButton btn : buttonActions) {
+            if (btn != selectedButton) {
+                btn.setSelected(false);
+            }
+        }
 
-        // // Remove unrelated components from parent panel
-        // for (Component component : parentPanel.getComponents()) {
-        //     if (!(component instanceof SettingsNavigationPanel || component instanceof NavigationPanel)) {
-        //         parentPanel.remove(component);
-        //     }
-        // }
-
-        // JPanel rightPanel;
-        // switch (selectedButton.getText()) {
-        //     case "Change password":
-        //         rightPanel = new ChangePasswordPanel(database);
-        //         break;
-        //     case "Personal data":
-        //         rightPanel = new PrivateDataPanel(database);
-        //         break;
-        //     default:
-        //         return; // Or handle other cases
-        // }
-
-        // rightPanel.setBounds(250, 100, 605, 550);
-        // parentPanel.add(rightPanel);
-        // parentPanel.revalidate();
-        // parentPanel.repaint();
+        switch (selectedButton.getText()) {
+            case "Change password":
+                eventsListener.onPasswordChangeRequest();
+                break;
+            case "Personal data":
+                eventsListener.onUsernameInfoChangeRequest();
+                break;
+            default:
+                return; // Or handle other cases
+        }
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
-import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
+import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
 import com.github.donkeyrit.twinkle.events.contracts.LoginEventsListener;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
@@ -13,10 +13,10 @@ import com.google.inject.Inject;
 public class NavigationPanel extends JPanel
 {
 	private final LoginEventsListener loginEventsListener;
-	private final ContentEventsListener contentEventsListener;
+	private final NavigationPanelEventsListener contentEventsListener;
 
 	@Inject
-    public NavigationPanel(ContentEventsListener contentEventsListener, LoginEventsListener loginEventsListener)
+    public NavigationPanel(NavigationPanelEventsListener contentEventsListener, LoginEventsListener loginEventsListener)
     {
 		this.contentEventsListener = contentEventsListener;
 		this.loginEventsListener = loginEventsListener;

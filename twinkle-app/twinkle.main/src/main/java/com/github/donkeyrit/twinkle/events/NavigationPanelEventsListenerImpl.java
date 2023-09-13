@@ -3,7 +3,7 @@ package com.github.donkeyrit.twinkle.events;
 import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
 import com.github.donkeyrit.twinkle.panels.settings.AdminSideActionMenuPanel;
 import com.github.donkeyrit.twinkle.panels.ioc.factories.CarPanelFactory;
-import com.github.donkeyrit.twinkle.events.contracts.ContentEventsListener;
+import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.panels.content.CarPanel;
@@ -13,7 +13,7 @@ import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-public class ContentEventsListenerImpl implements ContentEventsListener {
+public class NavigationPanelEventsListenerImpl implements NavigationPanelEventsListener {
 
 	private final Provider<ContentCompositePanel> contentCompositePanelProvider;
 	private ContentCompositePanel contentCompositePanel;
@@ -23,7 +23,7 @@ public class ContentEventsListenerImpl implements ContentEventsListener {
 	private final CarPanelFactory carPanelFactory;
 	
 	@Inject
-	public ContentEventsListenerImpl(
+	public NavigationPanelEventsListenerImpl(
 		Provider<ContentCompositePanel> contentCompositePanelProvider,
 		Provider<AdminSideActionMenuPanel> sideActionMenuPanelProvider,
 		ContentPanelFactory contentPanelFactory,
