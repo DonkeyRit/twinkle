@@ -15,6 +15,7 @@ import com.github.donkeyrit.twinkle.panels.ioc.factories.CarPanelFactory;
 import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
 import com.github.donkeyrit.twinkle.panels.settings.AdminSideActionMenuPanel;
 import com.github.donkeyrit.twinkle.panels.settings.PasswordUpdatePanel;
+import com.github.donkeyrit.twinkle.panels.settings.ProfileUpdatePanel;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 
 import com.google.inject.AbstractModule;
@@ -46,5 +47,6 @@ public class SwingUiModules extends AbstractModule {
 		bind(ContentCompositePanel.class);	
 		bind(AdminSideActionMenuPanel.class);
 		bind(PasswordUpdatePanel.class);
+		bind(ProfileUpdatePanel.class);
 	}
 }

@@ -1,36 +1,36 @@
 package com.github.donkeyrit.twinkle.panels.settings;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.*;
-import java.util.*;
-import javax.swing.border.*;
-
-import com.github.donkeyrit.twinkle.DataBase;
-import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.controls.input.JCustomTextField;
+import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
-public class PrivateDataPanel extends JPanel {
+import com.google.inject.Inject;
+import javax.swing.border.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+import java.util.*;
 
-	public PrivateDataPanel(DataBase database) {
+public class ProfileUpdatePanel extends JPanel {
+
+	@Inject
+	public ProfileUpdatePanel() {
 		setLayout(null);
 
 		String queryUser = "SELECT first_name,second_name,middle_name,address,phone_number FROM client where id_user = (SELECT id_user FROMusersWHERE login = '"
 				+ UserInformation.getLogin() + "')";
-		ResultSet userSet = database.select(queryUser);
+		//ResultSet userSet = database.select(queryUser);
 		ArrayList<String> infoUser = new ArrayList<String>();
-		try {
-			int numRows = userSet.getMetaData().getColumnCount();
-			while (userSet.next()) {
-				for (int i = 0; i < numRows; i++) {
-					infoUser.add(userSet.getString(i + 1));
-				}
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
+		// try {
+		// 	int numRows = userSet.getMetaData().getColumnCount();
+		// 	while (userSet.next()) {
+		// 		for (int i = 0; i < numRows; i++) {
+		// 			infoUser.add(userSet.getString(i + 1));
+		// 		}
+		// 	}
+		// } catch (SQLException ex) {
+		// 	ex.printStackTrace();
+		// }
 
 		Box box = Box.createVerticalBox();
 		box.setBounds(202, 10, 200, 250);
@@ -73,7 +73,7 @@ public class PrivateDataPanel extends JPanel {
 						}
 						createClient += "(SELECT id_user FROMusersWHERE login = '" + UserInformation.getLogin() + "'))";
 
-						database.insert(createClient);
+						//database.insert(createClient);
 						for (int i = 0; i < fieldText.size(); i++) {
 							fieldText.get(i).setPlaceholder("Success");
 							fieldText.get(i).setText("");
@@ -91,7 +91,7 @@ public class PrivateDataPanel extends JPanel {
 						}
 						updateClient += " WHERE id_user = (SELECT id_user FROMusersWHERE login = '"
 								+ UserInformation.getLogin() + "')";
-						database.update(updateClient);
+						//database.update(updateClient);
 					}
 				} else {
 					for (int i = 0; i < fieldText.size(); i++) {
