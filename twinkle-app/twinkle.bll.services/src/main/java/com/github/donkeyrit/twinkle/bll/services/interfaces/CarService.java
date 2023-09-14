@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle.bll.services.contracts;
+package com.github.donkeyrit.twinkle.bll.services.interfaces;
 
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;

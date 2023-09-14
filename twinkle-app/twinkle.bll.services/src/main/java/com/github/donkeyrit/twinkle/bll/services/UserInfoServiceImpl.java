@@ -1,12 +1,21 @@
 package com.github.donkeyrit.twinkle.bll.services;
 
-import com.github.donkeyrit.twinkle.bll.services.contracts.UserInfoService;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.bll.services.interfaces.UserInfoService;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.bll.security.HashManager;
 
+import com.google.inject.Inject;
 import java.util.Optional;
 
 public class UserInfoServiceImpl implements UserInfoService {
+
+	private final UserRepository userRepository;
+
+	@Inject
+	public UserInfoServiceImpl(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@Override
 	public Optional<String> updatePassword(String oldPassword, String newPassword, String repeatPassword) {
@@ -24,12 +33,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 			return Optional.of("Password does't match");
 		}
 
-		//TODO: Use repository to update password
-		// String updateUserQuery = "UPDATE users SET password = '"
-		// 		+ HashManager.generateHash(new String(fieldPass.get(1).getPassword())) + "'" + " WHERE login = '"
-		// 		+ UserInformation.getLogin() + "'";
-		// database.update(updateUserQuery);
-
+		String newPasswordHash = HashManager.generateHash(newPassword);
+		userRepository.updatePassword(UserInformation.getId(), newPasswordHash);
 		UserInformation.setPassword(HashManager.generateHash(newPassword));
 		return Optional.empty();
 	}

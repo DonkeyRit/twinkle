@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.panels.settings;
 
-import com.github.donkeyrit.twinkle.bll.services.contracts.UserInfoService;
+import com.github.donkeyrit.twinkle.bll.services.interfaces.UserInfoService;
 import com.github.donkeyrit.twinkle.controls.input.JCustomPasswordField;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 

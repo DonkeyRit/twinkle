@@ -25,6 +25,10 @@ public class UserInformation
 		preferences.putBoolean(PREF_ROLE, user.isRole());
 	}
 
+	public static int getId()
+	{
+		return preferences.getInt(PREF_ID, 0);
+	}
 
 	public static String getLogin()
 	{
