@@ -1,118 +1,78 @@
 package com.github.donkeyrit.twinkle.panels.settings;
 
-import com.github.donkeyrit.twinkle.controls.input.JCustomTextField;
+import com.github.donkeyrit.twinkle.bll.services.interfaces.UserInfoService;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
+import com.github.donkeyrit.twinkle.controls.input.JCustomTextField;
+import com.github.donkeyrit.twinkle.dal.models.Client;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 import com.google.inject.Inject;
 import javax.swing.border.*;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 
 public class ProfileUpdatePanel extends JPanel {
 
-	@Inject
-	public ProfileUpdatePanel() {
-		setLayout(null);
+	private final String FIRST_NAME_FIELD = "Enter first_name";
+	private final String SECOND_NAME_FIELD = "Enter second_name"; 
+	private final String MIDDLE_NAME_FIELD = "Enter middle_name";
+	private final String ADDRESS_FIELD = "Enter address"; 
+	private final String PHONE_NUMBER_FIELD = "Enter phone_number";
 
-		String queryUser = "SELECT first_name,second_name,middle_name,address,phone_number FROM client where id_user = (SELECT id_user FROMusersWHERE login = '"
-				+ UserInformation.getLogin() + "')";
-		//ResultSet userSet = database.select(queryUser);
-		ArrayList<String> infoUser = new ArrayList<String>();
-		// try {
-		// 	int numRows = userSet.getMetaData().getColumnCount();
-		// 	while (userSet.next()) {
-		// 		for (int i = 0; i < numRows; i++) {
-		// 			infoUser.add(userSet.getString(i + 1));
-		// 		}
-		// 	}
-		// } catch (SQLException ex) {
-		// 	ex.printStackTrace();
-		// }
+	private final UserInfoService userInfoService;
+
+	@Inject
+	public ProfileUpdatePanel(UserInfoService userInfoService) {
+		setLayout(null);
+		this.userInfoService = userInfoService;
+		initializeComponents();
+	}
+
+	private void initializeComponents() {
+		Optional<Client> client = this.userInfoService.get(UserInformation.getId());
 
 		Box box = Box.createVerticalBox();
 		box.setBounds(202, 10, 200, 250);
 		box.setBorder(new TitledBorder("Personal information"));
 
-		String[] placeholders = new String[] { "Enter first_name", "Enter second_name", "Enter middle_name",
-				"Enter address", "Enter phone_number" };
-		ArrayList<JCustomTextField> fieldText = new ArrayList<JCustomTextField>();
-		for (int i = 0; i < placeholders.length; i++) {
-			JCustomTextField tempField = new JCustomTextField();
-			tempField.setPlaceholder(placeholders[i]);
-			fieldText.add(tempField);
-			box.add(tempField);
-			box.add(Box.createVerticalStrut(10));
-		}
-		if (infoUser.size() == fieldText.size()) {
-			for (int i = 0; i < fieldText.size(); i++) {
-				fieldText.get(i).setText(infoUser.get(i));
-			}
-		}
+		JCustomTextField firstNameField = AddCustomTextField(FIRST_NAME_FIELD, client.map(Client::firstName), box);
+		JCustomTextField secondNameField = AddCustomTextField(SECOND_NAME_FIELD, client.map(Client::secondName), box);
+		JCustomTextField middleNameField = AddCustomTextField(MIDDLE_NAME_FIELD, client.map(Client::middleName), box);
+		JCustomTextField addressField = AddCustomTextField(ADDRESS_FIELD, client.map(Client::address), box);
+		JCustomTextField phoneNumberField = AddCustomTextField(PHONE_NUMBER_FIELD, client.map(Client::phoneNumber), box);
 
 		JButton confirm = new JButton("Confirm");
-		confirm.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int counter = 0;
-				ArrayList<String> inputData = new ArrayList<String>();
-				for (int i = 0; i < fieldText.size(); i++) {
-					if (!fieldText.get(i).getText().isEmpty()) {
-						counter++;
-						inputData.add(fieldText.get(i).getText());
-					}
-				}
+		confirm.addActionListener(e -> {
 
-				if (counter == fieldText.size()) {
-					if (infoUser.size() == 0) {
-						String createClient = "INSERT INTO client(first_name,second_name,middle_name,address,phone_number,id_user) VALUES (";
-						for (int i = 0; i < fieldText.size(); i++) {
-							createClient += "'" + fieldText.get(i).getText() + "',";
-						}
-						createClient += "(SELECT id_user FROMusersWHERE login = '" + UserInformation.getLogin() + "'))";
+			Optional<String> me = userInfoService.updateUserProfile(
+				firstNameField.getText(),
+				secondNameField.getText(),
+				middleNameField.getText(),
+				addressField.getText(),
+				phoneNumberField.getText()
+			);
 
-						//database.insert(createClient);
-						for (int i = 0; i < fieldText.size(); i++) {
-							fieldText.get(i).setPlaceholder("Success");
-							fieldText.get(i).setText("");
-							fieldText.get(i).setPhColor(Color.green);
-						}
-					} else {
-						String[] columnNames = new String[] { "first_name", "second_name", "middle_name", "address",
-								"phone_number" };
-						String updateClient = "UPDATE clients SET ";
-						for (int i = 0; i < fieldText.size(); i++) {
-							updateClient += columnNames[i] + " = '" + fieldText.get(i).getText() + "'";
-							if (i != fieldText.size() - 1) {
-								updateClient += ",";
-							}
-						}
-						updateClient += " WHERE id_user = (SELECT id_user FROMusersWHERE login = '"
-								+ UserInformation.getLogin() + "')";
-						//database.update(updateClient);
-					}
-				} else {
-					for (int i = 0; i < fieldText.size(); i++) {
-						String previousText = fieldText.get(i).getPlaceholder()
-								.substring(fieldText.get(i).getPlaceholder().indexOf("Please") + 7);
-						fieldText.get(i).setPlaceholder("Please," + previousText);
-						fieldText.get(i).setPhColor(Color.red);
-					}
-				}
-
-				revalidate();
-				repaint();
+			if(me.isPresent()){
+				setError(me.get());
 			}
 		});
 		box.add(Box.createHorizontalStrut(60));
 		box.add(confirm);
-
 		add(box);
+	}
 
-		System.out.println(infoUser);
+	private JCustomTextField AddCustomTextField(String label, Optional<String> value, Box box) {
+		JCustomTextField field = new JCustomTextField();
+		field.setPlaceholder(label);
+		box.add(field);
+		box.add(Box.createVerticalStrut(10));
+		value.ifPresent(v -> field.setText(v));
+		return field;
+	}
 
+	private void setError(String message){
+		//TODO: Implement error message
 	}
 
 	@Override
