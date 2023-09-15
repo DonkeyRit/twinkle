@@ -63,7 +63,9 @@ public class UserRepositoryImpl implements UserRepository
 
 	@Override
 	public void updatePassword(int userId, String passwordHash) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'updatePassword'");
+		session.getTransaction().begin();
+        User user = session.find(User.class, userId);
+		user.setPassword(passwordHash);
+        session.getTransaction().commit();
 	}
 }
