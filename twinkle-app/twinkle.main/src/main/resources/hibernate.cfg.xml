@@ -24,5 +24,6 @@
         <mapping class="com.github.donkeyrit.twinkle.dal.models.Car"/>
         <mapping class="com.github.donkeyrit.twinkle.dal.models.Country"/>
         <mapping class="com.github.donkeyrit.twinkle.dal.models.Rent"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.Client"/>
     </session-factory>
 </hibernate-configuration>
