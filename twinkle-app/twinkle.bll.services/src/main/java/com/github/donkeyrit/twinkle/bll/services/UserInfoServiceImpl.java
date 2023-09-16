@@ -1,9 +1,10 @@
 package com.github.donkeyrit.twinkle.bll.services;
 
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ClientRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
-import com.github.donkeyrit.twinkle.dal.models.Client;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.UserInfoService;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
+import com.github.donkeyrit.twinkle.dal.models.Client;
 import com.github.donkeyrit.twinkle.bll.security.HashManager;
 
 import com.google.inject.Inject;
@@ -11,10 +12,12 @@ import java.util.Optional;
 
 public class UserInfoServiceImpl implements UserInfoService {
 
+	private final ClientRepository clientRepository;
 	private final UserRepository userRepository;
 
 	@Inject
-	public UserInfoServiceImpl(UserRepository userRepository) {
+	public UserInfoServiceImpl(ClientRepository clientRepository, UserRepository userRepository) {
+		this.clientRepository = clientRepository;
 		this.userRepository = userRepository;
 	}
 
@@ -42,64 +45,41 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 	@Override
 	public Optional<Client> get(int userId) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'get'");
+		return this.clientRepository.getByUserId(userId);
 	}
 
 	@Override
 	public Optional<String> updateUserProfile(
+		Optional<Client> client,
 		String firstNameText, 
 		String secondNameText, 
 		String middleNameText,
 		String addressText, 
 		String phoneNumberText
 	) {
+		if(client.isPresent()){
+
+			Client updatedClient = client.get();
+			updatedClient.setFirstName(firstNameText);
+			updatedClient.setSecondName(secondNameText);
+			updatedClient.setMiddleName(middleNameText);
+			updatedClient.setAddress(addressText);
+			updatedClient.setPhoneNumber(phoneNumberText);
+
+			this.clientRepository.update(updatedClient);
+		}
+		else{
+
+			Client newClient = new Client();
+			newClient.setFirstName(firstNameText);
+			newClient.setSecondName(secondNameText);
+			newClient.setMiddleName(middleNameText);
+			newClient.setAddress(addressText);
+			newClient.setPhoneNumber(phoneNumberText);
+
+			this.clientRepository.insert(newClient);
+		}
 
 		return Optional.empty();
-		// int counter = 0;
-		// ArrayList<String> inputData = new ArrayList<String>();
-		// for (int i = 0; i < fieldText.size(); i++) {
-		// 	if (!fieldText.get(i).getText().isEmpty()) {
-		// 		counter++;
-		// 		inputData.add(fieldText.get(i).getText());
-		// 	}
-		// }
-
-		// if (counter == fieldText.size()) {
-		// 	if (infoUser.size() == 0) {
-		// 		String createClient = "INSERT INTO client(first_name,second_name,middle_name,address,phone_number,id_user) VALUES (";
-		// 		for (int i = 0; i < fieldText.size(); i++) {
-		// 			createClient += "'" + fieldText.get(i).getText() + "',";
-		// 		}
-		// 		createClient += "(SELECT id_user FROMusersWHERE login = '" + UserInformation.getLogin() + "'))";
-
-		// 		// database.insert(createClient);
-		// 		for (int i = 0; i < fieldText.size(); i++) {
-		// 			fieldText.get(i).setPlaceholder("Success");
-		// 			fieldText.get(i).setText("");
-		// 			fieldText.get(i).setPhColor(Color.green);
-		// 		}
-		// 	} else {
-		// 		String[] columnNames = new String[] { "first_name", "second_name", "middle_name", "address",
-		// 				"phone_number" };
-		// 		String updateClient = "UPDATE clients SET ";
-		// 		for (int i = 0; i < fieldText.size(); i++) {
-		// 			updateClient += columnNames[i] + " = '" + fieldText.get(i).getText() + "'";
-		// 			if (i != fieldText.size() - 1) {
-		// 				updateClient += ",";
-		// 			}
-		// 		}
-		// 		updateClient += " WHERE id_user = (SELECT id_user FROMusersWHERE login = '" + UserInformation.getLogin()
-		// 				+ "')";
-		// 		// database.update(updateClient);
-		// 	}
-		// } else {
-		// 	for (int i = 0; i < fieldText.size(); i++) {
-		// 		String previousText = fieldText.get(i).getPlaceholder()
-		// 				.substring(fieldText.get(i).getPlaceholder().indexOf("Please") + 7);
-		// 		fieldText.get(i).setPlaceholder("Please," + previousText);
-		// 		fieldText.get(i).setPhColor(Color.red);
-		// 	}
-		// }
 	}
 }

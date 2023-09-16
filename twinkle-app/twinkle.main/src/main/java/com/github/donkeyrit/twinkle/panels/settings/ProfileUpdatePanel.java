@@ -36,16 +36,17 @@ public class ProfileUpdatePanel extends JPanel {
 		box.setBounds(202, 10, 200, 250);
 		box.setBorder(new TitledBorder("Personal information"));
 
-		JCustomTextField firstNameField = AddCustomTextField(FIRST_NAME_FIELD, client.map(Client::firstName), box);
-		JCustomTextField secondNameField = AddCustomTextField(SECOND_NAME_FIELD, client.map(Client::secondName), box);
-		JCustomTextField middleNameField = AddCustomTextField(MIDDLE_NAME_FIELD, client.map(Client::middleName), box);
-		JCustomTextField addressField = AddCustomTextField(ADDRESS_FIELD, client.map(Client::address), box);
-		JCustomTextField phoneNumberField = AddCustomTextField(PHONE_NUMBER_FIELD, client.map(Client::phoneNumber), box);
+		JCustomTextField firstNameField = AddCustomTextField(FIRST_NAME_FIELD, client.map(Client::getFirstName), box);
+		JCustomTextField secondNameField = AddCustomTextField(SECOND_NAME_FIELD, client.map(Client::getSecondName), box);
+		JCustomTextField middleNameField = AddCustomTextField(MIDDLE_NAME_FIELD, client.map(Client::getMiddleName), box);
+		JCustomTextField addressField = AddCustomTextField(ADDRESS_FIELD, client.map(Client::getAddress), box);
+		JCustomTextField phoneNumberField = AddCustomTextField(PHONE_NUMBER_FIELD, client.map(Client::getPhoneNumber), box);
 
 		JButton confirm = new JButton("Confirm");
 		confirm.addActionListener(e -> {
 
 			Optional<String> me = userInfoService.updateUserProfile(
+				client,
 				firstNameField.getText(),
 				secondNameField.getText(),
 				middleNameField.getText(),
