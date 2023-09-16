@@ -17,7 +17,6 @@ public class MainFrame extends JFrame
 		this.switchedPanel = new SwitchedPanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(875,700); 
-        setResizable(false);
         setLocationRelativeTo(null);
 
         // Add container to frame
