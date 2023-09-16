@@ -60,4 +60,12 @@ public class UserRepositoryImpl implements UserRepository
         session.persist(user);
         session.getTransaction().commit();
     }
+
+	@Override
+	public void updatePassword(int userId, String passwordHash) {
+		session.getTransaction().begin();
+        User user = session.find(User.class, userId);
+		user.setPassword(passwordHash);
+        session.getTransaction().commit();
+	}
 }

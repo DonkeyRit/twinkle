@@ -1,126 +1,103 @@
 package com.github.donkeyrit.twinkle.panels.settings;
 
-import com.github.donkeyrit.twinkle.controls.input.JCustomTextField;
+import com.github.donkeyrit.twinkle.bll.services.interfaces.UserInfoService;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
-import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
+import com.github.donkeyrit.twinkle.controls.input.JCustomTextField;
+import com.github.donkeyrit.twinkle.dal.models.Client;
 
 import com.google.inject.Inject;
 import javax.swing.border.*;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 
 public class ProfileUpdatePanel extends JPanel {
 
+	private static final Color DARK_BG_COLOR = new Color(50, 50, 50);
+    private static final Color DARK_FG_COLOR = Color.WHITE;
+
+	private final String FIRST_NAME_FIELD = "Enter first_name";
+	private final String SECOND_NAME_FIELD = "Enter second_name"; 
+	private final String MIDDLE_NAME_FIELD = "Enter middle_name";
+	private final String ADDRESS_FIELD = "Enter address"; 
+	private final String PHONE_NUMBER_FIELD = "Enter phone_number";
+
+	private final UserInfoService userInfoService;
+	private JLabel errorMessageLabel;
+
 	@Inject
-	public ProfileUpdatePanel() {
-		setLayout(null);
+	public ProfileUpdatePanel(UserInfoService userInfoService) {
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.setBackground(DARK_BG_COLOR);
+		this.userInfoService = userInfoService;
+		initializeComponents();
+	}
 
-		String queryUser = "SELECT first_name,second_name,middle_name,address,phone_number FROM client where id_user = (SELECT id_user FROMusersWHERE login = '"
-				+ UserInformation.getLogin() + "')";
-		//ResultSet userSet = database.select(queryUser);
-		ArrayList<String> infoUser = new ArrayList<String>();
-		// try {
-		// 	int numRows = userSet.getMetaData().getColumnCount();
-		// 	while (userSet.next()) {
-		// 		for (int i = 0; i < numRows; i++) {
-		// 			infoUser.add(userSet.getString(i + 1));
-		// 		}
-		// 	}
-		// } catch (SQLException ex) {
-		// 	ex.printStackTrace();
-		// }
+	private void initializeComponents() {
+		Optional<Client> client = this.userInfoService.get(UserInformation.getId());
 
-		Box box = Box.createVerticalBox();
-		box.setBounds(202, 10, 200, 250);
-		box.setBorder(new TitledBorder("Personal information"));
+		Box mainBox = Box.createVerticalBox();
+        mainBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainBox.setBackground(DARK_BG_COLOR);
 
-		String[] placeholders = new String[] { "Enter first_name", "Enter second_name", "Enter middle_name",
-				"Enter address", "Enter phone_number" };
-		ArrayList<JCustomTextField> fieldText = new ArrayList<JCustomTextField>();
-		for (int i = 0; i < placeholders.length; i++) {
-			JCustomTextField tempField = new JCustomTextField();
-			tempField.setPlaceholder(placeholders[i]);
-			fieldText.add(tempField);
-			box.add(tempField);
-			box.add(Box.createVerticalStrut(10));
-		}
-		if (infoUser.size() == fieldText.size()) {
-			for (int i = 0; i < fieldText.size(); i++) {
-				fieldText.get(i).setText(infoUser.get(i));
-			}
-		}
+        TitledBorder titleBorder = BorderFactory.createTitledBorder("Personal information");
+        titleBorder.setTitleColor(DARK_FG_COLOR);
+        mainBox.setBorder(titleBorder);
+
+		JCustomTextField firstNameField = addCustomTextField(FIRST_NAME_FIELD, client.map(Client::getFirstName), mainBox);
+        JCustomTextField secondNameField = addCustomTextField(SECOND_NAME_FIELD, client.map(Client::getSecondName), mainBox);
+        JCustomTextField middleNameField = addCustomTextField(MIDDLE_NAME_FIELD, client.map(Client::getMiddleName), mainBox);
+        JCustomTextField addressField = addCustomTextField(ADDRESS_FIELD, client.map(Client::getAddress), mainBox);
+        JCustomTextField phoneNumberField = addCustomTextField(PHONE_NUMBER_FIELD, client.map(Client::getPhoneNumber), mainBox);
 
 		JButton confirm = new JButton("Confirm");
-		confirm.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int counter = 0;
-				ArrayList<String> inputData = new ArrayList<String>();
-				for (int i = 0; i < fieldText.size(); i++) {
-					if (!fieldText.get(i).getText().isEmpty()) {
-						counter++;
-						inputData.add(fieldText.get(i).getText());
-					}
-				}
+		confirm.addActionListener(e -> {
 
-				if (counter == fieldText.size()) {
-					if (infoUser.size() == 0) {
-						String createClient = "INSERT INTO client(first_name,second_name,middle_name,address,phone_number,id_user) VALUES (";
-						for (int i = 0; i < fieldText.size(); i++) {
-							createClient += "'" + fieldText.get(i).getText() + "',";
-						}
-						createClient += "(SELECT id_user FROMusersWHERE login = '" + UserInformation.getLogin() + "'))";
+			Optional<String> me = userInfoService.updateUserProfile(
+				client,
+				firstNameField.getText(),
+				secondNameField.getText(),
+				middleNameField.getText(),
+				addressField.getText(),
+				phoneNumberField.getText()
+			);
 
-						//database.insert(createClient);
-						for (int i = 0; i < fieldText.size(); i++) {
-							fieldText.get(i).setPlaceholder("Success");
-							fieldText.get(i).setText("");
-							fieldText.get(i).setPhColor(Color.green);
-						}
-					} else {
-						String[] columnNames = new String[] { "first_name", "second_name", "middle_name", "address",
-								"phone_number" };
-						String updateClient = "UPDATE clients SET ";
-						for (int i = 0; i < fieldText.size(); i++) {
-							updateClient += columnNames[i] + " = '" + fieldText.get(i).getText() + "'";
-							if (i != fieldText.size() - 1) {
-								updateClient += ",";
-							}
-						}
-						updateClient += " WHERE id_user = (SELECT id_user FROMusersWHERE login = '"
-								+ UserInformation.getLogin() + "')";
-						//database.update(updateClient);
-					}
-				} else {
-					for (int i = 0; i < fieldText.size(); i++) {
-						String previousText = fieldText.get(i).getPlaceholder()
-								.substring(fieldText.get(i).getPlaceholder().indexOf("Please") + 7);
-						fieldText.get(i).setPlaceholder("Please," + previousText);
-						fieldText.get(i).setPhColor(Color.red);
-					}
-				}
-
-				revalidate();
-				repaint();
+			if(me.isPresent()){
+				setError(me.get());
 			}
 		});
-		box.add(Box.createHorizontalStrut(60));
-		box.add(confirm);
 
-		add(box);
+		errorMessageLabel = new JLabel("");
+        errorMessageLabel.setForeground(Color.RED);
+        errorMessageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		System.out.println(infoUser);
+        this.add(Box.createVerticalStrut(20));
+        this.add(mainBox);
+        this.add(Box.createVerticalStrut(10));
+        this.add(errorMessageLabel);
+        this.add(Box.createVerticalStrut(10));
+        this.add(confirm);
+        this.add(Box.createVerticalGlue());
+	}
 
+	private JCustomTextField addCustomTextField(String label, Optional<String> value, Box box) {
+		JCustomTextField field = new JCustomTextField();
+        field.setPlaceholder(label);
+        field.setMaximumSize(field.getPreferredSize());
+        field.setAlignmentX(Component.CENTER_ALIGNMENT);
+        box.add(field);
+        box.add(Box.createVerticalStrut(10));
+        value.ifPresent(field::setText);
+        return field;
+	}
+
+	private void setError(String message){
+		errorMessageLabel.setText(message);
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(new Color(237, 237, 237));
 		g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(), 30, 25);
-
-		Image image = AssetsRetriever.retrieveAssetImageFromResources("assets/background/fill_data.png");
-		g.drawImage(image, 50, 310, this);
 	}
 }

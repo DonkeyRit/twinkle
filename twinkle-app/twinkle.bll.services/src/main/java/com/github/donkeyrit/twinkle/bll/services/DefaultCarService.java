@@ -6,7 +6,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarReposi
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
-import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
+import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;

@@ -1,10 +1,10 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
+import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
 import com.github.donkeyrit.twinkle.panels.nestedpanels.PageNavigatorPanel;
-import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 import javax.swing.SwingConstants;

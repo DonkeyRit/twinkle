@@ -1,7 +1,5 @@
 package com.github.donkeyrit.twinkle.dal.models;
 
-import com.github.donkeyrit.twinkle.dal.contracts.BaseDbModel;
-
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
@@ -10,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.sql.Date;
+
+import com.github.donkeyrit.twinkle.dal.interfaces.BaseDbModel;
 
 @Entity
 @Table(name = "rent")

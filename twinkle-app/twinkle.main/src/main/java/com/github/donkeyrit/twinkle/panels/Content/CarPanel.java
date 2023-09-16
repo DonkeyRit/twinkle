@@ -1,7 +1,7 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
-import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
+import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 
 import com.google.inject.Inject;

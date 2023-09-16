@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle.dal.contracts;
+package com.github.donkeyrit.twinkle.dal.interfaces;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle.dal.contracts;
+package com.github.donkeyrit.twinkle.dal.interfaces;
 
 import jakarta.persistence.EntityManager;
 import java.lang.reflect.ParameterizedType;

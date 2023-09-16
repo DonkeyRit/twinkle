@@ -4,7 +4,7 @@ import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListen
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
-import com.github.donkeyrit.twinkle.bll.services.contracts.CarService;
+import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.controls.MarkComboBoxModel;
 
 import javax.swing.ScrollPaneConstants;

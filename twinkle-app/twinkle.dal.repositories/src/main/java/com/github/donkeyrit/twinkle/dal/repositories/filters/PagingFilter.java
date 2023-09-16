@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.dal.repositories.filters;
 
-import com.github.donkeyrit.twinkle.dal.contracts.QueryFilter;
+import com.github.donkeyrit.twinkle.dal.interfaces.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 
 public class PagingFilter implements QueryFilter {

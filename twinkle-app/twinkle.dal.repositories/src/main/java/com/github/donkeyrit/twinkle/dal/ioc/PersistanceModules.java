@@ -6,10 +6,12 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarReposit
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ClientRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.CarBodyTypeRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.MarkOfCarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.ModelOfCarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.ClientRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.RentRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
 
@@ -33,6 +35,7 @@ public class PersistanceModules extends AbstractModule {
 		bind(CarBodyTypeRepository.class).to(CarBodyTypeRepositoryImpl.class);
 		bind(CarRepository.class).to(CarRepositoryImpl.class);
 		bind(RentRepository.class).to(RentRepositoryImpl.class);
+		bind(ClientRepository.class).to(ClientRepositoryImpl.class);
 	}
 
 	@Provides
