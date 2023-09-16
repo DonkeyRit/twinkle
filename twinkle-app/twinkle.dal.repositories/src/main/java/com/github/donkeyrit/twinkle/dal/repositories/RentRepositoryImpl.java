@@ -2,8 +2,8 @@ package com.github.donkeyrit.twinkle.dal.repositories;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.google.inject.Inject;
-import com.github.donkeyrit.twinkle.dal.contracts.BaseCrudRepository;
-import com.github.donkeyrit.twinkle.dal.contracts.QueryFilter;
+import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.Rent;
 
 import jakarta.persistence.EntityManager;
