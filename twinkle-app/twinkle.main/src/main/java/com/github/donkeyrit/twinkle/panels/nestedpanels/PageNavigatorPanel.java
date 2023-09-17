@@ -34,10 +34,10 @@ public class PageNavigatorPanel extends JPanel {
         this.setBackground(bgColor);
 
         JButton prevButton = createNavButton("<<");
-        prevButton.addActionListener(e -> navigationPanelEventsListener.onNextContentPageRequest());
+        prevButton.addActionListener(e -> navigationPanelEventsListener.onNextContentPageRequest(false));
 
         JButton nextButton = createNavButton(">>");
-        nextButton.addActionListener(e -> navigationPanelEventsListener.onNextContentPageRequest());
+        nextButton.addActionListener(e -> navigationPanelEventsListener.onNextContentPageRequest(true));
 
         this.add(prevButton);
 

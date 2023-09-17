@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.util.Optional;
 
 @Singleton
 public class ContentCompositePanel extends JPanel
@@ -73,5 +74,9 @@ public class ContentCompositePanel extends JPanel
 		this.revalidate();
 		this.repaint();
 		return this;
+	}
+
+	public Optional<JPanel> getContentPanel(){
+		return Optional.of(this.contentPanel);
 	}
 }

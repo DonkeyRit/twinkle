@@ -3,6 +3,7 @@ package com.github.donkeyrit.twinkle.panels.content;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
 import com.github.donkeyrit.twinkle.panels.nestedpanels.PageNavigatorPanel;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
@@ -81,7 +82,12 @@ public class ContentPanel extends JPanel {
 		}
 		add(carsContainer, BorderLayout.CENTER);
 
-		PageNavigatorPanel panel = new PageNavigatorPanel(contentEventsListener, 1, 4, 100);
+		Paging paging = filter.getPaging();
+		PageNavigatorPanel panel = new PageNavigatorPanel(
+			contentEventsListener, 
+			paging.getPageNumber(), 
+			paging.getPageSize(), 
+			100);
 		panel.setBounds(205, 520, 400, 30);
 		add(panel, BorderLayout.SOUTH);
 	}

@@ -9,6 +9,6 @@ public interface NavigationPanelEventsListener {
 	void onHomePageRequest();
 	void onContentPageRequest(CarQueryFilter queryFilter);
 	void onNextContentPageRequest(int pageNumber);
-	void onNextContentPageRequest();
+	void onNextContentPageRequest(boolean direction);
 	CarPanel onCarPanelCreateRequest(Car car);
 }
