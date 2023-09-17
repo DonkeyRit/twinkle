@@ -81,7 +81,7 @@ public class ContentPanel extends JPanel {
 		}
 		add(carsContainer, BorderLayout.CENTER);
 
-		PageNavigatorPanel panel = new PageNavigatorPanel(1, 4, 20);
+		PageNavigatorPanel panel = new PageNavigatorPanel(contentEventsListener, 1, 4, 100);
 		panel.setBounds(205, 520, 400, 30);
 		add(panel, BorderLayout.SOUTH);
 	}
