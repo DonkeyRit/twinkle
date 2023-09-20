@@ -1,11 +1,13 @@
 package com.github.donkeyrit.twinkle.dal.models;
 
 import java.io.Serializable;
+
+import com.github.donkeyrit.twinkle.dal.interfaces.BaseDbModel;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable
+public class User extends BaseDbModel implements Serializable
 {
     @Id
     @Column(name = "id_user")
