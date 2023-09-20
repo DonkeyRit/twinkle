@@ -5,7 +5,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
-import com.github.donkeyrit.twinkle.dal.models.utils.PagedResult;
+import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.Country;
@@ -65,7 +65,7 @@ public class CarRepositoryImplPagingTests extends Assertions {
 				DaoFixture.createCar(10, DateFixture.getDate(2020, 0, 01), civicCarModel, "Honda Civic 2020", 10, 25000));
 
 		// Act
-		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
 
 		// Assert
 		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);

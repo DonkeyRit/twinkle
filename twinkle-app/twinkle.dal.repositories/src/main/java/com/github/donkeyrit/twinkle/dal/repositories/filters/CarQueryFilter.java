@@ -1,5 +1,6 @@
 package com.github.donkeyrit.twinkle.dal.repositories.filters;
 
+import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 
 import java.util.Optional;
@@ -15,8 +16,15 @@ public class CarQueryFilter extends PagingFilter  {
 	private Optional<Double> selectedPrice;
 	private List<String> selectedBodyTypes;
 
-	public CarQueryFilter()
-	{
+	public CarQueryFilter(Paging paging) {
+		this.selectedMark = Optional.empty();
+		this.selectedModel = Optional.empty();
+		this.selectedPrice = Optional.empty();
+		this.selectedBodyTypes = new ArrayList<String>(0);
+		this.setPaging(paging);
+	}
+
+	public CarQueryFilter() {
 		this.selectedMark = Optional.empty();
 		this.selectedModel = Optional.empty();
 		this.selectedPrice = Optional.empty();

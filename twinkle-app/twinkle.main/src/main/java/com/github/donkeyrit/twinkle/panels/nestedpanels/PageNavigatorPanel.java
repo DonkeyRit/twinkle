@@ -20,7 +20,7 @@ public class PageNavigatorPanel extends JPanel {
 		NavigationPanelEventsListener navigationPanelEventsListener, 
 		int chosenPage, 
 		int itemsPerPage, 
-		int maxItems
+		long maxItems
 	) {
 		this.navigationPanelEventsListener = navigationPanelEventsListener;
         this.chosenPage = chosenPage;

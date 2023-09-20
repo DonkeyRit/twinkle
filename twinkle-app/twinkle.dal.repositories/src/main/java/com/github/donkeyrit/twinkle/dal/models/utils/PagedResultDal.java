@@ -2,7 +2,7 @@ package com.github.donkeyrit.twinkle.dal.models.utils;
 
 import java.util.stream.Stream;
 
-public class PagedResult<T> {
+public class PagedResultDal<T> {
 
 	private final Stream<T> result;
 	private final long totalCount;
@@ -19,7 +19,7 @@ public class PagedResult<T> {
 	
 	//#endregion
 	
-	public PagedResult(Stream<T> result, long totalCount) {
+	public PagedResultDal(Stream<T> result, long totalCount) {
 		this.result = result;
 		this.totalCount = totalCount;
 	}

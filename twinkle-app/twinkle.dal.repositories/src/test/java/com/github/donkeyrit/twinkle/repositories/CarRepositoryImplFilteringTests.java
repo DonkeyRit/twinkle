@@ -6,7 +6,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.Country;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
-import com.github.donkeyrit.twinkle.dal.models.utils.PagedResult;
+import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.utils.DaoFixture;
@@ -53,7 +53,7 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 				DaoFixture.createCar(3, DateFixture.getDate(2022, 0, 01), modelOfCar, "Toyota Camry 2022", 3, 27000));
 
 		// Act
-		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
 		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert
@@ -82,7 +82,7 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 				DaoFixture.createCar(12, DateFixture.getDate(2022, 0, 01), civicCarModel, "Honda Civic 2022", 12,27000));
 
 		// Act
-		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
 		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert
@@ -109,7 +109,7 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 				DaoFixture.createCar(93, DateFixture.getDate(2020, 0, 01), civicCarModel, "Honda Civic 2020", 93, selectedPrice));
 
 		// Act
-		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
 		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert
@@ -140,7 +140,7 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 				DaoFixture.createCar(29, DateFixture.getDate(2021, 0, 01), silveradoCarModel, "Mercedes-Benz C-Class 2021", 29, 39000),
 				DaoFixture.createCar(30, DateFixture.getDate(2022, 0, 01), silveradoCarModel, "Mercedes-Benz C-Class 2022", 30, 40000));
 		// Act
-		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
 		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert
@@ -166,7 +166,7 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 			DaoFixture.createCar(31, DateFixture.getDate(2020, 0, 01), eClassCarModel, "Acura TLX 2020", 31, 30000),
 				DaoFixture.createCar(32, DateFixture.getDate(2021, 0, 01), eClassCarModel, "Acura TLX 2021", 32, 31000));
 		// Act
-		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
 		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert

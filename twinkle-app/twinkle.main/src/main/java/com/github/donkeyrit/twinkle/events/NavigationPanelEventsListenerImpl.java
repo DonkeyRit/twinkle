@@ -44,7 +44,7 @@ public class NavigationPanelEventsListenerImpl implements NavigationPanelEventsL
 
 	@Override
 	public void onHomePageRequest() {
-		ContentPanel contentPanel = this.contentPanelFactory.create(new CarQueryFilter());
+		ContentPanel contentPanel = this.contentPanelFactory.create(new CarQueryFilter(new Paging(1, 4)));
 		getContentCompositePanel().setContentPanel(contentPanel);
 	}
 
@@ -61,7 +61,7 @@ public class NavigationPanelEventsListenerImpl implements NavigationPanelEventsL
 
 			ContentPanel contentPanel = (ContentPanel) contentPanelContainer.get();
 			CarQueryFilter previousFilter = contentPanel.getFilter();
-			Paging paging = previousFilter.getPaging();
+			Paging paging = previousFilter.getPaging().orElse(new Paging(1, 4));
 			previousFilter.setPaging(direction ? paging.next() : paging.previous());
 			ContentPanel newContentPanel = this.contentPanelFactory.create(previousFilter);
 			getContentCompositePanel().setContentPanel(newContentPanel);
@@ -76,7 +76,7 @@ public class NavigationPanelEventsListenerImpl implements NavigationPanelEventsL
 
 			ContentPanel contentPanel = (ContentPanel) contentPanelContainer.get();
 			CarQueryFilter previousFilter = contentPanel.getFilter();
-			Paging paging = previousFilter.getPaging();
+			Paging paging = previousFilter.getPaging().orElse(new Paging(1, 4));
 			previousFilter.setPaging(new Paging(pageNumber, paging.getPageSize()));
 			ContentPanel newContentPanel = this.contentPanelFactory.create(previousFilter);
 			getContentCompositePanel().setContentPanel(newContentPanel);

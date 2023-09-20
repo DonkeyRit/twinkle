@@ -3,7 +3,7 @@ package com.github.donkeyrit.twinkle.dal.repositories;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
-import com.github.donkeyrit.twinkle.dal.models.utils.PagedResult;
+import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
@@ -32,7 +32,7 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 	}
 
 	// TODO: Move this method to BaseCrudRepository
-	public PagedResult<Car> getPagedResult(CarQueryFilter queryFilter) {
+	public PagedResultDal<Car> getPagedResult(CarQueryFilter queryFilter) {
 
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 		
@@ -53,7 +53,7 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		countQuery.select(criteriaBuilder.count(countRoot)).where(countPredicates);
 
 		// #endregion
-		return new PagedResult<Car>(typedQuery.getResultStream(), getTotalCount(countQuery));
+		return new PagedResultDal<Car>(typedQuery.getResultStream(), getTotalCount(countQuery));
 	}
 
 	// #region Create predicates
