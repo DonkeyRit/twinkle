@@ -69,6 +69,6 @@ public class CarRepositoryImplPagingTests extends Assertions {
 
 		// Assert
 		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);
-		assertEquals(cars.getTotalCount(), 0);
+		assertEquals(cars.getTotalCount(), 100);
 	}
 }

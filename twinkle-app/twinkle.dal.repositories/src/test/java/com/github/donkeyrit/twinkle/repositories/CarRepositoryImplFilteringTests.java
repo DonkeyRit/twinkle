@@ -54,9 +54,10 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 
 		// Act
 		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert
-		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);
+		assertThat(actualResult).hasSameElementsAs(expectedResult);
 		assertEquals(cars.getTotalCount(), 3);
 	}
 
@@ -82,9 +83,10 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 
 		// Act
 		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert
-		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);
+		assertThat(actualResult).hasSameElementsAs(expectedResult);
 		assertEquals(cars.getTotalCount(), 6);
 	}
 
@@ -108,9 +110,10 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 
 		// Act
 		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert
-		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);
+		assertThat(actualResult).hasSameElementsAs(expectedResult);
 		assertEquals(cars.getTotalCount(), 2);
 	}
 
@@ -138,9 +141,10 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 				DaoFixture.createCar(30, DateFixture.getDate(2022, 0, 01), silveradoCarModel, "Mercedes-Benz C-Class 2022", 30, 40000));
 		// Act
 		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert
-		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);
+		assertThat(actualResult).hasSameElementsAs(expectedResult);
 		assertEquals(cars.getTotalCount(), 6);
 	}
 
@@ -163,9 +167,10 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 				DaoFixture.createCar(32, DateFixture.getDate(2021, 0, 01), eClassCarModel, "Acura TLX 2021", 32, 31000));
 		// Act
 		PagedResult<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car> actualResult = cars.getResult().toList();
 
 		// Assert
-		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);
+		assertThat(actualResult).hasSameElementsAs(expectedResult);
 		assertEquals(cars.getTotalCount(), 2);
 	}
 }

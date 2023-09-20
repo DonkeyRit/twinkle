@@ -2,22 +2,27 @@ package com.github.donkeyrit.twinkle.dal.repositories.filters;
 
 import com.github.donkeyrit.twinkle.dal.interfaces.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
+import java.util.Optional;
 
 public class PagingFilter implements QueryFilter {
 
 	//#region Fields
 
-	private Paging paging;
+	private Optional<Paging> paging;
+
+	public PagingFilter() {
+		paging = Optional.empty();
+	}
 
 	//#endregion
 	//#region Getters/Setters
 
-	public Paging getPaging() {
+	public Optional<Paging> getPaging() {
 		return paging;
 	}
 
 	public void setPaging(Paging paging) {
-		this.paging = paging;
+		this.paging = Optional.of(paging);
 	}
 
 	//#endregion

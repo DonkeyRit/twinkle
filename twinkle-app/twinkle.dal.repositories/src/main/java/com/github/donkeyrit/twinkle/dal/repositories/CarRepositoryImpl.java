@@ -21,6 +21,7 @@ import jakarta.persistence.TypedQuery;
 
 import com.google.inject.Inject;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.List;
 
 public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> implements CarRepository {
@@ -30,42 +31,40 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		super(session);
 	}
 
-	//TODO: Move this method to BaseCrudRepository
+	// TODO: Move this method to BaseCrudRepository
 	public PagedResult<Car> getPagedResult(CarQueryFilter queryFilter) {
 
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-		CriteriaQuery<Car> criteriaQuery = criteriaBuilder.createQuery(Car.class);
+		
+		CriteriaQuery<Car> query = criteriaBuilder.createQuery(Car.class);
+		Root<Car> root = query.from(Car.class);
+		Predicate[] predicates = applyFilters(criteriaBuilder, queryFilter, root, criteriaBuilder);
+		query.select(root).where(predicates);
 
-		Join<Car, ModelOfCar> model = null;
-		Join<ModelOfCar, MarkOfCar> mark = null;
-		Join<CarBodyType, ModelOfCar> carBodyType = null;
+		TypedQuery<Car> typedQuery = session.createQuery(query);
+		Optional<Paging> paging = queryFilter.getPaging();
+		paging.ifPresent(p -> AddPaging(typedQuery, p));
 
-		Root<Car> root = criteriaQuery.from(Car.class);
-		List<Predicate> predicateList = new ArrayList<Predicate>(4);
+		// #region Total count
 
-		AddSelectedModelPredicate(criteriaBuilder, queryFilter, root, model, predicateList);
-		AddSelectedMarkPredicate(criteriaBuilder, queryFilter, root, model, mark, predicateList);
-		AddSelectedPricePredicate(criteriaBuilder, queryFilter, root, predicateList);
-		AddSelectedBodyTypesPredicate(criteriaBuilder, queryFilter, root, model, mark, carBodyType, predicateList);
-
-		Predicate[] predicates = predicateList.toArray(new Predicate[0]);
-		criteriaQuery.select(root).where(predicates);
-
-		TypedQuery<Car> query = session.createQuery(criteriaQuery);
-		AddPaging(query, queryFilter.getPaging());
-
-		//#region Total count
 		CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-		countQuery.select(criteriaBuilder.count(root)).where(predicates);
-		//#endregion
+		Root<Car> countRoot = countQuery.from(Car.class);
+		Predicate[] countPredicates = applyFilters(criteriaBuilder, queryFilter, countRoot, criteriaBuilder);
+		countQuery.select(criteriaBuilder.count(countRoot)).where(countPredicates);
 
-		return new PagedResult<Car>(query.getResultStream(), getTotalCount(countQuery));
+		// #endregion
+		return new PagedResult<Car>(typedQuery.getResultStream(), getTotalCount(countQuery));
 	}
 
 	// #region Create predicates
 
-	private void AddSelectedModelPredicate(CriteriaBuilder criteriaBuilder, CarQueryFilter queryFilter, Root<Car> root,
-			Join<Car, ModelOfCar> model, List<Predicate> predicates) {
+	private void AddSelectedModelPredicate(
+		CriteriaBuilder criteriaBuilder, 
+		CarQueryFilter queryFilter, 
+		Root<Car> root,
+		Join<Car, ModelOfCar> model, 
+		List<Predicate> predicates
+	) {
 
 		if (queryFilter.getSelectedModel().isPresent()) {
 
@@ -77,8 +76,14 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		}
 	}
 
-	private void AddSelectedMarkPredicate(CriteriaBuilder criteriaBuilder, CarQueryFilter queryFilter, Root<Car> root,
-			Join<Car, ModelOfCar> model, Join<ModelOfCar, MarkOfCar> mark, List<Predicate> predicates) {
+	private void AddSelectedMarkPredicate(
+		CriteriaBuilder criteriaBuilder, 
+		CarQueryFilter queryFilter, 
+		Root<Car> root,
+		Join<Car, ModelOfCar> model, 
+		Join<ModelOfCar, MarkOfCar> mark, 
+		List<Predicate> predicates
+	) {
 
 		if (queryFilter.getSelectedMark().isPresent()) {
 
@@ -92,8 +97,12 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		}
 	}
 
-	private void AddSelectedPricePredicate(CriteriaBuilder criteriaBuilder, CarQueryFilter queryFilter, Root<Car> root,
-			List<Predicate> predicates) {
+	private void AddSelectedPricePredicate(
+		CriteriaBuilder criteriaBuilder, 
+		CarQueryFilter queryFilter, 
+		Root<Car> root,
+		List<Predicate> predicates
+	) {
 		if (queryFilter.getSelectedPrice().isPresent()) {
 			double selectedPrice = queryFilter.getSelectedPrice().get();
 			Predicate leCostPredicate = criteriaBuilder.lessThanOrEqualTo(root.get("cost"), selectedPrice);
@@ -102,9 +111,15 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 		}
 	}
 
-	private void AddSelectedBodyTypesPredicate(CriteriaBuilder criteriaBuilder, CarQueryFilter queryFilter,
-			Root<Car> root, Join<Car, ModelOfCar> model, Join<ModelOfCar, MarkOfCar> mark,
-			Join<CarBodyType, ModelOfCar> carBodyType, List<Predicate> predicates) {
+	private void AddSelectedBodyTypesPredicate(
+		CriteriaBuilder criteriaBuilder, 
+		CarQueryFilter queryFilter,
+		Root<Car> root, 
+		Join<Car, ModelOfCar> model, 
+		Join<ModelOfCar, MarkOfCar> mark,
+		Join<CarBodyType, ModelOfCar> carBodyType,
+		List<Predicate> predicates
+	) {
 		if (!queryFilter.getSelectedBodyTypes().isEmpty()) {
 
 			if (model == null)
@@ -120,6 +135,26 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 	}
 
 	// #endregion Create predicates
+
+	private Predicate[] applyFilters(
+		CriteriaBuilder criteriaBuilder, 
+		CarQueryFilter queryFilter, 
+		Root<Car> root, 
+		CriteriaBuilder cb
+	) {
+		List<Predicate> predicateList = new ArrayList<>(4);
+
+		Join<Car, ModelOfCar> model = null;
+		Join<ModelOfCar, MarkOfCar> mark = null;
+		Join<CarBodyType, ModelOfCar> carBodyType = null;
+
+		AddSelectedModelPredicate(criteriaBuilder, queryFilter, root, model, predicateList);
+		AddSelectedMarkPredicate(criteriaBuilder, queryFilter, root, model, mark, predicateList);
+		AddSelectedPricePredicate(criteriaBuilder, queryFilter, root, predicateList);
+		AddSelectedBodyTypesPredicate(criteriaBuilder, queryFilter, root, model, mark, carBodyType, predicateList);
+
+		return predicateList.toArray(new Predicate[0]);
+	}
 
 	private <T> void AddPaging(TypedQuery<T> query, Paging paging) {
 		int startIndex = (paging.getPageNumber() - 1) * paging.getPageSize();
