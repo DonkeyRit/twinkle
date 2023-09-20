@@ -1,93 +1,68 @@
 package com.github.donkeyrit.twinkle.panels.nestedpanels;
 
-import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import java.awt.FlowLayout;
-import java.awt.Component;
+import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
+import java.util.stream.IntStream;
+import javax.swing.*;
+import java.awt.*;
 
 public class PageNavigatorPanel extends JPanel {
-	private int choosenPage;
-	private int maxItems;
-	private int itemsPerPage;
 
-	public PageNavigatorPanel(int choosenPage, int itemsPerPage, int maxItems) {
-		this.choosenPage = choosenPage;
-		this.maxItems = maxItems;
-		this.itemsPerPage = itemsPerPage;
+    private int chosenPage;
+    private int maxPages;
 
-		setLayout(new FlowLayout(FlowLayout.LEFT));
-		setupPanel();
-	}
+    private Color bgColor = new Color(18, 18, 18);
+    private Color fgColor = Color.WHITE;
+    private Color activeColor = new Color(255, 80, 0);
 
-	private void setupPanel() {
-		int totalPages = (int) Math.ceil((double) maxItems / itemsPerPage);
+	private NavigationPanelEventsListener navigationPanelEventsListener;
 
-		for (int i = 1; i <= totalPages; i++) {
-			JButton pageButton = new JButton(String.valueOf(i));
-			if (i == choosenPage) {
-				pageButton.setEnabled(false);
-			} else {
-				// pageButton.addActionListener(new ActionListener() {
-				// 	@Override
-				// 	public void actionPerformed(ActionEvent e) {
-				// 		choosenPage = Integer.parseInt(e.getActionCommand());
-				// 		refreshButtons();
-				// 	}
-				// });
-			}
+    public PageNavigatorPanel(
+		NavigationPanelEventsListener navigationPanelEventsListener, 
+		int chosenPage, 
+		int itemsPerPage, 
+		long maxItems
+	) {
+		this.navigationPanelEventsListener = navigationPanelEventsListener;
+        this.chosenPage = chosenPage;
+        this.maxPages = (int) Math.ceil((double) maxItems / itemsPerPage);
 
-			add(pageButton);
-		}
-	}
+        initializeComponents();
+    }
 
-	private void refreshButtons() {
-		Component[] components = getComponents();
-		for (Component c : components) {
-			if (c instanceof JButton) {
-				JButton button = (JButton) c;
-				int pageNumber = Integer.parseInt(button.getText());
-				button.setEnabled(pageNumber != choosenPage);
-			}
-		}
-	}
+    private void initializeComponents() {
+        this.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.setBackground(bgColor);
 
-	private void showPageNumbers(Paging paging) {
-		// TODO: Move to separate panel
+        JButton prevButton = createNavButton("<<");
+        prevButton.addActionListener(e -> navigationPanelEventsListener.onNextContentPageRequest(false));
 
-		// int currentPageNumber = paging.getPageNumber();
-		// int firstPageNumber = ((int) (currentPageNumber / 5)) * 5 + 1;
-		// int endPageNumber = firstPageNumber + 4;
+        JButton nextButton = createNavButton(">>");
+        nextButton.addActionListener(e -> navigationPanelEventsListener.onNextContentPageRequest(true));
 
-		// Box buttonBox = Box.createHorizontalBox();
-		// buttonBox.setBounds(205, 520, 400, 30);
+        this.add(prevButton);
 
-		// if (firstPageNumber >= 5) {
-		// 	JButton backBut = new JButton(
-		// 			AssetsRetriever.retrieveAssetImageIconFromResources("assets/buttons/back.png"));
-		// 	backBut.addActionListener(e -> contentEventsListener.onNextContentPageRequest());
+        // Calculate start and end for pagination links, to handle cases where maxPages is too large
+        int startPage = Math.max(1, chosenPage - 5);
+        int endPage = Math.min(maxPages, chosenPage + 5);
 
-		// 	buttonBox.add(backBut);
-		// }
+        IntStream.range(startPage, endPage + 1).forEach(pageNum -> {
+            JButton pageButton = createNavButton(Integer.toString(pageNum));
+            if (pageNum == chosenPage) {
+                pageButton.setForeground(activeColor);
+                pageButton.setFont(pageButton.getFont().deriveFont(Font.BOLD));
+            }
+            pageButton.addActionListener(e -> navigationPanelEventsListener.onNextContentPageRequest(pageNum));
+            this.add(pageButton);
+        });
 
-		// Font buttonFont = new Font("Arial", Font.ITALIC, 10);
-		// ArrayList<JButton> buttonsList = new ArrayList<JButton>();
-		// for (int i = firstPageNumber; i < endPageNumber; i++) {
-		// 	JButton temp = new JButton(i + "");
+        this.add(nextButton);
+    }
 
-		// 	temp.setFont(buttonFont);
-		// 	temp.addActionListener(e -> {
-		// 		JButton pressButton = (JButton) e.getSource();
-		// 		int pageNumber = Integer.parseInt(pressButton.getText());
-		// 		contentEventsListener.onNextContentPageRequest(pageNumber);
-		// 	});
-
-		// 	buttonBox.add(temp);
-		// 	buttonsList.add(temp);
-		// }
-
-		// add(buttonBox);
-	}
-
+    private JButton createNavButton(String text) {
+        JButton button = new JButton(text);
+        button.setBackground(bgColor);
+        button.setForeground(fgColor);
+        button.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        return button;
+    }
 }

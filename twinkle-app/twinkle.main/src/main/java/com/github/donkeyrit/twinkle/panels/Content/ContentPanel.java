@@ -1,8 +1,10 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
+import com.github.donkeyrit.twinkle.bll.models.PagedResultBll;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
 import com.github.donkeyrit.twinkle.panels.nestedpanels.PageNavigatorPanel;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
@@ -23,7 +25,6 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
-import java.util.List;
 
 public class ContentPanel extends JPanel {
 	private final CarQueryFilter filter;
@@ -73,15 +74,20 @@ public class ContentPanel extends JPanel {
 		JPanel carsContainer = new JPanel();
         carsContainer.setLayout(new BoxLayout(carsContainer, BoxLayout.Y_AXIS));
         
-		List<Car> filteredCars = this.carService.getList(filter);
-		for (Car car : filteredCars) {
+		PagedResultBll<Car> filteredCars = this.carService.getPagedResult(filter);
+		for (Car car : filteredCars.getResult()) {
 			CarPanel panel = this.contentEventsListener.onCarPanelCreateRequest(car);
             panel.setBorder(new LineBorder(new Color(0, 163, 163), 4));
             carsContainer.add(panel);
 		}
 		add(carsContainer, BorderLayout.CENTER);
 
-		PageNavigatorPanel panel = new PageNavigatorPanel(1, 4, 20);
+		Paging paging = filter.getPaging().orElse(new Paging(1, 4));;
+		PageNavigatorPanel panel = new PageNavigatorPanel(
+			contentEventsListener, 
+			paging.getPageNumber(), 
+			paging.getPageSize(), 
+			filteredCars.getTotalCount());
 		panel.setBounds(205, 520, 400, 30);
 		add(panel, BorderLayout.SOUTH);
 	}

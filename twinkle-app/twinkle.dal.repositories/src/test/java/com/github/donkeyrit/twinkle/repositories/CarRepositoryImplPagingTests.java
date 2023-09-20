@@ -5,6 +5,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
+import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.Country;
@@ -19,6 +20,8 @@ import org.hibernate.cfg.Configuration;
 import org.assertj.core.api.Assertions;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +40,7 @@ public class CarRepositoryImplPagingTests extends Assertions {
 	}
 
 	@Test
-	public void retrieveSecondPage_getList() {
+	public void retrieveSecondPage_getPagedResult() {
 		// Arrange
 		CarQueryFilter carQueryFilter = new CarQueryFilter();
 		Paging paging = new Paging(2, 5);
@@ -62,9 +65,10 @@ public class CarRepositoryImplPagingTests extends Assertions {
 				DaoFixture.createCar(10, DateFixture.getDate(2020, 0, 01), civicCarModel, "Honda Civic 2020", 10, 25000));
 
 		// Act
-		List<Car> cars = carRepository.getList(carQueryFilter).toList();
+		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
 
 		// Assert
-		assertThat(cars).hasSameElementsAs(expectedResult);
+		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);
+		assertEquals(cars.getTotalCount(), 100);
 	}
 }

@@ -6,10 +6,12 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarReposi
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.bll.models.PagedResultBll;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,8 +70,9 @@ public class DefaultCarService implements CarService {
 	}
 
 	@Override
-	public List<Car> getList(CarQueryFilter filter) {
-		return this.carRepository.getList(filter).toList();
+	public PagedResultBll<Car> getPagedResult(CarQueryFilter filter) {
+		PagedResultDal<Car> dal = this.carRepository.getPagedResult(filter);
+		return new PagedResultBll<>(dal.getResult().toList(), dal.getTotalCount());
 	}
 
 	@Override

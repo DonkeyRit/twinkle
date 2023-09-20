@@ -1,6 +1,7 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
+import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 
 import com.google.inject.Singleton;
@@ -8,6 +9,7 @@ import com.google.inject.Inject;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.util.Optional;
 
 @Singleton
 public class ContentCompositePanel extends JPanel
@@ -26,7 +28,7 @@ public class ContentCompositePanel extends JPanel
         setLayout(null); 
 		setNavigationPanel(navigationPanel);
 		setSidebarPanel(sideBarFilterPanel);
-		setContentPanel(contentPanelFactory.create(new CarQueryFilter()));
+		setContentPanel(contentPanelFactory.create(new CarQueryFilter(new Paging(1, 4))));
     }
 
 	public ContentCompositePanel setNavigationPanel(JPanel navigationPanel)
@@ -73,5 +75,9 @@ public class ContentCompositePanel extends JPanel
 		this.revalidate();
 		this.repaint();
 		return this;
+	}
+
+	public Optional<JPanel> getContentPanel(){
+		return Optional.of(this.contentPanel);
 	}
 }
