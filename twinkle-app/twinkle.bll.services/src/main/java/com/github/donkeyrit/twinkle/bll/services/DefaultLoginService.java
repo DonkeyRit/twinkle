@@ -42,7 +42,7 @@ public class DefaultLoginService implements LoginService{
             return AuthenticationResult.error("Passwords do not match.");
         }
 
-        if(!userRepository.isUserExist(username))
+        if(userRepository.isUserExist(username))
         {
             return AuthenticationResult.error("Login already exist");
         }

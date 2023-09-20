@@ -1,5 +1,7 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
+import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
 
@@ -10,14 +12,12 @@ import jakarta.persistence.TypedQuery;
 import com.google.inject.Inject;
 import java.util.Optional;
 
-public class UserRepositoryImpl implements UserRepository
+public class UserRepositoryImpl extends BaseCrudRepository<User, QueryFilter> implements UserRepository
 {
-    private EntityManager session;
-    
 	@Inject
     public UserRepositoryImpl(EntityManager session) 
 	{
-        this.session = session;
+        super(session);
     }
 
     @Override
@@ -51,14 +51,6 @@ public class UserRepositoryImpl implements UserRepository
         {
             return false;
         }
-    }
-
-    @Override
-    public void insert(User user) 
-    {
-        session.getTransaction().begin();
-        session.persist(user);
-        session.getTransaction().commit();
     }
 
 	@Override
