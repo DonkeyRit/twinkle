@@ -1,8 +1,7 @@
-package com.github.donkeyrit.twinkle.bll;
+package com.github.donkeyrit.twinkle.auth.services;
 
-import com.github.donkeyrit.twinkle.bll.models.AuthenticationResult;
-import com.github.donkeyrit.twinkle.bll.security.HashManager;
-import com.github.donkeyrit.twinkle.bll.services.DefaultLoginService;
+import com.github.donkeyrit.twinkle.auth.models.AuthenticationResult;
+import com.github.donkeyrit.twinkle.auth.security.HashManager;
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;

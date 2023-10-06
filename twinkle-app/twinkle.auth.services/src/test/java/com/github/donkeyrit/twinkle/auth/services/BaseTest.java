@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle.bll;
+package com.github.donkeyrit.twinkle.auth.services;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

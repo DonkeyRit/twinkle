@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle.bll;
+package com.github.donkeyrit.twinkle.auth.services;
 
 import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.javafaker.Faker;

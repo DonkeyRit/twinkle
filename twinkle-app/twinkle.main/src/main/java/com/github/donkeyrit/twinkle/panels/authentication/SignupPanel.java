@@ -1,9 +1,9 @@
 package com.github.donkeyrit.twinkle.panels.authentication;
 
 import com.github.donkeyrit.twinkle.events.contracts.LoginEventsListener;
-import com.github.donkeyrit.twinkle.bll.models.AuthenticationResult;
+import com.github.donkeyrit.twinkle.auth.models.AuthenticationResult;
+import com.github.donkeyrit.twinkle.auth.services.interfaces.LoginService;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
-import com.github.donkeyrit.twinkle.bll.services.interfaces.LoginService;
 import com.github.donkeyrit.twinkle.controls.input.JCustomPasswordField;
 import com.github.donkeyrit.twinkle.controls.buttons.JConfirmationButton;
 import com.github.donkeyrit.twinkle.controls.buttons.JLinkButton;

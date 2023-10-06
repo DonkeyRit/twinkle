@@ -14,4 +14,38 @@
     <groupId>com.github.donkeyrit.twinkle</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.donkeyrit.twinkle</groupId>
+      <artifactId>dal.repositories</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+    </dependency>
+    <!-- Unit-tests-->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Unit-tests-->
+  </dependencies>
 </project>
