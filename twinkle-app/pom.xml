@@ -10,6 +10,7 @@
   <name>root</name>
 
   <modules>
+    <module>twinkle.auth.services</module>
     <module>twinkle.dal.repositories</module>
     <module>twinkle.bll.services</module>
     <module>twinkle.main</module>
