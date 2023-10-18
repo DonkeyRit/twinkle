@@ -1,4 +1,4 @@
-package com.github.donkeyrit.twinkle.bll.models;
+package com.github.donkeyrit.twinkle.auth.models;
 
 import com.github.donkeyrit.twinkle.dal.models.User;
 import java.util.Optional;

@@ -4,6 +4,7 @@ import com.github.donkeyrit.twinkle.panels.authentication.LoginPanel;
 import com.github.donkeyrit.twinkle.panels.common.SwitchedPanel;
 import com.github.donkeyrit.twinkle.panels.ioc.SwingUiModules;
 import com.github.donkeyrit.twinkle.dal.ioc.PersistanceModules;
+import com.github.donkeyrit.twinkle.auth.ioc.AuthenticationModules;
 import com.github.donkeyrit.twinkle.bll.ioc.ServicesModules;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
@@ -31,7 +32,8 @@ public class EntryPoint
 		Injector injector = Guice.createInjector(
 			new SwingUiModules(),
 			new ServicesModules(),
-			new PersistanceModules()
+			new PersistanceModules(),
+			new AuthenticationModules()
 		);
 
 		Logger logger = LoggerFactory.getLogger(EntryPoint.class);
