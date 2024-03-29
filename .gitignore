@@ -133,3 +133,8 @@ buildNumber.properties
 # Ignore all local history of files
 .history
 .DS_Store
+
+
+### JOOQ Generated Code ###
+# Ignore generated code
+generated
