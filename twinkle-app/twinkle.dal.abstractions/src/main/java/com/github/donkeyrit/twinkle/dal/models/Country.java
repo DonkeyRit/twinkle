@@ -2,18 +2,18 @@ package com.github.donkeyrit.twinkle.dal.models;
 
 import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 
-public class CarBodyType implements Identifiable {
+public class Country implements Identifiable {
 
     private Long id;
-    private String type;
+    private String countryName;
 
     // Constructors
-    public CarBodyType() {
+    public Country() {
     }
 
-    public CarBodyType(Long id, String type) {
+    public Country(Long id, String countryName) {
         this.id = id;
-        this.type = type;
+        this.countryName = countryName;
     }
 
     // Getters and Setters
@@ -25,11 +25,11 @@ public class CarBodyType implements Identifiable {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 }

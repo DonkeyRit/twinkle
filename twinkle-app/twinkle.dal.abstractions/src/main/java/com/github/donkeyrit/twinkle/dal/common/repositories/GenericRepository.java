@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.dal.common.repositories;
 
-import com.github.donkeyrit.twinkle.dal.common.Identifiable;
+import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 import java.util.stream.Stream;
 
 public interface GenericRepository<T extends Identifiable> 
