@@ -23,7 +23,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityManager;
 import org.hibernate.cfg.Configuration;
 
-public class PersistanceModules extends AbstractModule {
+public class HibernatePersistanceModules extends AbstractModule {
 
 	private static final ThreadLocal<EntityManager> ENTITY_MANAGER_CACHE = new ThreadLocal<EntityManager>();
 

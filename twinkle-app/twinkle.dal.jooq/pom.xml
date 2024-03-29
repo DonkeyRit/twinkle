@@ -5,9 +5,9 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>dal.hibernate.jooq</artifactId>
+  <artifactId>dal.jooq</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>dal.hibernate.jooq</name>
+  <name>dal.jooq</name>
 
   <properties>
     <jooq.configuration.path>src/main/resources/jooq.configuration.xml</jooq.configuration.path>
@@ -30,6 +30,10 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
     </dependency>
   </dependencies>
 
