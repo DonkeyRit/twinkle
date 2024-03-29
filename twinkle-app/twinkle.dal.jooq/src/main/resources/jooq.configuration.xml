@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.11.0.xsd">
+    <jdbc>
+        <driver>org.postgresql.Driver</driver>
+        <url>${database.url}</url>
+        <user>${database.user}</user>
+        <password>${database.password}</password>
+    </jdbc>
+    <generator>
+        <database>
+            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+            <includes>.*</includes>
+            <excludes></excludes>
+            <inputSchema>public</inputSchema>
+        </database>
+        <target>
+            <packageName>com.github.donkeyrit.twinkle.dal.jooq.generated</packageName>
+            <directory>src/main/java</directory>
+        </target>
+    </generator>
+</configuration>
