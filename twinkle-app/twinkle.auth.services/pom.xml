@@ -18,7 +18,7 @@
   <dependencies>
     <dependency>
       <groupId>com.github.donkeyrit.twinkle</groupId>
-      <artifactId>dal.repositories</artifactId>
+      <artifactId>dal.hibernate</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>

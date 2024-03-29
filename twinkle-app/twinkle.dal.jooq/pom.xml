@@ -5,9 +5,9 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>dal.repositories.jooq</artifactId>
+  <artifactId>dal.hibernate.jooq</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>dal.repositories.jooq</name>
+  <name>dal.hibernate.jooq</name>
 
   <properties>
     <jooq.configuration.path>src/main/resources/jooq.configuration.xml</jooq.configuration.path>

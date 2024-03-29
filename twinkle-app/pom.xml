@@ -12,7 +12,8 @@
   <modules>
     <module>twinkle.auth.services</module>
     <module>twinkle.dal.jooq</module>
-    <module>twinkle.dal.repositories</module>
+    <module>twinkle.dal.abstractions</module>
+    <module>twinkle.dal.hibernate</module>
     <module>twinkle.bll.services</module>
     <module>twinkle.main</module>
   </modules>
