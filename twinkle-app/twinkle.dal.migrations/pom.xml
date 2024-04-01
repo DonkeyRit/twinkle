@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>dal.migrations</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>dal.migrations</name>
+
+  <!-- mvn clean flyway:info
+  -Ddatabase.url=jdbc:postgresql://127.0.0.1:5433/integration_tests_carrental
+  -Ddatabase.user=twinkle_test_user -Ddatabase.password=Sr412Tqew! -X -->
+
+  <properties>
+    <database.tests.url>jdbc:postgresql://127.0.0.1:5433/carrenttests</database.tests.url>
+    <database.tests.user>localtestuser</database.tests.user>
+    <database.tests.password>localtestpassword</database.tests.password>
+  </properties>
+
+  <parent>
+    <artifactId>root</artifactId>
+    <groupId>com.github.donkeyrit.twinkle</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-maven-plugin</artifactId>
+
+        <executions>
+          <!-- Execution for the main database -->
+          <execution>
+            <id>flyway-migrate-main</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>migrate</goal>
+            </goals>
+            <configuration>
+              <url>${database.url}</url>
+              <user>${database.user}</user>
+              <password>${database.password}</password>
+              <schemas>
+                <schema>public</schema>
+              </schemas>
+              <cleanDisabled>false</cleanDisabled>
+              <locations>
+                <location>filesystem:src/main/resources/db/migrations/common</location>
+                <location>filesystem:src/main/resources/db/migrations/main</location>
+              </locations>
+            </configuration>
+          </execution>
+          <!-- Execution for the test database -->
+          <execution>
+            <id>flyway-migrate-test</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>migrate</goal>
+            </goals>
+            <configuration>
+              <url>${database.tests.url}</url>
+              <user>${database.tests.user}</user>
+              <password>${database.tests.password}</password>
+              <schemas>
+                <schema>public</schema>
+              </schemas>
+              <cleanDisabled>false</cleanDisabled>
+              <locations>
+                <location>filesystem:src/main/resources/db/migrations/common</location>
+                <location>filesystem:src/main/resources/db/migrations/tests</location>
+              </locations>
+            </configuration>
+          </execution>
+        </executions>
+
+        <dependencies>
+          <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+</project>

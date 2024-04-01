@@ -9,11 +9,15 @@
   <packaging>pom</packaging>
   <name>root</name>
 
+  <!-- mvn clean install -Ddatabase.url=jdbc:postgresql://127.0.0.1:5432/carrent -Ddatabase.user=localuser -Ddatabase.password=localpassword
+ -->
+
   <modules>
     <module>twinkle.auth.services</module>
-    <module>twinkle.dal.jooq</module>
+    <module>twinkle.dal.migrations</module>
     <module>twinkle.dal.abstractions</module>
     <module>twinkle.dal.hibernate</module>
+    <module>twinkle.dal.jooq</module>
     <module>twinkle.bll.services</module>
     <module>twinkle.main</module>
   </modules>
@@ -25,6 +29,9 @@
     <maven.compiler.target>19</maven.compiler.target>
     <!-- Dependencies Versions-->
     <jooq.version>3.19.6</jooq.version>
+    <flyway.version>9.20.0</flyway.version>
+    <postgresql.version>42.7.2</postgresql.version>
+    <hibernate.version>6.1.7.Final</hibernate.version>
   </properties>
 
   <dependencyManagement>
@@ -58,7 +65,7 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
-        <version>6.1.7.Final</version>
+        <version>${hibernate.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jooq</groupId>
@@ -68,7 +75,7 @@
       <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
-        <version>42.7.2</version>
+        <version>${postgresql.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.inject</groupId>
@@ -120,7 +127,12 @@
           <groupId>org.jooq</groupId>
           <artifactId>jooq-codegen-maven</artifactId>
           <version>${jooq.version}</version>
-      </plugin>
+        </plugin>
+        <plugin>
+          <groupId>org.flywaydb</groupId>
+          <artifactId>flyway-maven-plugin</artifactId>
+          <version>${flyway.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
