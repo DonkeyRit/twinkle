@@ -1,0 +1,9 @@
+ALTER TABLE "clients" ADD CONSTRAint Client_fk0 FOREIGN KEY (id_user) REFERENCES "users"(id_user);
+ALTER TABLE "car" ADD CONSTRAint Car_fk0 FOREIGN KEY (id_model) REFERENCES "model"(id_model);
+ALTER TABLE "model" ADD CONSTRAint Model_fk0 FOREIGN KEY (id_mark) REFERENCES "mark"(id_mark);
+ALTER TABLE "model" ADD CONSTRAint Model_fk1 FOREIGN KEY (id_body_type) REFERENCES "body_type"(id_body_type);
+ALTER TABLE "mark" ADD CONSTRAint Mark_fk0 FOREIGN KEY (id_country) REFERENCES "country"(id_country);
+ALTER TABLE "rent" ADD CONSTRAint Rent_fk0 FOREIGN KEY (id_client) REFERENCES "clients"(id_client);
+ALTER TABLE "rent" ADD CONSTRAint Rent_fk1 FOREIGN KEY (id_car) REFERENCES "car"(id);
+ALTER TABLE "resulting_injury" ADD CONSTRAint ResultingInjury_fk0 FOREIGN KEY (id_rent) REFERENCES "rent"(id_rent);
+ALTER TABLE "resulting_injury" ADD CONSTRAint ResultingInjury_fk1 FOREIGN KEY (id_injury) REFERENCES "injury"(id_injury);
