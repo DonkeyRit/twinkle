@@ -2,7 +2,7 @@ package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
-import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.Car1;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -19,7 +19,7 @@ public class CarPanel extends JPanel
 	private int imagesNum;
 
 	@Inject
-	public CarPanel(CarService carService, @Assisted Car car) 
+	public CarPanel(CarService carService, @Assisted Car1 car) 
 	{
 		setLayout(null);
 

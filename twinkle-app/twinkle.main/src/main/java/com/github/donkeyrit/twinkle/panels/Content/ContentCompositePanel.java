@@ -1,9 +1,8 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
-import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
-import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
-
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
+import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import com.google.inject.Singleton;
 import com.google.inject.Inject;
 
@@ -28,7 +27,7 @@ public class ContentCompositePanel extends JPanel
         setLayout(null); 
 		setNavigationPanel(navigationPanel);
 		setSidebarPanel(sideBarFilterPanel);
-		setContentPanel(contentPanelFactory.create(new CarQueryFilter(new Paging(1, 4))));
+		setContentPanel(contentPanelFactory.create(new CarQuerySpecification(new Paging(1, 4))));
     }
 
 	public ContentCompositePanel setNavigationPanel(JPanel navigationPanel)

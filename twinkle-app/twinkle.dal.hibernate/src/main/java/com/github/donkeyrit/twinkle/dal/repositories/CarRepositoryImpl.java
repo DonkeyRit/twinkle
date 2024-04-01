@@ -8,7 +8,7 @@ import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
-import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.Car1;
 
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
 
-public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> implements CarRepository {
+public class CarRepositoryImpl extends BaseCrudRepository<Car1, CarQueryFilter> implements CarRepository {
 
 	@Inject
 	public CarRepositoryImpl(EntityManager session) {
@@ -32,28 +32,28 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 	}
 
 	// TODO: Move this method to BaseCrudRepository
-	public PagedResultDal<Car> getPagedResult(CarQueryFilter queryFilter) {
+	public PagedResultDal<Car1> getPagedResult(CarQueryFilter queryFilter) {
 
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 		
-		CriteriaQuery<Car> query = criteriaBuilder.createQuery(Car.class);
-		Root<Car> root = query.from(Car.class);
+		CriteriaQuery<Car1> query = criteriaBuilder.createQuery(Car1.class);
+		Root<Car1> root = query.from(Car1.class);
 		Predicate[] predicates = applyFilters(criteriaBuilder, queryFilter, root, criteriaBuilder);
 		query.select(root).where(predicates);
 
-		TypedQuery<Car> typedQuery = session.createQuery(query);
+		TypedQuery<Car1> typedQuery = session.createQuery(query);
 		Optional<Paging> paging = queryFilter.getPaging();
 		paging.ifPresent(p -> AddPaging(typedQuery, p));
 
 		// #region Total count
 
 		CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-		Root<Car> countRoot = countQuery.from(Car.class);
+		Root<Car1> countRoot = countQuery.from(Car1.class);
 		Predicate[] countPredicates = applyFilters(criteriaBuilder, queryFilter, countRoot, criteriaBuilder);
 		countQuery.select(criteriaBuilder.count(countRoot)).where(countPredicates);
 
 		// #endregion
-		return new PagedResultDal<Car>(typedQuery.getResultStream(), getTotalCount(countQuery));
+		return new PagedResultDal<Car1>(typedQuery.getResultStream(), getTotalCount(countQuery));
 	}
 
 	// #region Create predicates
@@ -61,8 +61,8 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 	private void AddSelectedModelPredicate(
 		CriteriaBuilder criteriaBuilder, 
 		CarQueryFilter queryFilter, 
-		Root<Car> root,
-		Join<Car, ModelOfCar> model, 
+		Root<Car1> root,
+		Join<Car1, ModelOfCar> model, 
 		List<Predicate> predicates
 	) {
 
@@ -79,8 +79,8 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 	private void AddSelectedMarkPredicate(
 		CriteriaBuilder criteriaBuilder, 
 		CarQueryFilter queryFilter, 
-		Root<Car> root,
-		Join<Car, ModelOfCar> model, 
+		Root<Car1> root,
+		Join<Car1, ModelOfCar> model, 
 		Join<ModelOfCar, MarkOfCar> mark, 
 		List<Predicate> predicates
 	) {
@@ -100,7 +100,7 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 	private void AddSelectedPricePredicate(
 		CriteriaBuilder criteriaBuilder, 
 		CarQueryFilter queryFilter, 
-		Root<Car> root,
+		Root<Car1> root,
 		List<Predicate> predicates
 	) {
 		if (queryFilter.getSelectedPrice().isPresent()) {
@@ -114,8 +114,8 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 	private void AddSelectedBodyTypesPredicate(
 		CriteriaBuilder criteriaBuilder, 
 		CarQueryFilter queryFilter,
-		Root<Car> root, 
-		Join<Car, ModelOfCar> model, 
+		Root<Car1> root, 
+		Join<Car1, ModelOfCar> model, 
 		Join<ModelOfCar, MarkOfCar> mark,
 		Join<CarBodyType, ModelOfCar> carBodyType,
 		List<Predicate> predicates
@@ -139,12 +139,12 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 	private Predicate[] applyFilters(
 		CriteriaBuilder criteriaBuilder, 
 		CarQueryFilter queryFilter, 
-		Root<Car> root, 
+		Root<Car1> root, 
 		CriteriaBuilder cb
 	) {
 		List<Predicate> predicateList = new ArrayList<>(4);
 
-		Join<Car, ModelOfCar> model = null;
+		Join<Car1, ModelOfCar> model = null;
 		Join<ModelOfCar, MarkOfCar> mark = null;
 		Join<CarBodyType, ModelOfCar> carBodyType = null;
 
@@ -171,7 +171,7 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car, CarQueryFilter> i
 	public int getMaxPrice() {
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 		CriteriaQuery<Double> criteriaQuery = criteriaBuilder.createQuery(Double.class);
-		Root<Car> carRoot = criteriaQuery.from(Car.class);
+		Root<Car1> carRoot = criteriaQuery.from(Car1.class);
 
 		criteriaQuery.select(criteriaBuilder.max(carRoot.get("cost")));
 

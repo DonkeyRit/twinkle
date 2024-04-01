@@ -1,8 +1,8 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
-import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
-import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
+import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.controls.MarkComboBoxModel;
@@ -89,7 +89,7 @@ public class SideBarFilterPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				CarQueryFilter filter = new CarQueryFilter();
+				CarQuerySpecification filter = new CarQuerySpecification();
 				filter.setSelectedMark(markComboBox.getItemAt(markComboBox.getSelectedIndex()));
 				filter.setSelectedModel(modelComboBox.getItemAt(modelComboBox.getSelectedIndex()));
 				filter.setSelectedPrice(price.getValue());

@@ -8,7 +8,7 @@ import com.github.donkeyrit.twinkle.dal.models.Country;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
-import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.Car1;
 import com.github.donkeyrit.twinkle.utils.DaoFixture;
 import com.github.donkeyrit.twinkle.utils.DateFixture;
 
@@ -47,14 +47,14 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 				DaoFixture.createMarkOfCar(1, "Toyota", DaoFixture.createCountry(1, "Japan")),
 				DaoFixture.createCarBodyType(1, "Sedan"));
 
-		List<Car> expectedResult = Arrays.asList(
+		List<Car1> expectedResult = Arrays.asList(
 				DaoFixture.createCar(1, DateFixture.getDate(2020, 0, 01), modelOfCar, "Toyota Camry 2020", 1, 25000),
 				DaoFixture.createCar(2, DateFixture.getDate(2021, 0, 01), modelOfCar, "Toyota Camry 2021", 2, 26000),
 				DaoFixture.createCar(3, DateFixture.getDate(2022, 0, 01), modelOfCar, "Toyota Camry 2022", 3, 27000));
 
 		// Act
-		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
-		List<Car> actualResult = cars.getResult().toList();
+		PagedResultDal<Car1> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car1> actualResult = cars.getResult().toList();
 
 		// Assert
 		assertThat(actualResult).hasSameElementsAs(expectedResult);
@@ -73,7 +73,7 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 		ModelOfCar accordCarModel = DaoFixture.createModelOfCar(3, "Accord", hondaMark, sedanBodyType);
 		ModelOfCar civicCarModel = DaoFixture.createModelOfCar(4, "Civic", hondaMark, sedanBodyType);
 
-		List<Car> expectedResult = Arrays.asList(
+		List<Car1> expectedResult = Arrays.asList(
 				DaoFixture.createCar(7, DateFixture.getDate(2020, 0, 01), accordCarModel, "Honda Accord 2020", 7,28000),
 				DaoFixture.createCar(8, DateFixture.getDate(2021, 0, 01), accordCarModel, "Honda Accord 2021", 8,29000),
 				DaoFixture.createCar(9, DateFixture.getDate(2022, 0, 01), accordCarModel, "Honda Accord 2022", 9,30000),
@@ -82,8 +82,8 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 				DaoFixture.createCar(12, DateFixture.getDate(2022, 0, 01), civicCarModel, "Honda Civic 2022", 12,27000));
 
 		// Act
-		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
-		List<Car> actualResult = cars.getResult().toList();
+		PagedResultDal<Car1> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car1> actualResult = cars.getResult().toList();
 
 		// Assert
 		assertThat(actualResult).hasSameElementsAs(expectedResult);
@@ -104,13 +104,13 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 		ModelOfCar corollaCarModel = DaoFixture.createModelOfCar(2, "Corolla", toyotaMark, sedanBodyType);
 		ModelOfCar civicCarModel = DaoFixture.createModelOfCar(32, "Optima", kiaMark, sedanBodyType);
 
-		List<Car> expectedResult = Arrays.asList(
+		List<Car1> expectedResult = Arrays.asList(
 				DaoFixture.createCar(4, DateFixture.getDate(2020, 0, 01), corollaCarModel, "Toyota Corolla 2020", 4, selectedPrice),
 				DaoFixture.createCar(93, DateFixture.getDate(2020, 0, 01), civicCarModel, "Honda Civic 2020", 93, selectedPrice));
 
 		// Act
-		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
-		List<Car> actualResult = cars.getResult().toList();
+		PagedResultDal<Car1> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car1> actualResult = cars.getResult().toList();
 
 		// Assert
 		assertThat(actualResult).hasSameElementsAs(expectedResult);
@@ -132,7 +132,7 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 		ModelOfCar f150CarModel = DaoFixture.createModelOfCar(7, "F-150", fordMark, convertibleBodyType);
 		ModelOfCar silveradoCarModel = DaoFixture.createModelOfCar(10, "Silverado", chevroletMark, convertibleBodyType);
 
-		List<Car> expectedResult = Arrays.asList(
+		List<Car1> expectedResult = Arrays.asList(
 				DaoFixture.createCar(19, DateFixture.getDate(2020, 0, 01), f150CarModel, "Nissan Altima 2020", 19, 27000),
 				DaoFixture.createCar(20, DateFixture.getDate(2021, 0, 01), f150CarModel, "Nissan Altima 2021", 20, 28000),
 				DaoFixture.createCar(21, DateFixture.getDate(2022, 0, 01), f150CarModel, "Nissan Altima 2022", 21, 29000),
@@ -140,8 +140,8 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 				DaoFixture.createCar(29, DateFixture.getDate(2021, 0, 01), silveradoCarModel, "Mercedes-Benz C-Class 2021", 29, 39000),
 				DaoFixture.createCar(30, DateFixture.getDate(2022, 0, 01), silveradoCarModel, "Mercedes-Benz C-Class 2022", 30, 40000));
 		// Act
-		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
-		List<Car> actualResult = cars.getResult().toList();
+		PagedResultDal<Car1> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car1> actualResult = cars.getResult().toList();
 
 		// Assert
 		assertThat(actualResult).hasSameElementsAs(expectedResult);
@@ -162,12 +162,12 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 		carQueryFilter.setSelectedPrice(31000);
 		carQueryFilter.setSelectedBodyTypes(Arrays.asList(suvBodyType.getType()));
 
-		List<Car> expectedResult = Arrays.asList(
+		List<Car1> expectedResult = Arrays.asList(
 			DaoFixture.createCar(31, DateFixture.getDate(2020, 0, 01), eClassCarModel, "Acura TLX 2020", 31, 30000),
 				DaoFixture.createCar(32, DateFixture.getDate(2021, 0, 01), eClassCarModel, "Acura TLX 2021", 32, 31000));
 		// Act
-		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
-		List<Car> actualResult = cars.getResult().toList();
+		PagedResultDal<Car1> cars = carRepository.getPagedResult(carQueryFilter);
+		List<Car1> actualResult = cars.getResult().toList();
 
 		// Assert
 		assertThat(actualResult).hasSameElementsAs(expectedResult);

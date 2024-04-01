@@ -6,7 +6,7 @@ import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
-import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.Car1;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.Country;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
@@ -57,7 +57,7 @@ public class CarRepositoryImplPagingTests extends Assertions {
 		ModelOfCar accordCarModel = DaoFixture.createModelOfCar(3, "Accord", hondaMark, sedanBodyType);
 		ModelOfCar civicCarModel = DaoFixture.createModelOfCar(4, "Civic", hondaMark, sedanBodyType);
 
-		List<Car> expectedResult = Arrays.asList(
+		List<Car1> expectedResult = Arrays.asList(
 				DaoFixture.createCar(6, DateFixture.getDate(2022, 0, 01), corollaCarModel, "Toyota Corolla 2022", 6, 24000),
 				DaoFixture.createCar(7, DateFixture.getDate(2020, 0, 01), accordCarModel, "Honda Accord 2020", 7, 28000),
 				DaoFixture.createCar(8, DateFixture.getDate(2021, 0, 01), accordCarModel, "Honda Accord 2021", 8, 29000),
@@ -65,7 +65,7 @@ public class CarRepositoryImplPagingTests extends Assertions {
 				DaoFixture.createCar(10, DateFixture.getDate(2020, 0, 01), civicCarModel, "Honda Civic 2020", 10, 25000));
 
 		// Act
-		PagedResultDal<Car> cars = carRepository.getPagedResult(carQueryFilter);
+		PagedResultDal<Car1> cars = carRepository.getPagedResult(carQueryFilter);
 
 		// Assert
 		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);
