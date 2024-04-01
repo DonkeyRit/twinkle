@@ -13,6 +13,12 @@
   -Ddatabase.url=jdbc:postgresql://127.0.0.1:5433/integration_tests_carrental
   -Ddatabase.user=twinkle_test_user -Ddatabase.password=Sr412Tqew! -X -->
 
+  <properties>
+    <database.tests.url>jdbc:postgresql://127.0.0.1:5433/carrenttests</database.tests.url>
+    <database.tests.user>localtestuser</database.tests.user>
+    <database.tests.password>localtestpassword</database.tests.password>
+  </properties>
+
   <parent>
     <artifactId>root</artifactId>
     <groupId>com.github.donkeyrit.twinkle</groupId>
@@ -26,29 +32,49 @@
         <artifactId>flyway-maven-plugin</artifactId>
 
         <executions>
+          <!-- Execution for the main database -->
           <execution>
-            <id>flyway-migrate</id>
+            <id>flyway-migrate-main</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>migrate</goal>
             </goals>
+            <configuration>
+              <url>${database.url}</url>
+              <user>${database.user}</user>
+              <password>${database.password}</password>
+              <schemas>
+                <schema>public</schema>
+              </schemas>
+              <cleanDisabled>false</cleanDisabled>
+              <locations>
+                <location>filesystem:src/main/resources/db/migrations/common</location>
+                <location>filesystem:src/main/resources/db/migrations/main</location>
+              </locations>
+            </configuration>
+          </execution>
+          <!-- Execution for the test database -->
+          <execution>
+            <id>flyway-migrate-test</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>migrate</goal>
+            </goals>
+            <configuration>
+              <url>${database.tests.url}</url>
+              <user>${database.tests.user}</user>
+              <password>${database.tests.password}</password>
+              <schemas>
+                <schema>public</schema>
+              </schemas>
+              <cleanDisabled>false</cleanDisabled>
+              <locations>
+                <location>filesystem:src/main/resources/db/migrations/common</location>
+                <location>filesystem:src/main/resources/db/migrations/tests</location>
+              </locations>
+            </configuration>
           </execution>
         </executions>
-
-        <configuration>
-
-          <url>${database.url}</url>
-          <user>${database.user}</user>
-          <password>${database.password}</password>
-          <schemas>
-            <schema>public</schema>
-          </schemas>
-          <cleanDisabled>false</cleanDisabled>
-
-          <locations>
-            <location>filesystem:src/main/resources/db/migrations</location>
-          </locations>
-        </configuration>
 
         <dependencies>
           <dependency>
@@ -58,38 +84,6 @@
           </dependency>
         </dependencies>
       </plugin>
-      <!--<plugin>
-        <groupId>org.flywaydb</groupId>
-        <artifactId>flyway-maven-plugin</artifactId>
-        
-        <executions>
-          <execution>
-            <id>flyway-migrate</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>migrate</goal>
-            </goals>
-          </execution>
-        </executions>
-        
-        <configuration>
-    
-          <url>jdbc:postgresql://127.0.0.1:5433/integration_tests_carrental?ssl=false</url>
-          <user>twinkle_test_user</user>
-          <password>Sr412Tqew!</password>
-          <locations>
-              <location>filesystem:src/main/resources/db/migrations</location>
-          </locations>
-      </configuration>
-
-        <dependencies>
-          <dependency>
-              <groupId>org.postgresql</groupId>
-              <artifactId>postgresql</artifactId>
-              <version>42.7.2</version>
-          </dependency>
-      </dependencies>
-      </plugin>-->
     </plugins>
   </build>
 </project>

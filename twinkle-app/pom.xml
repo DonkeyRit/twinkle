@@ -9,6 +9,9 @@
   <packaging>pom</packaging>
   <name>root</name>
 
+  <!-- mvn clean install -Ddatabase.url=jdbc:postgresql://127.0.0.1:5432/carrent -Ddatabase.user=localuser -Ddatabase.password=localpassword
+ -->
+
   <modules>
     <module>twinkle.auth.services</module>
     <module>twinkle.dal.migrations</module>
