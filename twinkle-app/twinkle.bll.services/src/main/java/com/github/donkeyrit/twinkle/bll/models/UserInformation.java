@@ -19,7 +19,7 @@ public class UserInformation
 
 	public static void setUser(User user)
 	{
-		preferences.putInt(PREF_ID, user.getId());
+		preferences.putLong(PREF_ID, user.getId());
 		preferences.put(PREF_LOGIN, user.getLogin());
 		preferences.put(PREF_PASS, user.getPassword());
 		preferences.putBoolean(PREF_ROLE, user.isRole());

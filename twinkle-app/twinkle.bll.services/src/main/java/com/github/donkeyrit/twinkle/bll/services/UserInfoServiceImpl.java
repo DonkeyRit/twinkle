@@ -1,11 +1,12 @@
 package com.github.donkeyrit.twinkle.bll.services;
 
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ClientRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.UserInfoService;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
-import com.github.donkeyrit.twinkle.dal.models.Client;
 import com.github.donkeyrit.twinkle.bll.security.HashManager;
+
+import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.models.Client;
 
 import com.google.inject.Inject;
 import java.util.Optional;
@@ -77,7 +78,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			newClient.setAddress(addressText);
 			newClient.setPhoneNumber(phoneNumberText);
 
-			this.clientRepository.insert(newClient);
+			this.clientRepository.save(newClient);
 		}
 
 		return Optional.empty();
