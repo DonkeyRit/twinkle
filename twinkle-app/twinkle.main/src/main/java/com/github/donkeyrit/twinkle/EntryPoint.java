@@ -9,6 +9,7 @@ import com.github.donkeyrit.twinkle.auth.ioc.AuthenticationModules;
 import com.github.donkeyrit.twinkle.bll.ioc.ServicesModules;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
+import com.github.donkeyrit.twinkle.ioc.MainModules;
 import com.github.donkeyrit.twinkle.utils.Constants;
 
 import com.google.inject.Injector;
@@ -38,6 +39,7 @@ public class EntryPoint
 
 		// Services
 		Injector injector = Guice.createInjector(
+			new MainModules(),
 			new SwingUiModules(),
 			new ServicesModules(),
 			persistanceModule,
@@ -55,6 +57,9 @@ public class EntryPoint
         mainFrame.setVisible(true);
     }
 
+	/**
+	 * TODO: Duplicated logic
+	 */
 	public static Properties loadProperties(String filename) throws IOException {
         Properties properties = new Properties();
         try (InputStream input = EntryPoint.class.getClassLoader().getResourceAsStream(filename)) {
