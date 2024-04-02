@@ -1,10 +1,10 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
-import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 import com.github.donkeyrit.twinkle.bll.models.PagedResultBll;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
+import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import com.github.donkeyrit.twinkle.dal.models.Car;
-import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
 import com.github.donkeyrit.twinkle.panels.nestedpanels.PageNavigatorPanel;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
@@ -27,12 +27,12 @@ import java.awt.Color;
 import java.awt.Font;
 
 public class ContentPanel extends JPanel {
-	private final CarQueryFilter filter;
+	private final CarQuerySpecification filter;
 
 	private final NavigationPanelEventsListener contentEventsListener;
 	private final CarService carService;
 
-	public CarQueryFilter getFilter() {
+	public CarQuerySpecification getFilter() {
 		return filter;
 	}
 
@@ -40,7 +40,7 @@ public class ContentPanel extends JPanel {
 	public ContentPanel(
 		NavigationPanelEventsListener contentEventsListener, 
 		CarService carService, 
-		@Assisted CarQueryFilter filter
+		@Assisted CarQuerySpecification filter
 	) {
 		setLayout(new BorderLayout());
 

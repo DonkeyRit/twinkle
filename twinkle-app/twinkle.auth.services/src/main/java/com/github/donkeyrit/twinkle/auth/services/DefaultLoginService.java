@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.auth.services;
 
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.auth.services.interfaces.LoginService;
 import com.github.donkeyrit.twinkle.auth.models.AuthenticationResult;
 import com.github.donkeyrit.twinkle.auth.security.HashManager;
@@ -49,7 +49,7 @@ public class DefaultLoginService implements LoginService{
         
         String passwordHash = HashManager.generateHash(password);
         User user = new User(username, passwordHash, false); 
-        userRepository.insert(user);
+        userRepository.save(user);
 
 		return AuthenticationResult.fromResult(Optional.of(user));
 	}

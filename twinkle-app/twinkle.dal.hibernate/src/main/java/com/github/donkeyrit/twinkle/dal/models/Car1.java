@@ -15,7 +15,7 @@ import com.github.donkeyrit.twinkle.dal.interfaces.BaseDbModel;
 
 @Entity
 @Table(name = "car")
-public class Car extends BaseDbModel {
+public class Car1 extends BaseDbModel {
 	
 	// #region Fields
 
@@ -113,7 +113,7 @@ public class Car extends BaseDbModel {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Car other = (Car) obj;
+		Car1 other = (Car1) obj;
 		if (id != other.id)
 			return false;
 		// if (ModelYear == null) {

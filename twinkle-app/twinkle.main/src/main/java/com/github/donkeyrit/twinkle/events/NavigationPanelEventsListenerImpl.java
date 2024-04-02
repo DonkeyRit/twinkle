@@ -3,9 +3,9 @@ package com.github.donkeyrit.twinkle.events;
 import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
 import com.github.donkeyrit.twinkle.panels.ioc.factories.ContentPanelFactory;
 import com.github.donkeyrit.twinkle.panels.settings.AdminSideActionMenuPanel;
-import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
+import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import com.github.donkeyrit.twinkle.dal.models.Car;
-import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.panels.ioc.factories.CarPanelFactory;
 import com.github.donkeyrit.twinkle.panels.content.ContentCompositePanel;
 import com.github.donkeyrit.twinkle.panels.content.ContentPanel;
@@ -44,12 +44,12 @@ public class NavigationPanelEventsListenerImpl implements NavigationPanelEventsL
 
 	@Override
 	public void onHomePageRequest() {
-		ContentPanel contentPanel = this.contentPanelFactory.create(new CarQueryFilter(new Paging(1, 4)));
+		ContentPanel contentPanel = this.contentPanelFactory.create(new CarQuerySpecification(new Paging(1, 4)));
 		getContentCompositePanel().setContentPanel(contentPanel);
 	}
 
 	@Override
-	public void onContentPageRequest(CarQueryFilter queryFilter) {
+	public void onContentPageRequest(CarQuerySpecification queryFilter) {
 		ContentPanel contentPanel = this.contentPanelFactory.create(queryFilter);
 		getContentCompositePanel().setContentPanel(contentPanel);
 	}
@@ -60,7 +60,7 @@ public class NavigationPanelEventsListenerImpl implements NavigationPanelEventsL
 		if (contentPanelContainer.isPresent() && contentPanelContainer.get() instanceof ContentPanel) {
 
 			ContentPanel contentPanel = (ContentPanel) contentPanelContainer.get();
-			CarQueryFilter previousFilter = contentPanel.getFilter();
+			CarQuerySpecification previousFilter = contentPanel.getFilter();
 			Paging paging = previousFilter.getPaging().orElse(new Paging(1, 4));
 			previousFilter.setPaging(direction ? paging.next() : paging.previous());
 			ContentPanel newContentPanel = this.contentPanelFactory.create(previousFilter);
@@ -75,7 +75,7 @@ public class NavigationPanelEventsListenerImpl implements NavigationPanelEventsL
 		if (contentPanelContainer.isPresent() && contentPanelContainer.get() instanceof ContentPanel) {
 
 			ContentPanel contentPanel = (ContentPanel) contentPanelContainer.get();
-			CarQueryFilter previousFilter = contentPanel.getFilter();
+			CarQuerySpecification previousFilter = contentPanel.getFilter();
 			Paging paging = previousFilter.getPaging().orElse(new Paging(1, 4));
 			previousFilter.setPaging(new Paging(pageNumber, paging.getPageSize()));
 			ContentPanel newContentPanel = this.contentPanelFactory.create(previousFilter);

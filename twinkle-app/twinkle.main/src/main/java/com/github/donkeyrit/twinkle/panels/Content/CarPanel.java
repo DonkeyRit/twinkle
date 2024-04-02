@@ -16,14 +16,14 @@ public class CarPanel extends JPanel
 {	
 	private String nameCountry;
 	private String status;
-	private int imagesNum;
+	private long imagesNum;
 
 	@Inject
 	public CarPanel(CarService carService, @Assisted Car car) 
 	{
 		setLayout(null);
 
-		int carId = car.getId();
+		long carId = car.getId();
 		this.imagesNum = carId;
 		this.nameCountry = car.getModelOfCar().getMark().getCountry().getCountryName();
 		this.status = carService.isTaken(carId);

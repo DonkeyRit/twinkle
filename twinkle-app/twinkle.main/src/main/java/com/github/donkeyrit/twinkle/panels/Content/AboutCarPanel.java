@@ -1,5 +1,13 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
+import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.bll.models.UserInformation;
+import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
+import com.github.donkeyrit.twinkle.DataBase;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,14 +16,6 @@ import java.util.*;
 import java.util.Date;
 import javax.swing.border.*;
 import javax.swing.text.*;
-
-import com.github.donkeyrit.twinkle.DataBase;
-import com.github.donkeyrit.twinkle.bll.models.UserInformation;
-import com.github.donkeyrit.twinkle.dal.models.Car;
-import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
-import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
 public class AboutCarPanel extends JPanel 
 {
@@ -28,7 +28,7 @@ public class AboutCarPanel extends JPanel
 	private String info;
 	private String bodyTypeName;
 
-	private CarQueryFilter carQueryFilter;
+	private CarQuerySpecification carQueryFilter;
 
 	public AboutCarPanel(
 		CarRepository carRepository, 
@@ -36,7 +36,7 @@ public class AboutCarPanel extends JPanel
 		DataBase database, 
 		JPanel panel, 
 		Car car,
-		CarQueryFilter carQueryFilter) 
+		CarQuerySpecification carQueryFilter) 
 	{
 		this.imagesNum = car.getImageId();
 		this.modelYear = car.getModelYear();

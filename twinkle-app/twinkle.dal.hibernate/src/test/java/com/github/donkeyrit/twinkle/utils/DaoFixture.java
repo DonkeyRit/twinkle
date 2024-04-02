@@ -4,7 +4,7 @@ import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.models.Country;
-import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.Car1;
 
 import java.sql.Date;
 
@@ -45,9 +45,9 @@ public class DaoFixture {
 		return modelOfCar;
 	}
 
-	public static Car createCar(int id, Date date, ModelOfCar modelOfCar, String info, int imageId, double cost)
+	public static Car1 createCar(int id, Date date, ModelOfCar modelOfCar, String info, int imageId, double cost)
 	{
-		Car car = new Car();
+		Car1 car = new Car1();
 		car.setId(id);
 		car.setModelYear(date);
 		car.setModelOfCar(modelOfCar);
