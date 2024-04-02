@@ -84,7 +84,7 @@ public class DefaultCarService implements CarService {
 	}
 
 	@Override
-	public String isTaken(int carId) {
+	public String isTaken(long carId) {
 		return rentRepository.isTaken(carId) ? "lock" : "open";
 	}
 }

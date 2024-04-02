@@ -17,5 +17,5 @@ public interface CarService {
 	Stream<CarBodyType> getCarBodyTypes();
 	int getMaxPrice();
 	PagedResultBll<Car> getPagedResult(CarQuerySpecification filter);
-	String isTaken(int carId);
+	String isTaken(long carId);
 }

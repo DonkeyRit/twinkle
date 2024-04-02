@@ -38,7 +38,7 @@ public class JooqRentRepository implements RentRepository {
 	}
 
 	@Override
-	public boolean isTaken(int carId) {
+	public boolean isTaken(long carId) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'isTaken'");
 	}
