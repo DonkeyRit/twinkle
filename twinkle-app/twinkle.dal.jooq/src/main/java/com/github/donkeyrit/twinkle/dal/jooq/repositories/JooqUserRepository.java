@@ -1,12 +1,15 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
+import com.github.donkeyrit.twinkle.dal.common.specifications.QuerySpecification;
 import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
+import com.github.donkeyrit.twinkle.dal.specifications.UserInfoSpecifciation;
 import com.google.inject.Inject;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 import javax.sql.DataSource;
-import java.util.Optional;
+
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -21,7 +24,7 @@ public class JooqUserRepository implements UserRepository {
 	}
 
 	@Override
-	public User findById(Long id) {
+	public User findById(int id) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'findById'");
 	}
@@ -51,21 +54,21 @@ public class JooqUserRepository implements UserRepository {
 	}
 
 	@Override
-	public Optional<User> getByLoginAndPassword(String login, String password) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getByLoginAndPassword'");
-	}
-
-	@Override
-	public boolean isUserExist(String login) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'isUserExist'");
-	}
-
-	@Override
 	public void updatePassword(int userId, String passwordHash) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'updatePassword'");
+	}
+
+	@Override
+	public Stream<User> getList(UserInfoSpecifciation querySpecification) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getList'");
+	}
+
+	@Override
+	public Optional<User> get(UserInfoSpecifciation quSpecification) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'get'");
 	}
 	
 }

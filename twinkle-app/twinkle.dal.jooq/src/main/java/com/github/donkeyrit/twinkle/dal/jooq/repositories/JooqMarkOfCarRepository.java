@@ -8,7 +8,7 @@ import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 public class JooqMarkOfCarRepository implements MarkOfCarRepository {
 
 	@Override
-	public MarkOfCar findById(Long id) {
+	public MarkOfCar findById(int id) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'findById'");
 	}

@@ -9,7 +9,7 @@ import com.github.donkeyrit.twinkle.dal.models.Client;
 public class JooqClientRepository implements ClientRepository {
 
 	@Override
-	public Client findById(Long id) {
+	public Client findById(int id) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'findById'");
 	}

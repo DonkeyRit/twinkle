@@ -8,7 +8,7 @@ import com.github.donkeyrit.twinkle.dal.models.Rent;
 public class JooqRentRepository implements RentRepository {
 
 	@Override
-	public Rent findById(Long id) {
+	public Rent findById(int id) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'findById'");
 	}

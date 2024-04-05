@@ -8,7 +8,7 @@ import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 public class JooqCarBodyTypeRepository implements CarBodyTypeRepository {
 
 	@Override
-	public CarBodyType findById(Long id) {
+	public CarBodyType findById(int id) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'findById'");
 	}

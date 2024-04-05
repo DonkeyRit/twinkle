@@ -1,5 +1,6 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.github.donkeyrit.twinkle.dal.common.models.Page;
@@ -16,7 +17,7 @@ public class JooqCarRepository implements CarRepository {
 	}
 
 	@Override
-	public Car findById(Long id) {
+	public Car findById(int id) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'findById'");
 	}
@@ -55,6 +56,12 @@ public class JooqCarRepository implements CarRepository {
 	public int getMaxPrice() {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getMaxPrice'");
+	}
+
+	@Override
+	public Optional<Car> get(PagedSpecification<Car> quSpecification) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'get'");
 	}
 	
 }

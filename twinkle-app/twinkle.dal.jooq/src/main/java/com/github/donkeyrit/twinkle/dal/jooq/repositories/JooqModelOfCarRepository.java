@@ -1,5 +1,6 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.github.donkeyrit.twinkle.dal.common.specifications.QuerySpecification;
@@ -15,7 +16,7 @@ public class JooqModelOfCarRepository implements ModelOfCarRepository {
 	}
 
 	@Override
-	public ModelOfCar findById(Long id) {
+	public ModelOfCar findById(int id) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'findById'");
 	}
@@ -42,6 +43,12 @@ public class JooqModelOfCarRepository implements ModelOfCarRepository {
 	public boolean update(ModelOfCar o) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'update'");
+	}
+
+	@Override
+	public Optional<ModelOfCar> get(QuerySpecification<ModelOfCar> quSpecification) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'get'");
 	}
 	
 }
