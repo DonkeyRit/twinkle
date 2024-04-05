@@ -6,8 +6,8 @@ import com.github.donkeyrit.twinkle.dal.models.User;
 public abstract class UserInfoSpecifciation<TPredicate> implements QuerySpecification<User> {
 	
 	//#region Fields
-	private String login;
-	private String passwordHash;
+	protected String login;
+	protected String passwordHash;
 	//#endregion
 
 	//#region Getters/Setters
