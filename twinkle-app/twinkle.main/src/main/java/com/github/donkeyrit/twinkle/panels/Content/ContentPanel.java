@@ -32,7 +32,7 @@ public class ContentPanel extends JPanel {
 	private final NavigationPanelEventsListener contentEventsListener;
 	private final CarService carService;
 
-	public CarQuerySpecification getFilter() {
+	public CarQuerySpecification<?> getFilter() {
 		return filter;
 	}
 
@@ -40,7 +40,7 @@ public class ContentPanel extends JPanel {
 	public ContentPanel(
 		NavigationPanelEventsListener contentEventsListener, 
 		CarService carService, 
-		@Assisted CarQuerySpecification filter
+		@Assisted CarQuerySpecification<?> filter
 	) {
 		setLayout(new BorderLayout());
 

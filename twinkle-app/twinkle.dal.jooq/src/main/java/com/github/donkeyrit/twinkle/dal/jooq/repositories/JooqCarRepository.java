@@ -1,53 +1,25 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import com.github.donkeyrit.twinkle.dal.common.models.Page;
+import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqFilterableRepository;
 import com.github.donkeyrit.twinkle.dal.common.specifications.PagedSpecification;
+import com.github.donkeyrit.twinkle.dal.common.models.Page;
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 
-public class JooqCarRepository implements CarRepository {
+import javax.sql.DataSource;
+import org.jooq.Condition;
 
-	@Override
-	public Stream<Car> getList(PagedSpecification<Car> querySpecification) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getList'");
+public class JooqCarRepository 
+	extends JooqFilterableRepository<Car, CarQuerySpecification<Condition>>
+	implements CarRepository<Condition> {
+
+	public JooqCarRepository(DataSource dataSource) {
+		super(dataSource);
 	}
 
 	@Override
-	public Car findById(int id) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findById'");
-	}
-
-	@Override
-	public Stream<Car> findAll() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
-	}
-
-	@Override
-	public boolean save(Car o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'save'");
-	}
-
-	@Override
-	public boolean delete(Car o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
-	}
-
-	@Override
-	public boolean update(Car o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
-	}
-
-	@Override
-	public Page<Car> getPagedResult(PagedSpecification<Car> filter) {
+	public Page<Car> getPagedResult(PagedSpecification<Car, Condition> filter) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getPagedResult'");
 	}
@@ -57,11 +29,6 @@ public class JooqCarRepository implements CarRepository {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getMaxPrice'");
 	}
-
-	@Override
-	public Optional<Car> get(PagedSpecification<Car> quSpecification) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'get'");
-	}
+	
 	
 }

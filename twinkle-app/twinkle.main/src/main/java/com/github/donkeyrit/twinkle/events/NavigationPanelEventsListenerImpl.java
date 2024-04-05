@@ -60,7 +60,7 @@ public class NavigationPanelEventsListenerImpl implements NavigationPanelEventsL
 		if (contentPanelContainer.isPresent() && contentPanelContainer.get() instanceof ContentPanel) {
 
 			ContentPanel contentPanel = (ContentPanel) contentPanelContainer.get();
-			CarQuerySpecification previousFilter = contentPanel.getFilter();
+			CarQuerySpecification<?> previousFilter = contentPanel.getFilter();
 			Paging paging = previousFilter.getPaging().orElse(new Paging(1, 4));
 			previousFilter.setPaging(direction ? paging.next() : paging.previous());
 			ContentPanel newContentPanel = this.contentPanelFactory.create(previousFilter);
@@ -75,7 +75,7 @@ public class NavigationPanelEventsListenerImpl implements NavigationPanelEventsL
 		if (contentPanelContainer.isPresent() && contentPanelContainer.get() instanceof ContentPanel) {
 
 			ContentPanel contentPanel = (ContentPanel) contentPanelContainer.get();
-			CarQuerySpecification previousFilter = contentPanel.getFilter();
+			CarQuerySpecification<?> previousFilter = contentPanel.getFilter();
 			Paging paging = previousFilter.getPaging().orElse(new Paging(1, 4));
 			previousFilter.setPaging(new Paging(pageNumber, paging.getPageSize()));
 			ContentPanel newContentPanel = this.contentPanelFactory.create(previousFilter);

@@ -4,7 +4,7 @@ import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import java.util.Optional;
 
-public abstract class PagedSpecification<T extends Identifiable> implements QuerySpecification<T> {
+public abstract class PagedSpecification<T extends Identifiable, TPredicate> implements QuerySpecification<T, TPredicate> {
 
 	//#region Fields
 

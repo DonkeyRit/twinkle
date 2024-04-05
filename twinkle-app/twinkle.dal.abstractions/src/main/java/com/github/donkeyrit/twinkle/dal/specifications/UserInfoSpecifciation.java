@@ -3,7 +3,7 @@ package com.github.donkeyrit.twinkle.dal.specifications;
 import com.github.donkeyrit.twinkle.dal.common.specifications.QuerySpecification;
 import com.github.donkeyrit.twinkle.dal.models.User;
 
-public abstract class UserInfoSpecifciation<TPredicate> implements QuerySpecification<User> {
+public abstract class UserInfoSpecifciation<TPredicate> implements QuerySpecification<User, TPredicate> {
 	
 	//#region Fields
 	protected String login;
@@ -38,6 +38,4 @@ public abstract class UserInfoSpecifciation<TPredicate> implements QuerySpecific
 	}
 
 	////#endregion
-
-	public abstract TPredicate toCondition();
 }
