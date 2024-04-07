@@ -6,8 +6,8 @@ import com.github.donkeyrit.twinkle.dal.common.models.Page;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 
-public interface CarRepository<TPredicate> extends FilterableRepository<Car, TPredicate, CarQuerySpecification<TPredicate>> 
+public interface CarRepository extends FilterableRepository<Car, CarQuerySpecification> 
 {
-	Page<Car> getPagedResult(PagedSpecification<Car, TPredicate> filter);
+	Page<Car> getPagedResult(PagedSpecification<Car> filter);
 	int getMaxPrice();
 }

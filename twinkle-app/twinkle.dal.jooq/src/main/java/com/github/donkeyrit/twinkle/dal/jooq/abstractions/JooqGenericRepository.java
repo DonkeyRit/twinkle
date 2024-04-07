@@ -7,16 +7,20 @@ import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
+import org.jooq.TableRecord;
+import org.jooq.Table;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
-public abstract class JooqGenericRepository<T extends Identifiable> implements GenericRepository<T> {
+public abstract class JooqGenericRepository<T extends Identifiable, R extends TableRecord<R>> implements GenericRepository<T> {
 
 	protected DSLContext context;
+	protected Table<R> table;
 
-	public JooqGenericRepository(DataSource dataSource) {
+	public JooqGenericRepository(DataSource dataSource, Table<R> table) {
 		this.context = DSL.using(dataSource, SQLDialect.POSTGRES);
+		this.table = table;
 	}
 
 	@Override

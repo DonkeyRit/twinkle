@@ -3,19 +3,20 @@ package com.github.donkeyrit.twinkle.dal.jooq.abstractions;
 import com.github.donkeyrit.twinkle.dal.common.repositories.FilterableRepository;
 import com.github.donkeyrit.twinkle.dal.common.specifications.QuerySpecification;
 import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
-import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Users;
 
 import java.util.stream.Stream;
 import java.util.Optional;
 import javax.sql.DataSource;
+
+import org.jooq.TableRecord;
+import org.jooq.Table;
 import org.jooq.Condition;
 
-public class JooqFilterableRepository<T extends Identifiable, TSpecification extends QuerySpecification<T, Condition>> 
-	extends JooqGenericRepository<T> 
-	implements FilterableRepository<T, Condition, TSpecification> {
+public abstract class JooqFilterableRepository<T extends Identifiable, TSpecification extends QuerySpecification<T>, R extends TableRecord<R>> 
+    extends JooqGenericRepository<T, R> implements FilterableRepository<T, TSpecification> {
 
-	public JooqFilterableRepository(DataSource dataSource) {
-		super(dataSource);
+	public JooqFilterableRepository(DataSource dataSource, Table<R> table) {
+		super(dataSource, table);
 	}
 
 	@Override
@@ -27,12 +28,14 @@ public class JooqFilterableRepository<T extends Identifiable, TSpecification ext
 	@Override
 	public Optional<T> get(TSpecification querySpecification) {
 		
-		this.context
+		var result = this.context
 			.select()
-			.from(Users.USERS)
-			.where(querySpecification.toCondition())
+			.from(this.table)
+			.where(toCondition(querySpecification))
 			.fetch();
 
-		return Optional.of(null);
+		return Optional.ofNullable(null);
 	}
+
+	public abstract Condition toCondition(TSpecification querySpecification);
 }

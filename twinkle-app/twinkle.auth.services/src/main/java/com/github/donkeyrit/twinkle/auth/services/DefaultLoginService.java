@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.auth.services;
 
-import com.github.donkeyrit.twinkle.dal.specifications.factory.SpecificationFactory;
+import com.github.donkeyrit.twinkle.dal.specifications.UserInfoSpecifciation;
 import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
 
@@ -11,14 +11,12 @@ import com.github.donkeyrit.twinkle.auth.security.HashManager;
 import com.google.inject.Inject;
 import java.util.Optional;
 
-public class DefaultLoginService implements LoginService{
+public class DefaultLoginService implements LoginService {
 
-	private final SpecificationFactory<?> specificationFactory;
 	private final UserRepository userRepository;
 
 	@Inject
-	public DefaultLoginService(SpecificationFactory<?> specificationFactory, UserRepository userRepository) {
-		this.specificationFactory = specificationFactory;
+	public DefaultLoginService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
@@ -30,7 +28,7 @@ public class DefaultLoginService implements LoginService{
 			return AuthenticationResult.error("Please fill both fields.");
 		}
 
-		Optional<User> currentUser = userRepository.get(specificationFactory.createUserInfoSpecification(username, password));
+		Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(username, password));
         return AuthenticationResult.fromResult(currentUser);
 	}
 
@@ -47,7 +45,7 @@ public class DefaultLoginService implements LoginService{
             return AuthenticationResult.error("Passwords do not match.");
         }
 
-        if(userRepository.get(specificationFactory.createUserInfoSpecification(username)).isPresent())
+        if(userRepository.get(new UserInfoSpecifciation(username)).isPresent())
         {
             return AuthenticationResult.error("Login already exist");
         }

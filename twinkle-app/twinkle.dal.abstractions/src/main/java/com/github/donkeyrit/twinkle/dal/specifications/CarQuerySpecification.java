@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
 
-public class CarQuerySpecification<TPredicate> extends PagedSpecification<Car, TPredicate> {
+public class CarQuerySpecification extends PagedSpecification<Car> {
 	//#region Fields
 
 	private Optional<MarkOfCar> selectedMark;
@@ -58,12 +58,6 @@ public class CarQuerySpecification<TPredicate> extends PagedSpecification<Car, T
 	}
 	public void setSelectedBodyTypes(List<String> selectedBodyTypes) {
 		this.selectedBodyTypes = selectedBodyTypes;
-	}
-
-	@Override
-	public TPredicate toCondition() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'toCondition'");
 	}
 
 	//#endregion
