@@ -9,11 +9,11 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 import org.jooq.TableRecord;
-import org.jooq.Table;
 import org.jooq.Condition;
+import org.jooq.Table;
 
-public abstract class JooqFilterableRepository<T extends Identifiable, TSpecification extends QuerySpecification<T>, R extends TableRecord<R>> 
-    extends JooqGenericRepository<T, R> implements FilterableRepository<T, TSpecification> {
+public abstract class JooqFilterableRepository<T extends Identifiable, TSpecification extends QuerySpecification<T>, R extends TableRecord<R>>
+		extends JooqGenericRepository<T, R> implements FilterableRepository<T, TSpecification> {
 
 	public JooqFilterableRepository(DataSource dataSource, Table<R> table) {
 		super(dataSource, table);
@@ -21,21 +21,28 @@ public abstract class JooqFilterableRepository<T extends Identifiable, TSpecific
 
 	@Override
 	public Stream<T> getList(TSpecification querySpecification) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getList'");
+		return this.context
+			.selectFrom(this.table)
+			.where(toCondition(querySpecification))
+			.fetchStream()
+			.map(this::mapRecordToEntity);
 	}
 
 	@Override
 	public Optional<T> get(TSpecification querySpecification) {
-		
-		var result = this.context
-			.select()
-			.from(this.table)
+		R record = this.context
+			.selectFrom(this.table)
 			.where(toCondition(querySpecification))
-			.fetch();
+			.fetchOne();
 
-		return Optional.ofNullable(null);
+		if (record != null) {
+			return Optional.of(mapRecordToEntity(record));
+		} else {
+			return Optional.empty();
+		}
 	}
 
 	public abstract Condition toCondition(TSpecification querySpecification);
+
+	protected abstract T mapRecordToEntity(R record);
 }

@@ -39,6 +39,12 @@ public class JooqCarRepository
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'toCondition'");
 	}
+
+	@Override
+	protected Car mapRecordToEntity(CarRecord record) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'mapRecordToEntity'");
+	}
 	
 	
 }

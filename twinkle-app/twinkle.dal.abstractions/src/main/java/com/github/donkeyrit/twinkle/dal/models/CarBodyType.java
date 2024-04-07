@@ -4,24 +4,24 @@ import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 
 public class CarBodyType implements Identifiable {
 
-    private Long id;
+    private int id;
     private String type;
 
     // Constructors
     public CarBodyType() {
     }
 
-    public CarBodyType(Long id, String type) {
+    public CarBodyType(int id, String type) {
         this.id = id;
         this.type = type;
     }
 
     // Getters and Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

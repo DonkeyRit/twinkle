@@ -4,7 +4,7 @@ import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 
 public class MarkOfCar implements Identifiable {
 
-    private Long id;
+    private int id;
     private String name;
     private Country country;
 
@@ -12,18 +12,18 @@ public class MarkOfCar implements Identifiable {
     public MarkOfCar() {
     }
 
-    public MarkOfCar(Long id, String name, Country country) {
+    public MarkOfCar(int id, String name, Country country) {
         this.id = id;
         this.name = name;
         this.country = country;
     }
 
     // Getters and Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

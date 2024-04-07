@@ -42,4 +42,9 @@ public class JooqUserRepository
 
 		return loginCondition.and(passwordHashCondition);
 	}
+
+	@Override
+	protected User mapRecordToEntity(UsersRecord record) {
+		return new User(record.getLogin(), record.getPassword(), record.getRole());
+	}
 }

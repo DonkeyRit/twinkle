@@ -4,7 +4,7 @@ import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 
 public class ModelOfCar implements Identifiable {
 
-    private Long id;
+    private int id;
     private String modelName;
     private MarkOfCar mark;
     private CarBodyType bodyType;
@@ -13,7 +13,7 @@ public class ModelOfCar implements Identifiable {
     public ModelOfCar() {
     }
 
-    public ModelOfCar(Long id, String modelName, MarkOfCar mark, CarBodyType bodyType) {
+    public ModelOfCar(int id, String modelName, MarkOfCar mark, CarBodyType bodyType) {
         this.id = id;
         this.modelName = modelName;
         this.mark = mark;
@@ -21,11 +21,11 @@ public class ModelOfCar implements Identifiable {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
