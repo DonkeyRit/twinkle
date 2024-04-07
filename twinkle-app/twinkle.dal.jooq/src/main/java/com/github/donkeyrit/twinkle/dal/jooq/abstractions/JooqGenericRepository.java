@@ -13,7 +13,8 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
-public abstract class JooqGenericRepository<T extends Identifiable, R extends TableRecord<R>> implements GenericRepository<T> {
+public abstract class JooqGenericRepository<T extends Identifiable, R extends TableRecord<R>>
+		implements GenericRepository<T> {
 
 	protected DSLContext context;
 	protected Table<R> table;
@@ -25,32 +26,49 @@ public abstract class JooqGenericRepository<T extends Identifiable, R extends Ta
 
 	@Override
 	public T findById(int id) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findById'");
+		R record = this.context.selectFrom(this.table).where(DSL.field("id").eq(id)).fetchOne();
+		return record != null ? mapRecordToEntity(record) : null;
 	}
 
 	@Override
 	public Stream<T> findAll() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+		return this.context
+			.selectFrom(this.table)
+			.fetchStream()
+			.map(this::mapRecordToEntity);
 	}
 
 	@Override
-	public boolean save(T o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'save'");
+	public boolean save(T entity) {
+		R record = entityToRecord(entity);
+		this.context
+			.insertInto(this.table)
+			.set(record)
+			.execute();
+		return true;
 	}
 
 	@Override
-	public boolean delete(T o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
+	public boolean delete(T entity) {
+		this.context
+			.deleteFrom(this.table)
+			.where(DSL.field("id").eq(entity.getId()))
+			.execute();
+		return true;
 	}
 
 	@Override
-	public boolean update(T o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
+	public boolean update(T entity) {
+		R record = entityToRecord(entity); // Assumes existence of this method
+		this.context
+			.update(this.table)
+			.set(record)
+			.where(DSL.field("id").eq(entity.getId()))
+			.execute();
+		return true;
 	}
-	
+
+	protected abstract T mapRecordToEntity(R record);
+
+	protected abstract R entityToRecord(T entity);
 }

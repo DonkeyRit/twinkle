@@ -43,6 +43,4 @@ public abstract class JooqFilterableRepository<T extends Identifiable, TSpecific
 	}
 
 	public abstract Condition toCondition(TSpecification querySpecification);
-
-	protected abstract T mapRecordToEntity(R record);
 }

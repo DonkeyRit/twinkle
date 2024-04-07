@@ -1,17 +1,17 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqFilterableRepository;
-import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Users;
 import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.UsersRecord;
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Users;
+
+import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqFilterableRepository;
 import com.github.donkeyrit.twinkle.dal.specifications.UserInfoSpecifciation;
 import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
+
 import com.google.inject.Inject;
-
-import static org.jooq.impl.DSL.field;
-
 import javax.sql.DataSource;
 
+import static org.jooq.impl.DSL.field;
 import org.jooq.Condition;
 import org.jooq.impl.DSL;
 
@@ -22,12 +22,6 @@ public class JooqUserRepository
 	@Inject
 	public JooqUserRepository(DataSource dataSource) {
 		super(dataSource, Users.USERS);
-	}
-
-	@Override
-	public void updatePassword(int userId, String passwordHash) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'updatePassword'");
 	}
 
 	@Override
@@ -45,6 +39,13 @@ public class JooqUserRepository
 
 	@Override
 	protected User mapRecordToEntity(UsersRecord record) {
-		return new User(record.getLogin(), record.getPassword(), record.getRole());
+		User user = new User(record.getLogin(), record.getPassword(), record.getRole());
+		user.setId(record.getIdUser());
+		return user;
+	}
+
+	@Override
+	protected UsersRecord entityToRecord(User entity) {
+		return new UsersRecord(entity.getId(), entity.getLogin(), entity.getPassword(), entity.isRole());
 	}
 }

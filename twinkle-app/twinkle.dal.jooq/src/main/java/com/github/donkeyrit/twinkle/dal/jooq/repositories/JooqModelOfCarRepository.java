@@ -33,4 +33,10 @@ public class JooqModelOfCarRepository
 		throw new UnsupportedOperationException("Unimplemented method 'mapRecordToEntity'");
 	}
 
+	@Override
+	protected ModelRecord entityToRecord(ModelOfCar entity) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'entityToRecord'");
+	}
+
 }

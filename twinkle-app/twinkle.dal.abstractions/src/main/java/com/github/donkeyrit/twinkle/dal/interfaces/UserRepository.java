@@ -6,5 +6,4 @@ import com.github.donkeyrit.twinkle.dal.models.User;
 
 public interface UserRepository extends FilterableRepository<User, UserInfoSpecifciation>
 {
-	void updatePassword(int userId, String passwordHash);
 }
