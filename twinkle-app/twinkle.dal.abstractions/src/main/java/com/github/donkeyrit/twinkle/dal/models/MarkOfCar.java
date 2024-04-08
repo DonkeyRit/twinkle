@@ -7,18 +7,28 @@ public class MarkOfCar implements Identifiable {
     private int id;
     private String name;
     private Country country;
+	private int countryId;
 
-    // Constructors
+	//#region Constructors
+
     public MarkOfCar() {
     }
 
-    public MarkOfCar(int id, String name, Country country) {
+    public MarkOfCar(int id, String name, int countryId) {
+        this.id = id;
+        this.name = name;
+        this.countryId = countryId;
+    }
+
+	public MarkOfCar(int id, String name, Country country) {
         this.id = id;
         this.name = name;
         this.country = country;
     }
 
-    // Getters and Setters
+	//#endregion
+
+    //#region Getters and Setters
     public int getId() {
         return id;
     }
@@ -42,4 +52,13 @@ public class MarkOfCar implements Identifiable {
     public void setCountry(Country country) {
         this.country = country;
     }
+
+	public int getCountryId() {
+		return countryId;
+	}
+
+	public void setCountryId(int countryId) {
+		this.countryId = countryId;
+	}
+	//#endregion
 }

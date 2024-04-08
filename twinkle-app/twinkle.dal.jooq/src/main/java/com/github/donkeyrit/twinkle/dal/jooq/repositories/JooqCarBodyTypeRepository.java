@@ -1,7 +1,7 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.BodyType;
 import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.BodyTypeRecord;
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.BodyType;
 import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqGenericRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;

@@ -19,7 +19,7 @@ public class JooqMarkOfCarRepository
 
 	@Override
 	protected MarkOfCar mapRecordToEntity(MarkRecord record) {
-		return new MarkOfCar(record.getId(), record.getMarkName(), null); //TODO: Replace null
+		return new MarkOfCar(record.getId(), record.getMarkName(), record.getIdCountry());
 	}
 
 	@Override

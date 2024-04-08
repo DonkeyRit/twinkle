@@ -51,6 +51,4 @@ public class JooqCarRepository
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'entityToRecord'");
 	}
-	
-	
 }

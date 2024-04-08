@@ -28,7 +28,7 @@ public class JooqModelOfCarRepository
 
 	@Override
 	protected ModelOfCar mapRecordToEntity(ModelRecord record) {
-		return new ModelOfCar(record.getId(), record.getModelName(), null, null); //TODO: Replace nulls
+		return new ModelOfCar(record.getId(), record.getModelName(), record.getIdMark(), record.getIdBodyType());
 	}
 
 	@Override
