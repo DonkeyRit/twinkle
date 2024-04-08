@@ -40,7 +40,7 @@ public class JooqUserRepository
 	@Override
 	protected User mapRecordToEntity(UsersRecord record) {
 		User user = new User(record.getLogin(), record.getPassword(), record.getRole());
-		user.setId(record.getIdUser());
+		user.setId(record.getId());
 		return user;
 	}
 

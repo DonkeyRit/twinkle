@@ -6,24 +6,24 @@ import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqGenericRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 
+import com.google.inject.Inject;
 import javax.sql.DataSource;
 
 public class JooqCarBodyTypeRepository
 	extends JooqGenericRepository<CarBodyType, BodyTypeRecord> implements CarBodyTypeRepository {
 
+	@Inject
 	public JooqCarBodyTypeRepository(DataSource dataSource) {
 		super(dataSource, BodyType.BODY_TYPE);
 	}
 
 	@Override
 	protected CarBodyType mapRecordToEntity(BodyTypeRecord record) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'mapRecordToEntity'");
+		return new CarBodyType(record.getId(), record.getBodyTypeName());
 	}
 
 	@Override
 	protected BodyTypeRecord entityToRecord(CarBodyType entity) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'entityToRecord'");
+		return new BodyTypeRecord(entity.getId(), entity.getType());
 	}	
 }

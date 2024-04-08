@@ -25,13 +25,13 @@ public class JooqCarRepository
 	@Override
 	public Page<Car> getPagedResult(PagedSpecification<Car> filter) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getPagedResult'");
+		throw new UnsupportedOperationException("Unimplemented JooqCarRepository method 'getPagedResult'");
 	}
 
 	@Override
 	public int getMaxPrice() {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getMaxPrice'");
+		throw new UnsupportedOperationException("Unimplemented JooqCarRepository method 'getMaxPrice'");
 	}
 
 	@Override
