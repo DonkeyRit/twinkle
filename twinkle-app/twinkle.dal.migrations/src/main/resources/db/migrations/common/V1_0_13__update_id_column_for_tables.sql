@@ -1,0 +1,9 @@
+ALTER TABLE "body_type" RENAME COLUMN "id_body_type" TO "id";
+ALTER TABLE "clients" RENAME COLUMN "id_client" TO "id";
+ALTER TABLE "country" RENAME COLUMN "id_country" TO "id";
+ALTER TABLE "injury" RENAME COLUMN "id_injury" TO "id";
+ALTER TABLE "mark" RENAME COLUMN "id_mark" TO "id";
+ALTER TABLE "model" RENAME COLUMN "id_model" TO "id";
+ALTER TABLE "rent" RENAME COLUMN "id_rent" TO "id";
+ALTER TABLE "resulting_injury" RENAME COLUMN "id_resulting_injury" TO "id";
+ALTER TABLE "users" RENAME COLUMN "id_user" TO "id";
