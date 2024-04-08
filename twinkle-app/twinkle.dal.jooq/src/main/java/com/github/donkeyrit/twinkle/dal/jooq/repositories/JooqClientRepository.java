@@ -1,41 +1,19 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.ClientsRecord;
+import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqGenericRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
 import com.github.donkeyrit.twinkle.dal.models.Client;
 
-public class JooqClientRepository implements ClientRepository {
+import javax.sql.DataSource;
+import java.util.Optional;
 
-	@Override
-	public Client findById(int id) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findById'");
-	}
+public class JooqClientRepository
+	extends JooqGenericRepository<Client, ClientsRecord> implements ClientRepository {
+		
 
-	@Override
-	public Stream<Client> findAll() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
-	}
-
-	@Override
-	public boolean save(Client o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'save'");
-	}
-
-	@Override
-	public boolean delete(Client o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
-	}
-
-	@Override
-	public boolean update(Client o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
+	public JooqClientRepository(DataSource dataSource) {
+		super(dataSource, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Clients.CLIENTS);
 	}
 
 	@Override
@@ -43,5 +21,16 @@ public class JooqClientRepository implements ClientRepository {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getByUserId'");
 	}
-	
+
+	@Override
+	protected Client mapRecordToEntity(ClientsRecord record) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'mapRecordToEntity'");
+	}
+
+	@Override
+	protected ClientsRecord entityToRecord(Client entity) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'entityToRecord'");
+	}
 }

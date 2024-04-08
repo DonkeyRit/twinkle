@@ -1,40 +1,17 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import java.util.stream.Stream;
-
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.RentRecord;
+import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqGenericRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.models.Rent;
 
-public class JooqRentRepository implements RentRepository {
+import javax.sql.DataSource;
 
-	@Override
-	public Rent findById(int id) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findById'");
-	}
+public class JooqRentRepository
+	extends JooqGenericRepository<Rent, RentRecord> implements RentRepository {
 
-	@Override
-	public Stream<Rent> findAll() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
-	}
-
-	@Override
-	public boolean save(Rent o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'save'");
-	}
-
-	@Override
-	public boolean delete(Rent o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
-	}
-
-	@Override
-	public boolean update(Rent o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
+	public JooqRentRepository(DataSource dataSource) {
+		super(dataSource, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Rent.RENT);
 	}
 
 	@Override
@@ -42,5 +19,16 @@ public class JooqRentRepository implements RentRepository {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'isTaken'");
 	}
-	
+
+	@Override
+	protected Rent mapRecordToEntity(RentRecord record) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'mapRecordToEntity'");
+	}
+
+	@Override
+	protected RentRecord entityToRecord(Rent entity) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'entityToRecord'");
+	}
 }
