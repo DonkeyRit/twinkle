@@ -7,14 +7,14 @@ import com.github.donkeyrit.twinkle.dal.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 
 import com.google.inject.Inject;
-import javax.sql.DataSource;
+import org.jooq.DSLContext;
 
 public class JooqCarBodyTypeRepository
 	extends JooqGenericRepository<CarBodyType, BodyTypeRecord> implements CarBodyTypeRepository {
 
 	@Inject
-	public JooqCarBodyTypeRepository(DataSource dataSource) {
-		super(dataSource, BodyType.BODY_TYPE);
+	public JooqCarBodyTypeRepository(DSLContext dslContext) {
+		super(dslContext, BodyType.BODY_TYPE);
 	}
 
 	@Override

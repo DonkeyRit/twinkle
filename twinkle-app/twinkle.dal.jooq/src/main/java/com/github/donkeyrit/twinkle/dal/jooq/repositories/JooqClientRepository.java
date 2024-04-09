@@ -6,15 +6,15 @@ import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
 import com.github.donkeyrit.twinkle.dal.models.Client;
 
 import com.google.inject.Inject;
-import javax.sql.DataSource;
+import org.jooq.DSLContext;
 import java.util.Optional;
 
 public class JooqClientRepository
 	extends JooqGenericRepository<Client, ClientsRecord> implements ClientRepository {
 		
 	@Inject
-	public JooqClientRepository(DataSource dataSource) {
-		super(dataSource, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Clients.CLIENTS);
+	public JooqClientRepository(DSLContext dslContext) {
+		super(dslContext, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Clients.CLIENTS);
 	}
 
 	@Override

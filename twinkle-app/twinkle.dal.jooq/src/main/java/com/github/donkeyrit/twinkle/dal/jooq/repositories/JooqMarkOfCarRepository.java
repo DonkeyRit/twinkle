@@ -5,16 +5,16 @@ import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqGenericRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.MarkOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Mark;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
-import com.google.inject.Inject;
 
-import javax.sql.DataSource;
+import com.google.inject.Inject;
+import org.jooq.DSLContext;
 
 public class JooqMarkOfCarRepository 
 	extends JooqGenericRepository<MarkOfCar, MarkRecord> implements MarkOfCarRepository {
 
 	@Inject
-	public JooqMarkOfCarRepository(DataSource dataSource) {
-		super(dataSource, Mark.MARK);
+	public JooqMarkOfCarRepository(DSLContext dslContext) {
+		super(dslContext, Mark.MARK);
 	}
 
 	@Override

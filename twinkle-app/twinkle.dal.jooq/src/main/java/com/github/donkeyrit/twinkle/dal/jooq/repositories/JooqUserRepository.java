@@ -9,10 +9,10 @@ import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.User;
 
 import com.google.inject.Inject;
-import javax.sql.DataSource;
 
 import static org.jooq.impl.DSL.field;
 import org.jooq.Condition;
+import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 
 public class JooqUserRepository 
@@ -20,8 +20,8 @@ public class JooqUserRepository
 	implements UserRepository {
 
 	@Inject
-	public JooqUserRepository(DataSource dataSource) {
-		super(dataSource, Users.USERS);
+	public JooqUserRepository(DSLContext dslContext) {
+		super(dslContext, Users.USERS);
 	}
 
 	@Override

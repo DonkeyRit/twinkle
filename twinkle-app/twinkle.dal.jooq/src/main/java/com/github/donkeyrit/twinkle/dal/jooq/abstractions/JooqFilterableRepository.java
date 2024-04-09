@@ -6,17 +6,17 @@ import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 
 import java.util.stream.Stream;
 import java.util.Optional;
-import javax.sql.DataSource;
 
 import org.jooq.TableRecord;
 import org.jooq.Condition;
+import org.jooq.DSLContext;
 import org.jooq.Table;
 
 public abstract class JooqFilterableRepository<T extends Identifiable, TSpecification extends QuerySpecification<T>, R extends TableRecord<R>>
 		extends JooqGenericRepository<T, R> implements FilterableRepository<T, TSpecification> {
 
-	public JooqFilterableRepository(DataSource dataSource, Table<R> table) {
-		super(dataSource, table);
+	public JooqFilterableRepository(DSLContext dslContext, Table<R> table) {
+		super(dslContext, table);
 	}
 
 	@Override

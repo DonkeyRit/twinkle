@@ -4,16 +4,16 @@ import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.RentRecord
 import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqGenericRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.models.Rent;
-import com.google.inject.Inject;
 
-import javax.sql.DataSource;
+import com.google.inject.Inject;
+import org.jooq.DSLContext;
 
 public class JooqRentRepository
 	extends JooqGenericRepository<Rent, RentRecord> implements RentRepository {
 
 	@Inject
-	public JooqRentRepository(DataSource dataSource) {
-		super(dataSource, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Rent.RENT);
+	public JooqRentRepository(DSLContext dslContext) {
+		super(dslContext, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Rent.RENT);
 	}
 
 	@Override

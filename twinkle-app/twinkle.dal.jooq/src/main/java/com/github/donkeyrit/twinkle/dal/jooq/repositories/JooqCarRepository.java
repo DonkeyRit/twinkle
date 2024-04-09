@@ -5,21 +5,20 @@ import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.CarRecord;
 import com.github.donkeyrit.twinkle.dal.common.specifications.PagedSpecification;
 import com.github.donkeyrit.twinkle.dal.common.models.Page;
 import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
-import com.google.inject.Inject;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 
-import javax.sql.DataSource;
-
+import com.google.inject.Inject;
 import org.jooq.Condition;
+import org.jooq.DSLContext;
 
 public class JooqCarRepository 
 	extends JooqFilterableRepository<Car, CarQuerySpecification, CarRecord>
 	implements CarRepository {
 
 	@Inject
-	public JooqCarRepository(DataSource dataSource) {
-		super(dataSource, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Car.CAR);
+	public JooqCarRepository(DSLContext dslContext) {
+		super(dslContext, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Car.CAR);
 	}
 
 	@Override

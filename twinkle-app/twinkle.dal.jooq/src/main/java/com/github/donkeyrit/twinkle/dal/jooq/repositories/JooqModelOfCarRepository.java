@@ -8,8 +8,8 @@ import com.github.donkeyrit.twinkle.dal.interfaces.ModelOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 
 import com.google.inject.Inject;
-import javax.sql.DataSource;
 import org.jooq.Condition;
+import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 
 public class JooqModelOfCarRepository 
@@ -17,8 +17,8 @@ public class JooqModelOfCarRepository
 	implements ModelOfCarRepository{
 
 	@Inject
-	public JooqModelOfCarRepository(DataSource dataSource) {
-		super(dataSource, Model.MODEL);
+	public JooqModelOfCarRepository(DSLContext dslContext) {
+		super(dslContext, Model.MODEL);
 	}
 
 	@Override
