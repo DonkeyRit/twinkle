@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 
 @Entity
 @Table(name = "mark")
-public class MarkOfCar {
+public class MarkOfCar1 {
 
 	// #region Fields
 
@@ -79,7 +79,7 @@ public class MarkOfCar {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MarkOfCar other = (MarkOfCar) obj;
+		MarkOfCar1 other = (MarkOfCar1) obj;
 		if (id != other.id)
 			return false;
 		if (name == null) {

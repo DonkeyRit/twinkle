@@ -32,7 +32,7 @@ import java.util.List;
 import com.google.inject.Inject;
 
 public class SideBarFilterPanel extends JPanel {
-	
+
 	private final List<JCheckBox> bodyTypeCheckBoxes;
 	private final JComboBox<MarkOfCar> markComboBox;
 	private final JComboBox<String> modelComboBox;
@@ -97,8 +97,7 @@ public class SideBarFilterPanel extends JPanel {
 					.stream()
 					.filter(cb -> cb.isSelected())
 					.map(cb -> cb.getText())
-					.toList());
-				filter.setPaging(new Paging(1, 4));
+					.toList());				filter.setPaging(new Paging(1, 4));
 				contentEventsListener.onContentPageRequest(filter);
 			}
 		});

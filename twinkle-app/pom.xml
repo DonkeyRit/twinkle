@@ -35,6 +35,7 @@
     <hibernate.version>6.1.7.Final</hibernate.version>
     <slf4j.api.version>2.0.12</slf4j.api.version>
     <log4j.version>2.20.0</log4j.version>
+    <guice.version>7.0.0</guice.version>
   </properties>
 
   <dependencyManagement>
@@ -83,12 +84,12 @@
       <dependency>
         <groupId>com.google.inject</groupId>
         <artifactId>guice</artifactId>
-        <version>5.0.1</version>
+        <version>${guice.version}</version>
       </dependency>
       <dependency>
         <groupId>com.google.inject.extensions</groupId>
         <artifactId>guice-assistedinject</artifactId>
-        <version>5.1.0</version>
+        <version>${guice.version}</version>
       </dependency>
       <!-- Logger dependencies -->
       <dependency>

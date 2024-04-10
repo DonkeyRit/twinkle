@@ -2,7 +2,7 @@ package com.github.donkeyrit.twinkle.dal.repositories;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
 import com.google.inject.Inject;
-import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.models.MarkOfCar1;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -19,9 +19,9 @@ public class MarkOfCarRepositoryImpl implements MarkOfCarRepository
     }
 
 	@Override
-	public Stream<MarkOfCar> getList() 
+	public Stream<MarkOfCar1> getList() 
 	{
-		TypedQuery<MarkOfCar> query = session.createQuery("SELECT u FROM MarkOfCar u", MarkOfCar.class);
+		TypedQuery<MarkOfCar1> query = session.createQuery("SELECT u FROM MarkOfCar u", MarkOfCar1.class);
         return query.getResultStream();
 	}
 }
