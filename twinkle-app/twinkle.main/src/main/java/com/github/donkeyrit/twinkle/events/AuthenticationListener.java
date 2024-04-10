@@ -8,7 +8,7 @@ import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 
 import com.google.inject.Inject;
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 public class AuthenticationListener implements LoginEventsListener {
 

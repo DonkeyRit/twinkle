@@ -1,40 +1,29 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import java.util.stream.Stream;
-
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.MarkRecord;
+import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqGenericRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.MarkOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Mark;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 
-public class JooqMarkOfCarRepository implements MarkOfCarRepository {
+import com.google.inject.Inject;
+import org.jooq.DSLContext;
 
-	@Override
-	public MarkOfCar findById(Long id) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findById'");
+public class JooqMarkOfCarRepository 
+	extends JooqGenericRepository<MarkOfCar, MarkRecord> implements MarkOfCarRepository {
+
+	@Inject
+	public JooqMarkOfCarRepository(DSLContext dslContext) {
+		super(dslContext, Mark.MARK);
 	}
 
 	@Override
-	public Stream<MarkOfCar> findAll() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+	protected MarkOfCar mapRecordToEntity(MarkRecord record) {
+		return new MarkOfCar(record.getId(), record.getMarkName(), record.getIdCountry());
 	}
 
 	@Override
-	public boolean save(MarkOfCar o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'save'");
+	protected MarkRecord entityToRecord(MarkOfCar entity) {
+		return new MarkRecord(entity.getId(), entity.getName(), entity.getCountry().getId());
 	}
-
-	@Override
-	public boolean delete(MarkOfCar o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
-	}
-
-	@Override
-	public boolean update(MarkOfCar o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
-	}
-	
 }

@@ -1,47 +1,38 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import java.util.stream.Stream;
-
+import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqFilterableRepository;
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Model;
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.ModelRecord;
 import com.github.donkeyrit.twinkle.dal.common.specifications.QuerySpecification;
 import com.github.donkeyrit.twinkle.dal.interfaces.ModelOfCarRepository;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
 
-public class JooqModelOfCarRepository implements ModelOfCarRepository {
+import com.google.inject.Inject;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 
-	@Override
-	public Stream<ModelOfCar> getList(QuerySpecification<ModelOfCar> querySpecification) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getList'");
+public class JooqModelOfCarRepository 
+	extends JooqFilterableRepository<ModelOfCar, QuerySpecification<ModelOfCar>, ModelRecord>
+	implements ModelOfCarRepository{
+
+	@Inject
+	public JooqModelOfCarRepository(DSLContext dslContext) {
+		super(dslContext, Model.MODEL);
 	}
 
 	@Override
-	public ModelOfCar findById(Long id) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findById'");
+	public Condition toCondition(QuerySpecification<ModelOfCar> querySpecification) {
+		return DSL.noCondition();
 	}
 
 	@Override
-	public Stream<ModelOfCar> findAll() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+	protected ModelOfCar mapRecordToEntity(ModelRecord record) {
+		return new ModelOfCar(record.getId(), record.getModelName(), record.getIdMark(), record.getIdBodyType());
 	}
 
 	@Override
-	public boolean save(ModelOfCar o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'save'");
+	protected ModelRecord entityToRecord(ModelOfCar entity) {
+		return new ModelRecord(entity.getId(), entity.getModelName(), entity.getMark().getId(), entity.getBodyType().getId());
 	}
-
-	@Override
-	public boolean delete(ModelOfCar o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
-	}
-
-	@Override
-	public boolean update(ModelOfCar o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
-	}
-	
 }

@@ -1,14 +1,17 @@
 package com.github.donkeyrit.twinkle.auth.services;
 
+import com.github.donkeyrit.twinkle.dal.specifications.UserInfoSpecifciation;
 import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.models.User;
+
 import com.github.donkeyrit.twinkle.auth.services.interfaces.LoginService;
 import com.github.donkeyrit.twinkle.auth.models.AuthenticationResult;
 import com.github.donkeyrit.twinkle.auth.security.HashManager;
-import com.github.donkeyrit.twinkle.dal.models.User;
+
 import com.google.inject.Inject;
 import java.util.Optional;
 
-public class DefaultLoginService implements LoginService{
+public class DefaultLoginService implements LoginService {
 
 	private final UserRepository userRepository;
 
@@ -25,7 +28,7 @@ public class DefaultLoginService implements LoginService{
 			return AuthenticationResult.error("Please fill both fields.");
 		}
 
-		Optional<User> currentUser = userRepository.getByLoginAndPassword(username, password);
+		Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(username, password));
         return AuthenticationResult.fromResult(currentUser);
 	}
 
@@ -42,7 +45,7 @@ public class DefaultLoginService implements LoginService{
             return AuthenticationResult.error("Passwords do not match.");
         }
 
-        if(userRepository.isUserExist(username))
+        if(userRepository.get(new UserInfoSpecifciation(username)).isPresent())
         {
             return AuthenticationResult.error("Login already exist");
         }

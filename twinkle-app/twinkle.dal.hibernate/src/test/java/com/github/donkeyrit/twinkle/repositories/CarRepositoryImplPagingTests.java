@@ -9,7 +9,7 @@ import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 import com.github.donkeyrit.twinkle.dal.models.Car1;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.Country;
-import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.models.MarkOfCar1;
 import com.github.donkeyrit.twinkle.utils.DateFixture;
 import com.github.donkeyrit.twinkle.utils.DaoFixture;
 
@@ -50,8 +50,8 @@ public class CarRepositoryImplPagingTests extends Assertions {
 		CarBodyType sedanBodyType = DaoFixture.createCarBodyType(1, "Sedan");
 		Country japan = DaoFixture.createCountry(1, "Japan");
 
-		MarkOfCar hondaMark = DaoFixture.createMarkOfCar(2, "Honda", japan);
-		MarkOfCar corollaMark = DaoFixture.createMarkOfCar(1, "Toyota", japan);
+		MarkOfCar1 hondaMark = DaoFixture.createMarkOfCar(2, "Honda", japan);
+		MarkOfCar1 corollaMark = DaoFixture.createMarkOfCar(1, "Toyota", japan);
 
 		ModelOfCar corollaCarModel = DaoFixture.createModelOfCar(2, "Corolla", corollaMark, sedanBodyType);
 		ModelOfCar accordCarModel = DaoFixture.createModelOfCar(3, "Accord", hondaMark, sedanBodyType);

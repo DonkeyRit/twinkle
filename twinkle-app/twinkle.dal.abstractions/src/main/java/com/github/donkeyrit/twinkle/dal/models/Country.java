@@ -4,24 +4,24 @@ import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 
 public class Country implements Identifiable {
 
-    private Long id;
+    private int id;
     private String countryName;
 
     // Constructors
     public Country() {
     }
 
-    public Country(Long id, String countryName) {
+    public Country(int id, String countryName) {
         this.id = id;
         this.countryName = countryName;
     }
 
     // Getters and Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

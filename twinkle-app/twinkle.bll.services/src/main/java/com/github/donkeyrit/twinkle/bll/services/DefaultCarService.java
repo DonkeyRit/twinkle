@@ -51,12 +51,12 @@ public class DefaultCarService implements CarService {
 		if (markSelected.getId() > -1) {
 			//TODO: use markid
 			long markId = markSelected.getId();
-			QuerySpecification<ModelOfCar> filter = new ModelOfCarQuerySpecification();
-			List<String> list = this.modelOfCarRepository
-				.getList(filter)
-				.map(model -> model.getModelName())
-				.toList();
-			return Optional.of(list);
+			// QuerySpecification<ModelOfCar, ?> filter = new ModelOfCarQuerySpecification();
+			// List<String> list = this.modelOfCarRepository
+			// 	.getList(filter)
+			// 	.map(model -> model.getModelName())
+			// 	.toList();
+			return Optional.of(null);//list);
 		}
 
 		return Optional.empty();

@@ -2,7 +2,7 @@ package com.github.donkeyrit.twinkle.utils;
 
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
-import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.models.MarkOfCar1;
 import com.github.donkeyrit.twinkle.dal.models.Country;
 import com.github.donkeyrit.twinkle.dal.models.Car1;
 
@@ -18,8 +18,8 @@ public class DaoFixture {
 		return country;
 	}
 
-	public static MarkOfCar createMarkOfCar(int id, String mark, Country country) {
-		MarkOfCar markOfCar = new MarkOfCar();
+	public static MarkOfCar1 createMarkOfCar(int id, String mark, Country country) {
+		MarkOfCar1 markOfCar = new MarkOfCar1();
 		markOfCar.setId(id);
 		markOfCar.setName(mark);
 		markOfCar.setCountry(country);
@@ -35,7 +35,7 @@ public class DaoFixture {
 		return carBodyType;
 	}
 
-	public static ModelOfCar createModelOfCar(int id, String model, MarkOfCar markOfCar, CarBodyType carBodyType) {
+	public static ModelOfCar createModelOfCar(int id, String model, MarkOfCar1 markOfCar, CarBodyType carBodyType) {
 		ModelOfCar modelOfCar = new ModelOfCar();
 		modelOfCar.setId(id);
 		modelOfCar.setModelName(model);

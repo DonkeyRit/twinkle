@@ -25,7 +25,7 @@ public class ModelOfCar
 
 	@OneToOne()
 	@JoinColumn(unique = true, name = "id_mark")
-	private MarkOfCar mark;
+	private MarkOfCar1 mark;
 
 	@OneToOne()
 	@JoinColumn(unique = true, name = "id_body_type")
@@ -55,12 +55,12 @@ public class ModelOfCar
 		this.modelName = modelName;
 	}
 
-	public MarkOfCar getMark() 
+	public MarkOfCar1 getMark() 
 	{
 		return mark;
 	}
 
-	public void setMark(MarkOfCar mark) 
+	public void setMark(MarkOfCar1 mark) 
 	{
 		this.mark = mark;
 	}

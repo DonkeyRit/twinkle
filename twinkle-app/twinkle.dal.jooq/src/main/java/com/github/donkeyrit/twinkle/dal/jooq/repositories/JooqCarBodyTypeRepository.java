@@ -1,40 +1,29 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import java.util.stream.Stream;
-
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.BodyTypeRecord;
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.BodyType;
+import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqGenericRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 
-public class JooqCarBodyTypeRepository implements CarBodyTypeRepository {
+import com.google.inject.Inject;
+import org.jooq.DSLContext;
 
-	@Override
-	public CarBodyType findById(Long id) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findById'");
+public class JooqCarBodyTypeRepository
+	extends JooqGenericRepository<CarBodyType, BodyTypeRecord> implements CarBodyTypeRepository {
+
+	@Inject
+	public JooqCarBodyTypeRepository(DSLContext dslContext) {
+		super(dslContext, BodyType.BODY_TYPE);
 	}
 
 	@Override
-	public Stream<CarBodyType> findAll() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+	protected CarBodyType mapRecordToEntity(BodyTypeRecord record) {
+		return new CarBodyType(record.getId(), record.getBodyTypeName());
 	}
 
 	@Override
-	public boolean save(CarBodyType o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'save'");
-	}
-
-	@Override
-	public boolean delete(CarBodyType o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
-	}
-
-	@Override
-	public boolean update(CarBodyType o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
-	}
-	
+	protected BodyTypeRecord entityToRecord(CarBodyType entity) {
+		return new BodyTypeRecord(entity.getId(), entity.getType());
+	}	
 }

@@ -1,46 +1,41 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import java.util.stream.Stream;
-
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.RentRecord;
+import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqGenericRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.models.Rent;
 
-public class JooqRentRepository implements RentRepository {
+import com.google.inject.Inject;
+import org.jooq.DSLContext;
 
-	@Override
-	public Rent findById(Long id) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findById'");
-	}
+public class JooqRentRepository
+	extends JooqGenericRepository<Rent, RentRecord> implements RentRepository {
 
-	@Override
-	public Stream<Rent> findAll() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
-	}
-
-	@Override
-	public boolean save(Rent o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'save'");
-	}
-
-	@Override
-	public boolean delete(Rent o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
-	}
-
-	@Override
-	public boolean update(Rent o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
+	@Inject
+	public JooqRentRepository(DSLContext dslContext) {
+		super(dslContext, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Rent.RENT);
 	}
 
 	@Override
 	public boolean isTaken(long carId) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'isTaken'");
+		return false; //TODO: Update implementation
 	}
-	
+
+	@Override
+	protected Rent mapRecordToEntity(RentRecord record) {
+		// return new Rent(
+		// 	record.getId(),
+		// 	record.getIdClient(),
+		// 	record.getIdCar(), 
+		// 	record.getStartDate(), 
+		// 	record.getPlanDate(), 
+		// 	record.getEndDate());
+
+		return null;
+	}
+
+	@Override
+	protected RentRecord entityToRecord(Rent entity) {
+		return null;
+	}
 }

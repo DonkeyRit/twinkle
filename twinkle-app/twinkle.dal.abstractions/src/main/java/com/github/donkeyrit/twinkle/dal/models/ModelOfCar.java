@@ -4,28 +4,39 @@ import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 
 public class ModelOfCar implements Identifiable {
 
-    private Long id;
+    private int id;
     private String modelName;
     private MarkOfCar mark;
-    private CarBodyType bodyType;
+	private int markId;
+	private CarBodyType bodyType;
+	private int bodyTypeId;
 
-    // Constructors
+	//#region Constructors
     public ModelOfCar() {
     }
 
-    public ModelOfCar(Long id, String modelName, MarkOfCar mark, CarBodyType bodyType) {
+    public ModelOfCar(int id, String modelName, MarkOfCar mark, CarBodyType bodyType) {
         this.id = id;
         this.modelName = modelName;
         this.mark = mark;
         this.bodyType = bodyType;
     }
 
-    // Getters and Setters
-    public Long getId() {
+	public ModelOfCar(int id, String modelName, int markId, int bodyTypeId) {
+		this.id = id;
+		this.modelName = modelName;
+		this.markId = markId;
+		this.bodyTypeId = bodyTypeId;
+	}
+
+	//#endregion
+
+	//#region Getters and Setters
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -45,6 +56,14 @@ public class ModelOfCar implements Identifiable {
         this.mark = mark;
     }
 
+	public int getMarkId() {
+		return markId;
+	}
+
+	public void setMarkId(int markId) {
+		this.markId = markId;
+	}
+
     public CarBodyType getBodyType() {
         return bodyType;
     }
@@ -52,4 +71,13 @@ public class ModelOfCar implements Identifiable {
     public void setBodyType(CarBodyType bodyType) {
         this.bodyType = bodyType;
     }
+
+	public int getBodyTypeId() {
+		return bodyTypeId;
+	}
+
+	public void setBodyTypeId(int bodyTypeId) {
+		this.bodyTypeId = bodyTypeId;
+	}
+	//#endregion
 }

@@ -7,7 +7,7 @@ import com.github.donkeyrit.twinkle.bll.security.HashManager;
 import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.models.Client;
-
+import com.github.donkeyrit.twinkle.dal.models.User;
 import com.google.inject.Inject;
 import java.util.Optional;
 
@@ -39,7 +39,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 		}
 
 		String newPasswordHash = HashManager.generateHash(newPassword);
-		userRepository.updatePassword(UserInformation.getId(), newPasswordHash);
+		User updatedUser = new User(UserInformation.getLogin(), newPasswordHash, UserInformation.isRole());
+		updatedUser.setId(UserInformation.getId());
+		userRepository.update(updatedUser);
 		UserInformation.setPassword(HashManager.generateHash(newPassword));
 		return Optional.empty();
 	}

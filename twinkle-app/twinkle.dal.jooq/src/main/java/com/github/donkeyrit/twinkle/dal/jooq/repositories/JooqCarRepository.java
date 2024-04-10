@@ -1,60 +1,53 @@
 package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
-import java.util.stream.Stream;
-
-import com.github.donkeyrit.twinkle.dal.common.models.Page;
+import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqFilterableRepository;
+import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.CarRecord;
 import com.github.donkeyrit.twinkle.dal.common.specifications.PagedSpecification;
+import com.github.donkeyrit.twinkle.dal.common.models.Page;
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 
-public class JooqCarRepository implements CarRepository {
+import com.google.inject.Inject;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
 
-	@Override
-	public Stream<Car> getList(PagedSpecification<Car> querySpecification) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getList'");
-	}
+public class JooqCarRepository 
+	extends JooqFilterableRepository<Car, CarQuerySpecification, CarRecord>
+	implements CarRepository {
 
-	@Override
-	public Car findById(Long id) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findById'");
-	}
-
-	@Override
-	public Stream<Car> findAll() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'findAll'");
-	}
-
-	@Override
-	public boolean save(Car o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'save'");
-	}
-
-	@Override
-	public boolean delete(Car o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'delete'");
-	}
-
-	@Override
-	public boolean update(Car o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'update'");
+	@Inject
+	public JooqCarRepository(DSLContext dslContext) {
+		super(dslContext, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Car.CAR);
 	}
 
 	@Override
 	public Page<Car> getPagedResult(PagedSpecification<Car> filter) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getPagedResult'");
+		throw new UnsupportedOperationException("Unimplemented JooqCarRepository method 'getPagedResult'");
 	}
 
 	@Override
 	public int getMaxPrice() {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getMaxPrice'");
+		throw new UnsupportedOperationException("Unimplemented JooqCarRepository method 'getMaxPrice'");
 	}
-	
+
+	@Override
+	public Condition toCondition(CarQuerySpecification querySpecification) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'toCondition'");
+	}
+
+	@Override
+	protected Car mapRecordToEntity(CarRecord record) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'mapRecordToEntity'");
+	}
+
+	@Override
+	protected CarRecord entityToRecord(Car entity) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'entityToRecord'");
+	}
 }

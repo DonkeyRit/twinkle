@@ -1,12 +1,9 @@
 package com.github.donkeyrit.twinkle.dal.interfaces;
 
-import com.github.donkeyrit.twinkle.dal.common.repositories.GenericRepository;
+import com.github.donkeyrit.twinkle.dal.common.repositories.FilterableRepository;
+import com.github.donkeyrit.twinkle.dal.specifications.UserInfoSpecifciation;
 import com.github.donkeyrit.twinkle.dal.models.User;
-import java.util.Optional;
 
-public interface UserRepository extends GenericRepository<User>
+public interface UserRepository extends FilterableRepository<User, UserInfoSpecifciation>
 {
-    Optional<User> getByLoginAndPassword(String login, String password);
-    boolean isUserExist(String login);
-	void updatePassword(int userId, String passwordHash);
 }

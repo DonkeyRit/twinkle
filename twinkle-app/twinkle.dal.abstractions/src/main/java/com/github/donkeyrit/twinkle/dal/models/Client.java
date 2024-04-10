@@ -4,7 +4,7 @@ import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 
 public class Client implements Identifiable {
 
-    private Long id;
+    private int id;
     private String firstName;
     private String secondName;
     private String middleName;
@@ -16,7 +16,7 @@ public class Client implements Identifiable {
     public Client() {
     }
 
-    public Client(Long id, String firstName, String secondName, String middleName, String address, String phoneNumber, int userId) {
+    public Client(int id, String firstName, String secondName, String middleName, String address, String phoneNumber, int userId) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -27,11 +27,11 @@ public class Client implements Identifiable {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

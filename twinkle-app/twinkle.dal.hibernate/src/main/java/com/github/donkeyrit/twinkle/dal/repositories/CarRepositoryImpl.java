@@ -6,7 +6,7 @@ import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
-import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.models.MarkOfCar1;
 import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car1;
 
@@ -81,7 +81,7 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car1, CarQueryFilter> 
 		CarQueryFilter queryFilter, 
 		Root<Car1> root,
 		Join<Car1, ModelOfCar> model, 
-		Join<ModelOfCar, MarkOfCar> mark, 
+		Join<ModelOfCar, MarkOfCar1> mark, 
 		List<Predicate> predicates
 	) {
 
@@ -116,7 +116,7 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car1, CarQueryFilter> 
 		CarQueryFilter queryFilter,
 		Root<Car1> root, 
 		Join<Car1, ModelOfCar> model, 
-		Join<ModelOfCar, MarkOfCar> mark,
+		Join<ModelOfCar, MarkOfCar1> mark,
 		Join<CarBodyType, ModelOfCar> carBodyType,
 		List<Predicate> predicates
 	) {
@@ -145,7 +145,7 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car1, CarQueryFilter> 
 		List<Predicate> predicateList = new ArrayList<>(4);
 
 		Join<Car1, ModelOfCar> model = null;
-		Join<ModelOfCar, MarkOfCar> mark = null;
+		Join<ModelOfCar, MarkOfCar1> mark = null;
 		Join<CarBodyType, ModelOfCar> carBodyType = null;
 
 		AddSelectedModelPredicate(criteriaBuilder, queryFilter, root, model, predicateList);

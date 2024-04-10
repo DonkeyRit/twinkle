@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 public interface GenericRepository<T extends Identifiable> 
 {
-	T findById(Long id);
+	T findById(int id);
 	Stream<T> findAll();
 	boolean save(T o);
 	boolean delete(T o);
