@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 
 @Entity
 @Table(name = "country")
-public class Country {
+public class Country1 {
 
 	// #region Fields
 
@@ -59,7 +59,7 @@ public class Country {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Country other = (Country) obj;
+		Country1 other = (Country1) obj;
 		if (id != other.id)
 			return false;
 		if (countryName == null) {

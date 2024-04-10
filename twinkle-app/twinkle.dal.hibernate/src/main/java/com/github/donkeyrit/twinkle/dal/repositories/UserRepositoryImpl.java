@@ -3,7 +3,7 @@ package com.github.donkeyrit.twinkle.dal.repositories;
 import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
-import com.github.donkeyrit.twinkle.dal.models.User;
+import com.github.donkeyrit.twinkle.dal.models.User1;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -12,7 +12,7 @@ import jakarta.persistence.TypedQuery;
 import com.google.inject.Inject;
 import java.util.Optional;
 
-public class UserRepositoryImpl extends BaseCrudRepository<User, QueryFilter> implements UserRepository
+public class UserRepositoryImpl extends BaseCrudRepository<User1, QueryFilter> implements UserRepository
 {
 	@Inject
     public UserRepositoryImpl(EntityManager session) 
@@ -21,14 +21,14 @@ public class UserRepositoryImpl extends BaseCrudRepository<User, QueryFilter> im
     }
 
     @Override
-    public Optional<User> getByLoginAndPassword(String login, String password) 
+    public Optional<User1> getByLoginAndPassword(String login, String password) 
     {
-        TypedQuery<User> query = session.createQuery("SELECT u FROM User u WHERE u.login = :login AND u.password = :password", User.class);
+        TypedQuery<User1> query = session.createQuery("SELECT u FROM User u WHERE u.login = :login AND u.password = :password", User1.class);
         query.setParameter("login", login);
         query.setParameter("password", password);
         try 
         {
-            User user = query.getSingleResult();
+            User1 user = query.getSingleResult();
             return Optional.of(user);
         } 
         catch (NoResultException e) 
@@ -40,7 +40,7 @@ public class UserRepositoryImpl extends BaseCrudRepository<User, QueryFilter> im
     @Override
     public boolean isUserExist(String login) 
     {
-        TypedQuery<User> query = session.createQuery("SELECT u FROM User u WHERE u.login = :login", User.class);
+        TypedQuery<User1> query = session.createQuery("SELECT u FROM User u WHERE u.login = :login", User1.class);
         query.setParameter("login", login);
         try 
         {
@@ -56,7 +56,7 @@ public class UserRepositoryImpl extends BaseCrudRepository<User, QueryFilter> im
 	@Override
 	public void updatePassword(int userId, String passwordHash) {
 		session.getTransaction().begin();
-        User user = session.find(User.class, userId);
+        User1 user = session.find(User1.class, userId);
 		user.setPassword(passwordHash);
         session.getTransaction().commit();
 	}

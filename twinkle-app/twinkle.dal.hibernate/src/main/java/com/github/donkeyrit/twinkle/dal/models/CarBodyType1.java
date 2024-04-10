@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 
 @Entity
 @Table(name = "body_type")
-public class CarBodyType {
+public class CarBodyType1 {
 
 	// #region Fields
 
@@ -59,7 +59,7 @@ public class CarBodyType {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CarBodyType other = (CarBodyType) obj;
+		CarBodyType1 other = (CarBodyType1) obj;
 		if (id != other.id)
 			return false;
 		if (type == null) {

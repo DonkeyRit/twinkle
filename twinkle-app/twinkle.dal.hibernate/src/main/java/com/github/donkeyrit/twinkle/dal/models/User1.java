@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseDbModel implements Serializable
+public class User1 extends BaseDbModel implements Serializable
 {
     @Id
     @Column(name = "id_user")
@@ -23,12 +23,12 @@ public class User extends BaseDbModel implements Serializable
     @Column(name = "role")
     private boolean role;
 
-    public User()
+    public User1()
     {
 
     }
 
-    public User(String login, String password, boolean role)
+    public User1(String login, String password, boolean role)
     {
         this.login = login;
         this.password = password;

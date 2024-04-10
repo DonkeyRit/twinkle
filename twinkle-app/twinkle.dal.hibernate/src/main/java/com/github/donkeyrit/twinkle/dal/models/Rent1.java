@@ -13,7 +13,7 @@ import com.github.donkeyrit.twinkle.dal.interfaces.BaseDbModel;
 
 @Entity
 @Table(name = "rent")
-public class Rent extends BaseDbModel {
+public class Rent1 extends BaseDbModel {
 
 	//#region Fields
 

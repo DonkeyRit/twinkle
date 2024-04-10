@@ -2,7 +2,7 @@ package com.github.donkeyrit.twinkle.dal.repositories;
 
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
 import com.google.inject.Inject;
-import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
+import com.github.donkeyrit.twinkle.dal.models.CarBodyType1;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -21,9 +21,9 @@ public class CarBodyTypeRepositoryImpl implements CarBodyTypeRepository
 	}
 
 	@Override
-	public Stream<CarBodyType> getList() 
+	public Stream<CarBodyType1> getList() 
 	{
-		TypedQuery<CarBodyType> query = session.createQuery("SELECT u FROM CarBodyType u", CarBodyType.class);
+		TypedQuery<CarBodyType1> query = session.createQuery("SELECT u FROM CarBodyType u", CarBodyType1.class);
         return query.getResultStream();
 	}
 }

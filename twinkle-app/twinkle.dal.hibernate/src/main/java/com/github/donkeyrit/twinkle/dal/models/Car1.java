@@ -35,7 +35,7 @@ public class Car1 extends BaseDbModel {
 
 	@OneToOne()
 	@JoinColumn(unique = true, name = "id_model")
-	private ModelOfCar modelOfCar;
+	private ModelOfCar1 modelOfCar;
 
 	// #endregion
 	// #region Getters/Setters
@@ -80,11 +80,11 @@ public class Car1 extends BaseDbModel {
 		this.cost = cost;
 	}
 
-	public ModelOfCar getModelOfCar() {
+	public ModelOfCar1 getModelOfCar() {
 		return modelOfCar;
 	}
 
-	public void setModelOfCar(ModelOfCar modelOfCar) {
+	public void setModelOfCar(ModelOfCar1 modelOfCar) {
 		this.modelOfCar = modelOfCar;
 	}
 

@@ -3,9 +3,9 @@ package com.github.donkeyrit.twinkle.repositories;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
-import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
-import com.github.donkeyrit.twinkle.dal.models.Country;
-import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
+import com.github.donkeyrit.twinkle.dal.models.CarBodyType1;
+import com.github.donkeyrit.twinkle.dal.models.Country1;
+import com.github.donkeyrit.twinkle.dal.models.ModelOfCar1;
 import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar1;
 import com.github.donkeyrit.twinkle.dal.models.Car1;
@@ -43,7 +43,7 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 		CarQueryFilter carQueryFilter = new CarQueryFilter();
 		carQueryFilter.setSelectedModel("Camry");
 
-		ModelOfCar modelOfCar = DaoFixture.createModelOfCar(1, "Camry",
+		ModelOfCar1 modelOfCar = DaoFixture.createModelOfCar(1, "Camry",
 				DaoFixture.createMarkOfCar(1, "Toyota", DaoFixture.createCountry(1, "Japan")),
 				DaoFixture.createCarBodyType(1, "Sedan"));
 
@@ -69,9 +69,9 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 		CarQueryFilter carQueryFilter = new CarQueryFilter();
 		carQueryFilter.setSelectedMark(hondaMark);
 
-		CarBodyType sedanBodyType = DaoFixture.createCarBodyType(1, "Sedan");
-		ModelOfCar accordCarModel = DaoFixture.createModelOfCar(3, "Accord", hondaMark, sedanBodyType);
-		ModelOfCar civicCarModel = DaoFixture.createModelOfCar(4, "Civic", hondaMark, sedanBodyType);
+		CarBodyType1 sedanBodyType = DaoFixture.createCarBodyType(1, "Sedan");
+		ModelOfCar1 accordCarModel = DaoFixture.createModelOfCar(3, "Accord", hondaMark, sedanBodyType);
+		ModelOfCar1 civicCarModel = DaoFixture.createModelOfCar(4, "Civic", hondaMark, sedanBodyType);
 
 		List<Car1> expectedResult = Arrays.asList(
 				DaoFixture.createCar(7, DateFixture.getDate(2020, 0, 01), accordCarModel, "Honda Accord 2020", 7,28000),
@@ -97,12 +97,12 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 		CarQueryFilter carQueryFilter = new CarQueryFilter();
 		carQueryFilter.setSelectedPrice(selectedPrice);
 
-		CarBodyType sedanBodyType = DaoFixture.createCarBodyType(1, "Sedan");
+		CarBodyType1 sedanBodyType = DaoFixture.createCarBodyType(1, "Sedan");
 		MarkOfCar1 kiaMark = DaoFixture.createMarkOfCar(13, "Kia", DaoFixture.createCountry(5, "Sweden"));
 		MarkOfCar1 toyotaMark = DaoFixture.createMarkOfCar(1, "Toyota", DaoFixture.createCountry(1, "Japan"));
 
-		ModelOfCar corollaCarModel = DaoFixture.createModelOfCar(2, "Corolla", toyotaMark, sedanBodyType);
-		ModelOfCar civicCarModel = DaoFixture.createModelOfCar(32, "Optima", kiaMark, sedanBodyType);
+		ModelOfCar1 corollaCarModel = DaoFixture.createModelOfCar(2, "Corolla", toyotaMark, sedanBodyType);
+		ModelOfCar1 civicCarModel = DaoFixture.createModelOfCar(32, "Optima", kiaMark, sedanBodyType);
 
 		List<Car1> expectedResult = Arrays.asList(
 				DaoFixture.createCar(4, DateFixture.getDate(2020, 0, 01), corollaCarModel, "Toyota Corolla 2020", 4, selectedPrice),
@@ -124,13 +124,13 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 		CarQueryFilter carQueryFilter = new CarQueryFilter();
 		carQueryFilter.setSelectedBodyTypes(selectedCarBodyTypes);
 
-		CarBodyType convertibleBodyType = DaoFixture.createCarBodyType(4, "Convertible");
-		Country usa = DaoFixture.createCountry(3, "USA");
+		CarBodyType1 convertibleBodyType = DaoFixture.createCarBodyType(4, "Convertible");
+		Country1 usa = DaoFixture.createCountry(3, "USA");
 		MarkOfCar1 fordMark = DaoFixture.createMarkOfCar(4, "Ford", usa);
 		MarkOfCar1 chevroletMark = DaoFixture.createMarkOfCar(5, "Chevrolet", usa);
 
-		ModelOfCar f150CarModel = DaoFixture.createModelOfCar(7, "F-150", fordMark, convertibleBodyType);
-		ModelOfCar silveradoCarModel = DaoFixture.createModelOfCar(10, "Silverado", chevroletMark, convertibleBodyType);
+		ModelOfCar1 f150CarModel = DaoFixture.createModelOfCar(7, "F-150", fordMark, convertibleBodyType);
+		ModelOfCar1 silveradoCarModel = DaoFixture.createModelOfCar(10, "Silverado", chevroletMark, convertibleBodyType);
 
 		List<Car1> expectedResult = Arrays.asList(
 				DaoFixture.createCar(19, DateFixture.getDate(2020, 0, 01), f150CarModel, "Nissan Altima 2020", 19, 27000),
@@ -151,10 +151,10 @@ public class CarRepositoryImplFilteringTests extends Assertions {
 	@Test
 	public void filterByAllFields_getPagedResult() {
 		// Arrange
-		CarBodyType suvBodyType = DaoFixture.createCarBodyType(2, "SUV");
-		Country germany = DaoFixture.createCountry(2, "Germany");
+		CarBodyType1 suvBodyType = DaoFixture.createCarBodyType(2, "SUV");
+		Country1 germany = DaoFixture.createCountry(2, "Germany");
 		MarkOfCar1 mercedesBenzMark = DaoFixture.createMarkOfCar(6, "Mercedes-Benz", germany);
-		ModelOfCar eClassCarModel = DaoFixture.createModelOfCar(11, "E-Class", mercedesBenzMark, suvBodyType);
+		ModelOfCar1 eClassCarModel = DaoFixture.createModelOfCar(11, "E-Class", mercedesBenzMark, suvBodyType);
 		
 		CarQueryFilter carQueryFilter = new CarQueryFilter();
 		carQueryFilter.setSelectedMark(mercedesBenzMark);
