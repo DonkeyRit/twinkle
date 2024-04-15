@@ -1,26 +1,22 @@
 package com.github.donkeyrit.twinkle.bll.services;
 
-import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
-import com.github.donkeyrit.twinkle.dal.specifications.ModelOfCarQuerySpecification;
-import com.github.donkeyrit.twinkle.dal.interfaces.CarBodyTypeRepository;
-import com.github.donkeyrit.twinkle.dal.interfaces.ModelOfCarRepository;
-import com.github.donkeyrit.twinkle.dal.interfaces.MarkOfCarRepository;
-import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
-import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
-import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
-import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
-import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
-import com.github.donkeyrit.twinkle.dal.models.Car;
-import com.github.donkeyrit.twinkle.dal.common.models.Page;
-import com.github.donkeyrit.twinkle.dal.common.specifications.QuerySpecification;
-import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
-import com.github.donkeyrit.twinkle.bll.models.PagedResultBll;
-
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.Optional;
-import java.util.List;
 
+import com.github.donkeyrit.twinkle.bll.models.PagedResultBll;
+import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
+import com.github.donkeyrit.twinkle.dal.common.models.Page;
+import com.github.donkeyrit.twinkle.dal.interfaces.CarBodyTypeRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.MarkOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.ModelOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
+import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
+import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 import com.google.inject.Inject;
 
 public class DefaultCarService implements CarService {
@@ -64,7 +60,9 @@ public class DefaultCarService implements CarService {
 
 	@Override
 	public int getMaxPrice() {
-		return this.carRepository.getMaxPrice();
+		//TODO: Rename method
+		Double maxCost = this.carRepository.getMaxPrice();
+		return (int) (maxCost.intValue() / 10000);
 	}
 
 	@Override
