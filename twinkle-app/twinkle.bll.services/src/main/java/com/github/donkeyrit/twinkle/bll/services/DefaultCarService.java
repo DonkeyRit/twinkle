@@ -77,8 +77,8 @@ public class DefaultCarService implements CarService {
 	}
 
 	@Override
-	public PagedResultBll<Car> getPagedResult(CarQuerySpecification filter) {
-		Page<Car> dal = this.carRepository.getPagedResult(filter, Optional.of(Paging.all()));
+	public PagedResultBll<Car> getPagedResult(CarQuerySpecification filter, Optional<Paging> paging) {
+		Page<Car> dal = this.carRepository.getPagedResult(filter, paging);
 		return new PagedResultBll<>(dal.getContent(), dal.getTotalElements());
 	}
 

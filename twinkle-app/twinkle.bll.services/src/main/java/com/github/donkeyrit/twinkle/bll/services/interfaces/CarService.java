@@ -3,6 +3,7 @@ package com.github.donkeyrit.twinkle.bll.services.interfaces;
 import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
+import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 import com.github.donkeyrit.twinkle.bll.models.PagedResultBll;
 
@@ -16,6 +17,6 @@ public interface CarService {
 	List<MarkOfCar> getExistingMarks();
 	Stream<CarBodyType> getCarBodyTypes();
 	int getMaxPrice();
-	PagedResultBll<Car> getPagedResult(CarQuerySpecification filter);
+	PagedResultBll<Car> getPagedResult(CarQuerySpecification filter, Optional<Paging> paging);
 	String isTaken(long carId);
 }
