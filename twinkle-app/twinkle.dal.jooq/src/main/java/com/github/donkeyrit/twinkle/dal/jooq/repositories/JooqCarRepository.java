@@ -2,20 +2,17 @@ package com.github.donkeyrit.twinkle.dal.jooq.repositories;
 
 import com.github.donkeyrit.twinkle.dal.jooq.abstractions.JooqFilterableRepository;
 import com.github.donkeyrit.twinkle.dal.jooq.generated.tables.records.CarRecord;
-import com.github.donkeyrit.twinkle.dal.common.specifications.PagedSpecification;
-import com.github.donkeyrit.twinkle.dal.common.models.Page;
 import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
 
 import com.google.inject.Inject;
-import java.math.BigDecimal;
 
 import org.jooq.CommonTableExpression;
-import org.jooq.Condition;
 import org.jooq.DSLContext;
-import org.jooq.Field;
+import org.jooq.Condition;
 import org.jooq.Record1;
+import org.jooq.Field;
 import org.jooq.impl.DSL;
 
 public class JooqCarRepository 
@@ -25,12 +22,6 @@ public class JooqCarRepository
 	@Inject
 	public JooqCarRepository(DSLContext dslContext) {
 		super(dslContext, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Car.CAR);
-	}
-
-	@Override
-	public Page<Car> getPagedResult(PagedSpecification<Car> filter) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented JooqCarRepository method 'getPagedResult'");
 	}
 
 	@Override

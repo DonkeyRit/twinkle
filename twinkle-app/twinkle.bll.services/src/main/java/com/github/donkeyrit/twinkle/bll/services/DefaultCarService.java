@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import com.github.donkeyrit.twinkle.bll.models.PagedResultBll;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.dal.common.models.Page;
+import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarBodyTypeRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.MarkOfCarRepository;
@@ -77,7 +78,7 @@ public class DefaultCarService implements CarService {
 
 	@Override
 	public PagedResultBll<Car> getPagedResult(CarQuerySpecification filter) {
-		Page<Car> dal = this.carRepository.getPagedResult(filter);
+		Page<Car> dal = this.carRepository.getPagedResult(filter, Optional.of(Paging.all()));
 		return new PagedResultBll<>(dal.getContent(), dal.getTotalElements());
 	}
 

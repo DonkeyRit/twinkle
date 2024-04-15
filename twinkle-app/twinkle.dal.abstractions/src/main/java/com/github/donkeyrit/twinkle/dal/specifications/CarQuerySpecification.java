@@ -1,6 +1,6 @@
 package com.github.donkeyrit.twinkle.dal.specifications;
 
-import com.github.donkeyrit.twinkle.dal.common.specifications.PagedSpecification;
+import com.github.donkeyrit.twinkle.dal.common.specifications.QuerySpecification;
 import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.dal.models.Car;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
 
-public class CarQuerySpecification extends PagedSpecification<Car> {
+public class CarQuerySpecification implements QuerySpecification<Car> {
 	//#region Fields
 
 	private Optional<MarkOfCar> selectedMark;
@@ -22,7 +22,6 @@ public class CarQuerySpecification extends PagedSpecification<Car> {
 		this.selectedModel = Optional.empty();
 		this.selectedPrice = Optional.empty();
 		this.selectedBodyTypes = new ArrayList<String>(0);
-		//this.setPaging(paging);
 	}
 
 	public CarQuerySpecification() {
