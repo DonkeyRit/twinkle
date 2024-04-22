@@ -1,29 +1,38 @@
 package com.github.donkeyrit.twinkle.dal.models;
 
-import java.sql.Date;
-
 import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
+import java.time.LocalDate;
 
 public class Car implements Identifiable {
 
     private int id;
-    private Date modelYear;
+    private LocalDate modelYear;
     private String info;
     private int imageId;
     private double cost;
     private ModelOfCar modelOfCar;
+	private int modelOfCarId;
 
     // Constructors
     public Car() {
     }
 
-    public Car(int id, Date modelYear, String info, int imageId, double cost, ModelOfCar modelOfCar) {
+    public Car(int id, LocalDate modelYear, String info, int imageId, double cost, ModelOfCar modelOfCar) {
         this.id = id;
         this.modelYear = modelYear;
         this.info = info;
         this.imageId = imageId;
         this.cost = cost;
         this.modelOfCar = modelOfCar;
+    }
+
+	public Car(int id, LocalDate modelYear, String info, int imageId, double cost, int modelOfCarId) {
+        this.id = id;
+        this.modelYear = modelYear;
+        this.info = info;
+        this.imageId = imageId;
+        this.cost = cost;
+        this.modelOfCarId = modelOfCarId;
     }
 
     // Getters and Setters
@@ -35,11 +44,11 @@ public class Car implements Identifiable {
         this.id = id;
     }
 
-    public Date getModelYear() {
+    public LocalDate getModelYear() {
         return modelYear;
     }
 
-    public void setModelYear(Date modelYear) {
+    public void setModelYear(LocalDate modelYear) {
         this.modelYear = modelYear;
     }
 

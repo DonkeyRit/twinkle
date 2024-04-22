@@ -25,8 +25,13 @@ public class CarPanel extends JPanel
 
 		long carId = car.getId();
 		this.imagesNum = carId;
-		this.nameCountry = car.getModelOfCar().getMark().getCountry().getCountryName();
 		this.status = carService.isTaken(carId);
+
+		//TODO: Retrieve real information
+		this.nameCountry = "Canada"; //car.getModelOfCar().getMark().getCountry().getCountryName();
+		String modelName = ""; //car.getModelOfCar().getModelName();
+		String markName = ""; //car.getModelOfCar().getMark().getName();
+		String bodyTypeName = ""; //car.getModelOfCar().getBodyType().getType();
 
 		Font font = new Font("Arial", Font.BOLD, 13);
 		Font alterfont = new Font("Arial", Font.ITALIC, 13);
@@ -36,7 +41,8 @@ public class CarPanel extends JPanel
 		modelLab.setFont(alterfont);
 		add(modelLab);
 
-		JLabel modelLabel = new JLabel(car.getModelOfCar().getModelName());
+		
+		JLabel modelLabel = new JLabel(modelName);
 		modelLabel.setBounds(290, 10, 150, 15);
 		modelLabel.setFont(font);
 		add(modelLabel);
@@ -46,7 +52,8 @@ public class CarPanel extends JPanel
 		markLab.setFont(alterfont);
 		add(markLab);
 
-		JLabel markLabel = new JLabel(car.getModelOfCar().getMark().getName());
+		
+		JLabel markLabel = new JLabel(markName);
 		markLabel.setBounds(290, 30, 150, 15);
 		markLabel.setFont(font);
 		add(markLabel);
@@ -56,7 +63,7 @@ public class CarPanel extends JPanel
 		bodyTypeLab.setFont(alterfont);
 		add(bodyTypeLab);
 
-		JLabel bodyTypeLabel = new JLabel(car.getModelOfCar().getBodyType().getType());
+		JLabel bodyTypeLabel = new JLabel(bodyTypeName);
 		bodyTypeLabel.setBounds(290, 50, 150, 15);
 		bodyTypeLabel.setFont(font);
 		add(bodyTypeLabel);

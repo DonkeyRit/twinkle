@@ -4,8 +4,8 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
-import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
-import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
+import com.github.donkeyrit.twinkle.dal.models.CarBodyType1;
+import com.github.donkeyrit.twinkle.dal.models.ModelOfCar1;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar1;
 import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car1;
@@ -62,7 +62,7 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car1, CarQueryFilter> 
 		CriteriaBuilder criteriaBuilder, 
 		CarQueryFilter queryFilter, 
 		Root<Car1> root,
-		Join<Car1, ModelOfCar> model, 
+		Join<Car1, ModelOfCar1> model, 
 		List<Predicate> predicates
 	) {
 
@@ -80,8 +80,8 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car1, CarQueryFilter> 
 		CriteriaBuilder criteriaBuilder, 
 		CarQueryFilter queryFilter, 
 		Root<Car1> root,
-		Join<Car1, ModelOfCar> model, 
-		Join<ModelOfCar, MarkOfCar1> mark, 
+		Join<Car1, ModelOfCar1> model, 
+		Join<ModelOfCar1, MarkOfCar1> mark, 
 		List<Predicate> predicates
 	) {
 
@@ -115,9 +115,9 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car1, CarQueryFilter> 
 		CriteriaBuilder criteriaBuilder, 
 		CarQueryFilter queryFilter,
 		Root<Car1> root, 
-		Join<Car1, ModelOfCar> model, 
-		Join<ModelOfCar, MarkOfCar1> mark,
-		Join<CarBodyType, ModelOfCar> carBodyType,
+		Join<Car1, ModelOfCar1> model, 
+		Join<ModelOfCar1, MarkOfCar1> mark,
+		Join<CarBodyType1, ModelOfCar1> carBodyType,
 		List<Predicate> predicates
 	) {
 		if (!queryFilter.getSelectedBodyTypes().isEmpty()) {
@@ -144,9 +144,9 @@ public class CarRepositoryImpl extends BaseCrudRepository<Car1, CarQueryFilter> 
 	) {
 		List<Predicate> predicateList = new ArrayList<>(4);
 
-		Join<Car1, ModelOfCar> model = null;
-		Join<ModelOfCar, MarkOfCar1> mark = null;
-		Join<CarBodyType, ModelOfCar> carBodyType = null;
+		Join<Car1, ModelOfCar1> model = null;
+		Join<ModelOfCar1, MarkOfCar1> mark = null;
+		Join<CarBodyType1, ModelOfCar1> carBodyType = null;
 
 		AddSelectedModelPredicate(criteriaBuilder, queryFilter, root, model, predicateList);
 		AddSelectedMarkPredicate(criteriaBuilder, queryFilter, root, model, mark, predicateList);

@@ -25,7 +25,7 @@ public class MarkOfCar1 {
 
 	@OneToOne()
 	@JoinColumn(unique = true, name = "id_country")
-	private Country country;
+	private Country1 country;
 
 	// #endregion
 	// #region Getters/Setters
@@ -46,11 +46,11 @@ public class MarkOfCar1 {
 		this.name = name;
 	}
 
-	public Country getCountry() {
+	public Country1 getCountry() {
 		return country;
 	}
 
-	public void setCountry(Country country) {
+	public void setCountry(Country1 country) {
 		this.country = country;
 	}
 

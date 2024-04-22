@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 
 @Entity
 @Table(name = "clients")
-public class Client extends BaseDbModel {
+public class Client1 extends BaseDbModel {
 
 	//#region Fields
 

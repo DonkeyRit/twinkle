@@ -1,16 +1,15 @@
-package com.github.donkeyrit.twinkle.dal.common.specifications;
+package com.github.donkeyrit.twinkle.models;
 
-import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import java.util.Optional;
 
-public abstract class PagedSpecification<T extends Identifiable> implements QuerySpecification<T> {
-
+public class PagingSearchFilterViewModel {
+	
 	//#region Fields
 
 	private Optional<Paging> paging;
 
-	public PagedSpecification() {
+	public PagingSearchFilterViewModel() {
 		paging = Optional.empty();
 	}
 

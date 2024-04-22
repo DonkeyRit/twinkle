@@ -1,14 +1,14 @@
-package com.github.donkeyrit.twinkle.dal.specifications;
+package com.github.donkeyrit.twinkle.models;
 
-import com.github.donkeyrit.twinkle.dal.common.specifications.QuerySpecification;
+import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
-import com.github.donkeyrit.twinkle.dal.models.Car;
 
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
 
-public class CarQuerySpecification implements QuerySpecification<Car> {
+public class CarSearchFilterViewModel extends PagingSearchFilterViewModel  {
+	
 	//#region Fields
 
 	private Optional<MarkOfCar> selectedMark;
@@ -16,7 +16,15 @@ public class CarQuerySpecification implements QuerySpecification<Car> {
 	private Optional<Double> selectedPrice;
 	private List<String> selectedBodyTypes;
 
-	public CarQuerySpecification() {
+	public CarSearchFilterViewModel(Paging paging) {
+		this.selectedMark = Optional.empty();
+		this.selectedModel = Optional.empty();
+		this.selectedPrice = Optional.empty();
+		this.selectedBodyTypes = new ArrayList<String>(0);
+		this.setPaging(paging);
+	}
+
+	public CarSearchFilterViewModel() {
 		this.selectedMark = Optional.empty();
 		this.selectedModel = Optional.empty();
 		this.selectedPrice = Optional.empty();
@@ -53,3 +61,4 @@ public class CarQuerySpecification implements QuerySpecification<Car> {
 
 	//#endregion
 }
+

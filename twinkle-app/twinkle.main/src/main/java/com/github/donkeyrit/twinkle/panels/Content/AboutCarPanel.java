@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.Date;
 import javax.swing.border.*;
@@ -20,7 +21,7 @@ import javax.swing.text.*;
 public class AboutCarPanel extends JPanel 
 {
 	private int imagesNum;
-	private Date modelYear;
+	private LocalDate modelYear;
 	private Double cost;
 	private String modelName;
 	private String markName;

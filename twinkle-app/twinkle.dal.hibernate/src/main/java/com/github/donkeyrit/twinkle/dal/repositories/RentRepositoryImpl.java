@@ -4,12 +4,12 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.google.inject.Inject;
 import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.QueryFilter;
-import com.github.donkeyrit.twinkle.dal.models.Rent;
+import com.github.donkeyrit.twinkle.dal.models.Rent1;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
-public class RentRepositoryImpl extends BaseCrudRepository<Rent, QueryFilter> implements RentRepository {
+public class RentRepositoryImpl extends BaseCrudRepository<Rent1, QueryFilter> implements RentRepository {
 
 	@Inject
 	public RentRepositoryImpl(EntityManager session) {
@@ -19,8 +19,8 @@ public class RentRepositoryImpl extends BaseCrudRepository<Rent, QueryFilter> im
 	@Override
 	public boolean isTaken(int carId) {
 
-		TypedQuery<Rent> query = session.createQuery(
-			"SELECT u FROM Rent u WHERE u.idCar = :carId ORDER BY u.endDate", Rent.class);
+		TypedQuery<Rent1> query = session.createQuery(
+			"SELECT u FROM Rent u WHERE u.idCar = :carId ORDER BY u.endDate", Rent1.class);
         query.setParameter("carId", carId);
 		query.setMaxResults(1);
 		
@@ -28,7 +28,7 @@ public class RentRepositoryImpl extends BaseCrudRepository<Rent, QueryFilter> im
 			return false;
 		}
 
-		Rent lastRent = query.getSingleResult();
+		Rent1 lastRent = query.getSingleResult();
 		return lastRent.getEndDate() == null;
 	}
 }

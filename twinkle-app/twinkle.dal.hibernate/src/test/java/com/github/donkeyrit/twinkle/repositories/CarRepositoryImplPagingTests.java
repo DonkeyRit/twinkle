@@ -3,12 +3,12 @@ package com.github.donkeyrit.twinkle.repositories;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
-import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
+import com.github.donkeyrit.twinkle.dal.models.ModelOfCar1;
 import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
 import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
 import com.github.donkeyrit.twinkle.dal.models.Car1;
-import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
-import com.github.donkeyrit.twinkle.dal.models.Country;
+import com.github.donkeyrit.twinkle.dal.models.CarBodyType1;
+import com.github.donkeyrit.twinkle.dal.models.Country1;
 import com.github.donkeyrit.twinkle.dal.models.MarkOfCar1;
 import com.github.donkeyrit.twinkle.utils.DateFixture;
 import com.github.donkeyrit.twinkle.utils.DaoFixture;
@@ -47,15 +47,15 @@ public class CarRepositoryImplPagingTests extends Assertions {
 		carQueryFilter.setSelectedPrice(100000);
 		carQueryFilter.setPaging(paging);
 
-		CarBodyType sedanBodyType = DaoFixture.createCarBodyType(1, "Sedan");
-		Country japan = DaoFixture.createCountry(1, "Japan");
+		CarBodyType1 sedanBodyType = DaoFixture.createCarBodyType(1, "Sedan");
+		Country1 japan = DaoFixture.createCountry(1, "Japan");
 
 		MarkOfCar1 hondaMark = DaoFixture.createMarkOfCar(2, "Honda", japan);
 		MarkOfCar1 corollaMark = DaoFixture.createMarkOfCar(1, "Toyota", japan);
 
-		ModelOfCar corollaCarModel = DaoFixture.createModelOfCar(2, "Corolla", corollaMark, sedanBodyType);
-		ModelOfCar accordCarModel = DaoFixture.createModelOfCar(3, "Accord", hondaMark, sedanBodyType);
-		ModelOfCar civicCarModel = DaoFixture.createModelOfCar(4, "Civic", hondaMark, sedanBodyType);
+		ModelOfCar1 corollaCarModel = DaoFixture.createModelOfCar(2, "Corolla", corollaMark, sedanBodyType);
+		ModelOfCar1 accordCarModel = DaoFixture.createModelOfCar(3, "Accord", hondaMark, sedanBodyType);
+		ModelOfCar1 civicCarModel = DaoFixture.createModelOfCar(4, "Civic", hondaMark, sedanBodyType);
 
 		List<Car1> expectedResult = Arrays.asList(
 				DaoFixture.createCar(6, DateFixture.getDate(2022, 0, 01), corollaCarModel, "Toyota Corolla 2022", 6, 24000),

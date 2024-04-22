@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "model")
-public class ModelOfCar 
+public class ModelOfCar1 
 {
 	//#region Fields
 
@@ -29,7 +29,7 @@ public class ModelOfCar
 
 	@OneToOne()
 	@JoinColumn(unique = true, name = "id_body_type")
-	private CarBodyType bodyType;
+	private CarBodyType1 bodyType;
 
 	//#endregion
 
@@ -65,12 +65,12 @@ public class ModelOfCar
 		this.mark = mark;
 	}
 
-	public CarBodyType getBodyType() 
+	public CarBodyType1 getBodyType() 
 	{
 		return bodyType;
 	}
 
-	public void setBodyTypeId(CarBodyType bodyType)
+	public void setBodyTypeId(CarBodyType1 bodyType)
 	{
 		this.bodyType = bodyType;
 	}
@@ -96,7 +96,7 @@ public class ModelOfCar
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ModelOfCar other = (ModelOfCar) obj;
+		ModelOfCar1 other = (ModelOfCar1) obj;
 		if (Id != other.Id)
 			return false;
 		if (modelName == null) {

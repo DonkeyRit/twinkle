@@ -1,11 +1,12 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
-import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 import com.github.donkeyrit.twinkle.bll.models.PagedResultBll;
 import com.github.donkeyrit.twinkle.bll.services.interfaces.CarService;
 import com.github.donkeyrit.twinkle.dal.common.models.Paging;
 import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 import com.github.donkeyrit.twinkle.events.contracts.NavigationPanelEventsListener;
+import com.github.donkeyrit.twinkle.models.CarSearchFilterViewModel;
 import com.github.donkeyrit.twinkle.panels.nestedpanels.PageNavigatorPanel;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
@@ -23,16 +24,17 @@ import com.google.inject.Inject;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.util.Optional;
 import java.awt.Color;
 import java.awt.Font;
 
 public class ContentPanel extends JPanel {
-	private final CarQuerySpecification filter;
+	private final CarSearchFilterViewModel filter;
 
 	private final NavigationPanelEventsListener contentEventsListener;
 	private final CarService carService;
 
-	public CarQuerySpecification getFilter() {
+	public CarSearchFilterViewModel getFilter() {
 		return filter;
 	}
 
@@ -40,7 +42,7 @@ public class ContentPanel extends JPanel {
 	public ContentPanel(
 		NavigationPanelEventsListener contentEventsListener, 
 		CarService carService, 
-		@Assisted CarQuerySpecification filter
+		@Assisted CarSearchFilterViewModel filter
 	) {
 		setLayout(new BorderLayout());
 
@@ -73,8 +75,8 @@ public class ContentPanel extends JPanel {
 		// Cars container
 		JPanel carsContainer = new JPanel();
         carsContainer.setLayout(new BoxLayout(carsContainer, BoxLayout.Y_AXIS));
-        
-		PagedResultBll<Car> filteredCars = this.carService.getPagedResult(filter);
+       
+		PagedResultBll<Car> filteredCars = this.carService.getPagedResult(adaptFromFilter(filter), filter.getPaging());
 		for (Car car : filteredCars.getResult()) {
 			CarPanel panel = this.contentEventsListener.onCarPanelCreateRequest(car);
             panel.setBorder(new LineBorder(new Color(0, 163, 163), 4));
@@ -98,4 +100,15 @@ public class ContentPanel extends JPanel {
 		g.setColor(new Color(237, 237, 237));
 		g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(), 30, 25);
 	}
+
+	public static CarQuerySpecification adaptFromFilter(CarSearchFilterViewModel filter) {
+        CarQuerySpecification querySpecification = new CarQuerySpecification();
+
+		filter.setSelectedBodyTypes(filter.getSelectedBodyTypes());
+		filter.getSelectedMark().ifPresent(mark -> filter.setSelectedMark(mark));
+		filter.getSelectedModel().ifPresent(model -> filter.setSelectedModel(model));
+		filter.getSelectedPrice().ifPresent(price -> filter.setSelectedPrice(price));
+
+        return querySpecification;
+    }
 }
