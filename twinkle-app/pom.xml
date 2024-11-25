@@ -14,11 +14,13 @@
  -->
 
   <modules>
+    <!-- Persistence modules -->
+    <module>persistence/twinkle.dal.abstractions</module>
+    <module>persistence/twinkle.dal.migrations</module>
+    <module>persistence/twinkle.dal.jooq</module>
+    <module>persistence/twinkle.dal.hibernate</module>
+    <!-- Persistence modules -->
     <module>twinkle.auth.services</module>
-    <module>twinkle.dal.migrations</module>
-    <module>twinkle.dal.abstractions</module>
-    <module>twinkle.dal.hibernate</module>
-    <module>twinkle.dal.jooq</module>
     <module>twinkle.bll.services</module>
     <module>twinkle.main</module>
   </modules>
