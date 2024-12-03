@@ -10,18 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - local_db_data:/var/lib/postgresql/data
-  postgres_local_tests:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: localtestuser
-      POSTGRES_PASSWORD: localtestpassword
-      POSTGRES_DB: carrenttests
-    ports:
-      - "5433:5432"
-    volumes:
-      - local_test_db_data:/var/lib/postgresql/data
 
 volumes:
   local_db_data:
-  local_test_db_data:
 
