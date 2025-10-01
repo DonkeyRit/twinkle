@@ -14,7 +14,7 @@ public class Country1 {
 	// #region Fields
 
 	@Id
-	@Column(name = "id_country")
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 

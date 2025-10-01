@@ -19,7 +19,7 @@ public class Rent1 extends BaseDbModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_rent")
+	@Column(name = "id")
 	private int id;
 
 	@Column(name = "id_client")

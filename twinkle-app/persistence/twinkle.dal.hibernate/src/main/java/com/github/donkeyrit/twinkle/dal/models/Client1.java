@@ -17,7 +17,7 @@ public class Client1 extends BaseDbModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_client")
+	@Column(name = "id")
 	private int id;
 
 	@Column(name = "first_name")

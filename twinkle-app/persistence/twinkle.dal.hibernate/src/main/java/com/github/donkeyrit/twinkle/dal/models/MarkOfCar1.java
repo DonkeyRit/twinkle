@@ -16,7 +16,7 @@ public class MarkOfCar1 {
 	// #region Fields
 
 	@Id
-	@Column(name = "id_mark")
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 

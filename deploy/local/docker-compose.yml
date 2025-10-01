@@ -9,8 +9,20 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - local_db_data:/var/lib/postgresql/data
+      - local_db_data:/var/lib/postgresql
+
+  postgres_local_test:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: twinkle_test_user
+      POSTGRES_PASSWORD: Sr412Tqew!
+      POSTGRES_DB: integration_tests_carrental
+    ports:
+      - "5433:5432"
+    volumes:
+      - local_db_test_data:/var/lib/postgresql
 
 volumes:
   local_db_data:
+  local_db_test_data:
 

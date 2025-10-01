@@ -16,7 +16,7 @@ public class ModelOfCar1
 	//#region Fields
 
 	@Id
-	@Column(name = "id_model")
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int Id;
 

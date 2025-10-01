@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 public class User1 extends BaseDbModel implements Serializable
 {
     @Id
-    @Column(name = "id_user")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

@@ -14,7 +14,7 @@ public class CarBodyType1 {
 	// #region Fields
 
 	@Id
-	@Column(name = "id_body_type")
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
