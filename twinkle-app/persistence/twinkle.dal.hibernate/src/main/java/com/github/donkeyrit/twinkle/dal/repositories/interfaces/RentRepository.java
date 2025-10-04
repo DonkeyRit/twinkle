@@ -4,7 +4,13 @@ import com.github.donkeyrit.twinkle.dal.interfaces.CrudRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.QueryFilter;
 import com.github.donkeyrit.twinkle.dal.models.Rent1;
 
+import java.util.Optional;
+
 public interface RentRepository extends CrudRepository<Rent1, QueryFilter>  {
-	
+
 	boolean isTaken(int carId);
+
+	Optional<Rent1> getLastByCarId(int carId);
+
+	Optional<Rent1> getLastByClientId(int clientId);
 }

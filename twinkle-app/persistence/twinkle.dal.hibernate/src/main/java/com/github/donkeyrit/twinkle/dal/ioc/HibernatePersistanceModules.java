@@ -7,6 +7,8 @@ import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ClientRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.InjuryRepository;
+import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ResultingInjuryRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.CarBodyTypeRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.MarkOfCarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.ModelOfCarRepositoryImpl;
@@ -14,6 +16,8 @@ import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.ClientRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.RentRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.InjuryRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.ResultingInjuryRepositoryImpl;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -36,6 +40,8 @@ public class HibernatePersistanceModules extends AbstractModule {
 		bind(CarRepository.class).to(CarRepositoryImpl.class);
 		bind(RentRepository.class).to(RentRepositoryImpl.class);
 		bind(ClientRepository.class).to(ClientRepositoryImpl.class);
+		bind(InjuryRepository.class).to(InjuryRepositoryImpl.class);
+		bind(ResultingInjuryRepository.class).to(ResultingInjuryRepositoryImpl.class);
 	}
 
 	@Provides
