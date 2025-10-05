@@ -1,182 +1,79 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
-import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
-import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
-import com.github.donkeyrit.twinkle.dal.models.CarBodyType1;
-import com.github.donkeyrit.twinkle.dal.models.ModelOfCar1;
-import com.github.donkeyrit.twinkle.dal.models.MarkOfCar1;
-import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
-import com.github.donkeyrit.twinkle.dal.models.Car1;
+import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
+import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
+import com.github.donkeyrit.twinkle.dal.repositories.abstractions.HibernateFilterableRepository;
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
+import com.google.inject.Inject;
+
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 
-import com.google.inject.Inject;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.List;
 
-public class CarRepositoryImpl extends BaseCrudRepository<Car1, CarQueryFilter> implements CarRepository {
+public class CarRepositoryImpl extends HibernateFilterableRepository<Car, CarQuerySpecification> implements CarRepository {
 
 	@Inject
-	public CarRepositoryImpl(EntityManager session) {
-		super(session);
-	}
-
-	// TODO: Move this method to BaseCrudRepository
-	public PagedResultDal<Car1> getPagedResult(CarQueryFilter queryFilter) {
-
-		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-		
-		CriteriaQuery<Car1> query = criteriaBuilder.createQuery(Car1.class);
-		Root<Car1> root = query.from(Car1.class);
-		Predicate[] predicates = applyFilters(criteriaBuilder, queryFilter, root, criteriaBuilder);
-		query.select(root).where(predicates);
-
-		TypedQuery<Car1> typedQuery = session.createQuery(query);
-		Optional<Paging> paging = queryFilter.getPaging();
-		paging.ifPresent(p -> AddPaging(typedQuery, p));
-
-		// #region Total count
-
-		CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-		Root<Car1> countRoot = countQuery.from(Car1.class);
-		Predicate[] countPredicates = applyFilters(criteriaBuilder, queryFilter, countRoot, criteriaBuilder);
-		countQuery.select(criteriaBuilder.count(countRoot)).where(countPredicates);
-
-		// #endregion
-		return new PagedResultDal<Car1>(typedQuery.getResultStream(), getTotalCount(countQuery));
-	}
-
-	// #region Create predicates
-
-	private void AddSelectedModelPredicate(
-		CriteriaBuilder criteriaBuilder, 
-		CarQueryFilter queryFilter, 
-		Root<Car1> root,
-		Join<Car1, ModelOfCar1> model, 
-		List<Predicate> predicates
-	) {
-
-		if (queryFilter.getSelectedModel().isPresent()) {
-
-			String modelName = queryFilter.getSelectedModel().get();
-			model = root.join("modelOfCar");
-
-			Predicate eqModelName = criteriaBuilder.equal(model.get("modelName"), modelName);
-			predicates.add(eqModelName);
-		}
-	}
-
-	private void AddSelectedMarkPredicate(
-		CriteriaBuilder criteriaBuilder, 
-		CarQueryFilter queryFilter, 
-		Root<Car1> root,
-		Join<Car1, ModelOfCar1> model, 
-		Join<ModelOfCar1, MarkOfCar1> mark, 
-		List<Predicate> predicates
-	) {
-
-		if (queryFilter.getSelectedMark().isPresent()) {
-
-			int markId = queryFilter.getSelectedMark().get().getId();
-			if (model == null)
-				model = root.join("modelOfCar");
-			mark = model.join("mark");
-
-			Predicate eqMarkId = criteriaBuilder.equal(mark.get("id"), markId);
-			predicates.add(eqMarkId);
-		}
-	}
-
-	private void AddSelectedPricePredicate(
-		CriteriaBuilder criteriaBuilder, 
-		CarQueryFilter queryFilter, 
-		Root<Car1> root,
-		List<Predicate> predicates
-	) {
-		if (queryFilter.getSelectedPrice().isPresent()) {
-			double selectedPrice = queryFilter.getSelectedPrice().get();
-			Predicate leCostPredicate = criteriaBuilder.lessThanOrEqualTo(root.get("cost"), selectedPrice);
-
-			predicates.add(leCostPredicate);
-		}
-	}
-
-	private void AddSelectedBodyTypesPredicate(
-		CriteriaBuilder criteriaBuilder, 
-		CarQueryFilter queryFilter,
-		Root<Car1> root, 
-		Join<Car1, ModelOfCar1> model, 
-		Join<ModelOfCar1, MarkOfCar1> mark,
-		Join<CarBodyType1, ModelOfCar1> carBodyType,
-		List<Predicate> predicates
-	) {
-		if (!queryFilter.getSelectedBodyTypes().isEmpty()) {
-
-			if (model == null)
-				model = root.join("modelOfCar");
-			carBodyType = model.join("bodyType");
-
-			In<String> selectedCarBodyTypesPredicate = criteriaBuilder.in(carBodyType.get("type"));
-			for (String selectedCarBodyType : queryFilter.getSelectedBodyTypes()) {
-				selectedCarBodyTypesPredicate.value(selectedCarBodyType);
-			}
-			predicates.add(selectedCarBodyTypesPredicate);
-		}
-	}
-
-	// #endregion Create predicates
-
-	private Predicate[] applyFilters(
-		CriteriaBuilder criteriaBuilder, 
-		CarQueryFilter queryFilter, 
-		Root<Car1> root, 
-		CriteriaBuilder cb
-	) {
-		List<Predicate> predicateList = new ArrayList<>(4);
-
-		Join<Car1, ModelOfCar1> model = null;
-		Join<ModelOfCar1, MarkOfCar1> mark = null;
-		Join<CarBodyType1, ModelOfCar1> carBodyType = null;
-
-		AddSelectedModelPredicate(criteriaBuilder, queryFilter, root, model, predicateList);
-		AddSelectedMarkPredicate(criteriaBuilder, queryFilter, root, model, mark, predicateList);
-		AddSelectedPricePredicate(criteriaBuilder, queryFilter, root, predicateList);
-		AddSelectedBodyTypesPredicate(criteriaBuilder, queryFilter, root, model, mark, carBodyType, predicateList);
-
-		return predicateList.toArray(new Predicate[0]);
-	}
-
-	private <T> void AddPaging(TypedQuery<T> query, Paging paging) {
-		int startIndex = (paging.getPageNumber() - 1) * paging.getPageSize();
-
-		query.setFirstResult(startIndex);
-		query.setMaxResults(paging.getPageSize());
-	}
-
-	private long getTotalCount(CriteriaQuery<Long> countQuery) {
-		return session.createQuery(countQuery).getSingleResult();
+	public CarRepositoryImpl(EntityManager entityManager) {
+		super(entityManager);
 	}
 
 	@Override
-	public int getMaxPrice() {
-		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+	public Double getMaxPrice() {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Double> criteriaQuery = criteriaBuilder.createQuery(Double.class);
-		Root<Car1> carRoot = criteriaQuery.from(Car1.class);
-
+		Root<Car> carRoot = criteriaQuery.from(Car.class);
 		criteriaQuery.select(criteriaBuilder.max(carRoot.get("cost")));
 
-		TypedQuery<Double> typedQuery = session.createQuery(criteriaQuery);
-		Double maxCost = typedQuery.getSingleResult();
-		return (int) (maxCost.intValue() / 10000);
+		Double maxCost = entityManager.createQuery(criteriaQuery).getSingleResult();
+		return maxCost != null ? maxCost : 0;
+	}
+
+	@Override
+	protected Predicate[] toPredicates(CriteriaBuilder criteriaBuilder, Root<Car> root, CarQuerySpecification specification) {
+		List<Predicate> predicates = new ArrayList<>(4);
+
+		Join<Car, ModelOfCar> model = null;
+
+		if (specification.getSelectedModel().isPresent()) {
+			model = root.join("modelOfCar");
+			predicates.add(criteriaBuilder.equal(model.get("modelName"), specification.getSelectedModel().get()));
+		}
+
+		if (specification.getSelectedMark().isPresent()) {
+			if (model == null) {
+				model = root.join("modelOfCar");
+			}
+			Join<ModelOfCar, ?> mark = model.join("mark");
+			predicates.add(criteriaBuilder.equal(mark.get("id"), specification.getSelectedMark().get().getId()));
+		}
+
+		if (specification.getSelectedPrice().isPresent()) {
+			predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("cost"), specification.getSelectedPrice().get()));
+		}
+
+		if (!specification.getSelectedBodyTypes().isEmpty()) {
+			if (model == null) {
+				model = root.join("modelOfCar");
+			}
+			Join<ModelOfCar, CarBodyType> bodyType = model.join("bodyType");
+
+			In<String> bodyTypeIn = criteriaBuilder.in(bodyType.get("type"));
+			for (String selectedBodyType : specification.getSelectedBodyTypes()) {
+				bodyTypeIn.value(selectedBodyType);
+			}
+			predicates.add(bodyTypeIn);
+		}
+
+		return predicates.toArray(new Predicate[0]);
 	}
 }

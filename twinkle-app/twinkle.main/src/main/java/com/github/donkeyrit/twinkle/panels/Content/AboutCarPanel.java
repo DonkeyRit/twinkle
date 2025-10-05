@@ -1,18 +1,19 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
+import com.github.donkeyrit.twinkle.dal.specifications.UserInfoSpecifciation;
 import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.InjuryRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.ResultingInjuryRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
-import com.github.donkeyrit.twinkle.dal.models.Rent1;
-import com.github.donkeyrit.twinkle.dal.models.Client1;
-import com.github.donkeyrit.twinkle.dal.models.User1;
-import com.github.donkeyrit.twinkle.dal.models.Injury1;
-import com.github.donkeyrit.twinkle.dal.models.ResultingInjury1;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ClientRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.InjuryRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ResultingInjuryRepository;
+import com.github.donkeyrit.twinkle.dal.models.Rent;
+import com.github.donkeyrit.twinkle.dal.models.Client;
+import com.github.donkeyrit.twinkle.dal.models.User;
+import com.github.donkeyrit.twinkle.dal.models.Injury;
+import com.github.donkeyrit.twinkle.dal.models.ResultingInjury;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
 
@@ -20,6 +21,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -42,11 +44,10 @@ public class AboutCarPanel extends JPanel
 	public AboutCarPanel(
 		CarRepository carRepository,
 		RentRepository rentRepository,
-		com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository hibernateRentRepository,
-		ClientRepository hibernateClientRepository,
-		UserRepository hibernateUserRepository,
-		InjuryRepository hibernateInjuryRepository,
-		ResultingInjuryRepository hibernateResultingInjuryRepository,
+		ClientRepository clientRepository,
+		UserRepository userRepository,
+		InjuryRepository injuryRepository,
+		ResultingInjuryRepository resultingInjuryRepository,
 		JPanel panel,
 		Car car,
 		CarQuerySpecification carQueryFilter)
@@ -72,7 +73,7 @@ public class AboutCarPanel extends JPanel
 		add(scrollPane);
 
 		String statusStr = "Свободно";
-		Optional<Rent1> lastRentForCar = hibernateRentRepository.getLastByCarId(imagesNum);
+		Optional<Rent> lastRentForCar = rentRepository.getLastByCarId(imagesNum);
 		if (lastRentForCar.isPresent() && lastRentForCar.get().getEndDate() == null) {
 			statusStr = "Busy";
 		}
@@ -109,9 +110,8 @@ public class AboutCarPanel extends JPanel
 						temp = (AboutCarPanel) mas[i];
 					}
 				}
-				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, hibernateRentRepository,
-						hibernateClientRepository, hibernateUserRepository, hibernateInjuryRepository,
-						hibernateResultingInjuryRepository, panel, car, carQueryFilter);
+				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, clientRepository,
+						userRepository, injuryRepository, resultingInjuryRepository, panel, car, carQueryFilter);
 				newPanel.setBounds(250, 100, 605, 550);
 				panel.remove(temp);
 				panel.add(newPanel);
@@ -372,10 +372,10 @@ public class AboutCarPanel extends JPanel
 									@Override
 									public void actionPerformed(ActionEvent e) {
 										int idClient = 0;
-										Optional<User1> currentUser = hibernateUserRepository.getByLoginAndPassword(
-												UserInformation.getLogin(), UserInformation.getPassword());
+										Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(
+												UserInformation.getLogin(), UserInformation.getPassword()));
 										if (currentUser.isPresent()) {
-											Optional<Client1> currentClient = hibernateClientRepository
+											Optional<Client> currentClient = clientRepository
 													.getByUserId(currentUser.get().getId());
 											if (currentClient.isPresent()) {
 												idClient = currentClient.get().getId();
@@ -387,7 +387,7 @@ public class AboutCarPanel extends JPanel
 										} else {
 
 											boolean isHaveRenta = false;
-											Optional<Rent1> lastRentForClient = hibernateRentRepository
+											Optional<Rent> lastRentForClient = rentRepository
 													.getLastByClientId(idClient);
 											if (lastRentForClient.isPresent()
 													&& lastRentForClient.get().getEndDate() == null) {
@@ -397,15 +397,15 @@ public class AboutCarPanel extends JPanel
 											if (isHaveRenta) {
 												planPriceLabel.setText("You cannot take more than one car at a time");
 											} else {
-												Rent1 newRent = new Rent1();
+												Rent newRent = new Rent();
 												newRent.setIdClient(idClient);
 												newRent.setIdCar(imagesNum);
-												newRent.setStartDate(java.sql.Date.valueOf(
-														yList.get(0) + "-" + yList.get(1) + "-" + yList.get(2)));
-												newRent.setPlanDate(java.sql.Date.valueOf(
-														yList.get(3) + "-" + yList.get(4) + "-" + yList.get(5)));
+												newRent.setStartDate(LocalDate.of(
+														yList.get(0), yList.get(1), yList.get(2)));
+												newRent.setPlanDate(LocalDate.of(
+														yList.get(3), yList.get(4), yList.get(5)));
 
-												hibernateRentRepository.insert(newRent);
+												rentRepository.save(newRent);
 
 												String insertRenta = "rent for client " + idClient + ", car "
 														+ imagesNum;
@@ -514,11 +514,11 @@ public class AboutCarPanel extends JPanel
 		} else {
 
 			boolean isTrue = false;
-			Optional<Rent1> lastRentForThisCar = hibernateRentRepository.getLastByCarId(imagesNum);
+			Optional<Rent> lastRentForThisCar = rentRepository.getLastByCarId(imagesNum);
 			if (lastRentForThisCar.isPresent()) {
-				Client1 renterClient = hibernateClientRepository.getById(lastRentForThisCar.get().getIdClient());
+				Client renterClient = clientRepository.findById(lastRentForThisCar.get().getIdClient());
 				if (renterClient != null) {
-					User1 renterUser = hibernateUserRepository.getById(renterClient.getUserId());
+					User renterUser = userRepository.findById(renterClient.getUserId());
 					if (renterUser != null
 							&& UserInformation.getLogin().equals(renterUser.getLogin())
 							&& UserInformation.getPassword().equals(renterUser.getPassword())) {
@@ -539,8 +539,8 @@ public class AboutCarPanel extends JPanel
 						tempPanel.remove(tempBut);
 
 						Box box = Box.createVerticalBox();
-						ArrayList<String> injuryNames = hibernateInjuryRepository.getList(null)
-								.map(Injury1::getInjuryName)
+						ArrayList<String> injuryNames = injuryRepository.findAll()
+								.map(Injury::getInjuryName)
 								.collect(Collectors.toCollection(ArrayList::new));
 
 						ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
@@ -590,29 +590,27 @@ public class AboutCarPanel extends JPanel
 										int currMont = calendar.get(Calendar.MONTH);
 										int currDay = calendar.get(Calendar.DATE);
 
-										String dataStr = currYear + "-" + currMont + "-" + currDay;
-
 										int idRentaNum = 0;
-										Optional<Rent1> rentToClose = hibernateRentRepository
+										Optional<Rent> rentToClose = rentRepository
 												.getLastByCarId(imagesNum);
 										if (rentToClose.isPresent()) {
-											Rent1 rent = rentToClose.get();
-											rent.setEndDate(java.sql.Date.valueOf(dataStr));
-											hibernateRentRepository.update(rent);
+											Rent rent = rentToClose.get();
+											rent.setEndDate(LocalDate.of(currYear, currMont + 1, currDay));
+											rentRepository.update(rent);
 											idRentaNum = rent.getId();
 										}
 
 										int idInjuryNum = 0;
-										Optional<Injury1> matchingInjury = hibernateInjuryRepository
+										Optional<Injury> matchingInjury = injuryRepository
 												.getByName(injuryForCar);
 										if (matchingInjury.isPresent()) {
 											idInjuryNum = matchingInjury.get().getId();
 										}
 
-										ResultingInjury1 resultingInjury = new ResultingInjury1();
+										ResultingInjury resultingInjury = new ResultingInjury();
 										resultingInjury.setIdRent(idRentaNum);
 										resultingInjury.setIdInjury(idInjuryNum);
-										hibernateResultingInjuryRepository.insert(resultingInjury);
+										resultingInjuryRepository.save(resultingInjury);
 
 										remove(box);
 										remove(newReturnButton);
@@ -647,32 +645,30 @@ public class AboutCarPanel extends JPanel
 								int currMont = calendar.get(Calendar.MONTH);
 								int currDay = calendar.get(Calendar.DATE);
 
-								Date startRentaDate = null;
-								Date dataRentaPlan = null;
-								Optional<Rent1> rentForCostCalc = hibernateRentRepository.getLastByCarId(imagesNum);
+								LocalDate startRentaDate = null;
+								LocalDate dataRentaPlan = null;
+								Optional<Rent> rentForCostCalc = rentRepository.getLastByCarId(imagesNum);
 								if (rentForCostCalc.isPresent()) {
 									startRentaDate = rentForCostCalc.get().getStartDate();
 									dataRentaPlan = rentForCostCalc.get().getPlanDate();
 								}
 
-								Date currentGetData = new Date(currYear, currMont, currDay);
-								startRentaDate = new Date(currYear, currMont + 1, currDay);
+								LocalDate currentGetData = LocalDate.of(currYear, currMont + 1, currDay);
+								startRentaDate = LocalDate.of(currYear, currMont + 1, currDay);
 
 								JLabel labelCostRenta = new JLabel("5000");
 								labelCostRenta.setBounds(480, 460, 120, 30);
 
-								if (currentGetData.after(startRentaDate)) {
+								if (currentGetData.isAfter(startRentaDate)) {
 									labelCostRenta.setText("Sum = 0");
 								} else {
 									double costForTheRent = 0f;
 
-									long difference = startRentaDate.getTime() - currentGetData.getTime();
-									int days = (int) (difference / (24 * 60 * 60 * 1000));
+									int days = (int) ChronoUnit.DAYS.between(currentGetData, startRentaDate);
 									costForTheRent = (days + 1f) * cost;
 
-									if (currentGetData.after(dataRentaPlan)) {
-										long diff = currentGetData.getTime() - dataRentaPlan.getTime();
-										int overDay = (int) (difference / (24 * 60 * 60 * 1000));
+									if (dataRentaPlan != null && currentGetData.isAfter(dataRentaPlan)) {
+										int overDay = (int) ChronoUnit.DAYS.between(dataRentaPlan, currentGetData);
 										costForTheRent += (cost * overDay) * 0.2;
 									}
 

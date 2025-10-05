@@ -1,29 +1,29 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.common.specifications.QuerySpecification;
+import com.github.donkeyrit.twinkle.dal.interfaces.ModelOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
+import com.github.donkeyrit.twinkle.dal.repositories.abstractions.HibernateFilterableRepository;
+
 import com.google.inject.Inject;
-import com.github.donkeyrit.twinkle.dal.models.ModelOfCar1;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
-import java.util.stream.Stream;
+public class ModelOfCarRepositoryImpl
+		extends HibernateFilterableRepository<ModelOfCar, QuerySpecification<ModelOfCar>>
+		implements ModelOfCarRepository {
 
-public class ModelOfCarRepositoryImpl implements ModelOfCarRepository
-{
-	private EntityManager session;
-    
 	@Inject
-    public ModelOfCarRepositoryImpl(EntityManager session) 
-	{
-        this.session = session;
-    }
+	public ModelOfCarRepositoryImpl(EntityManager entityManager) {
+		super(entityManager);
+	}
 
 	@Override
-	public Stream<ModelOfCar1> getListByMark(int markId) 
-	{
-		TypedQuery<ModelOfCar1> query = session.createQuery("SELECT u FROM ModelOfCar u WHERE u.markId = :markId", ModelOfCar1.class);
-        query.setParameter("markId", markId);
-		return query.getResultStream();
+	protected Predicate[] toPredicates(CriteriaBuilder criteriaBuilder, Root<ModelOfCar> root, QuerySpecification<ModelOfCar> specification) {
+		// QuerySpecification<ModelOfCar> carries no filter fields yet - mirrors JooqModelOfCarRepository.
+		return new Predicate[0];
 	}
 }

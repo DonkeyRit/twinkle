@@ -17,15 +17,15 @@
         <property name="hibernate.show_sql">true</property>
 
         <!-- Names the annotated entity class -->
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.User1"/>
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.MarkOfCar1"/>
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.CarBodyType1"/>
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.ModelOfCar1"/>
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.Car1"/>
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.Country1"/>
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.Rent1"/>
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.Client1"/>
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.Injury1"/>
-        <mapping class="com.github.donkeyrit.twinkle.dal.models.ResultingInjury1"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.User"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.MarkOfCar"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.CarBodyType"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.ModelOfCar"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.Car"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.Country"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.Rent"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.Client"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.Injury"/>
+        <mapping class="com.github.donkeyrit.twinkle.dal.models.ResultingInjury"/>
     </session-factory>
 </hibernate-configuration>

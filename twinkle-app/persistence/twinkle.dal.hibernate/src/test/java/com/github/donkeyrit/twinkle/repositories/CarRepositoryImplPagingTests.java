@@ -1,15 +1,15 @@
 package com.github.donkeyrit.twinkle.repositories;
 
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.filters.CarQueryFilter;
+import com.github.donkeyrit.twinkle.dal.common.models.Page;
+import com.github.donkeyrit.twinkle.dal.common.models.Paging;
+import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
 import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
-import com.github.donkeyrit.twinkle.dal.models.ModelOfCar1;
-import com.github.donkeyrit.twinkle.dal.models.filters.Paging;
-import com.github.donkeyrit.twinkle.dal.models.utils.PagedResultDal;
-import com.github.donkeyrit.twinkle.dal.models.Car1;
-import com.github.donkeyrit.twinkle.dal.models.CarBodyType1;
-import com.github.donkeyrit.twinkle.dal.models.Country1;
-import com.github.donkeyrit.twinkle.dal.models.MarkOfCar1;
+import com.github.donkeyrit.twinkle.dal.models.ModelOfCar;
+import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
+import com.github.donkeyrit.twinkle.dal.models.Country;
+import com.github.donkeyrit.twinkle.dal.models.MarkOfCar;
 import com.github.donkeyrit.twinkle.utils.DateFixture;
 import com.github.donkeyrit.twinkle.utils.DaoFixture;
 
@@ -25,10 +25,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 
 public class CarRepositoryImplPagingTests extends Assertions {
-	
+
 	private static CarRepository carRepository;
 
 	@BeforeClass
@@ -42,22 +43,21 @@ public class CarRepositoryImplPagingTests extends Assertions {
 	@Test
 	public void retrieveSecondPage_getPagedResult() {
 		// Arrange
-		CarQueryFilter carQueryFilter = new CarQueryFilter();
+		CarQuerySpecification carQuerySpecification = new CarQuerySpecification();
 		Paging paging = new Paging(2, 5);
-		carQueryFilter.setSelectedPrice(100000);
-		carQueryFilter.setPaging(paging);
+		carQuerySpecification.setSelectedPrice(100000);
 
-		CarBodyType1 sedanBodyType = DaoFixture.createCarBodyType(1, "Sedan");
-		Country1 japan = DaoFixture.createCountry(1, "Japan");
+		CarBodyType sedanBodyType = DaoFixture.createCarBodyType(1, "Sedan");
+		Country japan = DaoFixture.createCountry(1, "Japan");
 
-		MarkOfCar1 hondaMark = DaoFixture.createMarkOfCar(2, "Honda", japan);
-		MarkOfCar1 corollaMark = DaoFixture.createMarkOfCar(1, "Toyota", japan);
+		MarkOfCar hondaMark = DaoFixture.createMarkOfCar(2, "Honda", japan);
+		MarkOfCar corollaMark = DaoFixture.createMarkOfCar(1, "Toyota", japan);
 
-		ModelOfCar1 corollaCarModel = DaoFixture.createModelOfCar(2, "Corolla", corollaMark, sedanBodyType);
-		ModelOfCar1 accordCarModel = DaoFixture.createModelOfCar(3, "Accord", hondaMark, sedanBodyType);
-		ModelOfCar1 civicCarModel = DaoFixture.createModelOfCar(4, "Civic", hondaMark, sedanBodyType);
+		ModelOfCar corollaCarModel = DaoFixture.createModelOfCar(2, "Corolla", corollaMark, sedanBodyType);
+		ModelOfCar accordCarModel = DaoFixture.createModelOfCar(3, "Accord", hondaMark, sedanBodyType);
+		ModelOfCar civicCarModel = DaoFixture.createModelOfCar(4, "Civic", hondaMark, sedanBodyType);
 
-		List<Car1> expectedResult = Arrays.asList(
+		List<Car> expectedResult = Arrays.asList(
 				DaoFixture.createCar(6, DateFixture.getDate(2022, 0, 01), corollaCarModel, "Toyota Corolla 2022", 6, 24000),
 				DaoFixture.createCar(7, DateFixture.getDate(2020, 0, 01), accordCarModel, "Honda Accord 2020", 7, 28000),
 				DaoFixture.createCar(8, DateFixture.getDate(2021, 0, 01), accordCarModel, "Honda Accord 2021", 8, 29000),
@@ -65,10 +65,10 @@ public class CarRepositoryImplPagingTests extends Assertions {
 				DaoFixture.createCar(10, DateFixture.getDate(2020, 0, 01), civicCarModel, "Honda Civic 2020", 10, 25000));
 
 		// Act
-		PagedResultDal<Car1> cars = carRepository.getPagedResult(carQueryFilter);
+		Page<Car> cars = carRepository.getPagedResult(carQuerySpecification, Optional.of(paging));
 
 		// Assert
-		assertThat(cars.getResult().toList()).hasSameElementsAs(expectedResult);
-		assertEquals(cars.getTotalCount(), 100);
+		assertThat(cars.getContent()).hasSameElementsAs(expectedResult);
+		assertEquals(cars.getTotalElements(), 100);
 	}
 }

@@ -10,24 +10,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "country")
-public class Country implements Identifiable {
+@Table(name = "resulting_injury")
+public class ResultingInjury implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @Column(name = "country_name")
-    private String countryName;
+    @Column(name = "id_rent")
+    private int idRent;
+
+    @Column(name = "id_injury")
+    private int idInjury;
 
     // Constructors
-    public Country() {
+    public ResultingInjury() {
     }
 
-    public Country(int id, String countryName) {
+    public ResultingInjury(int id, int idRent, int idInjury) {
         this.id = id;
-        this.countryName = countryName;
+        this.idRent = idRent;
+        this.idInjury = idInjury;
     }
 
     // Getters and Setters
@@ -39,11 +43,19 @@ public class Country implements Identifiable {
         this.id = id;
     }
 
-    public String getCountryName() {
-        return countryName;
+    public int getIdRent() {
+        return idRent;
     }
 
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
+    public void setIdRent(int idRent) {
+        this.idRent = idRent;
+    }
+
+    public int getIdInjury() {
+        return idInjury;
+    }
+
+    public void setIdInjury(int idInjury) {
+        this.idInjury = idInjury;
     }
 }

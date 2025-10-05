@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class JooqClientRepository
 	extends JooqGenericRepository<Client, ClientsRecord> implements ClientRepository {
-		
+
 	@Inject
 	public JooqClientRepository(DSLContext dslContext) {
 		super(dslContext, com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Clients.CLIENTS);
@@ -19,8 +19,12 @@ public class JooqClientRepository
 
 	@Override
 	public Optional<Client> getByUserId(int userId) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented JooqClientRepository method 'getByUserId'");
+		ClientsRecord record = this.context
+			.selectFrom(this.table)
+			.where(com.github.donkeyrit.twinkle.dal.jooq.generated.tables.Clients.CLIENTS.ID_USER.eq(userId))
+			.fetchOne();
+
+		return Optional.ofNullable(record).map(this::mapRecordToEntity);
 	}
 
 	@Override
