@@ -20,6 +20,7 @@
     <module>persistence/twinkle.dal.jooq</module>
     <module>persistence/twinkle.dal.hibernate</module>
     <!-- Persistence modules -->
+    <module>twinkle.telemetry</module>
     <module>twinkle.auth.services</module>
     <module>twinkle.bll.services</module>
     <module>twinkle.main</module>
