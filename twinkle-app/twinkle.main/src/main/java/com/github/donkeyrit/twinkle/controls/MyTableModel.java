@@ -13,7 +13,12 @@ import jakarta.persistence.EntityManager;
 
 import org.hibernate.Session;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MyTableModel extends AbstractTableModel {
+
+	private static final Logger logger = LoggerFactory.getLogger(MyTableModel.class);
 
 	private final EntityManager entityManager;
 	private final String tableName;
@@ -60,7 +65,7 @@ public class MyTableModel extends AbstractTableModel {
 					allRows.add(oneRow);
 				}
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				logger.error("Failed to load rows for table {}", tableName, ex);
 			}
 		});
 		return allRows;
@@ -75,7 +80,7 @@ public class MyTableModel extends AbstractTableModel {
 					names.add(rs.getString("COLUMN_NAME"));
 				}
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				logger.error("Failed to load column names for table {}", tableName, ex);
 			}
 		});
 		return names;

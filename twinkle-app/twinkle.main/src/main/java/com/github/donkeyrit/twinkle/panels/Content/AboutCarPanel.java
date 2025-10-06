@@ -28,8 +28,13 @@ import java.util.stream.Collectors;
 import javax.swing.border.*;
 import javax.swing.text.*;
 
-public class AboutCarPanel extends JPanel 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class AboutCarPanel extends JPanel
 {
+	private static final Logger logger = LoggerFactory.getLogger(AboutCarPanel.class);
+
 	private int imagesNum;
 	private LocalDate modelYear;
 	private Double cost;
@@ -183,7 +188,7 @@ public class AboutCarPanel extends JPanel
 							formatter = new MaskFormatter(form);
 							formatter.setPlaceholderCharacter('0');
 						} catch (Exception exec) {
-							exec.printStackTrace();
+							logger.warn("Failed to create mask formatter for pattern {}", form, exec);
 						}
 						JFormattedTextField ssnField = new JFormattedTextField(formatter);
 						ssnField.setHorizontalAlignment(JTextField.CENTER);
@@ -204,7 +209,7 @@ public class AboutCarPanel extends JPanel
 							formatter = new MaskFormatter(form);
 							formatter.setPlaceholderCharacter('0');
 						} catch (Exception exec) {
-							exec.printStackTrace();
+							logger.warn("Failed to create mask formatter for pattern {}", form, exec);
 						}
 						JFormattedTextField tempField = new JFormattedTextField(formatter);
 
