@@ -11,6 +11,7 @@ import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
 import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.styles.Colors;
 import com.github.donkeyrit.twinkle.utils.Constants;
+import com.github.donkeyrit.twinkle.telemetry.CorrelationContext;
 
 import com.google.inject.Inject;
 import javax.swing.*;
@@ -86,17 +87,19 @@ public class LoginPanel extends JPanel implements ResettablePanel {
 
 		loginButton = new JConfirmationButton("Login");
 		loginButton.addActionListener(e -> {
-			String username = this.getUsername();
-			String password = this.getPassword();
+			try (CorrelationContext correlation = CorrelationContext.start("user-login")) {
+				String username = this.getUsername();
+				String password = this.getPassword();
 
-			AuthenticationResult authenticationResult = loginService.verifyCredentials(username, password);
-			if (!authenticationResult.isSuccessfull()) {
-				this.setErorr(authenticationResult.errorMessage());
-				return;
+				AuthenticationResult authenticationResult = loginService.verifyCredentials(username, password);
+				if (!authenticationResult.isSuccessfull()) {
+					this.setErorr(authenticationResult.errorMessage());
+					return;
+				}
+
+				UserInformation.setUser(authenticationResult.authenticatedUser().get());
+				this.loginEventsListener.onLoginSuccess();
 			}
-
-			UserInformation.setUser(authenticationResult.authenticatedUser().get());
-			this.loginEventsListener.onLoginSuccess();
 		});
 		add(loginButton, gbc);
 
