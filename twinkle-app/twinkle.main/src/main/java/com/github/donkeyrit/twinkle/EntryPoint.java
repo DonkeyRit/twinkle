@@ -11,6 +11,7 @@ import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.ioc.MainModules;
 import com.github.donkeyrit.twinkle.utils.Constants;
+import com.github.donkeyrit.twinkle.telemetry.CorrelationContext;
 
 import com.google.inject.Injector;
 import com.google.inject.Guice;
@@ -29,9 +30,11 @@ public class EntryPoint
          * Application start
          */
         System.out.println(HashManager.generateHash("qazxcftrew"));
-        new EntryPoint().initGui();
+        try (CorrelationContext correlation = CorrelationContext.start("application-startup")) {
+            new EntryPoint().initGui();
+        }
     }
-    
+
     private void initGui() throws IOException
     {
 		Properties properties = loadProperties("application.properties");
