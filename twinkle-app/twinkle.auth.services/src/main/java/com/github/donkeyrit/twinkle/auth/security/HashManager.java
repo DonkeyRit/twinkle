@@ -2,8 +2,13 @@ package com.github.donkeyrit.twinkle.auth.security;
 
 import java.security.MessageDigest;
 
-public class HashManager 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class HashManager
 {
+    private static final Logger logger = LoggerFactory.getLogger(HashManager.class);
+
     public static String generateHash(String input)
     {
         /**
@@ -24,7 +29,7 @@ public class HashManager
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
+            logger.error("Failed to generate hash", ex);
         }
          
         return res;
