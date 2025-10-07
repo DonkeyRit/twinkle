@@ -14,6 +14,11 @@ import java.util.Optional;
 
 public class DefaultLoginService implements LoginService {
 
+	private static final int MIN_USERNAME_LENGTH = 3;
+	private static final int MAX_USERNAME_LENGTH = 64;
+	private static final int MIN_PASSWORD_LENGTH = 8;
+	private static final int MAX_PASSWORD_LENGTH = 128;
+
 	private final UserRepository userRepository;
 
 	@Inject
@@ -51,11 +56,25 @@ public class DefaultLoginService implements LoginService {
 				return AuthenticationResult.error("All fields are required.");
 			}
 
+			String trimmedUsername = username.trim();
+			if (trimmedUsername.length() < MIN_USERNAME_LENGTH || trimmedUsername.length() > MAX_USERNAME_LENGTH)
+			{
+				return AuthenticationResult.error(
+					"Login must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
+			}
+
+			if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH)
+			{
+				return AuthenticationResult.error(
+					"Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
+			}
+
 			if (!password.equals(confirmPassword))
 			{
 				return AuthenticationResult.error("Passwords do not match.");
 			}
 
+			username = trimmedUsername;
 			if(userRepository.get(new UserInfoSpecifciation(username)).isPresent())
 			{
 				return AuthenticationResult.error("Login already exist");
