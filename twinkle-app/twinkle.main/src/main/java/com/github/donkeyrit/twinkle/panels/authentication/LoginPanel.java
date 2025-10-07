@@ -8,7 +8,6 @@ import com.github.donkeyrit.twinkle.controls.buttons.JConfirmationButton;
 import com.github.donkeyrit.twinkle.controls.input.JCustomPasswordField;
 import com.github.donkeyrit.twinkle.controls.buttons.JLinkButton;
 import com.github.donkeyrit.twinkle.panels.common.ResettablePanel;
-import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.styles.Colors;
 import com.github.donkeyrit.twinkle.utils.Constants;
 import com.github.donkeyrit.twinkle.telemetry.CorrelationContext;
@@ -129,8 +128,7 @@ public class LoginPanel extends JPanel implements ResettablePanel {
 	}
 
 	public String getPassword() {
-		String password = new String(passwordField.getPassword());
-		return HashManager.generateHash(password);
+		return new String(passwordField.getPassword());
 	}
 
 	public void setErorr(String message) {

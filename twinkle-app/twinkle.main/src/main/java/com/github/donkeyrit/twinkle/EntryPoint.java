@@ -7,7 +7,6 @@ import com.github.donkeyrit.twinkle.dal.ioc.HibernatePersistanceModules;
 import com.github.donkeyrit.twinkle.dal.jooq.ioc.JooqPersistanceModules;
 import com.github.donkeyrit.twinkle.auth.ioc.AuthenticationModules;
 import com.github.donkeyrit.twinkle.bll.ioc.ServicesModules;
-import com.github.donkeyrit.twinkle.security.HashManager;
 import com.github.donkeyrit.twinkle.frame.MainFrame;
 import com.github.donkeyrit.twinkle.ioc.MainModules;
 import com.github.donkeyrit.twinkle.utils.Constants;
@@ -29,7 +28,6 @@ public class EntryPoint
         /**
          * Application start
          */
-        System.out.println(HashManager.generateHash("qazxcftrew"));
         try (CorrelationContext correlation = CorrelationContext.start("application-startup")) {
             new EntryPoint().initGui();
         }
