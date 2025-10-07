@@ -40,6 +40,7 @@
     <log4j.version>2.20.0</log4j.version>
     <guice.version>7.0.0</guice.version>
     <opentelemetry.version>1.38.0</opentelemetry.version>
+    <jbcrypt.version>0.4</jbcrypt.version>
   </properties>
 
   <dependencyManagement>
@@ -99,6 +100,11 @@
         <groupId>com.google.inject.extensions</groupId>
         <artifactId>guice-assistedinject</artifactId>
         <version>${guice.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mindrot</groupId>
+        <artifactId>jbcrypt</artifactId>
+        <version>${jbcrypt.version}</version>
       </dependency>
       <!-- Logger dependencies -->
       <dependency>
