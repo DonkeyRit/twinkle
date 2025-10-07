@@ -6,6 +6,7 @@ import com.github.donkeyrit.twinkle.dal.models.User;
 
 import com.github.donkeyrit.twinkle.auth.services.interfaces.LoginService;
 import com.github.donkeyrit.twinkle.auth.models.AuthenticationResult;
+import com.github.donkeyrit.twinkle.auth.security.LoginAttemptLimiter;
 import com.github.donkeyrit.twinkle.auth.security.PasswordHasher;
 import com.github.donkeyrit.twinkle.telemetry.CorrelationContext;
 
@@ -20,6 +21,7 @@ public class DefaultLoginService implements LoginService {
 	private static final int MAX_PASSWORD_LENGTH = 128;
 
 	private final UserRepository userRepository;
+	private final LoginAttemptLimiter loginAttemptLimiter = new LoginAttemptLimiter();
 
 	@Inject
 	public DefaultLoginService(UserRepository userRepository) {
@@ -35,14 +37,20 @@ public class DefaultLoginService implements LoginService {
 				return AuthenticationResult.error("Please fill both fields.");
 			}
 
+			if (loginAttemptLimiter.isLockedOut(username)) {
+				return AuthenticationResult.error("Too many failed attempts. Please try again in a minute.");
+			}
+
 			// Passwords are salted, so a hash can no longer be looked up by
 			// equality: fetch the user by login, then verify the password
 			// against their stored hash.
 			Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(username));
 			if (currentUser.isEmpty() || !PasswordHasher.verify(password, currentUser.get().getPassword())) {
+				loginAttemptLimiter.recordFailure(username);
 				return AuthenticationResult.error("Incorrect login or password.");
 			}
 
+			loginAttemptLimiter.recordSuccess(username);
 			return AuthenticationResult.fromResult(currentUser);
 		}
 	}
