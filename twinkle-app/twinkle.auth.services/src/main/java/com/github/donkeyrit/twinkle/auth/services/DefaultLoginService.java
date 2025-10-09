@@ -90,7 +90,9 @@ public class DefaultLoginService implements LoginService {
 
 			String passwordHash = PasswordHasher.hash(password);
 			User user = new User(username, passwordHash, false);
-			userRepository.save(user);
+			if (!userRepository.save(user)) {
+				return AuthenticationResult.error("Could not create account. Please try again.");
+			}
 
 			return AuthenticationResult.fromResult(Optional.of(user));
 		}
