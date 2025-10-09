@@ -1,7 +1,6 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
-import com.github.donkeyrit.twinkle.dal.specifications.UserInfoSpecifciation;
 import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
@@ -377,14 +376,10 @@ public class AboutCarPanel extends JPanel
 									@Override
 									public void actionPerformed(ActionEvent e) {
 										int idClient = 0;
-										Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(
-												UserInformation.getLogin(), UserInformation.getPassword()));
-										if (currentUser.isPresent()) {
-											Optional<Client> currentClient = clientRepository
-													.getByUserId(currentUser.get().getId());
-											if (currentClient.isPresent()) {
-												idClient = currentClient.get().getId();
-											}
+										Optional<Client> currentClient = clientRepository
+												.getByUserId(UserInformation.getId());
+										if (currentClient.isPresent()) {
+											idClient = currentClient.get().getId();
 										}
 
 										if (idClient == 0) {
@@ -524,9 +519,7 @@ public class AboutCarPanel extends JPanel
 				Client renterClient = clientRepository.findById(lastRentForThisCar.get().getIdClient());
 				if (renterClient != null) {
 					User renterUser = userRepository.findById(renterClient.getUserId());
-					if (renterUser != null
-							&& UserInformation.getLogin().equals(renterUser.getLogin())
-							&& UserInformation.getPassword().equals(renterUser.getPassword())) {
+					if (renterUser != null && renterUser.getId() == UserInformation.getId()) {
 						isTrue = true;
 					}
 				}
