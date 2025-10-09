@@ -25,7 +25,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 	@Override
 	public Optional<String> updatePassword(String oldPassword, String newPassword, String repeatPassword) {
 
-		if (!PasswordHasher.verify(oldPassword, UserInformation.getPassword())) {
+		// Verify against the current hash straight from the database rather than
+		// a cached copy, so the session never needs to hold the password hash.
+		User currentUser = userRepository.findById(UserInformation.getId());
+		if (currentUser == null || !PasswordHasher.verify(oldPassword, currentUser.getPassword())) {
 			return Optional.of("Incorrect password");
 		}
 
@@ -43,7 +46,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 		if (!userRepository.update(updatedUser)) {
 			return Optional.of("Could not update password. Please try again.");
 		}
-		UserInformation.setPassword(newPasswordHash);
 		return Optional.empty();
 	}
 

@@ -7,7 +7,6 @@ public class UserInformation
 {
 	private static final String PREF_ROLE = "role";
 	private static final String PREF_LOGIN = "login";
-	private static final String PREF_PASS = "password";
 	private static final String PREF_ID = "id";
 
 
@@ -21,7 +20,6 @@ public class UserInformation
 	{
 		preferences.putLong(PREF_ID, user.getId());
 		preferences.put(PREF_LOGIN, user.getLogin());
-		preferences.put(PREF_PASS, user.getPassword());
 		preferences.putBoolean(PREF_ROLE, user.isRole());
 	}
 
@@ -35,18 +33,8 @@ public class UserInformation
 		return preferences.get(PREF_LOGIN, "");
 	}
 
-	public static String getPassword()
-	{
-		return preferences.get(PREF_PASS, "");
-	}
-
-	public static void setPassword(String password)
-	{
-		preferences.put(PREF_PASS, password);
-	}
-
 	public static boolean isRole()
 	{
 		return preferences.getBoolean(PREF_ROLE, false);
-	}	
+	}
 }
