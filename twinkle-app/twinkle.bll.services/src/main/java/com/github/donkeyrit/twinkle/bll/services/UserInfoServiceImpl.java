@@ -2,7 +2,7 @@ package com.github.donkeyrit.twinkle.bll.services;
 
 import com.github.donkeyrit.twinkle.bll.services.interfaces.UserInfoService;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
-import com.github.donkeyrit.twinkle.bll.security.HashManager;
+import com.github.donkeyrit.twinkle.auth.security.PasswordHasher;
 
 import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
@@ -25,8 +25,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	@Override
 	public Optional<String> updatePassword(String oldPassword, String newPassword, String repeatPassword) {
 
-		String oldPasswordHash = HashManager.generateHash(oldPassword);
-		if (!oldPasswordHash.equals(UserInformation.getPassword())) {
+		if (!PasswordHasher.verify(oldPassword, UserInformation.getPassword())) {
 			return Optional.of("Incorrect password");
 		}
 
@@ -38,11 +37,13 @@ public class UserInfoServiceImpl implements UserInfoService {
 			return Optional.of("Password does't match");
 		}
 
-		String newPasswordHash = HashManager.generateHash(newPassword);
+		String newPasswordHash = PasswordHasher.hash(newPassword);
 		User updatedUser = new User(UserInformation.getLogin(), newPasswordHash, UserInformation.isRole());
 		updatedUser.setId(UserInformation.getId());
-		userRepository.update(updatedUser);
-		UserInformation.setPassword(HashManager.generateHash(newPassword));
+		if (!userRepository.update(updatedUser)) {
+			return Optional.of("Could not update password. Please try again.");
+		}
+		UserInformation.setPassword(newPasswordHash);
 		return Optional.empty();
 	}
 
