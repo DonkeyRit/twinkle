@@ -36,7 +36,7 @@
     <postgresql.version>42.7.2</postgresql.version>
     <hibernate.version>6.1.7.Final</hibernate.version>
     <slf4j.api.version>2.0.12</slf4j.api.version>
-    <log4j.version>2.20.0</log4j.version>
+    <log4j.version>2.25.3</log4j.version>
     <guice.version>7.0.0</guice.version>
   </properties>
 
