@@ -1,12 +1,14 @@
 package com.github.donkeyrit.twinkle.dal.ioc;
 
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ModelOfCarRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.MarkOfCarRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.RentRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarRepository;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ClientRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.CarBodyTypeRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.ModelOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.MarkOfCarRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.InjuryRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.ResultingInjuryRepository;
 import com.github.donkeyrit.twinkle.dal.repositories.CarBodyTypeRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.MarkOfCarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.ModelOfCarRepositoryImpl;
@@ -14,6 +16,8 @@ import com.github.donkeyrit.twinkle.dal.repositories.CarRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.ClientRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.RentRepositoryImpl;
 import com.github.donkeyrit.twinkle.dal.repositories.UserRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.InjuryRepositoryImpl;
+import com.github.donkeyrit.twinkle.dal.repositories.ResultingInjuryRepositoryImpl;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -23,6 +27,13 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityManager;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * Binds the same twinkle.dal.abstractions repository interfaces that
+ * {@code JooqPersistanceModules} binds, just against Hibernate implementations. EntryPoint
+ * picks whichever of the two modules to install based on `persistence.strategy`, so the rest
+ * of the app (BLL, UI) only ever depends on the shared interfaces and never notices which one
+ * is active.
+ */
 public class HibernatePersistanceModules extends AbstractModule {
 
 	private static final ThreadLocal<EntityManager> ENTITY_MANAGER_CACHE = new ThreadLocal<EntityManager>();
@@ -36,6 +47,8 @@ public class HibernatePersistanceModules extends AbstractModule {
 		bind(CarRepository.class).to(CarRepositoryImpl.class);
 		bind(RentRepository.class).to(RentRepositoryImpl.class);
 		bind(ClientRepository.class).to(ClientRepositoryImpl.class);
+		bind(InjuryRepository.class).to(InjuryRepositoryImpl.class);
+		bind(ResultingInjuryRepository.class).to(ResultingInjuryRepositoryImpl.class);
 	}
 
 	@Provides

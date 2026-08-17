@@ -1,22 +1,12 @@
 package com.github.donkeyrit.twinkle.utils;
 
-import java.sql.Date;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 public class DateFixture {
 
-	public static Date getDate(int year, int month, int day) {
-
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH, day);
-		cal.set(Calendar.HOUR, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-
-		Date date = new Date(cal.getTimeInMillis());
-		return date;
+	public static LocalDate getDate(int year, int month, int day) {
+		// Preserves the historical (buggy-looking but established) 0-based month callers use,
+		// e.g. getDate(2020, 0, 1) means January 2020.
+		return LocalDate.of(year, month + 1, day);
 	}
 }

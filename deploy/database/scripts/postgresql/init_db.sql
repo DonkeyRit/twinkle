@@ -86,3 +86,5 @@ ALTER TABLE "rent" ADD CONSTRAint Rent_fk0 FOREIGN KEY (id_client) REFERENCES "c
 ALTER TABLE "rent" ADD CONSTRAint Rent_fk1 FOREIGN KEY (id_car) REFERENCES "car"(id);
 ALTER TABLE "resulting_injury" ADD CONSTRAint ResultingInjury_fk0 FOREIGN KEY (id_rent) REFERENCES "rent"(id_rent);
 ALTER TABLE "resulting_injury" ADD CONSTRAint ResultingInjury_fk1 FOREIGN KEY (id_injury) REFERENCES "injury"(id_injury);
+
+ALTER TABLE "users" ADD CONSTRAINT users_login_key UNIQUE (login);

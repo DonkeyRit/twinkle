@@ -1,29 +1,17 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.CarBodyTypeRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.CarBodyTypeRepository;
+import com.github.donkeyrit.twinkle.dal.models.CarBodyType;
+import com.github.donkeyrit.twinkle.dal.repositories.abstractions.HibernateGenericRepository;
+
 import com.google.inject.Inject;
-import com.github.donkeyrit.twinkle.dal.models.CarBodyType1;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 
-import java.util.stream.Stream;
-
-
-public class CarBodyTypeRepositoryImpl implements CarBodyTypeRepository
-{
-	private EntityManager session;
+public class CarBodyTypeRepositoryImpl extends HibernateGenericRepository<CarBodyType> implements CarBodyTypeRepository {
 
 	@Inject
-	public CarBodyTypeRepositoryImpl(EntityManager session) 
-	{
-		this.session = session;
-	}
-
-	@Override
-	public Stream<CarBodyType1> getList() 
-	{
-		TypedQuery<CarBodyType1> query = session.createQuery("SELECT u FROM CarBodyType u", CarBodyType1.class);
-        return query.getResultStream();
+	public CarBodyTypeRepositoryImpl(EntityManager entityManager) {
+		super(entityManager);
 	}
 }

@@ -1,23 +1,45 @@
 package com.github.donkeyrit.twinkle.dal.models;
 
-import java.sql.Date;
-
 import com.github.donkeyrit.twinkle.dal.common.models.Identifiable;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "rent")
 public class Rent implements Identifiable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "id_client")
     private int idClient;
+
+    @Column(name = "id_car")
     private int idCar;
-    private Date startDate;
-    private Date planDate;
-    private Date endDate;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "plan_date")
+    private LocalDate planDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     // Constructors
     public Rent() {
     }
 
-    public Rent(int id, int idClient, int idCar, Date startDate, Date planDate, Date endDate) {
+    public Rent(int id, int idClient, int idCar, LocalDate startDate, LocalDate planDate, LocalDate endDate) {
         this.id = id;
         this.idClient = idClient;
         this.idCar = idCar;
@@ -51,27 +73,27 @@ public class Rent implements Identifiable {
         this.idCar = idCar;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getPlanDate() {
+    public LocalDate getPlanDate() {
         return planDate;
     }
 
-    public void setPlanDate(Date planDate) {
+    public void setPlanDate(LocalDate planDate) {
         this.planDate = planDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 }

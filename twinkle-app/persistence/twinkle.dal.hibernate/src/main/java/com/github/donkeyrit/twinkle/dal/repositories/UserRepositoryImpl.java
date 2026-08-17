@@ -1,63 +1,38 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
-import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
-import com.github.donkeyrit.twinkle.dal.interfaces.QueryFilter;
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.UserRepository;
-import com.github.donkeyrit.twinkle.dal.models.User1;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.TypedQuery;
+import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.models.User;
+import com.github.donkeyrit.twinkle.dal.repositories.abstractions.HibernateFilterableRepository;
+import com.github.donkeyrit.twinkle.dal.specifications.UserInfoSpecifciation;
 
 import com.google.inject.Inject;
-import java.util.Optional;
 
-public class UserRepositoryImpl extends BaseCrudRepository<User1, QueryFilter> implements UserRepository
-{
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserRepositoryImpl extends HibernateFilterableRepository<User, UserInfoSpecifciation> implements UserRepository {
+
 	@Inject
-    public UserRepositoryImpl(EntityManager session) 
-	{
-        super(session);
-    }
-
-    @Override
-    public Optional<User1> getByLoginAndPassword(String login, String password) 
-    {
-        TypedQuery<User1> query = session.createQuery("SELECT u FROM User u WHERE u.login = :login AND u.password = :password", User1.class);
-        query.setParameter("login", login);
-        query.setParameter("password", password);
-        try 
-        {
-            User1 user = query.getSingleResult();
-            return Optional.of(user);
-        } 
-        catch (NoResultException e) 
-        {
-            return Optional.empty();
-        }
-    }
-
-    @Override
-    public boolean isUserExist(String login) 
-    {
-        TypedQuery<User1> query = session.createQuery("SELECT u FROM User u WHERE u.login = :login", User1.class);
-        query.setParameter("login", login);
-        try 
-        {
-            query.getSingleResult();
-            return true;
-        } 
-        catch (NoResultException e) 
-        {
-            return false;
-        }
-    }
+	public UserRepositoryImpl(EntityManager entityManager) {
+		super(entityManager);
+	}
 
 	@Override
-	public void updatePassword(int userId, String passwordHash) {
-		session.getTransaction().begin();
-        User1 user = session.find(User1.class, userId);
-		user.setPassword(passwordHash);
-        session.getTransaction().commit();
+	protected Predicate[] toPredicates(CriteriaBuilder criteriaBuilder, Root<User> root, UserInfoSpecifciation specification) {
+		List<Predicate> predicates = new ArrayList<>(2);
+
+		if (specification.getLogin() != null) {
+			predicates.add(criteriaBuilder.equal(root.get("login"), specification.getLogin()));
+		}
+		if (specification.getPasswordHash() != null) {
+			predicates.add(criteriaBuilder.equal(root.get("password"), specification.getPasswordHash()));
+		}
+
+		return predicates.toArray(new Predicate[0]);
 	}
 }

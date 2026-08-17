@@ -29,6 +29,8 @@ public class JooqPersistanceModules extends AbstractModule {
 		bind(CarRepository.class).to(JooqCarRepository.class);
 		bind(RentRepository.class).to(JooqRentRepository.class);
 		bind(ClientRepository.class).to(JooqClientRepository.class);
+		bind(InjuryRepository.class).to(JooqInjuryRepository.class);
+		bind(ResultingInjuryRepository.class).to(JooqResultingInjuryRepository.class);
 	}
 
 	@Provides

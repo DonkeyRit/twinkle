@@ -1,20 +1,30 @@
 package com.github.donkeyrit.twinkle.panels.content;
 
 import com.github.donkeyrit.twinkle.dal.specifications.CarQuerySpecification;
+import com.github.donkeyrit.twinkle.dal.specifications.UserInfoSpecifciation;
 import com.github.donkeyrit.twinkle.dal.interfaces.RentRepository;
 import com.github.donkeyrit.twinkle.dal.interfaces.CarRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.UserRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.InjuryRepository;
+import com.github.donkeyrit.twinkle.dal.interfaces.ResultingInjuryRepository;
 import com.github.donkeyrit.twinkle.dal.models.Car;
+import com.github.donkeyrit.twinkle.dal.models.Rent;
+import com.github.donkeyrit.twinkle.dal.models.Client;
+import com.github.donkeyrit.twinkle.dal.models.User;
+import com.github.donkeyrit.twinkle.dal.models.Injury;
+import com.github.donkeyrit.twinkle.dal.models.ResultingInjury;
 import com.github.donkeyrit.twinkle.bll.models.UserInformation;
 import com.github.donkeyrit.twinkle.utils.AssetsRetriever;
-import com.github.donkeyrit.twinkle.DataBase;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.Date;
+import java.util.stream.Collectors;
 import javax.swing.border.*;
 import javax.swing.text.*;
 
@@ -32,12 +42,15 @@ public class AboutCarPanel extends JPanel
 	private CarQuerySpecification carQueryFilter;
 
 	public AboutCarPanel(
-		CarRepository carRepository, 
-		RentRepository rentRepository, 
-		DataBase database, 
-		JPanel panel, 
+		CarRepository carRepository,
+		RentRepository rentRepository,
+		ClientRepository clientRepository,
+		UserRepository userRepository,
+		InjuryRepository injuryRepository,
+		ResultingInjuryRepository resultingInjuryRepository,
+		JPanel panel,
 		Car car,
-		CarQuerySpecification carQueryFilter) 
+		CarQuerySpecification carQueryFilter)
 	{
 		this.imagesNum = car.getImageId();
 		this.modelYear = car.getModelYear();
@@ -59,18 +72,10 @@ public class AboutCarPanel extends JPanel
 		scrollPane.setBounds(300, 290, 285, 190);
 		add(scrollPane);
 
-		ResultSet statusSet = database.select(
-				"SELECT * FROM rent WHERE id_car = " + imagesNum + " ORDER BY end_date, plan_date DESC LIMIT 1");
 		String statusStr = "Свободно";
-		try {
-			while (statusSet.next()) {
-				Date rentDate = statusSet.getDate("end_date");
-				if (rentDate == null) {
-					statusStr = "Busy";
-				}
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
+		Optional<Rent> lastRentForCar = rentRepository.getLastByCarId(imagesNum);
+		if (lastRentForCar.isPresent() && lastRentForCar.get().getEndDate() == null) {
+			statusStr = "Busy";
 		}
 
 		Font font = new Font("Arial", Font.BOLD, 13);
@@ -105,7 +110,8 @@ public class AboutCarPanel extends JPanel
 						temp = (AboutCarPanel) mas[i];
 					}
 				}
-				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, database, panel, car, carQueryFilter);
+				AboutCarPanel newPanel = new AboutCarPanel(carRepository, rentRepository, clientRepository,
+						userRepository, injuryRepository, resultingInjuryRepository, panel, car, carQueryFilter);
 				newPanel.setBounds(250, 100, 605, 550);
 				panel.remove(temp);
 				panel.add(newPanel);
@@ -365,54 +371,44 @@ public class AboutCarPanel extends JPanel
 								buttonGetCar.addActionListener(new ActionListener() {
 									@Override
 									public void actionPerformed(ActionEvent e) {
-										String checkQuery = "SELECT id_client FROM clients INNER JOINusersON client.id_user = user.id_user WHERE login = "
-												+ "'" + UserInformation.getLogin() + "'";
-										ResultSet checkClientSet = database.select(checkQuery);
 										int idClient = 0;
-										try {
-											while (checkClientSet.next()) {
-												idClient = checkClientSet.getInt("id_client");
+										Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(
+												UserInformation.getLogin(), UserInformation.getPassword()));
+										if (currentUser.isPresent()) {
+											Optional<Client> currentClient = clientRepository
+													.getByUserId(currentUser.get().getId());
+											if (currentClient.isPresent()) {
+												idClient = currentClient.get().getId();
 											}
-										} catch (SQLException ex) {
-											ex.printStackTrace();
 										}
 
 										if (idClient == 0) {
 											planPriceLabel.setText("Please, fill data");
 										} else {
 
-											String queryToDB = "SELECT * FROM rent where id_client = (SELECT id_clients FROM client WHERE id_user = (SELECT id_user FROM users WHERE login = '"
-													+ UserInformation.getLogin()
-													+ "')) ORDER BY end_date, plan_date DESC LIMIT 1";
-											ResultSet checkRentaSet = database.select(queryToDB);
-											System.out.println(queryToDB);
 											boolean isHaveRenta = false;
-											try {
-												while (checkRentaSet.next()) {
-													Date rentDate = checkRentaSet.getDate("end_date");
-													if (rentDate == null) {
-														isHaveRenta = true;
-														;
-													}
-												}
-											} catch (SQLException ex) {
-												ex.printStackTrace();
+											Optional<Rent> lastRentForClient = rentRepository
+													.getLastByClientId(idClient);
+											if (lastRentForClient.isPresent()
+													&& lastRentForClient.get().getEndDate() == null) {
+												isHaveRenta = true;
 											}
 
 											if (isHaveRenta) {
 												planPriceLabel.setText("You cannot take more than one car at a time");
 											} else {
-												String insertRenta = "INSERT INTO rent(id_client,id_car,start_date,plan_date) VALUES ("
-														+ idClient + "," + imagesNum;
+												Rent newRent = new Rent();
+												newRent.setIdClient(idClient);
+												newRent.setIdCar(imagesNum);
+												newRent.setStartDate(LocalDate.of(
+														yList.get(0), yList.get(1), yList.get(2)));
+												newRent.setPlanDate(LocalDate.of(
+														yList.get(3), yList.get(4), yList.get(5)));
 
-												String startDataIn = "'" + yList.get(0) + "-" + yList.get(1) + "-"
-														+ yList.get(2) + "'";
-												String planDataIn = "'" + yList.get(3) + "-" + yList.get(4) + "-"
-														+ yList.get(5) + "'";
+												rentRepository.save(newRent);
 
-												insertRenta += "," + startDataIn + "," + planDataIn + ")";
-
-												database.insert(insertRenta);
+												String insertRenta = "rent for client " + idClient + ", car "
+														+ imagesNum;
 
 												JButton selecBut = (JButton) e.getSource();
 												JPanel selecPane = (JPanel) selecBut.getParent();
@@ -517,19 +513,18 @@ public class AboutCarPanel extends JPanel
 			add(actionWithCarButton);
 		} else {
 
-			String queryToDatabase = "SELECT * FROM users WHERE id_user = (SELECT id_user FROM clients WHERE id_client = (SELECT id_client FROm rent WHERE id_car = "
-					+ imagesNum + " ORDER BY end_date,plan_date DESC LIMIT 1))";
-			ResultSet checkUserSet = database.select(queryToDatabase);
 			boolean isTrue = false;
-			try {
-				while (checkUserSet.next()) {
-					if (UserInformation.getLogin().equals(checkUserSet.getString("login"))
-							&& UserInformation.getPassword().equals(checkUserSet.getString("password"))) {
+			Optional<Rent> lastRentForThisCar = rentRepository.getLastByCarId(imagesNum);
+			if (lastRentForThisCar.isPresent()) {
+				Client renterClient = clientRepository.findById(lastRentForThisCar.get().getIdClient());
+				if (renterClient != null) {
+					User renterUser = userRepository.findById(renterClient.getUserId());
+					if (renterUser != null
+							&& UserInformation.getLogin().equals(renterUser.getLogin())
+							&& UserInformation.getPassword().equals(renterUser.getPassword())) {
 						isTrue = true;
 					}
 				}
-			} catch (SQLException ex) {
-				ex.printStackTrace();
 			}
 
 			if (isTrue) {
@@ -544,16 +539,9 @@ public class AboutCarPanel extends JPanel
 						tempPanel.remove(tempBut);
 
 						Box box = Box.createVerticalBox();
-						String queryReturnCar = "SELECT * FROM injury";
-						ResultSet queryReturnCarSer = database.select(queryReturnCar);
-						ArrayList<String> injuryNames = new ArrayList<>();
-						try {
-							while (queryReturnCarSer.next()) {
-								injuryNames.add(queryReturnCarSer.getString("injury_name"));
-							}
-						} catch (SQLException ex) {
-							ex.printStackTrace();
-						}
+						ArrayList<String> injuryNames = injuryRepository.findAll()
+								.map(Injury::getInjuryName)
+								.collect(Collectors.toCollection(ArrayList::new));
 
 						ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
 						for (int i = 0; i < injuryNames.size(); i++) {
@@ -602,40 +590,27 @@ public class AboutCarPanel extends JPanel
 										int currMont = calendar.get(Calendar.MONTH);
 										int currDay = calendar.get(Calendar.DATE);
 
-										String dataStr = currYear + "-" + currMont + "-" + currDay;
-										String updateQuery = "UPDATE rent SET end_date = '" + dataStr
-												+ "' WHERE id_car = " + imagesNum
-												+ " AND id_client = (SELECT id_client FROM client INNER JOIN users ON client.id_user = user.id_user WHERE login = '"
-												+ UserInformation.getLogin() + "');";
-										database.update(updateQuery);
-
-										String idRentaStr = "SELECT id_rent FROM rent WHERE id_car = " + imagesNum
-												+ " AND id_client = (SELECT id_client FROM client INNER JOINusersON client.id_user = user.id_user WHERE login = '"
-												+ UserInformation.getLogin() + "') AND end_date = '" + dataStr + "'";
-										ResultSet rentaSet = database.select(idRentaStr);
 										int idRentaNum = 0;
-										try {
-											while (rentaSet.next()) {
-												idRentaNum = rentaSet.getInt("id_rent");
-											}
-										} catch (SQLException ex) {
-											ex.printStackTrace();
+										Optional<Rent> rentToClose = rentRepository
+												.getLastByCarId(imagesNum);
+										if (rentToClose.isPresent()) {
+											Rent rent = rentToClose.get();
+											rent.setEndDate(LocalDate.of(currYear, currMont + 1, currDay));
+											rentRepository.update(rent);
+											idRentaNum = rent.getId();
 										}
 
-										String idInjuryStr = "SELECT id_injury FROM injury WHERE injury_name = '"
-												+ injuryForCar + "'";
-										ResultSet injurySet = database.select(idInjuryStr);
 										int idInjuryNum = 0;
-										try {
-											while (injurySet.next()) {
-												idInjuryNum = injurySet.getInt("id_injury");
-											}
-										} catch (SQLException ex) {
-											ex.printStackTrace();
+										Optional<Injury> matchingInjury = injuryRepository
+												.getByName(injuryForCar);
+										if (matchingInjury.isPresent()) {
+											idInjuryNum = matchingInjury.get().getId();
 										}
 
-										database.insert("INSERT INTO  resultinginjury(id_rent,id_injury) VALUES("
-												+ idRentaNum + "," + idInjuryNum + ")");
+										ResultingInjury resultingInjury = new ResultingInjury();
+										resultingInjury.setIdRent(idRentaNum);
+										resultingInjury.setIdInjury(idInjuryNum);
+										resultingInjuryRepository.save(resultingInjury);
 
 										remove(box);
 										remove(newReturnButton);
@@ -670,42 +645,30 @@ public class AboutCarPanel extends JPanel
 								int currMont = calendar.get(Calendar.MONTH);
 								int currDay = calendar.get(Calendar.DATE);
 
-								String queryToDb = "SELECT login,id_car,join1.id_user,start_date,plan_date,end_date FROM\n"
-										+ "(SELECT id_car,id_user,rent.id_client,start_date,plan_date,end_date FROM rent INNER JOIN client ON rent.id_client = client.id_client) as join1\n"
-										+ "INNER JOIN users ON join1.id_user = user.id_user WHERE login = '"
-										+ UserInformation.getLogin() + "' AND id_car = " + imagesNum
-										+ " ORDER BY end_date,plan_date DESC LIMIT 1;";
-
-								ResultSet queryToDbSet = database.select(queryToDb);
-								Date startRentaDate = null;
-								Date dataRentaPlan = null;
-								try {
-									while (queryToDbSet.next()) {
-										startRentaDate = queryToDbSet.getDate("start_date");
-										dataRentaPlan = queryToDbSet.getDate("plan_date");
-									}
-								} catch (SQLException ex) {
-									ex.printStackTrace();
+								LocalDate startRentaDate = null;
+								LocalDate dataRentaPlan = null;
+								Optional<Rent> rentForCostCalc = rentRepository.getLastByCarId(imagesNum);
+								if (rentForCostCalc.isPresent()) {
+									startRentaDate = rentForCostCalc.get().getStartDate();
+									dataRentaPlan = rentForCostCalc.get().getPlanDate();
 								}
 
-								Date currentGetData = new Date(currYear, currMont, currDay);
-								startRentaDate = new Date(currYear, currMont + 1, currDay);
+								LocalDate currentGetData = LocalDate.of(currYear, currMont + 1, currDay);
+								startRentaDate = LocalDate.of(currYear, currMont + 1, currDay);
 
 								JLabel labelCostRenta = new JLabel("5000");
 								labelCostRenta.setBounds(480, 460, 120, 30);
 
-								if (currentGetData.after(startRentaDate)) {
+								if (currentGetData.isAfter(startRentaDate)) {
 									labelCostRenta.setText("Sum = 0");
 								} else {
 									double costForTheRent = 0f;
 
-									long difference = startRentaDate.getTime() - currentGetData.getTime();
-									int days = (int) (difference / (24 * 60 * 60 * 1000));
+									int days = (int) ChronoUnit.DAYS.between(currentGetData, startRentaDate);
 									costForTheRent = (days + 1f) * cost;
 
-									if (currentGetData.after(dataRentaPlan)) {
-										long diff = currentGetData.getTime() - dataRentaPlan.getTime();
-										int overDay = (int) (difference / (24 * 60 * 60 * 1000));
+									if (dataRentaPlan != null && currentGetData.isAfter(dataRentaPlan)) {
+										int overDay = (int) ChronoUnit.DAYS.between(dataRentaPlan, currentGetData);
 										costForTheRent += (cost * overDay) * 0.2;
 									}
 

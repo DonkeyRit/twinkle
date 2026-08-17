@@ -1,27 +1,28 @@
 package com.github.donkeyrit.twinkle.dal.repositories;
 
-import com.github.donkeyrit.twinkle.dal.repositories.interfaces.ClientRepository;
-import com.github.donkeyrit.twinkle.dal.interfaces.BaseCrudRepository;
-import com.github.donkeyrit.twinkle.dal.interfaces.QueryFilter;
-import com.github.donkeyrit.twinkle.dal.models.Client1;
+import com.github.donkeyrit.twinkle.dal.interfaces.ClientRepository;
+import com.github.donkeyrit.twinkle.dal.models.Client;
+import com.github.donkeyrit.twinkle.dal.repositories.abstractions.HibernateGenericRepository;
+
+import com.google.inject.Inject;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
-import com.google.inject.Inject;
 import java.util.Optional;
 
-public class ClientRepositoryImpl extends BaseCrudRepository<Client1, QueryFilter> implements ClientRepository {
+public class ClientRepositoryImpl extends HibernateGenericRepository<Client> implements ClientRepository {
 
 	@Inject
-	public ClientRepositoryImpl(EntityManager session) {
-		super(session);
+	public ClientRepositoryImpl(EntityManager entityManager) {
+		super(entityManager);
 	}
 
 	@Override
-	public Optional<Client1> getByUserId(int userId) {
-		TypedQuery<Client1> query = session.createQuery("SELECT u FROM Client u WHERE u.userId = :userId", Client1.class);
-        query.setParameter("userId", userId);
+	public Optional<Client> getByUserId(int userId) {
+		TypedQuery<Client> query = entityManager.createQuery(
+			"SELECT c FROM Client c WHERE c.userId = :userId", Client.class);
+		query.setParameter("userId", userId);
 		return query.getResultStream().findFirst();
 	}
 }
