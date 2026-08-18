@@ -5,9 +5,9 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>bll.services</artifactId>
+  <artifactId>telemetry</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>bll.services</name>
+  <name>telemetry</name>
 
   <parent>
     <artifactId>root</artifactId>
@@ -17,32 +17,21 @@
 
   <dependencies>
     <dependency>
-        <groupId>com.github.donkeyrit.twinkle</groupId>
-        <artifactId>dal.abstractions</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-sdk</artifactId>
     </dependency>
     <!-- Unit-tests-->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.javafaker</groupId>
-      <artifactId>javafaker</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

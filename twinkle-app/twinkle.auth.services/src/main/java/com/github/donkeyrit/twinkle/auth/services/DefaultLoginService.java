@@ -7,6 +7,7 @@ import com.github.donkeyrit.twinkle.dal.models.User;
 import com.github.donkeyrit.twinkle.auth.services.interfaces.LoginService;
 import com.github.donkeyrit.twinkle.auth.models.AuthenticationResult;
 import com.github.donkeyrit.twinkle.auth.security.HashManager;
+import com.github.donkeyrit.twinkle.telemetry.CorrelationContext;
 
 import com.google.inject.Inject;
 import java.util.Optional;
@@ -23,37 +24,41 @@ public class DefaultLoginService implements LoginService {
 	@Override
 	public AuthenticationResult verifyCredentials(String username, String password) {
 
-		if (username.isEmpty() || password.isEmpty()) {
+		try (CorrelationContext correlation = CorrelationContext.start("login-verify-credentials")) {
+			if (username.isEmpty() || password.isEmpty()) {
 
-			return AuthenticationResult.error("Please fill both fields.");
+				return AuthenticationResult.error("Please fill both fields.");
+			}
+
+			Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(username, password));
+			return AuthenticationResult.fromResult(currentUser);
 		}
-
-		Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(username, password));
-        return AuthenticationResult.fromResult(currentUser);
 	}
 
 	@Override
 	public AuthenticationResult signUp(String username, String password, String confirmPassword) {
 
-		if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) 
-        {
-            return AuthenticationResult.error("All fields are required.");
-        }
+		try (CorrelationContext correlation = CorrelationContext.start("login-sign-up")) {
+			if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty())
+			{
+				return AuthenticationResult.error("All fields are required.");
+			}
 
-        if (!password.equals(confirmPassword)) 
-        {
-            return AuthenticationResult.error("Passwords do not match.");
-        }
+			if (!password.equals(confirmPassword))
+			{
+				return AuthenticationResult.error("Passwords do not match.");
+			}
 
-        if(userRepository.get(new UserInfoSpecifciation(username)).isPresent())
-        {
-            return AuthenticationResult.error("Login already exist");
-        }
-        
-        String passwordHash = HashManager.generateHash(password);
-        User user = new User(username, passwordHash, false); 
-        userRepository.save(user);
+			if(userRepository.get(new UserInfoSpecifciation(username)).isPresent())
+			{
+				return AuthenticationResult.error("Login already exist");
+			}
 
-		return AuthenticationResult.fromResult(Optional.of(user));
+			String passwordHash = HashManager.generateHash(password);
+			User user = new User(username, passwordHash, false);
+			userRepository.save(user);
+
+			return AuthenticationResult.fromResult(Optional.of(user));
+		}
 	}
 }

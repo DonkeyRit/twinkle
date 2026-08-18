@@ -20,6 +20,7 @@
     <module>persistence/twinkle.dal.jooq</module>
     <module>persistence/twinkle.dal.hibernate</module>
     <!-- Persistence modules -->
+    <module>twinkle.telemetry</module>
     <module>twinkle.auth.services</module>
     <module>twinkle.bll.services</module>
     <module>twinkle.main</module>
@@ -38,6 +39,7 @@
     <slf4j.api.version>2.0.12</slf4j.api.version>
     <log4j.version>2.20.0</log4j.version>
     <guice.version>7.0.0</guice.version>
+    <opentelemetry.version>1.38.0</opentelemetry.version>
   </properties>
 
   <dependencyManagement>
@@ -120,6 +122,18 @@
         <version>${log4j.version}</version>
       </dependency>
       <!-- Logger dependencies -->
+      <!-- OpenTelemetry dependencies -->
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-api</artifactId>
+        <version>${opentelemetry.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-sdk</artifactId>
+        <version>${opentelemetry.version}</version>
+      </dependency>
+      <!-- OpenTelemetry dependencies -->
     </dependencies>
   </dependencyManagement>
 
