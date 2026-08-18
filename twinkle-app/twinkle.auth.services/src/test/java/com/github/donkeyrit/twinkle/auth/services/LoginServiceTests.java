@@ -1,91 +1,114 @@
 package com.github.donkeyrit.twinkle.auth.services;
 
-//TODO: Update tests
-public class LoginServiceTests extends BaseTest {
+import com.github.donkeyrit.twinkle.auth.models.AuthenticationResult;
+import com.github.donkeyrit.twinkle.dal.models.User;
 
-    // private UserRepository userRepository;
-    // private User user;
-    // private DefaultLoginService loginService;
-    // private AuthenticationResult authenticationResult;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
-    // @BeforeClass
-    // public void setUp() {
-    //     EntityManager session = sessionFactory.createEntityManager();
-    //     userRepository = new UserRepositoryImpl(session);
-    //     loginService = new DefaultLoginService(userRepository);
-    // }
+import static org.assertj.core.api.Assertions.assertThat;
 
-    // @Test
-    // void registerNewUser(){
-    //     // Arrange
-    //     user = Utils.generateTestUser();
-    //     String userPassword = user.getPassword();
-    //     user.setPassword(HashManager.generateHash(user.getPassword()));
+public class LoginServiceTests {
 
-    //     // Act
-    //     authenticationResult = loginService.signUp(user.getLogin(), userPassword, userPassword);
+	private InMemoryUserRepository userRepository;
+	private DefaultLoginService loginService;
 
-    //     // Assert
-    //     Assert.assertNull(authenticationResult.errorMessage());
-    //     Assert.assertTrue(authenticationResult.isSuccessfull());
-    //     Assert.assertEquals(authenticationResult.authenticatedUser().get().getLogin(), user.getLogin());
-    //     Assert.assertEquals(authenticationResult.authenticatedUser().get().getPassword(), user.getPassword());
-    // }
+	@BeforeMethod
+	public void setUp() {
+		userRepository = new InMemoryUserRepository();
+		loginService = new DefaultLoginService(userRepository);
+	}
 
-    // @Test
-    // void registerExistingUser(){
-    //     // Arrange
-    //     user = Utils.generateTestUser();
-    //     String userPassword = user.getPassword();
-    //     user.setPassword(HashManager.generateHash(user.getPassword()));
-    //     userRepository.insert(user);
+	@Test
+	public void signUp_createsUserWithHashedPassword() {
+		AuthenticationResult result = loginService.signUp("new_user", "correct-password", "correct-password");
 
-    //     // Act
-    //     authenticationResult = loginService.signUp(user.getLogin(), userPassword, userPassword);
+		assertThat(result.isSuccessfull()).isTrue();
+		User createdUser = result.authenticatedUser().orElseThrow();
+		assertThat(createdUser.getLogin()).isEqualTo("new_user");
+		assertThat(createdUser.getPassword()).isNotEqualTo("correct-password");
+	}
 
-    //     // Assert
-    //     Assert.assertEquals(authenticationResult.errorMessage(), "Login already exist");
-    //     Assert.assertFalse(authenticationResult.isSuccessfull());
-    // }
+	@Test
+	public void signUp_rejectsMismatchedConfirmation() {
+		AuthenticationResult result = loginService.signUp("new_user", "correct-password", "different-password");
 
-    // @DataProvider(name = "userData")
-    // public Object[][] provideUserData() {
-    //     return new Object[][] {
-    //             {"test_user_login", "test_user_password", ""},
-    //             {"test_user_login", "", "test_user_password"},
-    //             {"", "test_user_password", "test_user_password"},
-    //             {"test_user_login", "", ""},
-    //             {"", "test_user_password", ""},
-    //             {"", "", "test_user_password"},
-    //             {"", "", ""}
-    //     };
-    // }
+		assertThat(result.isSuccessfull()).isFalse();
+		assertThat(result.errorMessage()).isEqualTo("Passwords do not match.");
+	}
 
-    // @Test(dataProvider = "userData")
-    // void registerUserWithEmptyFields(String username, String password, String confirmPassword){
-    //     // Arrange
-    //     User user = Utils.generateTestUser();
-    //     user.setPassword(HashManager.generateHash(user.getPassword()));
+	@Test
+	public void signUp_rejectsExistingLogin() {
+		loginService.signUp("existing_user", "correct-password", "correct-password");
 
-    //     // Act
-    //     authenticationResult = loginService.signUp(username, password, confirmPassword);
+		AuthenticationResult result = loginService.signUp("existing_user", "another-password", "another-password");
 
-    //     // Assert
-    //     Assert.assertEquals(authenticationResult.errorMessage(), "All fields are required.");
-    //     Assert.assertFalse(authenticationResult.isSuccessfull());
-    // }
+		assertThat(result.isSuccessfull()).isFalse();
+		assertThat(result.errorMessage()).isEqualTo("Login already exist");
+	}
 
-    // @AfterTest
-    // void tearDown(){
-    //     if (authenticationResult.authenticatedUser().isPresent()){
-    //         System.out.println("Remove the test user: " + user.getLogin());
-    //         user = authenticationResult.authenticatedUser().orElse(new User());
-    //         userRepository.delete(user);
-    //     }
-    //     else if (user != null) {
-    //         System.out.println("Remove the test user: " + user.getLogin());
-    //         user = userRepository.getByLoginAndPassword(user.getLogin(), user.getPassword()).orElse(new User());
-    //         userRepository.delete(user);
-    //     }
-    // }
+	@Test
+	public void signUp_rejectsShortPassword() {
+		AuthenticationResult result = loginService.signUp("new_user", "short1", "short1");
+
+		assertThat(result.isSuccessfull()).isFalse();
+	}
+
+	@Test
+	public void signUp_rejectsShortLogin() {
+		AuthenticationResult result = loginService.signUp("ab", "correct-password", "correct-password");
+
+		assertThat(result.isSuccessfull()).isFalse();
+	}
+
+	@Test
+	public void signUp_reportsErrorWhenPersistenceFails() {
+		userRepository.failNextSave();
+
+		AuthenticationResult result = loginService.signUp("new_user", "correct-password", "correct-password");
+
+		assertThat(result.isSuccessfull()).isFalse();
+	}
+
+	@Test
+	public void verifyCredentials_succeedsWithCorrectPassword() {
+		loginService.signUp("existing_user", "correct-password", "correct-password");
+
+		AuthenticationResult result = loginService.verifyCredentials("existing_user", "correct-password");
+
+		assertThat(result.isSuccessfull()).isTrue();
+		assertThat(result.authenticatedUser().orElseThrow().getLogin()).isEqualTo("existing_user");
+	}
+
+	@Test
+	public void verifyCredentials_failsWithWrongPassword() {
+		loginService.signUp("existing_user", "correct-password", "correct-password");
+
+		AuthenticationResult result = loginService.verifyCredentials("existing_user", "wrong-password");
+
+		assertThat(result.isSuccessfull()).isFalse();
+		assertThat(result.errorMessage()).isEqualTo("Incorrect login or password.");
+	}
+
+	@Test
+	public void verifyCredentials_failsForUnknownUser() {
+		AuthenticationResult result = loginService.verifyCredentials("nobody", "correct-password");
+
+		assertThat(result.isSuccessfull()).isFalse();
+		assertThat(result.errorMessage()).isEqualTo("Incorrect login or password.");
+	}
+
+	@Test
+	public void verifyCredentials_locksOutAfterRepeatedFailures() {
+		loginService.signUp("existing_user", "correct-password", "correct-password");
+
+		for (int i = 0; i < 5; i++) {
+			loginService.verifyCredentials("existing_user", "wrong-password");
+		}
+
+		AuthenticationResult result = loginService.verifyCredentials("existing_user", "correct-password");
+
+		assertThat(result.isSuccessfull()).isFalse();
+		assertThat(result.errorMessage()).isEqualTo("Too many failed attempts. Please try again in a minute.");
+	}
 }

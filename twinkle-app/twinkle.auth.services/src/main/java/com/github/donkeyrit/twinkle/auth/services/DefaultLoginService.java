@@ -6,7 +6,8 @@ import com.github.donkeyrit.twinkle.dal.models.User;
 
 import com.github.donkeyrit.twinkle.auth.services.interfaces.LoginService;
 import com.github.donkeyrit.twinkle.auth.models.AuthenticationResult;
-import com.github.donkeyrit.twinkle.auth.security.HashManager;
+import com.github.donkeyrit.twinkle.auth.security.LoginAttemptLimiter;
+import com.github.donkeyrit.twinkle.auth.security.PasswordHasher;
 import com.github.donkeyrit.twinkle.telemetry.CorrelationContext;
 
 import com.google.inject.Inject;
@@ -14,7 +15,13 @@ import java.util.Optional;
 
 public class DefaultLoginService implements LoginService {
 
+	private static final int MIN_USERNAME_LENGTH = 3;
+	private static final int MAX_USERNAME_LENGTH = 64;
+	private static final int MIN_PASSWORD_LENGTH = 8;
+	private static final int MAX_PASSWORD_LENGTH = 128;
+
 	private final UserRepository userRepository;
+	private final LoginAttemptLimiter loginAttemptLimiter = new LoginAttemptLimiter();
 
 	@Inject
 	public DefaultLoginService(UserRepository userRepository) {
@@ -30,7 +37,20 @@ public class DefaultLoginService implements LoginService {
 				return AuthenticationResult.error("Please fill both fields.");
 			}
 
-			Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(username, password));
+			if (loginAttemptLimiter.isLockedOut(username)) {
+				return AuthenticationResult.error("Too many failed attempts. Please try again in a minute.");
+			}
+
+			// Passwords are salted, so a hash can no longer be looked up by
+			// equality: fetch the user by login, then verify the password
+			// against their stored hash.
+			Optional<User> currentUser = userRepository.get(new UserInfoSpecifciation(username));
+			if (currentUser.isEmpty() || !PasswordHasher.verify(password, currentUser.get().getPassword())) {
+				loginAttemptLimiter.recordFailure(username);
+				return AuthenticationResult.error("Incorrect login or password.");
+			}
+
+			loginAttemptLimiter.recordSuccess(username);
 			return AuthenticationResult.fromResult(currentUser);
 		}
 	}
@@ -44,19 +64,35 @@ public class DefaultLoginService implements LoginService {
 				return AuthenticationResult.error("All fields are required.");
 			}
 
+			String trimmedUsername = username.trim();
+			if (trimmedUsername.length() < MIN_USERNAME_LENGTH || trimmedUsername.length() > MAX_USERNAME_LENGTH)
+			{
+				return AuthenticationResult.error(
+					"Login must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
+			}
+
+			if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH)
+			{
+				return AuthenticationResult.error(
+					"Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
+			}
+
 			if (!password.equals(confirmPassword))
 			{
 				return AuthenticationResult.error("Passwords do not match.");
 			}
 
+			username = trimmedUsername;
 			if(userRepository.get(new UserInfoSpecifciation(username)).isPresent())
 			{
 				return AuthenticationResult.error("Login already exist");
 			}
 
-			String passwordHash = HashManager.generateHash(password);
+			String passwordHash = PasswordHasher.hash(password);
 			User user = new User(username, passwordHash, false);
-			userRepository.save(user);
+			if (!userRepository.save(user)) {
+				return AuthenticationResult.error("Could not create account. Please try again.");
+			}
 
 			return AuthenticationResult.fromResult(Optional.of(user));
 		}
